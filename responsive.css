@@ -357,12 +357,6 @@ body.menu-open .header-capsule .section.center {
   z-index: 999;
 }
 
-/* Hide the bottom mobile nav while the hamburger menu is open — it sat
-   underneath the slide-in panel and showed through, looking cluttered. */
-body.menu-open #un-mobile-nav {
-  display: none !important;
-}
-
 body.menu-open .menu-backdrop {
   opacity: 1;
   visibility: visible;
