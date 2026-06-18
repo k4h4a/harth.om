@@ -52,7 +52,15 @@
       "Bash(curl -s http://localhost:3000/api/v1/rentals)",
       "Bash(curl -s \"http://localhost:3000/api/v1/orders/track/IJ-TEST1234\")",
       "Bash(curl -s http://localhost:3000/api/v1/deliveries)",
-      "Bash(node -e \"require\\('./knexfile.js'\\)\")"
+      "Bash(node -e \"require\\('./knexfile.js'\\)\")",
+      "Bash(git push *)",
+      "Bash(git config *)",
+      "PowerShell(Get-Command gh -ErrorAction SilentlyContinue)",
+      "PowerShell(winget list --id GitHub.cli 2>$null)",
+      "Bash(git remote *)",
+      "Bash(git add *)",
+      "Bash(git commit -m ' *)",
+      "Bash(awk 'NR==806,NR==1300' \"admin-dashboard.html\")"
     ]
   }
 }
