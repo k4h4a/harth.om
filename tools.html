@@ -546,7 +546,7 @@
         cursor: not-allowed;
       }
     </style>
-  
+
     <!-- HARTH-RESPONSIVE-CSS -->
     <link rel="stylesheet" href="responsive.css" />
   </head>
@@ -572,7 +572,12 @@
         </nav>
 
         <div class="section left" id="auth-header">
-          <a href="register.html" class="hs-btn hs-btn--ghost hs-btn--sm" id="login-link">تسجيل دخول</a>
+          <a
+            href="register.html"
+            class="hs-btn hs-btn--ghost hs-btn--sm"
+            id="login-link"
+            >تسجيل دخول</a
+          >
         </div>
       </div>
     </header>
@@ -581,7 +586,11 @@
       <!-- Top-of-tools banner slot. Populated from
            /public/banners?placement=tools_top. Hidden if nothing
            returns. Same component as the homepage strip but inline. -->
-      <div id="tools-top-banner" class="container" style="display:none;margin:20px auto 0"></div>
+      <div
+        id="tools-top-banner"
+        class="container"
+        style="display: none; margin: 20px auto 0"
+      ></div>
 
       <div style="text-align: center; margin-top: 30px">
         <h2 style="font-size: 32px">معداتك للإيجار</h2>
@@ -589,14 +598,14 @@
       </div>
 
       <div class="filters-bar">
-        <input 
-          type="search" 
-          id="filter-search" 
-          class="hs-input" 
-          placeholder="ابحث عن معدة..." 
+        <input
+          type="search"
+          id="filter-search"
+          class="hs-input"
+          placeholder="ابحث عن معدة..."
           title="البحث في أسماء ووصف المعدات"
         />
-        
+
         <select id="filter-category" class="hs-select" title="فئة المعدات">
           <option value="">كل الفئات</option>
           <option value="tractor">الجرارات</option>
@@ -608,7 +617,7 @@
           <option value="pesticide">المبيدات</option>
           <option value="other">أخرى</option>
         </select>
-        
+
         <select id="filter-governorate" class="hs-select" title="المحافظة">
           <option value="">كل المحافظات</option>
           <option value="muscat">مسقط</option>
@@ -623,7 +632,7 @@
           <option value="dhahirah">الظاهرة</option>
           <option value="wusta">الوسطى</option>
         </select>
-        
+
         <select id="filter-sort" class="hs-select" title="ترتيب النتائج">
           <option value="newest">الأحدث أولاً</option>
           <option value="oldest">الأقدم أولاً</option>
@@ -631,13 +640,14 @@
           <option value="price_high">السعر (أعلى إلى أقل)</option>
           <option value="rating">الأعلى تقييماً</option>
         </select>
-        
+
         <button
           type="button"
           class="hs-btn hs-btn--ghost"
           id="filter-favorites-toggle"
           aria-pressed="false"
-          title="إظهار المفضلة فقط">
+          title="إظهار المفضلة فقط"
+        >
           <i class="far fa-heart"></i>
           <span>المفضلة فقط</span>
         </button>
@@ -649,23 +659,12 @@
           <div class="card__body">
             <div class="skeleton skeleton--title"></div>
             <div class="skeleton skeleton--text"></div>
-            <div class="skeleton skeleton--text" style="width: 60%;"></div>
-            <div style="margin-top: var(--sp-4); display: flex; gap: var(--sp-2);">
-              <div class="skeleton skeleton--button" style="flex: 1;"></div>
-              <div class="skeleton skeleton--button" style="width: 3rem;"></div>
-            </div>
-          </div>
-        </div>
-        
-        <div class="hs-card">
-          <div class="skeleton skeleton--card"></div>
-          <div class="card__body">
-            <div class="skeleton skeleton--title"></div>
-            <div class="skeleton skeleton--text"></div>
-            <div class="skeleton skeleton--text" style="width: 80%;"></div>
-            <div style="margin-top: var(--sp-4); display: flex; gap: var(--sp-2);">
-              <div class="skeleton skeleton--button" style="flex: 1;"></div>
-              <div class="skeleton skeleton--button" style="width: 3rem;"></div>
+            <div class="skeleton skeleton--text" style="width: 60%"></div>
+            <div
+              style="margin-top: var(--sp-4); display: flex; gap: var(--sp-2)"
+            >
+              <div class="skeleton skeleton--button" style="flex: 1"></div>
+              <div class="skeleton skeleton--button" style="width: 3rem"></div>
             </div>
           </div>
         </div>
@@ -675,10 +674,12 @@
           <div class="card__body">
             <div class="skeleton skeleton--title"></div>
             <div class="skeleton skeleton--text"></div>
-            <div class="skeleton skeleton--text" style="width: 70%;"></div>
-            <div style="margin-top: var(--sp-4); display: flex; gap: var(--sp-2);">
-              <div class="skeleton skeleton--button" style="flex: 1;"></div>
-              <div class="skeleton skeleton--button" style="width: 3rem;"></div>
+            <div class="skeleton skeleton--text" style="width: 80%"></div>
+            <div
+              style="margin-top: var(--sp-4); display: flex; gap: var(--sp-2)"
+            >
+              <div class="skeleton skeleton--button" style="flex: 1"></div>
+              <div class="skeleton skeleton--button" style="width: 3rem"></div>
             </div>
           </div>
         </div>
@@ -688,10 +689,12 @@
           <div class="card__body">
             <div class="skeleton skeleton--title"></div>
             <div class="skeleton skeleton--text"></div>
-            <div class="skeleton skeleton--text" style="width: 65%;"></div>
-            <div style="margin-top: var(--sp-4); display: flex; gap: var(--sp-2);">
-              <div class="skeleton skeleton--button" style="flex: 1;"></div>
-              <div class="skeleton skeleton--button" style="width: 3rem;"></div>
+            <div class="skeleton skeleton--text" style="width: 70%"></div>
+            <div
+              style="margin-top: var(--sp-4); display: flex; gap: var(--sp-2)"
+            >
+              <div class="skeleton skeleton--button" style="flex: 1"></div>
+              <div class="skeleton skeleton--button" style="width: 3rem"></div>
             </div>
           </div>
         </div>
@@ -701,10 +704,12 @@
           <div class="card__body">
             <div class="skeleton skeleton--title"></div>
             <div class="skeleton skeleton--text"></div>
-            <div class="skeleton skeleton--text" style="width: 75%;"></div>
-            <div style="margin-top: var(--sp-4); display: flex; gap: var(--sp-2);">
-              <div class="skeleton skeleton--button" style="flex: 1;"></div>
-              <div class="skeleton skeleton--button" style="width: 3rem;"></div>
+            <div class="skeleton skeleton--text" style="width: 65%"></div>
+            <div
+              style="margin-top: var(--sp-4); display: flex; gap: var(--sp-2)"
+            >
+              <div class="skeleton skeleton--button" style="flex: 1"></div>
+              <div class="skeleton skeleton--button" style="width: 3rem"></div>
             </div>
           </div>
         </div>
@@ -714,10 +719,27 @@
           <div class="card__body">
             <div class="skeleton skeleton--title"></div>
             <div class="skeleton skeleton--text"></div>
-            <div class="skeleton skeleton--text" style="width: 60%;"></div>
-            <div style="margin-top: var(--sp-4); display: flex; gap: var(--sp-2);">
-              <div class="skeleton skeleton--button" style="flex: 1;"></div>
-              <div class="skeleton skeleton--button" style="width: 3rem;"></div>
+            <div class="skeleton skeleton--text" style="width: 75%"></div>
+            <div
+              style="margin-top: var(--sp-4); display: flex; gap: var(--sp-2)"
+            >
+              <div class="skeleton skeleton--button" style="flex: 1"></div>
+              <div class="skeleton skeleton--button" style="width: 3rem"></div>
+            </div>
+          </div>
+        </div>
+
+        <div class="hs-card">
+          <div class="skeleton skeleton--card"></div>
+          <div class="card__body">
+            <div class="skeleton skeleton--title"></div>
+            <div class="skeleton skeleton--text"></div>
+            <div class="skeleton skeleton--text" style="width: 60%"></div>
+            <div
+              style="margin-top: var(--sp-4); display: flex; gap: var(--sp-2)"
+            >
+              <div class="skeleton skeleton--button" style="flex: 1"></div>
+              <div class="skeleton skeleton--button" style="width: 3rem"></div>
             </div>
           </div>
         </div>
@@ -726,23 +748,63 @@
       <section
         class="equipment-grid"
         id="equip-grid"
-        style="grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); display: none"
+        style="
+          grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+          display: none;
+        "
       ></section>
 
       <div id="empty-state" class="hs-empty" style="display: none">
         <div class="hs-empty__art">
-          <svg width="48" height="48" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
-            <path d="M12 20L24 14L36 20V34C36 35.1046 35.1046 36 34 36H14C12.8954 36 12 35.1046 12 34V20Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-            <path d="M24 14V36" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-            <path d="M24 8V14" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-            <path d="M20 8H28" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-            <circle cx="30" cy="24" r="2" fill="currentColor"/>
+          <svg
+            width="48"
+            height="48"
+            viewBox="0 0 48 48"
+            fill="none"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path
+              d="M12 20L24 14L36 20V34C36 35.1046 35.1046 36 34 36H14C12.8954 36 12 35.1046 12 34V20Z"
+              stroke="currentColor"
+              stroke-width="2"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+            />
+            <path
+              d="M24 14V36"
+              stroke="currentColor"
+              stroke-width="2"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+            />
+            <path
+              d="M24 8V14"
+              stroke="currentColor"
+              stroke-width="2"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+            />
+            <path
+              d="M20 8H28"
+              stroke="currentColor"
+              stroke-width="2"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+            />
+            <circle cx="30" cy="24" r="2" fill="currentColor" />
           </svg>
         </div>
         <h3 class="hs-empty__title">لا توجد معدات متاحة</h3>
-        <p class="hs-empty__desc">لم نعثر على معدات متاحة للإيجار بالمعايير المحددة. جرب تعديل المرشحات أو ابحث عن شيء آخر.</p>
+        <p class="hs-empty__desc">
+          لم نعثر على معدات متاحة للإيجار بالمعايير المحددة. جرب تعديل المرشحات
+          أو ابحث عن شيء آخر.
+        </p>
         <div class="hs-empty__cta">
-          <button type="button" class="hs-btn hs-btn--secondary" onclick="clearFilters()">
+          <button
+            type="button"
+            class="hs-btn hs-btn--secondary"
+            onclick="clearFilters()"
+          >
             <i class="fas fa-filter"></i>
             مسح المرشحات
           </button>
@@ -756,8 +818,14 @@
     <div class="modal-backdrop" id="modal-backdrop">
       <div class="modal" role="dialog" aria-labelledby="modal-title">
         <h3 id="modal-title">حجز إيجار</h3>
-        <p id="modal-equipment-name" style="color: #666; font-size: 14px; margin: 0 0 8px"></p>
-        <p id="modal-daily-price" style="color: #6ab04c; font-weight: 700; margin: 0"></p>
+        <p
+          id="modal-equipment-name"
+          style="color: #666; font-size: 14px; margin: 0 0 8px"
+        ></p>
+        <p
+          id="modal-daily-price"
+          style="color: #6ab04c; font-weight: 700; margin: 0"
+        ></p>
 
         <!-- Deposit (تأمين) notice — only shown when the listing has a
              non-zero deposit_amount. Inserted by JS in openBookingModal(). -->
@@ -785,9 +853,17 @@
         <div id="availability-hint" class="availability-hint"></div>
 
         <label for="rental-notes">ملاحظات (اختياري)</label>
-        <textarea id="rental-notes" maxlength="2000" placeholder="أي ملاحظات للمالك..."></textarea>
+        <textarea
+          id="rental-notes"
+          maxlength="2000"
+          placeholder="أي ملاحظات للمالك..."
+        ></textarea>
 
-        <div id="total-preview" class="total-preview" style="display: none"></div>
+        <div
+          id="total-preview"
+          class="total-preview"
+          style="display: none"
+        ></div>
 
         <div class="modal-actions">
           <button type="button" class="btn-primary-green" id="confirm-rental">
@@ -801,16 +877,13 @@
     </div>
 
     <footer>
-      <div class="team-logo-container">
-        <img src="شعار حرث.jpeg" class="team-img" />
-      </div>
       <div class="social-links">
         <a
           href="https://www.instagram.com/harth_oman?igsh=ZnpodHd4bTdieXBq&utm_source=qr"
           class="insta"
-        ><i class="fab fa-instagram"></i></a>
+          ><i class="fab fa-instagram"></i
+        ></a>
         <a href="77556094" class="wa"><i class="fab fa-whatsapp"></i></a>
-        <a href="#" class="yt"><i class="fab fa-youtube"></i></a>
       </div>
       <div class="footer-bottom">
         <p>&copy; 2026 جميع الحقوق محفوظة لفريق حرث</p>
@@ -819,7 +892,9 @@
 
     <div id="toast"></div>
 
-    <a href="checkout.html" class="basket-floating-button" title="سلة المبيعات">🛒</a>
+    <a href="checkout.html" class="basket-floating-button" title="سلة المبيعات"
+      >🛒</a
+    >
 
     <script src="design-system.js"></script>
     <script src="equipment-pdf.js"></script>
@@ -852,17 +927,32 @@
 
         function escapeHtml(s) {
           if (s == null) return "";
-          return String(s).replace(/[&<>"']/g, (c) => ({
-            "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;",
-          })[c]);
+          return String(s).replace(
+            /[&<>"']/g,
+            (c) =>
+              ({
+                "&": "&amp;",
+                "<": "&lt;",
+                ">": "&gt;",
+                '"': "&quot;",
+                "'": "&#39;",
+              })[c],
+          );
         }
 
         function categoryLabel(c) {
-          return ({
-            tractor: "جرار", sprayer: "مرشة", harvester: "حصادة",
-            tools: "أدوات", seeds: "بذور", fertilizer: "أسمدة",
-            pesticide: "مبيدات", other: "أخرى",
-          })[c] || c;
+          return (
+            {
+              tractor: "جرار",
+              sprayer: "مرشة",
+              harvester: "حصادة",
+              tools: "أدوات",
+              seeds: "بذور",
+              fertilizer: "أسمدة",
+              pesticide: "مبيدات",
+              other: "أخرى",
+            }[c] || c
+          );
         }
 
         // ---------- Clear all filters ----------
@@ -873,7 +963,7 @@
           if (gov) gov.value = "";
           const sort = $("#filter-sort");
           if (sort) sort.value = "newest";
-          
+
           // Reset favorites toggle
           favoritesOnly = false;
           const toggle = $("#filter-favorites-toggle");
@@ -882,11 +972,11 @@
             toggle.style.background = "transparent";
             toggle.style.borderColor = "rgba(255,255,255,0.2)";
           }
-          
+
           // Reset to first page and reload
           currentPage = 1;
           loadEquipment();
-          
+
           // Show success toast
           showToast("تم مسح جميع المرشحات ✓");
         }
@@ -899,7 +989,9 @@
           $("#pagination").innerHTML = "";
 
           const cat = $("#filter-category").value;
-          const gov = $("#filter-governorate") ? $("#filter-governorate").value : "";
+          const gov = $("#filter-governorate")
+            ? $("#filter-governorate").value
+            : "";
           const search = $("#filter-search").value.trim();
 
           // Favorites-only mode hits /wishlist instead of /equipment.
@@ -926,12 +1018,15 @@
             try {
               const res = await apiFetch(`/wishlist?${params}`);
               if (!res || !res.success) {
-                throw new Error((res && res.error && res.error.message) || "Failed to load");
+                throw new Error(
+                  (res && res.error && res.error.message) || "Failed to load",
+                );
               }
               renderGrid(res.items);
               renderPagination(res.pagination);
             } catch (err) {
-              $("#load-state").innerHTML = `<p style="color:#ffb3b3">خطأ: ${escapeHtml(err.message)}</p>`;
+              $("#load-state").innerHTML =
+                `<p style="color:#ffb3b3">خطأ: ${escapeHtml(err.message)}</p>`;
               showToast(err.message || "خطأ", true);
             }
             return;
@@ -951,12 +1046,15 @@
           try {
             const res = await apiFetch(`/equipment?${params}`);
             if (!res || !res.success) {
-              throw new Error((res && res.error && res.error.message) || "Failed to load");
+              throw new Error(
+                (res && res.error && res.error.message) || "Failed to load",
+              );
             }
             renderGrid(res.items);
             renderPagination(res.pagination);
           } catch (err) {
-            $("#load-state").innerHTML = `<p style="color:#ffb3b3">خطأ في التحميل: ${escapeHtml(err.message)}</p>`;
+            $("#load-state").innerHTML =
+              `<p style="color:#ffb3b3">خطأ في التحميل: ${escapeHtml(err.message)}</p>`;
             showToast(err.message || "خطأ في التحميل", true);
           }
         }
@@ -972,9 +1070,14 @@
           }
 
           for (const eq of items) {
-            const img = eq.primary_image_url || (Array.isArray(eq.images) && eq.images[0]) || "";
+            const img =
+              eq.primary_image_url ||
+              (Array.isArray(eq.images) && eq.images[0]) ||
+              "";
             const loc = eq.location || {};
-            const locStr = (loc.city ? loc.city : "") + (loc.street ? " — " + loc.street : "");
+            const locStr =
+              (loc.city ? loc.city : "") +
+              (loc.street ? " — " + loc.street : "");
 
             // Trust badges. The list endpoint attaches a compact trust object
             // per item (badges + a few stats). We render at most three badges
@@ -989,20 +1092,23 @@
             // tap "حجز", so it lives on the card itself, not just in the
             // booking modal.
             const dep = Number(eq.deposit_amount || 0);
-            const depHtml = dep > 0
-              ? `<div class="deposit-hint" title="يُحجز ويُعاد عند إرجاع المعدة سليمة">
+            const depHtml =
+              dep > 0
+                ? `<div class="deposit-hint" title="يُحجز ويُعاد عند إرجاع المعدة سليمة">
                    <i class="fas fa-shield-alt" style="color:#f1c40f"></i>
                    تأمين ${escapeHtml(dep.toFixed(2))} ر.ع
                  </div>`
-              : "";
+                : "";
 
             const card = document.createElement("div");
             card.className = "equipment-card";
             card.innerHTML = `
               <div class="price-tag">${escapeHtml(String(eq.daily_price))} ر.ع / يوم</div>
-              ${img
-                ? `<img src="${escapeHtml(img)}" alt="${escapeHtml(eq.name)}" class="equip-img" />`
-                : `<div class="equip-img" style="background:#333;display:flex;align-items:center;justify-content:center"><i class="fas fa-image" style="font-size:40px;color:#888"></i></div>`}
+              ${
+                img
+                  ? `<img src="${escapeHtml(img)}" alt="${escapeHtml(eq.name)}" class="equip-img" />`
+                  : `<div class="equip-img" style="background:#333;display:flex;align-items:center;justify-content:center"><i class="fas fa-image" style="font-size:40px;color:#888"></i></div>`
+              }
               <div class="equip-details">
                 <h3>${escapeHtml(eq.name)}</h3>
                 ${badgesHtml}
@@ -1031,7 +1137,9 @@
             `;
             grid.appendChild(card);
 
-            card.querySelector(".book-btn").addEventListener("click", () => openBookingModal(eq));
+            card
+              .querySelector(".book-btn")
+              .addEventListener("click", () => openBookingModal(eq));
             card.querySelector(".pdf-btn").addEventListener("click", () => {
               if (window.generateEquipmentPDF) generateEquipmentPDF(eq);
             });
@@ -1082,7 +1190,10 @@
           if (trust.completed_transactions > 0) {
             parts.push(`${trust.completed_transactions} طلب مكتمل`);
           }
-          if (trust.completion_rate != null && trust.completed_transactions >= 3) {
+          if (
+            trust.completion_rate != null &&
+            trust.completed_transactions >= 3
+          ) {
             parts.push(`إكمال ${trust.completion_rate}%`);
           }
           if (trust.avg_response_hours != null) {
@@ -1109,11 +1220,17 @@
             });
             return b;
           };
-          wrap.appendChild(mk("السابق", Math.max(1, p.page - 1), { disabled: p.page === 1 }));
+          wrap.appendChild(
+            mk("السابق", Math.max(1, p.page - 1), { disabled: p.page === 1 }),
+          );
           for (let i = 1; i <= p.pages; i++) {
             wrap.appendChild(mk(String(i), i, { active: i === p.page }));
           }
-          wrap.appendChild(mk("التالي", Math.min(p.pages, p.page + 1), { disabled: p.page === p.pages }));
+          wrap.appendChild(
+            mk("التالي", Math.min(p.pages, p.page + 1), {
+              disabled: p.page === p.pages,
+            }),
+          );
         }
 
         // ---------- Booking modal ----------
@@ -1125,7 +1242,8 @@
           }
           activeEquipment = eq;
           $("#modal-equipment-name").textContent = eq.name;
-          $("#modal-daily-price").textContent = `السعر اليومي: ${eq.daily_price} ر.ع`;
+          $("#modal-daily-price").textContent =
+            `السعر اليومي: ${eq.daily_price} ر.ع`;
 
           // Deposit notice in the modal. We always show this BEFORE the
           // user picks dates so they aren't surprised at total time.
@@ -1192,7 +1310,8 @@
               `/rentals/availability/${activeEquipment.id}?start_date=${start}&end_date=${end}`,
             );
             if (!res || !res.success) {
-              hint.textContent = (res && res.error && res.error.message) || "تعذّر التحقق";
+              hint.textContent =
+                (res && res.error && res.error.message) || "تعذّر التحقق";
               hint.className = "availability-hint bad";
               return;
             }
@@ -1203,11 +1322,12 @@
               const dep = Number(activeEquipment.deposit_amount || 0);
               const grand = rentalCost + dep;
               preview.style.display = "block";
-              preview.innerHTML = dep > 0
-                ? `الإيجار: ${rentalCost.toFixed(2)} ر.ع (${res.days} يوم × ${activeEquipment.daily_price} ر.ع)
+              preview.innerHTML =
+                dep > 0
+                  ? `الإيجار: ${rentalCost.toFixed(2)} ر.ع (${res.days} يوم × ${activeEquipment.daily_price} ر.ع)
                    <br>تأمين قابل للاسترداد: ${dep.toFixed(2)} ر.ع
                    <br><strong>الإجمالي عند الحجز: ${grand.toFixed(2)} ر.ع</strong>`
-                : `الإجمالي المتوقع: ${rentalCost.toFixed(2)} ر.ع (${res.days} يوم × ${activeEquipment.daily_price} ر.ع)`;
+                  : `الإجمالي المتوقع: ${rentalCost.toFixed(2)} ر.ع (${res.days} يوم × ${activeEquipment.daily_price} ر.ع)`;
             } else {
               hint.textContent = "✗ هذه الفترة محجوزة. جرّب تواريخ أخرى.";
               hint.className = "availability-hint bad";
@@ -1222,8 +1342,11 @@
         const RENTAL_CART_KEY = "harth_rental_cart";
 
         function getRentalCart() {
-          try { return JSON.parse(localStorage.getItem(RENTAL_CART_KEY) || "[]"); }
-          catch (_e) { return []; }
+          try {
+            return JSON.parse(localStorage.getItem(RENTAL_CART_KEY) || "[]");
+          } catch (_e) {
+            return [];
+          }
         }
 
         function saveRentalCart(items) {
@@ -1258,7 +1381,9 @@
           const cart = getRentalCart();
 
           // Remove existing entry for the same equipment if re-added
-          const filtered = cart.filter((r) => r.equipment_id !== activeEquipment.id);
+          const filtered = cart.filter(
+            (r) => r.equipment_id !== activeEquipment.id,
+          );
 
           filtered.push({
             equipment_id: activeEquipment.id,
@@ -1276,7 +1401,9 @@
 
           saveRentalCart(filtered);
           closeModal();
-          showToast(`✓ تمت إضافة "${activeEquipment.name}" للسلة (${days} يوم)`);
+          showToast(
+            `✓ تمت إضافة "${activeEquipment.name}" للسلة (${days} يوم)`,
+          );
 
           setTimeout(() => {
             window.location.href = "checkout.html";
@@ -1305,9 +1432,10 @@
           const bgImage = b.image_url
             ? `background:linear-gradient(rgba(0,0,0,0.5),rgba(0,0,0,0.5)),url('${escapeHtml(b.image_url)}') center/cover;`
             : `background:linear-gradient(135deg,${bg},rgba(0,0,0,0.4));`;
-          const cta = b.cta_url && b.cta_label
-            ? `<a href="${escapeHtml(b.cta_url)}" style="background:${escapeHtml(fg)};color:${escapeHtml(bg)};padding:8px 16px;border-radius:999px;text-decoration:none;font-weight:700;font-size:13px;display:inline-block">${escapeHtml(b.cta_label)} →</a>`
-            : "";
+          const cta =
+            b.cta_url && b.cta_label
+              ? `<a href="${escapeHtml(b.cta_url)}" style="background:${escapeHtml(fg)};color:${escapeHtml(bg)};padding:8px 16px;border-radius:999px;text-decoration:none;font-weight:700;font-size:13px;display:inline-block">${escapeHtml(b.cta_label)} →</a>`
+              : "";
           return `
             <div style="${bgImage};color:${escapeHtml(fg)};padding:20px 24px;border-radius:14px;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:12px;box-shadow:0 4px 14px rgba(0,0,0,0.18)">
               <div>
@@ -1332,7 +1460,10 @@
               loadEquipment();
             }, 350);
           });
-          $("#filter-governorate").addEventListener("change", () => { currentPage = 1; loadEquipment(); });
+          $("#filter-governorate").addEventListener("change", () => {
+            currentPage = 1;
+            loadEquipment();
+          });
           $("#filter-category").addEventListener("change", () => {
             currentPage = 1;
             loadEquipment();
@@ -1348,9 +1479,15 @@
             favBtn.addEventListener("click", () => {
               favoritesOnly = !favoritesOnly;
               favBtn.setAttribute("aria-pressed", String(favoritesOnly));
-              favBtn.querySelector("i").className = favoritesOnly ? "fas fa-heart" : "far fa-heart";
-              favBtn.style.background = favoritesOnly ? "rgba(231, 76, 60, 0.2)" : "transparent";
-              favBtn.style.borderColor = favoritesOnly ? "#e74c3c" : "rgba(255,255,255,0.2)";
+              favBtn.querySelector("i").className = favoritesOnly
+                ? "fas fa-heart"
+                : "far fa-heart";
+              favBtn.style.background = favoritesOnly
+                ? "rgba(231, 76, 60, 0.2)"
+                : "transparent";
+              favBtn.style.borderColor = favoritesOnly
+                ? "#e74c3c"
+                : "rgba(255,255,255,0.2)";
               favBtn.style.color = favoritesOnly ? "#ffb3b3" : "#fff";
 
               const govSel = $("#filter-governorate");
@@ -1373,7 +1510,7 @@
         });
       })();
     </script>
-  
+
     <!-- HARTH-RESPONSIVE-JS -->
     <script src="responsive.js" defer></script>
   </body>
