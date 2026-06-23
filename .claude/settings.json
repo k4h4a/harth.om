@@ -1,7 +1,13 @@
 {
   "permissions": {
     "allow": [
-      "Bash(node -e ' *)"
+      "Bash(node -e ' *)",
+      "Bash(ls -la /tmp/pwcheck/*.png 2>&1)",
+      "Read(//c/tmp/pwcheck/**)",
+      "Bash(find / -maxdepth 6 -iname \"__pw_*.png\" 2>/dev/null)",
+      "Read(//c//**)",
+      "Bash(node check.js)",
+      "Bash(echo \"EXIT_CODE=$?\")"
     ]
   }
 }

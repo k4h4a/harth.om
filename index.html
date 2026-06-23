@@ -49,14 +49,20 @@
           </ul>
         </nav>
 
-        <div class="section left" id="auth-header">
-          <a
-            href="register.html"
-            class="hs-btn hs-btn--ghost hs-btn--sm"
-            id="login-link"
-          >
-            تسجيل دخول
+        <div class="section left">
+          <a href="register.html?role=owner" class="hs-btn hs-btn--accent hs-btn--sm" id="add-listing-cta">
+            <i class="fas fa-plus"></i>
+            أضف معدتك
           </a>
+          <div id="auth-header">
+            <a
+              href="register.html"
+              class="hs-btn hs-btn--ghost hs-btn--sm"
+              id="login-link"
+            >
+              تسجيل دخول
+            </a>
+          </div>
         </div>
       </div>
     </header>
@@ -84,41 +90,75 @@
         </div>
       </section>
 
-      <!-- Hero Section: now driven by /public/banners?placement=home_hero
-           when banners exist; otherwise falls back to the static hero
-           copy below so first-time visitors with no banners still see
-           something compelling. -->
-      <section class="hero-section" id="hero-section">
-        <!-- Banner carousel slot — populated by JS if banners exist. -->
-        <div id="hero-carousel" style="display: none"></div>
+      <!-- Hero Search Section — the main discovery tool. Always visible;
+           does not depend on admin banners. -->
+      <section class="search-hero">
+        <div class="container">
+          <h1 class="search-hero-title">
+            كل ما تحتاجه مزرعتك، <span class="text-accent">في مكان واحد</span>
+          </h1>
+          <p class="search-hero-subtitle">
+            تأجير وبيع المعدات الزراعية مباشرة من مزارعين موثوقين، مع توصيل
+            يغطي جميع محافظات السلطنة
+          </p>
 
-        <!-- Static fallback. Hidden by JS when banners take over. -->
-        <div class="container" id="hero-static">
-          <div class="hero-content">
-            <h1 class="hero-title">
-              معاً نحو <span class="text-accent">حصادٍ أذكى</span> <br />ونماءٍ
-              مستدام
-            </h1>
-            <p class="hero-description">
-              "حرث" تضع أحدث الخدمات والتقنيات الزراعية بين يديك. منصة شاملة
-              لتأجير وبيع المعدات الزراعية مع شبكة توصيل موثوقة عبر جميع محافظات
-              السلطنة.
-            </p>
-            <div class="hero-actions">
-              <a href="tools.html" class="hs-btn hs-btn--lg">
-                <i class="fas fa-tractor"></i>
-                تصفح المعدات
-              </a>
-              <a
-                href="register.html"
-                class="hs-btn hs-btn--secondary hs-btn--lg"
-              >
-                <i class="fas fa-user-plus"></i>
-                انضم الآن
-              </a>
+          <form class="search-bar" id="hero-search-form">
+            <div class="search-bar-field search-bar-field--main">
+              <i class="fas fa-search"></i>
+              <input
+                type="search"
+                id="hero-search-input"
+                placeholder="ابحث عن جرار، حصادة، مرشة..."
+                aria-label="ابحث عن معدة"
+              />
             </div>
-          </div>
+            <div class="search-bar-field">
+              <select id="hero-search-category" class="hs-select" aria-label="فئة المعدات">
+                <option value="">كل الفئات</option>
+                <option value="tractor">الجرارات</option>
+                <option value="harvester">معدات الحصاد</option>
+                <option value="sprayer">المرشات والري</option>
+                <option value="tools">الأدوات اليدوية</option>
+                <option value="seeds">البذور</option>
+                <option value="fertilizer">الأسمدة</option>
+                <option value="pesticide">المبيدات</option>
+                <option value="other">أخرى</option>
+              </select>
+            </div>
+            <div class="search-bar-field">
+              <select id="hero-search-governorate" class="hs-select" aria-label="المحافظة">
+                <option value="">كل المحافظات</option>
+                <option value="muscat">مسقط</option>
+                <option value="dhofar">ظفار</option>
+                <option value="musandam">مسندم</option>
+                <option value="buraimi">البريمي</option>
+                <option value="dakhiliyah">الداخلية</option>
+                <option value="north_batinah">شمال الباطنة</option>
+                <option value="south_batinah">جنوب الباطنة</option>
+                <option value="south_sharqiyah">جنوب الشرقية</option>
+                <option value="north_sharqiyah">شمال الشرقية</option>
+                <option value="dhahirah">الظاهرة</option>
+                <option value="wusta">الوسطى</option>
+              </select>
+            </div>
+            <button type="button" class="hs-btn hs-btn--secondary search-bar-advanced" id="hero-advanced-filters-btn">
+              <i class="fas fa-sliders-h"></i>
+              فلاتر متقدمة
+            </button>
+            <button type="submit" class="hs-btn hs-btn--lg search-bar-submit">
+              <i class="fas fa-search"></i>
+              بحث
+            </button>
+          </form>
         </div>
+      </section>
+
+      <!-- Admin-controlled seasonal banner — now a slim optional strip under
+           the search hero, not the main attraction. Empty/hidden when no
+           banner is configured. -->
+      <section class="hero-section" id="hero-section">
+        <div id="hero-carousel" style="display: none"></div>
+        <div class="container" id="hero-static"></div>
       </section>
 
       <!-- Secondary banner strip — sits under the hero, used for
@@ -128,61 +168,54 @@
         <div class="container" id="banner-secondary-wrap"></div>
       </section>
 
-      <!-- Features Section -->
-      <section class="features-section">
+      <!-- Categories System -->
+      <section class="categories-section">
         <div class="container">
-          <h2 class="section-title">لماذا تختار حرث؟</h2>
-          <div class="features-grid">
-            <div class="hs-card">
-              <div class="card__body">
-                <div class="feature-icon">
-                  <i class="fas fa-seedling"></i>
-                </div>
-                <h3 class="feature-title">تنوع المعدات</h3>
-                <p class="feature-description">
-                  مجموعة واسعة من المعدات الزراعية الحديثة للإيجار والبيع من
-                  مزارعين موثوقين
-                </p>
-              </div>
-            </div>
-
-            <div class="hs-card">
-              <div class="card__body">
-                <div class="feature-icon">
-                  <i class="fas fa-shipping-fast"></i>
-                </div>
-                <h3 class="feature-title">توصيل سريع</h3>
-                <p class="feature-description">
-                  شبكة توصيل متطورة تغطي جميع محافظات عُمان مع تتبع لحظي للطلبات
-                </p>
-              </div>
-            </div>
-
-            <div class="hs-card">
-              <div class="card__body">
-                <div class="feature-icon">
-                  <i class="fas fa-shield-alt"></i>
-                </div>
-                <h3 class="feature-title">موثوقية عالية</h3>
-                <p class="feature-description">
-                  نظام توثيق متقدم للمزارعين وضمان جودة لكل معدة مع خدمة عملاء
-                  على مدار الساعة
-                </p>
-              </div>
-            </div>
-
-            <div class="hs-card">
-              <div class="card__body">
-                <div class="feature-icon">
-                  <i class="fas fa-mobile-alt"></i>
-                </div>
-                <h3 class="feature-title">تجربة متطورة</h3>
-                <p class="feature-description">
-                  واجهة سهلة الاستخدام مع إشعارات فورية وأدوات إدارة متقدمة
-                  للمزارعين
-                </p>
-              </div>
-            </div>
+          <div class="section-head">
+            <h2 class="section-title">تصفح حسب الفئة</h2>
+            <p class="section-subtitle">اختر فئة المعدات التي تبحث عنها</p>
+          </div>
+          <div class="categories-rail" id="categories-rail">
+            <button type="button" class="category-card" data-category="tractor">
+              <span class="category-icon"><i class="fas fa-tractor"></i></span>
+              <span class="category-title">الجرارات</span>
+              <span class="category-count" data-count-for="tractor">…</span>
+            </button>
+            <button type="button" class="category-card" data-category="harvester">
+              <span class="category-icon"><i class="fas fa-wheat-awn"></i></span>
+              <span class="category-title">معدات الحصاد</span>
+              <span class="category-count" data-count-for="harvester">…</span>
+            </button>
+            <button type="button" class="category-card" data-category="sprayer">
+              <span class="category-icon"><i class="fas fa-shower"></i></span>
+              <span class="category-title">المرشات والري</span>
+              <span class="category-count" data-count-for="sprayer">…</span>
+            </button>
+            <button type="button" class="category-card" data-category="tools">
+              <span class="category-icon"><i class="fas fa-toolbox"></i></span>
+              <span class="category-title">الأدوات اليدوية</span>
+              <span class="category-count" data-count-for="tools">…</span>
+            </button>
+            <button type="button" class="category-card" data-category="seeds">
+              <span class="category-icon"><i class="fas fa-seedling"></i></span>
+              <span class="category-title">البذور</span>
+              <span class="category-count" data-count-for="seeds">…</span>
+            </button>
+            <button type="button" class="category-card" data-category="fertilizer">
+              <span class="category-icon"><i class="fas fa-flask"></i></span>
+              <span class="category-title">الأسمدة</span>
+              <span class="category-count" data-count-for="fertilizer">…</span>
+            </button>
+            <button type="button" class="category-card" data-category="pesticide">
+              <span class="category-icon"><i class="fas fa-spray-can"></i></span>
+              <span class="category-title">المبيدات</span>
+              <span class="category-count" data-count-for="pesticide">…</span>
+            </button>
+            <button type="button" class="category-card" data-category="other">
+              <span class="category-icon"><i class="fas fa-ellipsis"></i></span>
+              <span class="category-title">أخرى</span>
+              <span class="category-count" data-count-for="other">…</span>
+            </button>
           </div>
         </div>
       </section>
@@ -234,32 +267,175 @@
         </div>
       </section>
 
-      <!-- CTA Section -->
-      <section class="cta-section">
+      <!-- Featured Listings -->
+      <section class="featured-section">
         <div class="container">
-          <div class="hs-card hs-card--featured">
-            <div class="card__body">
-              <h2 class="cta-title">هل أنت مزارع؟</h2>
-              <p class="cta-description">
-                انضم لشبكة المزارعين في حرث وابدأ بتأجير معداتك أو بيع منتجاتك
-                للمزارعين في جميع أنحاء السلطنة
-              </p>
-              <div class="cta-actions">
-                <a
-                  href="register.html?role=owner"
-                  class="hs-btn hs-btn--accent hs-btn--lg"
-                >
-                  <i class="fas fa-store"></i>
-                  سجل كمزارع
-                </a>
-                <a href="basket.html" class="hs-btn hs-btn--ghost hs-btn--lg">
-                  تصفح المعدات المعروضة
-                </a>
+          <div class="section-head">
+            <h2 class="section-title">معدات مميّزة</h2>
+            <p class="section-subtitle">الأعلى تقييماً من مزارعين موثوقين</p>
+          </div>
+          <div class="featured-rail-wrap">
+            <button type="button" class="featured-nav featured-nav--prev" id="featured-prev" aria-label="السابق">
+              <i class="fas fa-chevron-right"></i>
+            </button>
+            <div class="featured-rail" id="featured-rail">
+              <div class="hs-skel-card" style="min-width: 300px">
+                <div class="hs-skel hs-skel--thumb"></div>
+                <div class="hs-skel-card__body">
+                  <div class="hs-skel hs-skel--title"></div>
+                  <div class="hs-skel hs-skel--line"></div>
+                </div>
               </div>
+              <div class="hs-skel-card" style="min-width: 300px">
+                <div class="hs-skel hs-skel--thumb"></div>
+                <div class="hs-skel-card__body">
+                  <div class="hs-skel hs-skel--title"></div>
+                  <div class="hs-skel hs-skel--line"></div>
+                </div>
+              </div>
+              <div class="hs-skel-card" style="min-width: 300px">
+                <div class="hs-skel hs-skel--thumb"></div>
+                <div class="hs-skel-card__body">
+                  <div class="hs-skel hs-skel--title"></div>
+                  <div class="hs-skel hs-skel--line"></div>
+                </div>
+              </div>
+            </div>
+            <button type="button" class="featured-nav featured-nav--next" id="featured-next" aria-label="التالي">
+              <i class="fas fa-chevron-left"></i>
+            </button>
+          </div>
+        </div>
+      </section>
+
+      <!-- Main Marketplace Area: sidebar filters + listings grid -->
+      <section class="marketplace-section" id="marketplace-section">
+        <div class="container">
+          <div class="section-head">
+            <h2 class="section-title">جميع المعدات</h2>
+            <p class="section-subtitle">تصفّح، رشّح بحسب احتياجك، واختر ما يناسبك</p>
+          </div>
+
+          <div class="marketplace-layout">
+            <aside class="filters-sidebar" id="filters-sidebar">
+              <div class="filters-sidebar-head">
+                <h3><i class="fas fa-sliders-h"></i> الفلاتر</h3>
+                <button type="button" class="filters-close-btn" id="mp-filters-close" aria-label="إغلاق الفلاتر">
+                  <i class="fas fa-times"></i>
+                </button>
+              </div>
+
+              <div class="filter-group">
+                <label class="filter-group-title" for="mp-filter-category">الفئة</label>
+                <select id="mp-filter-category" class="hs-select">
+                  <option value="">كل الفئات</option>
+                  <option value="tractor">الجرارات</option>
+                  <option value="harvester">معدات الحصاد</option>
+                  <option value="sprayer">المرشات والري</option>
+                  <option value="tools">الأدوات اليدوية</option>
+                  <option value="seeds">البذور</option>
+                  <option value="fertilizer">الأسمدة</option>
+                  <option value="pesticide">المبيدات</option>
+                  <option value="other">أخرى</option>
+                </select>
+              </div>
+
+              <div class="filter-group">
+                <span class="filter-group-title">نوع العرض</span>
+                <div class="filter-pills" id="mp-filter-listing-type">
+                  <button type="button" class="filter-pill is-active" data-value="">الكل</button>
+                  <button type="button" class="filter-pill" data-value="rent">للإيجار</button>
+                  <button type="button" class="filter-pill" data-value="sale">للبيع</button>
+                </div>
+              </div>
+
+              <div class="filter-group">
+                <span class="filter-group-title">نطاق السعر (ر.ع)</span>
+                <div class="price-range-inputs">
+                  <input type="number" id="mp-filter-min-price" class="hs-input" placeholder="من" min="0" inputmode="decimal" />
+                  <span class="price-range-sep">—</span>
+                  <input type="number" id="mp-filter-max-price" class="hs-input" placeholder="إلى" min="0" inputmode="decimal" />
+                </div>
+              </div>
+
+              <div class="filter-group">
+                <label class="filter-group-title" for="mp-filter-governorate">المحافظة</label>
+                <select id="mp-filter-governorate" class="hs-select">
+                  <option value="">كل المحافظات</option>
+                  <option value="muscat">مسقط</option>
+                  <option value="dhofar">ظفار</option>
+                  <option value="musandam">مسندم</option>
+                  <option value="buraimi">البريمي</option>
+                  <option value="dakhiliyah">الداخلية</option>
+                  <option value="north_batinah">شمال الباطنة</option>
+                  <option value="south_batinah">جنوب الباطنة</option>
+                  <option value="south_sharqiyah">جنوب الشرقية</option>
+                  <option value="north_sharqiyah">شمال الشرقية</option>
+                  <option value="dhahirah">الظاهرة</option>
+                  <option value="wusta">الوسطى</option>
+                </select>
+              </div>
+
+              <div class="filter-group">
+                <label class="filter-group-title" for="mp-filter-min-rating">التقييم الأدنى</label>
+                <select id="mp-filter-min-rating" class="hs-select">
+                  <option value="">أي تقييم</option>
+                  <option value="4">4 نجوم فأكثر</option>
+                  <option value="3">3 نجوم فأكثر</option>
+                  <option value="2">2 نجوم فأكثر</option>
+                </select>
+              </div>
+
+              <div class="filters-sidebar-actions">
+                <button type="button" class="hs-btn hs-btn--block" id="mp-apply-filters">تطبيق الفلاتر</button>
+                <button type="button" class="hs-btn hs-btn--ghost hs-btn--block" id="mp-clear-filters">مسح الكل</button>
+              </div>
+            </aside>
+
+            <div class="listings-main">
+              <div class="listings-toolbar">
+                <div class="listings-result-count" id="mp-result-count">جارٍ التحميل…</div>
+                <div class="listings-toolbar-actions">
+                  <button type="button" class="hs-btn hs-btn--secondary hs-btn--sm" id="mp-filters-drawer-btn">
+                    <i class="fas fa-sliders-h"></i> الفلاتر
+                  </button>
+                  <select id="mp-filter-sort" class="hs-select" aria-label="ترتيب النتائج">
+                    <option value="newest">الأحدث أولاً</option>
+                    <option value="oldest">الأقدم أولاً</option>
+                    <option value="price_low">السعر: الأقل أولاً</option>
+                    <option value="price_high">السعر: الأعلى أولاً</option>
+                    <option value="rating">الأعلى تقييماً</option>
+                  </select>
+                </div>
+              </div>
+
+              <div id="mp-load-state" class="skeleton-grid">
+                <div class="hs-card"><div class="skeleton skeleton--card"></div><div class="card__body"><div class="skeleton skeleton--title"></div><div class="skeleton skeleton--text"></div></div></div>
+                <div class="hs-card"><div class="skeleton skeleton--card"></div><div class="card__body"><div class="skeleton skeleton--title"></div><div class="skeleton skeleton--text"></div></div></div>
+                <div class="hs-card"><div class="skeleton skeleton--card"></div><div class="card__body"><div class="skeleton skeleton--title"></div><div class="skeleton skeleton--text"></div></div></div>
+                <div class="hs-card"><div class="skeleton skeleton--card"></div><div class="card__body"><div class="skeleton skeleton--title"></div><div class="skeleton skeleton--text"></div></div></div>
+                <div class="hs-card"><div class="skeleton skeleton--card"></div><div class="card__body"><div class="skeleton skeleton--title"></div><div class="skeleton skeleton--text"></div></div></div>
+                <div class="hs-card"><div class="skeleton skeleton--card"></div><div class="card__body"><div class="skeleton skeleton--title"></div><div class="skeleton skeleton--text"></div></div></div>
+              </div>
+
+              <div class="listings-grid" id="mp-grid" style="display: none"></div>
+
+              <div class="hs-empty" id="mp-empty" style="display: none">
+                <div class="hs-empty__art">
+                  <i class="fas fa-tractor" style="font-size: 40px"></i>
+                </div>
+                <h3 class="hs-empty__title">لا توجد نتائج مطابقة</h3>
+                <p class="hs-empty__desc">جرّب تغيير الفلاتر أو البحث عن كلمة أخرى</p>
+                <button type="button" class="hs-btn hs-btn--secondary hs-empty__cta" id="mp-empty-clear">مسح الفلاتر</button>
+              </div>
+
+              <div class="listings-pagination" id="mp-pagination"></div>
             </div>
           </div>
         </div>
       </section>
+
+      <div class="filters-sheet-backdrop" id="filters-sheet-backdrop"></div>
     </main>
 
     <footer class="footer-modern">
@@ -893,13 +1069,17 @@
         margin-top: 0;
       }
 
+      /* The admin banner strip is now secondary — it collapses to nothing
+         when empty, and stays compact even when a banner is configured. */
       .hero-section {
-        min-height: 70vh;
+        min-height: 0;
         display: flex;
         align-items: center;
         text-align: center;
         position: relative;
-        padding: var(--sp-8) 0;
+      }
+      #hero-static:empty {
+        display: none;
       }
 
       .hero-content {
@@ -944,10 +1124,13 @@
         flex-wrap: wrap;
       }
 
-      .features-section,
+      .categories-section,
       .stats-section,
-      .cta-section {
-        padding: var(--sp-16) 0;
+      .featured-section,
+      .marketplace-section {
+        /* design-system.css only defines spacing up to --sp-10 (72px);
+           --sp-16 doesn't exist and silently zeroes this padding. */
+        padding: var(--sp-10) 0;
       }
 
       .section-title {
@@ -955,39 +1138,23 @@
         font-weight: 700;
         text-align: center;
         color: var(--color-text);
-        margin-bottom: var(--sp-12);
+        margin-bottom: var(--sp-2);
       }
 
-      .features-grid {
-        display: grid;
-        grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-        gap: var(--sp-6);
-        margin-top: var(--sp-8);
+      .section-head {
+        text-align: center;
+        margin-bottom: var(--sp-8);
       }
 
-      .feature-icon {
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        width: 4rem;
-        height: 4rem;
-        background: var(--color-brand-500);
-        border-radius: var(--r-xl);
-        color: white;
-        font-size: var(--fs-xl);
-        margin-bottom: var(--sp-4);
-      }
-
-      .feature-title {
-        font-size: var(--fs-lg);
-        font-weight: 600;
-        color: var(--color-text);
-        margin-bottom: var(--sp-3);
-      }
-
-      .feature-description {
+      .section-subtitle {
+        font-size: var(--fs-md);
         color: var(--color-text-muted);
-        line-height: var(--lh-relaxed);
+        margin: 0;
+      }
+
+      .marketplace-section .section-head,
+      .featured-section .section-head {
+        text-align: start;
       }
 
       .stats-section {
@@ -1019,37 +1186,512 @@
         font-weight: 500;
       }
 
-      .cta-section .hs-card {
+      /* ===== Hero search ============================================== */
+      .search-hero {
+        padding: var(--sp-10) 0 var(--sp-8);
         text-align: center;
-        max-width: 600px;
-        margin: 0 auto;
+        background: radial-gradient(
+          ellipse at top,
+          rgba(106, 176, 76, 0.18),
+          transparent 60%
+        );
       }
 
-      .cta-title {
-        font-size: var(--fs-2xl);
-        font-weight: 700;
+      .search-hero-title {
+        font-size: clamp(1.9rem, 4.5vw, 3rem);
+        font-weight: 800;
+        line-height: 1.25;
         color: var(--color-text);
+        margin: 0 0 var(--sp-3);
+      }
+
+      .search-hero-subtitle {
+        font-size: var(--fs-lg);
+        color: var(--color-text-muted);
+        max-width: 640px;
+        margin: 0 auto var(--sp-8);
+        line-height: var(--lh-base);
+      }
+
+      .search-bar {
+        display: flex;
+        align-items: stretch;
+        gap: var(--sp-2);
+        max-width: 980px;
+        margin: 0 auto;
+        background: var(--surface-glass);
+        backdrop-filter: blur(14px);
+        border: 1px solid var(--border-soft);
+        border-radius: var(--r-xl);
+        padding: var(--sp-2);
+        box-shadow: var(--shadow-lg);
+        flex-wrap: wrap;
+      }
+
+      .search-bar-field {
+        display: flex;
+        align-items: center;
+        gap: var(--sp-2);
+        flex: 1 1 160px;
+        background: var(--surface-2);
+        border-radius: var(--r-md);
+        padding: 0 var(--sp-3);
+      }
+
+      .search-bar-field--main {
+        flex: 2 1 260px;
+        color: var(--color-text-soft);
+      }
+
+      .search-bar-field--main input {
+        flex: 1;
+        border: none;
+        background: transparent;
+        color: var(--color-text);
+        font-family: inherit;
+        font-size: var(--fs-base);
+        padding: 12px 0;
+      }
+      .search-bar-field--main input:focus {
+        outline: none;
+      }
+      .search-bar-field--main input::placeholder {
+        color: var(--color-text-soft);
+      }
+
+      .search-bar-field .hs-select {
+        border: none;
+        background: transparent !important;
+        padding: 12px 0;
+      }
+
+      .search-bar-advanced {
+        flex: 0 0 auto;
+      }
+      .search-bar-submit {
+        flex: 0 0 auto;
+      }
+
+      /* ===== Categories ================================================ */
+      .categories-rail {
+        display: grid;
+        grid-template-columns: repeat(4, 1fr);
+        gap: var(--sp-4);
+      }
+
+      .category-card {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: var(--sp-2);
+        background: var(--surface-glass);
+        border: 1px solid var(--border-soft);
+        border-radius: var(--r-lg);
+        padding: var(--sp-5) var(--sp-3);
+        color: var(--color-text);
+        font-family: inherit;
+        cursor: pointer;
+        transition: transform var(--dur-base) var(--ease-standard),
+          box-shadow var(--dur-base) var(--ease-standard),
+          border-color var(--dur-base) var(--ease-standard);
+      }
+      .category-card:hover {
+        transform: translateY(-4px);
+        box-shadow: var(--shadow-lg);
+        border-color: var(--color-brand-500);
+      }
+
+      .category-icon {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 3.5rem;
+        height: 3.5rem;
+        border-radius: var(--r-xl);
+        background: linear-gradient(
+          135deg,
+          var(--color-brand-500),
+          var(--color-brand-700)
+        );
+        color: #fff;
+        font-size: var(--fs-xl);
+      }
+
+      .category-title {
+        font-weight: 700;
+        font-size: var(--fs-md);
+      }
+
+      .category-count {
+        font-size: var(--fs-xs);
+        color: var(--color-text-soft);
+      }
+
+      /* ===== Featured listings ========================================= */
+      .featured-rail-wrap {
+        position: relative;
+      }
+
+      .featured-rail {
+        display: flex;
+        gap: var(--sp-5);
+        overflow-x: auto;
+        scroll-behavior: smooth;
+        scroll-snap-type: x proximity;
+        padding-bottom: var(--sp-2);
+      }
+
+      .featured-nav {
+        position: absolute;
+        top: 50%;
+        transform: translateY(-50%);
+        z-index: 2;
+        width: 2.75rem;
+        height: 2.75rem;
+        border-radius: 50%;
+        border: 1px solid var(--border-soft);
+        background: var(--surface-modal);
+        color: var(--color-text);
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+      .featured-nav--prev {
+        inset-inline-start: -1.2rem;
+      }
+      .featured-nav--next {
+        inset-inline-end: -1.2rem;
+      }
+
+      .featured-card {
+        flex: 0 0 300px;
+        scroll-snap-align: start;
+        background: var(--surface-glass);
+        border: 1px solid var(--border-soft);
+        border-radius: var(--r-lg);
+        overflow: hidden;
+        box-shadow: var(--shadow-md);
+        transition: transform var(--dur-base) var(--ease-standard);
+      }
+      .featured-card:hover {
+        transform: translateY(-4px);
+      }
+
+      .featured-card-media {
+        position: relative;
+        height: 180px;
+        background: #1f2a1f;
+      }
+      .featured-card-media img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        display: block;
+      }
+      .featured-card-badge {
+        position: absolute;
+        top: var(--sp-2);
+        inset-inline-start: var(--sp-2);
+      }
+      .featured-card-price {
+        position: absolute;
+        bottom: var(--sp-2);
+        inset-inline-end: var(--sp-2);
+        background: rgba(0, 0, 0, 0.65);
+        color: #fff;
+        font-weight: 700;
+        font-size: var(--fs-sm);
+        padding: 4px 10px;
+        border-radius: var(--r-pill);
+      }
+
+      .featured-card-body {
+        padding: var(--sp-4);
+      }
+      .featured-card-body h3 {
+        margin: 0 0 var(--sp-1);
+        font-size: var(--fs-md);
+        color: var(--color-text);
+      }
+      .featured-card-meta {
+        display: flex;
+        justify-content: space-between;
+        font-size: var(--fs-xs);
+        color: var(--color-text-soft);
+      }
+
+      /* ===== Main marketplace area ===================================== */
+      .marketplace-layout {
+        display: grid;
+        grid-template-columns: 280px 1fr;
+        gap: var(--sp-8);
+        align-items: start;
+      }
+
+      .filters-sidebar {
+        background: var(--surface-glass);
+        border: 1px solid var(--border-soft);
+        border-radius: var(--r-lg);
+        padding: var(--sp-5);
+        position: sticky;
+        top: calc(var(--sp-10) + 70px);
+      }
+
+      .filters-sidebar-head {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
         margin-bottom: var(--sp-4);
       }
-
-      .cta-description {
+      .filters-sidebar-head h3 {
+        margin: 0;
+        font-size: var(--fs-md);
+        color: var(--color-text);
+      }
+      .filters-close-btn {
+        display: none;
+        background: none;
+        border: none;
         color: var(--color-text-muted);
-        line-height: var(--lh-relaxed);
-        margin-bottom: var(--sp-6);
+        font-size: var(--fs-lg);
+        cursor: pointer;
       }
 
-      .cta-actions {
+      .filter-group {
+        margin-bottom: var(--sp-5);
+      }
+      .filter-group-title {
+        display: block;
+        font-size: var(--fs-sm);
+        font-weight: 600;
+        color: var(--color-text-muted);
+        margin-bottom: var(--sp-2);
+      }
+
+      .filter-pills {
         display: flex;
-        gap: var(--sp-4);
-        justify-content: center;
+        gap: var(--sp-2);
         flex-wrap: wrap;
+      }
+      .filter-pill {
+        flex: 1;
+        padding: 8px 10px;
+        border-radius: var(--r-pill);
+        border: 1px solid var(--border-soft);
+        background: var(--surface-2);
+        color: var(--color-text-muted);
+        font-family: inherit;
+        font-size: var(--fs-xs);
+        cursor: pointer;
+        white-space: nowrap;
+      }
+      .filter-pill.is-active {
+        background: var(--color-brand-500);
+        border-color: var(--color-brand-500);
+        color: #fff;
+      }
+
+      .price-range-inputs {
+        display: flex;
+        align-items: center;
+        gap: var(--sp-2);
+      }
+      .price-range-inputs .hs-input {
+        text-align: center;
+      }
+      .price-range-sep {
+        color: var(--color-text-soft);
+      }
+
+      .filters-sidebar-actions {
+        display: flex;
+        flex-direction: column;
+        gap: var(--sp-2);
+      }
+
+      .listings-toolbar {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: var(--sp-3);
+        margin-bottom: var(--sp-5);
+        flex-wrap: wrap;
+      }
+      .listings-result-count {
+        font-size: var(--fs-sm);
+        color: var(--color-text-muted);
+      }
+      .listings-toolbar-actions {
+        display: flex;
+        align-items: center;
+        gap: var(--sp-3);
+      }
+      #mp-filters-drawer-btn {
+        display: none;
+      }
+
+      .listings-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(270px, 1fr));
+        gap: var(--sp-5);
+      }
+
+      .listing-card {
+        background: var(--surface-glass);
+        border: 1px solid var(--border-soft);
+        border-radius: var(--r-lg);
+        overflow: hidden;
+        box-shadow: var(--shadow-md);
+        display: flex;
+        flex-direction: column;
+        transition: transform var(--dur-base) var(--ease-standard),
+          box-shadow var(--dur-base) var(--ease-standard);
+      }
+      .listing-card:hover {
+        transform: translateY(-4px);
+        box-shadow: var(--shadow-lg);
+      }
+
+      .listing-card-media {
+        position: relative;
+        height: 190px;
+        background: #1f2a1f;
+      }
+      .listing-card-media img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        display: block;
+      }
+      .listing-price-tag {
+        position: absolute;
+        bottom: var(--sp-2);
+        inset-inline-end: var(--sp-2);
+        background: var(--color-accent-500);
+        color: #1a1a1a;
+        font-weight: 800;
+        font-size: var(--fs-sm);
+        padding: 4px 10px;
+        border-radius: var(--r-pill);
+      }
+      .listing-fav-btn {
+        position: absolute;
+        top: var(--sp-2);
+        inset-inline-start: var(--sp-2);
+        width: 2.2rem;
+        height: 2.2rem;
+        border-radius: 50%;
+        border: none;
+        background: rgba(0, 0, 0, 0.45);
+        color: #fff;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        transition: background var(--dur-fast);
+      }
+      .listing-fav-btn[aria-pressed="true"] {
+        background: var(--color-danger-500);
+      }
+
+      .listing-card-body {
+        padding: var(--sp-4);
+        display: flex;
+        flex-direction: column;
+        gap: var(--sp-2);
+        flex: 1;
+      }
+      .listing-card-top {
+        display: flex;
+        align-items: center;
+        gap: var(--sp-2);
+        flex-wrap: wrap;
+      }
+      .listing-card-title {
+        margin: 0;
+        font-size: var(--fs-lg);
+        font-weight: 700;
+        color: var(--color-text);
+      }
+      .listing-card-desc {
+        margin: 0;
+        font-size: var(--fs-sm);
+        color: var(--color-text-muted);
+        line-height: var(--lh-base);
+        display: -webkit-box;
+        -webkit-line-clamp: 2;
+        -webkit-box-orient: vertical;
+        overflow: hidden;
+      }
+      .listing-card-meta {
+        display: flex;
+        flex-wrap: wrap;
+        gap: var(--sp-3);
+        font-size: var(--fs-xs);
+        color: var(--color-text-soft);
+      }
+      .listing-card-foot {
+        margin-top: auto;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: var(--sp-2);
+        padding-top: var(--sp-2);
+      }
+      .listing-rating {
+        font-size: var(--fs-sm);
+        color: var(--color-text-muted);
+      }
+
+      .listings-pagination {
+        display: flex;
+        justify-content: center;
+        gap: var(--sp-2);
+        margin-top: var(--sp-8);
+        flex-wrap: wrap;
+      }
+      .pagination-btn {
+        min-width: 2.4rem;
+        height: 2.4rem;
+        padding: 0 10px;
+        border-radius: var(--r-md);
+        border: 1px solid var(--border-soft);
+        background: var(--surface-2);
+        color: var(--color-text);
+        font-family: inherit;
+        cursor: pointer;
+      }
+      .pagination-btn.is-active {
+        background: var(--color-brand-500);
+        border-color: var(--color-brand-500);
+      }
+      .pagination-btn:disabled {
+        opacity: 0.4;
+        cursor: not-allowed;
+      }
+
+      /* Mobile filter bottom sheet (and backdrop) */
+      .filters-sheet-backdrop {
+        position: fixed;
+        inset: 0;
+        background: rgba(0, 0, 0, 0.6);
+        z-index: calc(var(--z-modal) - 1);
+        opacity: 0;
+        visibility: hidden;
+        transition: opacity var(--dur-base) var(--ease-standard),
+          visibility var(--dur-base) var(--ease-standard);
+      }
+      .filters-sheet-backdrop.is-open {
+        opacity: 1;
+        visibility: visible;
       }
 
       /* Footer Styles */
       .footer-modern {
         background: var(--surface-modal);
-        padding: var(--sp-16) 0 var(--sp-8);
-        margin-top: var(--sp-16);
+        padding: var(--sp-10) 0 var(--sp-8);
+        margin-top: var(--sp-10);
       }
 
       .footer-content {
@@ -1166,6 +1808,13 @@
         color: var(--color-brand-500) !important;
       }
 
+      /* ===== Header: Add Listing CTA next to auth area ================= */
+      .header-capsule .section.left {
+        display: flex;
+        align-items: center;
+        gap: var(--sp-3);
+      }
+
       /* Responsive */
       @media (max-width: 768px) {
         .hero-actions {
@@ -1186,7 +1835,75 @@
           flex-direction: column;
           text-align: center;
         }
+
+        #add-listing-cta span,
+        #add-listing-cta {
+          font-size: 11px !important;
+          padding: 6px 10px !important;
+        }
       }
+
+      @media (max-width: 1023px) {
+        .marketplace-layout {
+          grid-template-columns: 1fr;
+        }
+
+        .filters-sidebar {
+          position: fixed;
+          inset-inline: 0;
+          bottom: 0;
+          top: auto;
+          max-height: 85vh;
+          overflow-y: auto;
+          border-radius: var(--r-2xl) var(--r-2xl) 0 0;
+          z-index: var(--z-modal);
+          transform: translateY(100%);
+          transition: transform var(--dur-slow) var(--ease-emphasized);
+          box-shadow: var(--shadow-xl);
+        }
+        .filters-sidebar.is-open {
+          transform: translateY(0);
+        }
+        .filters-close-btn {
+          display: block;
+        }
+        #mp-filters-drawer-btn {
+          display: inline-flex;
+        }
+      }
+
+      @media (max-width: 640px) {
+        .search-bar {
+          flex-direction: column;
+        }
+        .search-bar-field,
+        .search-bar-advanced,
+        .search-bar-submit {
+          flex: 1 1 auto;
+          width: 100%;
+        }
+
+        .categories-rail {
+          grid-template-columns: none;
+          grid-auto-flow: column;
+          grid-auto-columns: 108px;
+          overflow-x: auto;
+          scroll-snap-type: x mandatory;
+          padding-bottom: var(--sp-2);
+        }
+        .category-card {
+          scroll-snap-align: start;
+        }
+
+        .listings-toolbar {
+          flex-direction: column;
+          align-items: stretch;
+        }
+        .listings-toolbar-actions {
+          justify-content: space-between;
+        }
+      }
+
       /* ===== Stories strip ============================================
          Instagram-style horizontal rail of circular avatars at the top of
          the homepage. Each avatar has a gradient ring to signal "live
@@ -1437,7 +2154,7 @@
       }
       .hero-banner-slide {
         flex: 0 0 100%;
-        min-height: 70vh;
+        min-height: 320px;
         display: flex;
         align-items: center;
       }
@@ -1515,6 +2232,563 @@
         text-decoration: none;
       }
     </style>
+
+    <!-- ============================================================
+         Marketplace homepage logic: category counts, featured rail,
+         and the main listings grid (search/filter/sort/paginate
+         against the existing /api/v1/equipment endpoint). Reuses
+         apiFetch/getToken/getUser from script.js — loaded earlier.
+    ============================================================== -->
+    <script>
+      (function () {
+        "use strict";
+
+        const CATEGORY_LABELS = {
+          tractor: "جرار",
+          harvester: "حصادة",
+          sprayer: "مرشة",
+          tools: "أدوات",
+          seeds: "بذور",
+          fertilizer: "أسمدة",
+          pesticide: "مبيدات",
+          other: "أخرى",
+        };
+        const GOVERNORATE_LABELS = {
+          muscat: "مسقط",
+          dhofar: "ظفار",
+          musandam: "مسندم",
+          buraimi: "البريمي",
+          dakhiliyah: "الداخلية",
+          north_batinah: "شمال الباطنة",
+          south_batinah: "جنوب الباطنة",
+          south_sharqiyah: "جنوب الشرقية",
+          north_sharqiyah: "شمال الشرقية",
+          dhahirah: "الظاهرة",
+          wusta: "الوسطى",
+        };
+
+        function categoryLabel(c) {
+          return CATEGORY_LABELS[c] || c || "";
+        }
+        function governorateLabel(g) {
+          return GOVERNORATE_LABELS[g] || g || "";
+        }
+        function escapeHtml(s) {
+          if (s == null) return "";
+          return String(s).replace(
+            /[&<>"']/g,
+            (c) =>
+              ({
+                "&": "&amp;",
+                "<": "&lt;",
+                ">": "&gt;",
+                '"': "&quot;",
+                "'": "&#39;",
+              })[c],
+          );
+        }
+
+        function showToast(msg, isError) {
+          let stack = document.querySelector(".hs-toast-stack");
+          if (!stack) {
+            stack = document.createElement("div");
+            stack.className = "hs-toast-stack";
+            document.body.appendChild(stack);
+          }
+          const toast = document.createElement("div");
+          toast.className =
+            "hs-toast " + (isError ? "hs-toast--error" : "hs-toast--success");
+          toast.textContent = msg;
+          stack.appendChild(toast);
+          setTimeout(() => {
+            toast.classList.add("is-leaving");
+            setTimeout(() => toast.remove(), 220);
+          }, 2600);
+        }
+
+        function bestTrustBadge(trust) {
+          if (!trust || !trust.badges) return "";
+          const b = trust.badges;
+          if (b.verified) {
+            return '<span class="hs-badge hs-badge--success"><i class="fas fa-check-circle"></i> موثَّق</span>';
+          }
+          if (b.top_seller) {
+            return '<span class="hs-badge hs-badge--accent"><i class="fas fa-star"></i> بائع مميّز</span>';
+          }
+          return "";
+        }
+
+        function imageOf(eq) {
+          return (
+            eq.primary_image_url ||
+            (Array.isArray(eq.images) && eq.images[0]) ||
+            ""
+          );
+        }
+
+        function priceLabelOf(eq) {
+          if (eq.listing_type === "sale" && eq.sale_price != null) {
+            return `${Number(eq.sale_price).toFixed(2)} ر.ع`;
+          }
+          if (eq.daily_price != null) {
+            return `${Number(eq.daily_price).toFixed(2)} ر.ع / يوم`;
+          }
+          if (eq.sale_price != null) {
+            return `${Number(eq.sale_price).toFixed(2)} ر.ع`;
+          }
+          return "—";
+        }
+
+        function actionOf(eq) {
+          if (eq.listing_type === "sale") {
+            return { href: `basket.html#eq-${eq.id}`, label: "أضف للسلة" };
+          }
+          return { href: `tools.html#eq-${eq.id}`, label: "استأجر الآن" };
+        }
+
+        /* ─── Header: Add Listing CTA target depends on role ─────────── */
+        function wireAddListingCta() {
+          const cta = document.getElementById("add-listing-cta");
+          if (!cta) return;
+          let user = null;
+          try {
+            user = JSON.parse(localStorage.getItem("user") || "null");
+          } catch (_e) {
+            user = null;
+          }
+          if (
+            localStorage.getItem("token") &&
+            user &&
+            (user.role === "owner" || user.role === "admin")
+          ) {
+            cta.href = "owner-dashboard.html";
+          }
+        }
+
+        /* ─── Categories: live counts ──────────────────────────────── */
+        function loadCategoryCounts() {
+          const cards = document.querySelectorAll("[data-count-for]");
+          cards.forEach((el) => {
+            const cat = el.dataset.countFor;
+            getJsonLocal(`/equipment?category=${cat}&limit=1`).then((res) => {
+              if (!res || !res.success || !res.pagination) {
+                el.textContent = "";
+                return;
+              }
+              el.textContent = `${res.pagination.total.toLocaleString("ar")} معدة`;
+            });
+          });
+        }
+
+        function getJsonLocal(path) {
+          const API =
+            window.location.hostname === "localhost"
+              ? "http://localhost:3000/api/v1"
+              : "/api/v1";
+          return fetch(API + path)
+            .then((r) => (r.ok ? r.json() : null))
+            .catch(() => null);
+        }
+
+        function wireCategoryCards() {
+          document.querySelectorAll(".category-card").forEach((card) => {
+            card.addEventListener("click", () => {
+              const cat = card.dataset.category;
+              const sel = document.getElementById("mp-filter-category");
+              if (sel) sel.value = cat;
+              mpState.category = cat;
+              mpState.page = 1;
+              loadMarketplace();
+              document
+                .getElementById("marketplace-section")
+                .scrollIntoView({ behavior: "smooth", block: "start" });
+            });
+          });
+        }
+
+        /* ─── Featured listings rail ──────────────────────────────── */
+        function loadFeatured() {
+          const rail = document.getElementById("featured-rail");
+          if (!rail) return;
+          getJsonLocal("/equipment?sort=rating&limit=8").then((res) => {
+            if (!res || !res.success || !res.items || !res.items.length) {
+              rail.closest(".featured-section").style.display = "none";
+              return;
+            }
+            rail.innerHTML = res.items.map(featuredCardHtml).join("");
+          });
+        }
+
+        function featuredCardHtml(eq) {
+          const img = imageOf(eq);
+          const action = actionOf(eq);
+          return `
+            <a class="featured-card" href="${escapeHtml(action.href)}">
+              <div class="featured-card-media">
+                ${
+                  img
+                    ? `<img src="${escapeHtml(img)}" alt="${escapeHtml(eq.name)}" loading="lazy" />`
+                    : `<div style="display:flex;align-items:center;justify-content:center;height:100%"><i class="fas fa-image" style="font-size:32px;color:#888"></i></div>`
+                }
+                <span class="featured-card-badge hs-badge hs-badge--accent"><i class="fas fa-crown"></i> مميّز</span>
+                <span class="featured-card-price">${escapeHtml(priceLabelOf(eq))}</span>
+              </div>
+              <div class="featured-card-body">
+                <h3>${escapeHtml(eq.name)}</h3>
+                <div class="featured-card-meta">
+                  <span><i class="fas fa-tag"></i> ${escapeHtml(categoryLabel(eq.category))}</span>
+                  <span><i class="fas fa-star" style="color:#f1c40f"></i> ${Number(eq.avg_rating || 0).toFixed(1)}</span>
+                </div>
+              </div>
+            </a>
+          `;
+        }
+
+        function wireFeaturedNav() {
+          const rail = document.getElementById("featured-rail");
+          const prev = document.getElementById("featured-prev");
+          const next = document.getElementById("featured-next");
+          if (!rail || !prev || !next) return;
+          prev.addEventListener("click", () =>
+            rail.scrollBy({ left: 320, behavior: "smooth" }),
+          );
+          next.addEventListener("click", () =>
+            rail.scrollBy({ left: -320, behavior: "smooth" }),
+          );
+        }
+
+        /* ─── Main marketplace: state + load ──────────────────────── */
+        const mpState = {
+          search: "",
+          category: "",
+          listing_type: "",
+          min_price: "",
+          max_price: "",
+          governorate: "",
+          min_rating: "",
+          sort: "newest",
+          page: 1,
+        };
+
+        async function loadMarketplace() {
+          const loadState = document.getElementById("mp-load-state");
+          const grid = document.getElementById("mp-grid");
+          const empty = document.getElementById("mp-empty");
+          const countEl = document.getElementById("mp-result-count");
+          loadState.style.display = "grid";
+          grid.style.display = "none";
+          empty.style.display = "none";
+
+          const params = new URLSearchParams({
+            page: String(mpState.page),
+            limit: "12",
+            sort: mpState.sort,
+          });
+          if (mpState.search) params.set("search", mpState.search);
+          if (mpState.category) params.set("category", mpState.category);
+          if (mpState.listing_type)
+            params.set("listing_type", mpState.listing_type);
+          if (mpState.min_price) params.set("min_price", mpState.min_price);
+          if (mpState.max_price) params.set("max_price", mpState.max_price);
+          if (mpState.governorate)
+            params.set("governorate", mpState.governorate);
+          if (mpState.min_rating)
+            params.set("min_rating", mpState.min_rating);
+
+          const res = await getJsonLocal(`/equipment?${params}`);
+          loadState.style.display = "none";
+
+          if (!res || !res.success || !res.items) {
+            countEl.textContent = "تعذّر تحميل النتائج";
+            empty.style.display = "flex";
+            return;
+          }
+
+          if (!res.items.length) {
+            countEl.textContent = "0 نتيجة";
+            empty.style.display = "flex";
+            renderPagination(res.pagination);
+            return;
+          }
+
+          countEl.textContent = `${res.pagination.total.toLocaleString("ar")} نتيجة`;
+          grid.innerHTML = res.items.map(listingCardHtml).join("");
+          grid.style.display = "grid";
+          wireListingCards(grid);
+          renderPagination(res.pagination);
+        }
+
+        function listingCardHtml(eq) {
+          const img = imageOf(eq);
+          const action = actionOf(eq);
+          const loc = eq.location || {};
+          const locStr =
+            governorateLabel(eq.governorate) +
+            (loc.city ? ` — ${loc.city}` : "");
+          const desc = (eq.description || "").slice(0, 110);
+
+          return `
+            <div class="listing-card" data-id="${eq.id}">
+              <div class="listing-card-media">
+                ${
+                  img
+                    ? `<img src="${escapeHtml(img)}" alt="${escapeHtml(eq.name)}" loading="lazy" />`
+                    : `<div style="display:flex;align-items:center;justify-content:center;height:100%"><i class="fas fa-image" style="font-size:32px;color:#888"></i></div>`
+                }
+                <button type="button" class="listing-fav-btn" data-id="${eq.id}" aria-pressed="false" title="إضافة للمفضلة">
+                  <i class="far fa-heart"></i>
+                </button>
+                <span class="listing-price-tag">${escapeHtml(priceLabelOf(eq))}</span>
+              </div>
+              <div class="listing-card-body">
+                <div class="listing-card-top">
+                  <span class="hs-badge hs-badge--neutral">${escapeHtml(categoryLabel(eq.category))}</span>
+                  ${bestTrustBadge(eq.trust)}
+                </div>
+                <h3 class="listing-card-title">${escapeHtml(eq.name)}</h3>
+                ${desc ? `<p class="listing-card-desc">${escapeHtml(desc)}</p>` : ""}
+                <div class="listing-card-meta">
+                  ${locStr.trim() ? `<span><i class="fas fa-map-marker-alt"></i> ${escapeHtml(locStr)}</span>` : ""}
+                </div>
+                <div class="listing-card-foot">
+                  <span class="listing-rating"><i class="fas fa-star" style="color:#f1c40f"></i> ${Number(eq.avg_rating || 0).toFixed(1)} (${eq.ratings_count || 0})</span>
+                  <a class="hs-btn hs-btn--sm" href="${escapeHtml(action.href)}">${action.label}</a>
+                </div>
+              </div>
+            </div>
+          `;
+        }
+
+        function wireListingCards(grid) {
+          grid.querySelectorAll(".listing-fav-btn").forEach((btn) => {
+            btn.addEventListener("click", (e) => {
+              e.preventDefault();
+              e.stopPropagation();
+              toggleFavorite(btn);
+            });
+          });
+        }
+
+        async function toggleFavorite(btn) {
+          const token = localStorage.getItem("token");
+          if (!token) {
+            showToast("سجّل دخول لإضافة المعدة للمفضلة", true);
+            return;
+          }
+          const id = btn.dataset.id;
+          const pressed = btn.getAttribute("aria-pressed") === "true";
+          const icon = btn.querySelector("i");
+          try {
+            const API =
+              window.location.hostname === "localhost"
+                ? "http://localhost:3000/api/v1"
+                : "/api/v1";
+            const headers = {
+              Authorization: "Bearer " + token,
+              "Content-Type": "application/json",
+            };
+            if (pressed) {
+              await fetch(`${API}/wishlist/${id}`, {
+                method: "DELETE",
+                headers,
+              });
+              btn.setAttribute("aria-pressed", "false");
+              icon.className = "far fa-heart";
+              showToast("تمت الإزالة من المفضلة");
+            } else {
+              await fetch(`${API}/wishlist`, {
+                method: "POST",
+                headers,
+                body: JSON.stringify({ equipment_id: id }),
+              });
+              btn.setAttribute("aria-pressed", "true");
+              icon.className = "fas fa-heart";
+              showToast("أضيف للمفضلة ✓");
+            }
+          } catch (_e) {
+            showToast("حدث خطأ، حاول مرة أخرى", true);
+          }
+        }
+
+        function renderPagination(pagination) {
+          const wrap = document.getElementById("mp-pagination");
+          if (!pagination || pagination.pages <= 1) {
+            wrap.innerHTML = "";
+            return;
+          }
+          const { page, pages } = pagination;
+          let html = `<button type="button" class="pagination-btn" data-page="${page - 1}" ${page <= 1 ? "disabled" : ""}><i class="fas fa-chevron-right"></i></button>`;
+          const start = Math.max(1, page - 2);
+          const end = Math.min(pages, page + 2);
+          for (let p = start; p <= end; p++) {
+            html += `<button type="button" class="pagination-btn ${p === page ? "is-active" : ""}" data-page="${p}">${p.toLocaleString("ar")}</button>`;
+          }
+          html += `<button type="button" class="pagination-btn" data-page="${page + 1}" ${page >= pages ? "disabled" : ""}><i class="fas fa-chevron-left"></i></button>`;
+          wrap.innerHTML = html;
+          wrap.querySelectorAll(".pagination-btn").forEach((btn) => {
+            btn.addEventListener("click", () => {
+              const p = parseInt(btn.dataset.page, 10);
+              if (!p || p < 1 || p > pages) return;
+              mpState.page = p;
+              loadMarketplace();
+              document
+                .getElementById("marketplace-section")
+                .scrollIntoView({ behavior: "smooth", block: "start" });
+            });
+          });
+        }
+
+        /* ─── Filters wiring ───────────────────────────────────────── */
+        function wireFilters() {
+          const catSel = document.getElementById("mp-filter-category");
+          const govSel = document.getElementById("mp-filter-governorate");
+          const ratingSel = document.getElementById("mp-filter-min-rating");
+          const minPrice = document.getElementById("mp-filter-min-price");
+          const maxPrice = document.getElementById("mp-filter-max-price");
+          const sortSel = document.getElementById("mp-filter-sort");
+          const pillsWrap = document.getElementById("mp-filter-listing-type");
+          const applyBtn = document.getElementById("mp-apply-filters");
+          const clearBtn = document.getElementById("mp-clear-filters");
+          const emptyClearBtn = document.getElementById("mp-empty-clear");
+
+          pillsWrap.querySelectorAll(".filter-pill").forEach((pill) => {
+            pill.addEventListener("click", () => {
+              pillsWrap
+                .querySelectorAll(".filter-pill")
+                .forEach((p) => p.classList.remove("is-active"));
+              pill.classList.add("is-active");
+              mpState.listing_type = pill.dataset.value || "";
+            });
+          });
+
+          function applyAndReload() {
+            mpState.category = catSel.value;
+            mpState.governorate = govSel.value;
+            mpState.min_rating = ratingSel.value;
+            mpState.min_price = minPrice.value;
+            mpState.max_price = maxPrice.value;
+            mpState.page = 1;
+            loadMarketplace();
+            closeFiltersSheet();
+          }
+
+          applyBtn.addEventListener("click", applyAndReload);
+
+          sortSel.addEventListener("change", () => {
+            mpState.sort = sortSel.value;
+            mpState.page = 1;
+            loadMarketplace();
+          });
+
+          function clearAll() {
+            catSel.value = "";
+            govSel.value = "";
+            ratingSel.value = "";
+            minPrice.value = "";
+            maxPrice.value = "";
+            sortSel.value = "newest";
+            pillsWrap
+              .querySelectorAll(".filter-pill")
+              .forEach((p) => p.classList.remove("is-active"));
+            pillsWrap.querySelector('[data-value=""]').classList.add("is-active");
+            Object.assign(mpState, {
+              search: "",
+              category: "",
+              listing_type: "",
+              min_price: "",
+              max_price: "",
+              governorate: "",
+              min_rating: "",
+              sort: "newest",
+              page: 1,
+            });
+            document.getElementById("hero-search-input").value = "";
+            document.getElementById("hero-search-category").value = "";
+            document.getElementById("hero-search-governorate").value = "";
+            loadMarketplace();
+            showToast("تم مسح جميع الفلاتر ✓");
+          }
+          clearBtn.addEventListener("click", clearAll);
+          if (emptyClearBtn) emptyClearBtn.addEventListener("click", clearAll);
+        }
+
+        /* ─── Mobile filter bottom sheet ──────────────────────────── */
+        function openFiltersSheet() {
+          document.getElementById("filters-sidebar").classList.add("is-open");
+          document
+            .getElementById("filters-sheet-backdrop")
+            .classList.add("is-open");
+        }
+        function closeFiltersSheet() {
+          document
+            .getElementById("filters-sidebar")
+            .classList.remove("is-open");
+          document
+            .getElementById("filters-sheet-backdrop")
+            .classList.remove("is-open");
+        }
+        function wireFiltersSheet() {
+          const drawerBtn = document.getElementById("mp-filters-drawer-btn");
+          const closeBtn = document.getElementById("mp-filters-close");
+          const backdrop = document.getElementById("filters-sheet-backdrop");
+          drawerBtn.addEventListener("click", openFiltersSheet);
+          closeBtn.addEventListener("click", closeFiltersSheet);
+          backdrop.addEventListener("click", closeFiltersSheet);
+        }
+
+        /* ─── Hero search bar ──────────────────────────────────────── */
+        function wireHeroSearch() {
+          const form = document.getElementById("hero-search-form");
+          const advancedBtn = document.getElementById(
+            "hero-advanced-filters-btn",
+          );
+
+          form.addEventListener("submit", (e) => {
+            e.preventDefault();
+            mpState.search = document
+              .getElementById("hero-search-input")
+              .value.trim();
+            const cat = document.getElementById("hero-search-category").value;
+            const gov = document.getElementById(
+              "hero-search-governorate",
+            ).value;
+            mpState.category = cat;
+            mpState.governorate = gov;
+            mpState.page = 1;
+
+            document.getElementById("mp-filter-category").value = cat;
+            document.getElementById("mp-filter-governorate").value = gov;
+
+            loadMarketplace();
+            document
+              .getElementById("marketplace-section")
+              .scrollIntoView({ behavior: "smooth", block: "start" });
+          });
+
+          advancedBtn.addEventListener("click", () => {
+            if (window.innerWidth <= 1023) {
+              openFiltersSheet();
+            } else {
+              document
+                .getElementById("filters-sidebar")
+                .scrollIntoView({ behavior: "smooth", block: "start" });
+            }
+          });
+        }
+
+        document.addEventListener("DOMContentLoaded", () => {
+          wireAddListingCta();
+          loadCategoryCounts();
+          wireCategoryCards();
+          loadFeatured();
+          wireFeaturedNav();
+          wireFilters();
+          wireFiltersSheet();
+          wireHeroSearch();
+          loadMarketplace();
+        });
+      })();
+    </script>
 
     <!-- HARTH-RESPONSIVE-JS -->
     <script src="responsive.js" defer></script>
