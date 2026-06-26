@@ -59,10 +59,17 @@ function rateFor(user) {
 /**
  * Create a commission record. Idempotent — returns null if one already
  * exists for this source (caller treats it as no-op).
+ *
+ * `commissionAmount`, when provided, is the commission already baked into
+ * the equipment's price at listing time (snapshotted onto the order_item /
+ * rental at creation) — we use it as-is instead of re-deriving a rate from
+ * the owner's PRO status. `rate` is then back-computed purely as a record
+ * of what fraction of gross that amount was.
  */
 async function recordCommission({
   ownerId,
   grossAmount,
+  commissionAmount = null,
   orderId = null,
   rentalId = null,
   orderItemId = null,
@@ -73,15 +80,16 @@ async function recordCommission({
   }
 
   const run = async (t) => {
-    const owner = await t("users")
-      .where({ id: ownerId })
-      .first("id", "is_pro", "pro_expires_at");
+    const owner = await t("users").where({ id: ownerId }).first("id");
     if (!owner) throw new AppError("Owner not found", 404);
 
-    const rate = rateFor(owner);
     const gross = money(grossAmount);
-    const commission = money(gross * rate);
+    const commission =
+      commissionAmount != null ? money(commissionAmount) : money(gross * rateFor(owner));
     const net = money(gross - commission);
+    // Rate column is informational (rate of gross that commission represents);
+    // keep its full 4-decimal precision rather than rounding to money().
+    const rate = gross > 0 ? Math.round((commission / gross) * 10000) / 10000 : 0;
 
     try {
       const [row] = await t("commission_transactions")
@@ -94,7 +102,9 @@ async function recordCommission({
           gross_amount: gross,
           commission_amount: commission,
           net_amount: net,
-          was_pro_at_time: rate === PRO_RATE,
+          // PRO-rate discounting no longer applies — commission is baked
+          // into the listing price at creation time instead.
+          was_pro_at_time: false,
           status: "pending",
         })
         .returning(PUBLIC_FIELDS);
@@ -124,6 +134,8 @@ async function recordForOrder(orderId, trx) {
     .select(
       "oi.id as order_item_id",
       "oi.line_total",
+      "oi.commission_per_unit",
+      "oi.quantity",
       "e.owner_id",
     );
 
@@ -132,6 +144,7 @@ async function recordForOrder(orderId, trx) {
     const row = await recordCommission({
       ownerId: it.owner_id,
       grossAmount: Number(it.line_total),
+      commissionAmount: money(Number(it.commission_per_unit) * it.quantity),
       orderId,
       orderItemId: it.order_item_id,
       trx,
@@ -147,11 +160,12 @@ async function recordForOrder(orderId, trx) {
 async function recordForRental(rentalId, trx) {
   const rental = await trx("rentals")
     .where({ id: rentalId })
-    .first("owner_id", "total_price");
+    .first("owner_id", "total_price", "commission_amount_snapshot");
   if (!rental) return null;
   return recordCommission({
     ownerId: rental.owner_id,
     grossAmount: Number(rental.total_price),
+    commissionAmount: Number(rental.commission_amount_snapshot) || 0,
     rentalId,
     trx,
   });
@@ -220,26 +234,67 @@ async function listForOwner(ownerId, { page = 1, limit = 20, status = null } = {
 }
 
 /**
- * Admin list — all commissions, paginated.
+ * Shared base query for admin commission reporting — joins through to the
+ * equipment a commission was earned on (via either the order item or the
+ * rental, exactly one of which is set) so admins can filter/report per
+ * equipment, not just per owner.
  */
-async function listAll({ page = 1, limit = 20, status = null, ownerId = null } = {}) {
+function baseAdminQuery() {
+  return knex("commission_transactions as c")
+    .leftJoin("users as u", "u.id", "c.owner_id")
+    .leftJoin("order_items as oi", "oi.id", "c.order_item_id")
+    .leftJoin("equipment as eo", "eo.id", "oi.equipment_id")
+    .leftJoin("rentals as r", "r.id", "c.rental_id")
+    .leftJoin("equipment as er", "er.id", "r.equipment_id");
+}
+
+function applyAdminFilters(q, { status, ownerId, from, to, search } = {}) {
+  if (status) q.where("c.status", status);
+  if (ownerId) q.where("c.owner_id", ownerId);
+  if (from) q.where("c.created_at", ">=", from);
+  if (to) q.where("c.created_at", "<=", to);
+  if (search) {
+    q.where(function () {
+      this.where("u.name", "ilike", `%${search}%`).orWhere("u.email", "ilike", `%${search}%`);
+    });
+  }
+  return q;
+}
+
+/**
+ * Admin list — all commissions, paginated. Supports filtering by status,
+ * owner (farmer) and a created_at date range.
+ */
+async function listAll({
+  page = 1,
+  limit = 20,
+  status = null,
+  ownerId = null,
+  from = null,
+  to = null,
+  search = null,
+} = {}) {
   const safeLimit = Math.min(100, Math.max(1, parseInt(limit, 10) || 20));
   const safePage = Math.max(1, parseInt(page, 10) || 1);
   const offset = (safePage - 1) * safeLimit;
 
-  const dataQ = knex("commission_transactions as c")
-    .leftJoin("users as u", "u.id", "c.owner_id")
-    .select("c.*", "u.name as owner_name", "u.email as owner_email")
+  const filters = { status, ownerId, from, to, search };
+
+  const dataQ = applyAdminFilters(baseAdminQuery(), filters)
+    .select(
+      "c.*",
+      "u.name as owner_name",
+      "u.email as owner_email",
+      knex.raw("coalesce(eo.id, er.id) as equipment_id"),
+      knex.raw("coalesce(eo.name, er.name) as equipment_name"),
+    )
     .orderBy("c.created_at", "desc")
     .limit(safeLimit)
     .offset(offset);
 
-  const countQ = knex("commission_transactions").count("* as c").first();
-
-  for (const q of [dataQ, countQ]) {
-    if (status) q.where(q === dataQ ? "c.status" : "status", status);
-    if (ownerId) q.where(q === dataQ ? "c.owner_id" : "owner_id", ownerId);
-  }
+  const countQ = applyAdminFilters(baseAdminQuery(), filters)
+    .count("c.id as c")
+    .first();
 
   const [items, countRow] = await Promise.all([dataQ, countQ]);
   const total = parseInt(countRow.c, 10);
@@ -253,6 +308,30 @@ async function listAll({ page = 1, limit = 20, status = null, ownerId = null } =
       pages: Math.ceil(total / safeLimit) || 1,
     },
   };
+}
+
+/**
+ * Admin export — same filters as listAll but unpaginated (capped) for CSV
+ * download.
+ */
+async function listForExport({
+  status = null,
+  ownerId = null,
+  from = null,
+  to = null,
+  search = null,
+} = {}) {
+  const EXPORT_CAP = 5000;
+  return applyAdminFilters(baseAdminQuery(), { status, ownerId, from, to, search })
+    .select(
+      "c.*",
+      "u.name as owner_name",
+      "u.email as owner_email",
+      knex.raw("coalesce(eo.id, er.id) as equipment_id"),
+      knex.raw("coalesce(eo.name, er.name) as equipment_name"),
+    )
+    .orderBy("c.created_at", "desc")
+    .limit(EXPORT_CAP);
 }
 
 /**
@@ -288,6 +367,7 @@ module.exports = {
   recordForRental,
   listForOwner,
   listAll,
+  listForExport,
   markPaid,
   markCancelled,
 };

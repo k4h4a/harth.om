@@ -18,8 +18,9 @@ router.get("/", auth.optionalAuth, listQueryValidator, ctrl.list);
 // Owner-only — MUST come before '/:id' so Express doesn't treat 'mine' as an id
 router.get("/mine", auth, requireRole("owner", "admin"), ctrl.listMine);
 
-// Public detail
-router.get("/:id", idParamValidator, ctrl.getOne);
+// Public detail (optionalAuth so the owner/admin can see the commission
+// breakdown; everyone else still only sees the final price).
+router.get("/:id", auth.optionalAuth, idParamValidator, ctrl.getOne);
 
 // Create (owner or admin) — owner must have an APPROVED account.
 // Per spec: "لا يمكنه استخدام صلاحية البيع أو التأجير إلا بعد موافقة الأدمن".

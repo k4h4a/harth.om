@@ -1855,6 +1855,20 @@
       <!-- COMMISSIONS -->
       <div class="tab-content" id="tab-commissions">
         <div class="card">
+          <h3><i class="fas fa-sliders-h"></i> إعدادات العمولة</h3>
+          <div class="filters" style="align-items:center">
+            <label style="display:flex;align-items:center;gap:8px">
+              نسبة عمولة المنصة (%)
+              <input type="number" id="comm-pct-input" min="0" max="100" step="0.1" style="width:90px" />
+            </label>
+            <button class="btn btn-primary" id="btn-save-commission-pct">
+              <i class="fas fa-save"></i> حفظ النسبة
+            </button>
+            <small id="comm-pct-meta" style="color:var(--color-text-soft)"></small>
+          </div>
+        </div>
+
+        <div class="card">
           <div class="filters">
             <select id="comm-status">
               <option value="">الكل</option>
@@ -1862,6 +1876,12 @@
               <option value="paid">مدفوع</option>
               <option value="cancelled">ملغى</option>
             </select>
+            <input type="text" id="comm-owner-search" placeholder="بحث باسم/بريد المزارع" />
+            <input type="date" id="comm-from" title="من تاريخ" />
+            <input type="date" id="comm-to" title="إلى تاريخ" />
+            <button class="btn" id="btn-export-commissions">
+              <i class="fas fa-file-export"></i> تصدير التقرير
+            </button>
           </div>
           <div id="commissions-list" style="overflow-x:auto">
             <div class="table-skeleton">
@@ -2600,7 +2620,7 @@
             if (btn.dataset.tab === "users") loadUsers();
             if (btn.dataset.tab === "orders") loadOrders();
             if (btn.dataset.tab === "promos") loadPromos();
-            if (btn.dataset.tab === "commissions") loadCommissions();
+            if (btn.dataset.tab === "commissions") { loadCommissionSettings(); loadCommissions(); }
             if (btn.dataset.tab === "payouts") loadPayoutBalances();
             if (btn.dataset.tab === "audit") loadAudit();
             if (btn.dataset.tab === "banners") loadBanners();
@@ -3658,11 +3678,22 @@
         });
 
         // ---------- Commissions ----------
-        async function loadCommissions() {
-          $("#commissions-list").innerHTML = skeletonTable(2, 5);
+        function commissionFilterParams() {
           const params = new URLSearchParams({ limit: "50" });
           const st = $("#comm-status").value;
+          const search = $("#comm-owner-search").value.trim();
+          const from = $("#comm-from").value;
+          const to = $("#comm-to").value;
           if (st) params.set("status", st);
+          if (search) params.set("search", search);
+          if (from) params.set("from", from);
+          if (to) params.set("to", to);
+          return params;
+        }
+
+        async function loadCommissions() {
+          $("#commissions-list").innerHTML = skeletonTable(2, 6);
+          const params = commissionFilterParams();
 
           try {
             const res = await apiFetch(`/admin/commissions?${params}`);
@@ -3676,6 +3707,7 @@
             const rows = res.items.map((c) => `
               <tr>
                 <td>${escapeHtml(c.owner_name || "—")}</td>
+                <td>${escapeHtml(c.equipment_name || "—")}</td>
                 <td>${money(c.gross_amount)}</td>
                 <td>${(Number(c.rate) * 100).toFixed(1)}%</td>
                 <td>${money(c.commission_amount)}</td>
@@ -3692,7 +3724,7 @@
             $("#commissions-list").innerHTML = `
               <table>
                 <thead>
-                  <tr><th>المالك</th><th>المبلغ</th><th>النسبة</th><th>العمولة</th><th>الصافي</th><th>الحالة</th><th></th></tr>
+                  <tr><th>المالك</th><th>المعدة</th><th>المبلغ</th><th>النسبة</th><th>العمولة</th><th>الصافي</th><th>الحالة</th><th></th></tr>
                 </thead>
                 <tbody>${rows}</tbody>
               </table>
@@ -3715,6 +3747,63 @@
             $("#commissions-list").innerHTML = `<div class="empty" style="color:#ffb3b3">${escapeHtml(err.message)}</div>`;
           }
         }
+
+        async function exportCommissions() {
+          try {
+            const params = commissionFilterParams();
+            params.delete("limit");
+            const res = await apiFetch(`/admin/commissions/export?${params}`);
+            if (!(res instanceof Response)) {
+              throw new Error(res?.error?.message || "فشل التصدير");
+            }
+            const blob = await res.blob();
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement("a");
+            a.href = url;
+            a.download = `commissions-${Date.now()}.csv`;
+            document.body.appendChild(a);
+            a.click();
+            a.remove();
+            URL.revokeObjectURL(url);
+          } catch (err) {
+            showToast(err.message, true);
+          }
+        }
+
+        // ---------- Commission rate settings ----------
+        async function loadCommissionSettings() {
+          try {
+            const res = await apiFetch("/admin/settings/commission");
+            if (!res?.success) throw new Error(res.error?.message || "فشل");
+            $("#comm-pct-input").value = res.settings.percentage;
+            $("#comm-pct-meta").textContent = res.settings.updated_at
+              ? `آخر تحديث: ${new Date(res.settings.updated_at).toLocaleString("ar")}${res.settings.updated_by_name ? " — " + res.settings.updated_by_name : ""}`
+              : "";
+          } catch (err) {
+            showToast(err.message, true);
+          }
+        }
+
+        $("#btn-save-commission-pct").addEventListener("click", async () => {
+          const pct = Number($("#comm-pct-input").value);
+          if (!Number.isFinite(pct) || pct < 0 || pct > 100) {
+            showToast("نسبة العمولة يجب أن تكون بين 0 و 100", true);
+            return;
+          }
+          try {
+            const res = await apiFetch("/admin/settings/commission", {
+              method: "PATCH",
+              body: JSON.stringify({ percentage: pct }),
+            });
+            if (!res?.success) throw new Error(res.error?.message || "فشل الحفظ");
+            showToast("تم حفظ نسبة العمولة ✓");
+            loadCommissionSettings();
+          } catch (err) {
+            showToast(err.message, true);
+          }
+        });
+
+        $("#btn-export-commissions").addEventListener("click", exportCommissions);
 
         // ---------- Pagination helper ----------
         function renderPagination(el, pg, onClick) {
@@ -3744,6 +3833,13 @@
         $("#orders-status").addEventListener("change", () => { ordersPage = 1; loadOrders(); });
         $("#orders-payment").addEventListener("change", () => { ordersPage = 1; loadOrders(); });
         $("#comm-status").addEventListener("change", loadCommissions);
+        $("#comm-from").addEventListener("change", loadCommissions);
+        $("#comm-to").addEventListener("change", loadCommissions);
+        let commOwnerDebounce;
+        $("#comm-owner-search").addEventListener("input", () => {
+          clearTimeout(commOwnerDebounce);
+          commOwnerDebounce = setTimeout(loadCommissions, 350);
+        });
         $("#deliveries-status").addEventListener("change", loadDeliveries);
 
         $("#logout-btn").addEventListener("click", () => {

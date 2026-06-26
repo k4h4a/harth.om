@@ -72,6 +72,7 @@ async function createOrderFromCart({
         "e.id as equipment_id",
         "e.name",
         "e.sale_price",
+        "e.sale_commission_amount",
         "e.listing_type",
         "e.status",
         "e.stock",
@@ -115,6 +116,7 @@ async function createOrderFromCart({
         image_snapshot: it.primary_image_url,
         quantity: it.quantity,
         price_per_unit: Number(it.sale_price),
+        commission_per_unit: Number(it.sale_commission_amount) || 0,
       });
     }
 
@@ -207,6 +209,7 @@ async function createOrderFromCart({
       quantity: i.quantity,
       price_per_unit: i.price_per_unit,
       line_total: lineTotal(i.price_per_unit, i.quantity),
+      commission_per_unit: i.commission_per_unit,
     }));
     await trx("order_items").insert(itemRows);
 

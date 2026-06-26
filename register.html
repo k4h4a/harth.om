@@ -3,7 +3,23 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>تسجيل الدخول | منصة حرث</title>
+    <script>
+      (function () {
+        try {
+          if (localStorage.getItem("harth_lang") === "en") {
+            document.documentElement.lang = "en";
+            document.documentElement.dir = "ltr";
+          }
+        } catch (e) {}
+        document.documentElement.classList.add("i18n-loading");
+      })();
+    </script>
+    <style>
+      html.i18n-loading body {
+        visibility: hidden;
+      }
+    </style>
+    <title data-i18n="register.title">تسجيل الدخول | منصة حرث</title>
     <link rel="stylesheet" href="design-system.css" />
     <link rel="stylesheet" href="style.css" />
     <link
@@ -105,11 +121,11 @@
     <div class="login-page">
       <div class="login-card">
         <div class="logo-area">
-          <h2>مَنْصَةُ حَرْثْ</h2>
+          <h2 data-i18n="register.logoText">مَنْصَةُ حَرْثْ</h2>
         </div>
 
-        <h3 id="page-title">تسجيل الدخول</h3>
-        <p id="page-sub">مرحباً بك مجدداً في مجتمعنا الزراعي</p>
+        <h3 id="page-title" data-i18n="register.login.title">تسجيل الدخول</h3>
+        <p id="page-sub" data-i18n="register.login.subtitle">مرحباً بك مجدداً في مجتمعنا الزراعي</p>
 
         <!-- LOGIN FORM -->
         <form id="loginForm">
@@ -118,6 +134,7 @@
               type="email"
               id="login-email"
               placeholder="البريد الإلكتروني"
+              data-i18n-placeholder="register.login.emailPlaceholder"
               required
               autocomplete="email"
             />
@@ -127,12 +144,13 @@
               type="password"
               id="login-password"
               placeholder="كلمة المرور"
+              data-i18n-placeholder="register.login.passwordPlaceholder"
               required
               autocomplete="current-password"
             />
           </div>
           <div id="login-msg" class="form-msg"></div>
-          <button type="submit" class="login-btn" id="login-btn">
+          <button type="submit" class="login-btn" id="login-btn" data-i18n="register.login.submitBtn">
             تسجيل الدخول
           </button>
         </form>
@@ -147,16 +165,17 @@
             border-top: 2px solid rgba(255, 255, 255, 0.15);
           "
         >
-          <h4 style="color: #6ab04c; margin-bottom: 20px">إنشاء حساب جديد</h4>
+          <h4 style="color: #6ab04c; margin-bottom: 20px" data-i18n="register.form.heading">إنشاء حساب جديد</h4>
           <form id="registerForm">
             <div class="input-field">
-              <input type="text" id="reg-name" placeholder="الاسم الكامل" required />
+              <input type="text" id="reg-name" placeholder="الاسم الكامل" data-i18n-placeholder="register.form.namePlaceholder" required />
             </div>
             <div class="input-field">
               <input
                 type="email"
                 id="reg-email"
                 placeholder="البريد الإلكتروني"
+                data-i18n-placeholder="register.login.emailPlaceholder"
                 required
                 autocomplete="email"
               />
@@ -166,19 +185,21 @@
                 type="password"
                 id="reg-password"
                 placeholder="كلمة المرور (8 أحرف أو أكثر)"
+                data-i18n-placeholder="register.form.passwordPlaceholder"
                 minlength="8"
                 required
                 autocomplete="new-password"
               />
             </div>
             <div class="input-field">
-              <input type="text" id="reg-identity" placeholder="رقم الهوية (اختياري)" />
+              <input type="text" id="reg-identity" placeholder="رقم الهوية (اختياري)" data-i18n-placeholder="register.form.identityPlaceholder" />
             </div>
             <div class="input-field">
               <input
                 type="tel"
                 id="reg-phone"
                 placeholder="رقم الهاتف (مثال: +96899999999)"
+                data-i18n-placeholder="register.form.phonePlaceholder"
               />
             </div>
             <div class="input-field">
@@ -195,18 +216,18 @@
                   font-size: 14px;
                 "
               >
-                <option value="">اختر المحافظة (اختياري)</option>
-                <option value="muscat">مسقط</option>
-                <option value="dhofar">ظفار</option>
-                <option value="musandam">مسندم</option>
-                <option value="buraimi">البريمي</option>
-                <option value="dakhiliyah">الداخلية</option>
-                <option value="north_batinah">شمال الباطنة</option>
-                <option value="south_batinah">جنوب الباطنة</option>
-                <option value="south_sharqiyah">جنوب الشرقية</option>
-                <option value="north_sharqiyah">شمال الشرقية</option>
-                <option value="dhahirah">الظاهرة</option>
-                <option value="wusta">الوسطى</option>
+                <option value="" data-i18n="register.form.governoratePlaceholder">اختر المحافظة (اختياري)</option>
+                <option value="muscat" data-i18n="common.governorates.muscat">مسقط</option>
+                <option value="dhofar" data-i18n="common.governorates.dhofar">ظفار</option>
+                <option value="musandam" data-i18n="common.governorates.musandam">مسندم</option>
+                <option value="buraimi" data-i18n="common.governorates.buraimi">البريمي</option>
+                <option value="dakhiliyah" data-i18n="common.governorates.dakhiliyah">الداخلية</option>
+                <option value="north_batinah" data-i18n="common.governorates.north_batinah">شمال الباطنة</option>
+                <option value="south_batinah" data-i18n="common.governorates.south_batinah">جنوب الباطنة</option>
+                <option value="south_sharqiyah" data-i18n="common.governorates.south_sharqiyah">جنوب الشرقية</option>
+                <option value="north_sharqiyah" data-i18n="common.governorates.north_sharqiyah">شمال الشرقية</option>
+                <option value="dhahirah" data-i18n="common.governorates.dhahirah">الظاهرة</option>
+                <option value="wusta" data-i18n="common.governorates.wusta">الوسطى</option>
               </select>
             </div>
 
@@ -217,6 +238,7 @@
                 display: block;
                 margin: 12px 0 8px;
               "
+              data-i18n="register.form.accountTypeLabel"
               >نوع الحساب:</label
             >
             <div
@@ -234,7 +256,7 @@
               >
                 <input type="radio" name="role" value="renter" checked />
                 <span class="checkmark"></span>
-                <strong>مستهلك</strong>
+                <strong data-i18n="register.form.roles.renter.label">مستهلك</strong>
                 <div
                   style="
                     font-size: 12px;
@@ -242,6 +264,7 @@
                     margin-top: 4px;
                     font-weight: 400;
                   "
+                  data-i18n="register.form.roles.renter.desc"
                 >
                   تصفّح وشراء المنتجات والمعدات. تفعيل فوري.
                 </div>
@@ -258,7 +281,7 @@
               >
                 <input type="radio" name="role" value="owner" />
                 <span class="checkmark"></span>
-                <strong>مزارع</strong>
+                <strong data-i18n="register.form.roles.owner.label">مزارع</strong>
                 <div
                   style="
                     font-size: 12px;
@@ -267,8 +290,8 @@
                     font-weight: 400;
                   "
                 >
-                  عرض منتجاتك ومعداتك للبيع أو للإيجار، إضافةً إلى الشراء.
-                  <br /><span style="color: #f1c40f"
+                  <span data-i18n="register.form.roles.owner.desc">عرض منتجاتك ومعداتك للبيع أو للإيجار، إضافةً إلى الشراء.</span>
+                  <br /><span style="color: #f1c40f" data-i18n="register.form.roles.owner.note"
                     >يتطلّب الحساب موافقة الإدارة قبل تفعيل صلاحية البيع/التأجير.</span
                   >
                 </div>
@@ -285,7 +308,7 @@
               >
                 <input type="radio" name="role" value="delivery" />
                 <span class="checkmark"></span>
-                <strong>مندوب توصيل</strong>
+                <strong data-i18n="register.form.roles.delivery.label">مندوب توصيل</strong>
                 <div
                   style="
                     font-size: 12px;
@@ -294,8 +317,8 @@
                     font-weight: 400;
                   "
                 >
-                  قبول وتنفيذ طلبات التوصيل، إضافةً إلى الشراء.
-                  <br /><span style="color: #f1c40f"
+                  <span data-i18n="register.form.roles.delivery.desc">قبول وتنفيذ طلبات التوصيل، إضافةً إلى الشراء.</span>
+                  <br /><span style="color: #f1c40f" data-i18n="register.form.roles.delivery.note"
                     >يتطلّب الحساب موافقة الإدارة قبل قبول طلبات التوصيل.</span
                   >
                 </div>
@@ -308,6 +331,7 @@
               id="register-btn"
               class="login-btn"
               style="background: #6ab04c; margin-top: 10px"
+              data-i18n="register.form.submitBtn"
             >
               إنشاء الحساب
             </button>
@@ -318,12 +342,12 @@
              register/login forms while the user types the 6-digit code. -->
         <div id="otpSection" style="display: none; margin-top: 20px">
           <h4 style="color: #6ab04c; margin-bottom: 8px; text-align: center">
-            <i class="fas fa-shield-alt"></i> تأكيد البريد الإلكتروني
+            <i class="fas fa-shield-alt"></i> <span data-i18n="register.otp.heading">تأكيد البريد الإلكتروني</span>
           </h4>
           <p class="otp-help">
-            أرسلنا رمزاً مكوناً من 6 أرقام إلى
+            <span data-i18n="register.otp.helpText">أرسلنا رمزاً مكوناً من 6 أرقام إلى</span>
             <strong id="otp-email-label" style="color: #fff"></strong>.
-            الرمز صالح لمدة 10 دقائق.
+            <span data-i18n="register.otp.helpTextSuffix">الرمز صالح لمدة 10 دقائق.</span>
           </p>
           <form id="otpForm">
             <input
@@ -338,16 +362,17 @@
               placeholder="------"
             />
             <div id="otp-msg" class="form-msg"></div>
-            <button type="submit" class="login-btn" id="otp-submit-btn">
+            <button type="submit" class="login-btn" id="otp-submit-btn" data-i18n="register.otp.confirmBtn">
               تأكيد
             </button>
             <p style="margin-top: 14px; text-align: center; font-size: 13px">
-              لم يصلك الرمز؟
+              <span data-i18n="register.otp.resendQuestion">لم يصلك الرمز؟</span>
               <button
                 type="button"
                 id="otp-resend-btn"
                 class="otp-resend"
                 disabled
+                data-i18n="register.otp.resendBtn"
               >
                 إعادة الإرسال
               </button>
@@ -359,6 +384,8 @@
                 id="otp-skip"
                 style="color: #ccc"
                 title="يمكنك إكمال التحقّق لاحقاً من إعدادات الحساب"
+                data-i18n-title="register.otp.skipTitle"
+                data-i18n="register.otp.skipLink"
               >
                 تخطّي الآن — أكمل لاحقاً
               </a>
@@ -377,11 +404,12 @@
             border-top: 1px solid rgba(255, 255, 255, 0.05);
           "
         >
-          <span id="toggle-text">ليس لديك حساب؟</span>
+          <span id="toggle-text" data-i18n="register.toggle.noAccountText">ليس لديك حساب؟</span>
           <a
             href="#"
             id="toggle-mode"
             style="color: #6ab04c; font-weight: bold"
+            data-i18n="register.toggle.createAccountLink"
             >إنشاء حساب جديد</a
           >
         </p>
@@ -390,10 +418,12 @@
 
     <div class="top-navigation">
       <a href="index.html" class="back-btn">
-        <i class="fas fa-arrow-right"></i> التراجع
+        <i class="fas fa-arrow-right"></i> <span data-i18n="register.backBtn">التراجع</span>
       </a>
     </div>
 
+    <script src="i18n.js"></script>
+    <script src="lang-switcher.js"></script>
     <script src="design-system.js"></script>
     <script src="script.js"></script>
     <script>
@@ -406,6 +436,10 @@
         "use strict";
 
         const $ = (s) => document.querySelector(s);
+
+        function t(key, vars) {
+          return window.HarthI18n ? window.HarthI18n.t(key, vars) : key;
+        }
 
         function showMsg(el, text, isError = false) {
           const box = $(el);
@@ -440,18 +474,18 @@
           $("#toggle-row").style.display = mode === "otp" ? "none" : "block";
 
           if (mode === "login") {
-            $("#page-title").textContent = "تسجيل الدخول";
-            $("#page-sub").textContent = "مرحباً بك مجدداً في مجتمعنا الزراعي";
-            $("#toggle-text").textContent = "ليس لديك حساب؟";
-            $("#toggle-mode").textContent = "إنشاء حساب جديد";
+            $("#page-title").textContent = t("register.login.title");
+            $("#page-sub").textContent = t("register.login.subtitle");
+            $("#toggle-text").textContent = t("register.toggle.noAccountText");
+            $("#toggle-mode").textContent = t("register.toggle.createAccountLink");
           } else if (mode === "register") {
-            $("#page-title").textContent = "إنشاء حساب جديد";
-            $("#page-sub").textContent = "أدخل بياناتك للبدء";
-            $("#toggle-text").textContent = "عندك حساب؟";
-            $("#toggle-mode").textContent = "تسجيل دخول";
+            $("#page-title").textContent = t("register.form.heading");
+            $("#page-sub").textContent = t("register.form.subtitle");
+            $("#toggle-text").textContent = t("register.toggle.haveAccountText");
+            $("#toggle-mode").textContent = t("register.toggle.loginLink");
           } else if (mode === "otp") {
-            $("#page-title").textContent = "تأكيد البريد";
-            $("#page-sub").textContent = "خطوة أخيرة لتأمين حسابك";
+            $("#page-title").textContent = t("register.otp.title");
+            $("#page-sub").textContent = t("register.otp.subtitle");
           }
         }
 
@@ -469,7 +503,7 @@
           const btn = $("#login-btn");
 
           btn.disabled = true;
-          btn.textContent = "جارٍ التحقق...";
+          btn.textContent = t("register.login.submitBtnLoading");
           showMsg("#login-msg", "");
 
           try {
@@ -479,19 +513,19 @@
             });
             if (!res || !res.success) {
               throw new Error(
-                (res && res.error && res.error.message) || "فشل تسجيل الدخول",
+                (res && res.error && res.error.message) || t("register.login.failed"),
               );
             }
             localStorage.setItem("token", res.token);
             localStorage.setItem("user", JSON.stringify(res.user));
-            showMsg("#login-msg", "✓ تم تسجيل الدخول، جارٍ التحويل...");
+            showMsg("#login-msg", t("register.login.success"));
             setTimeout(() => {
               window.location.href = landingFor(res.user);
             }, 700);
           } catch (err) {
-            showMsg("#login-msg", err.message || "خطأ", true);
+            showMsg("#login-msg", err.message || t("register.login.genericError"), true);
             btn.disabled = false;
-            btn.textContent = "تسجيل الدخول";
+            btn.textContent = t("register.login.submitBtn");
           }
         });
 
@@ -510,12 +544,12 @@
           const btn = $("#register-btn");
 
           if (password.length < 8) {
-            showMsg("#register-msg", "كلمة المرور يجب 8 أحرف على الأقل", true);
+            showMsg("#register-msg", t("register.form.passwordTooShort"), true);
             return;
           }
 
           btn.disabled = true;
-          btn.textContent = "جارٍ الإنشاء...";
+          btn.textContent = t("register.form.submitBtnLoading");
           showMsg("#register-msg", "");
 
           const body = { email, password, name, role };
@@ -530,7 +564,7 @@
             });
             if (!res || !res.success) {
               throw new Error(
-                (res && res.error && res.error.message) || "فشل التسجيل",
+                (res && res.error && res.error.message) || t("register.form.failed"),
               );
             }
             // Email verification was removed — registration succeeds and
@@ -544,20 +578,17 @@
 
             const isPending = res.user.account_status === "pending";
             if (isPending) {
-              showMsg(
-                "#register-msg",
-                "✓ تم إنشاء الحساب. حسابك قيد المراجعة من الإدارة. يمكنك التصفّح والشراء الآن.",
-              );
+              showMsg("#register-msg", t("register.form.pendingMsg"));
             } else {
-              showMsg("#register-msg", "✓ تم إنشاء الحساب، جارٍ التحويل...");
+              showMsg("#register-msg", t("register.form.successMsg"));
             }
             setTimeout(() => {
               window.location.href = landingFor(res.user);
             }, 1200);
           } catch (err) {
-            showMsg("#register-msg", err.message || "خطأ", true);
+            showMsg("#register-msg", err.message || t("register.login.genericError"), true);
             btn.disabled = false;
-            btn.textContent = "إنشاء الحساب";
+            btn.textContent = t("register.form.submitBtn");
           }
         });
 

@@ -31,6 +31,10 @@
 
   // The common header renders its central <ul class="nav-links">. We insert
   // a role-specific <li> at the front (visually rightmost in RTL).
+  function t(key) {
+    return window.HarthI18n ? window.HarthI18n.t(key) : key;
+  }
+
   function injectRoleLink(user) {
     const list = document.querySelector(".nav-links");
     if (!list) return;
@@ -46,17 +50,17 @@
     switch (user.role) {
       case "owner":
         href = "owner-dashboard.html";
-        label = "إضافة منتج";
+        label = t("nav.addProduct");
         icon = "fa-plus-circle";
         break;
       case "delivery":
         href = "delivery.html";
-        label = "توصيل";
+        label = t("nav.delivery");
         icon = "fa-truck";
         break;
       case "admin":
         href = "admin-dashboard.html";
-        label = "لوحة الأدمن";
+        label = t("nav.adminPanel");
         icon = "fa-shield-alt";
         break;
       default:
@@ -77,8 +81,9 @@
     const list = document.querySelector(".nav-links");
     if (!list) return;
 
-    // Avoid duplicating on back/forward cache.
-    if (list.querySelector("[data-universal=loyalty]")) return;
+    // Re-injecting (e.g. on a language change) replaces the old labels
+    // instead of stacking duplicates.
+    list.querySelectorAll("[data-universal]").forEach((el) => el.remove());
 
     const after = list.querySelector("[data-role-link]") || null;
 
@@ -87,7 +92,7 @@
     liOrders.setAttribute("data-universal", "my-orders");
     liOrders.innerHTML = `
       <a href="my-orders.html" class="nav-item">
-        <i class="fas fa-receipt" style="margin-inline-end:4px"></i>طلباتي
+        <i class="fas fa-receipt" style="margin-inline-end:4px"></i>${t("nav.myOrders")}
       </a>
     `;
     if (after && after.nextSibling) {
@@ -101,7 +106,7 @@
     liLoyalty.setAttribute("data-universal", "loyalty");
     liLoyalty.innerHTML = `
       <a href="loyalty.html" class="nav-item">
-        <i class="fas fa-medal" style="color:#f1c40f;margin-inline-end:4px"></i>الولاء
+        <i class="fas fa-medal" style="color:#f1c40f;margin-inline-end:4px"></i>${t("nav.loyaltyShort")}
       </a>
     `;
     const ordersRef = list.querySelector("[data-universal=my-orders]");
@@ -114,13 +119,16 @@
 
   // Swap the "login" button for a user menu when signed in.
   function renderUserCorner(user) {
-    const corner = document.querySelector(".login-nav-button");
-    if (!corner) return;
-
     if (!user) return; // keep the login button
 
-    // Replace with name + orders link + logout
-    const wrap = document.createElement("div");
+    // A previous run (e.g. before a language change) may have already
+    // replaced the login button — just refresh its text in that case.
+    const existing = document.getElementById("nav-user-corner");
+    const corner = existing || document.querySelector(".login-nav-button");
+    if (!corner) return;
+
+    const wrap = existing || document.createElement("div");
+    wrap.id = "nav-user-corner";
     wrap.style.cssText = "display:flex;gap:8px;align-items:center;flex-wrap:wrap";
     wrap.innerHTML = `
       <a href="my-orders.html" style="
@@ -133,17 +141,17 @@
         border-radius:6px;
         white-space:nowrap;
       ">
-        <i class="fas fa-receipt" style="margin-inline-end:4px"></i>طلباتي
+        <i class="fas fa-receipt" style="margin-inline-end:4px"></i>${t("nav.myOrders")}
       </a>
       <span style="color:#fff;font-size:13px;white-space:nowrap;">
         <i class="fas fa-user-circle" style="margin-inline-end:4px"></i>
         ${escapeHtml(user.name || user.email)}
       </span>
       <button id="nav-logout" style="background:rgba(231,76,60,0.8);color:#fff;border:none;padding:5px 10px;border-radius:6px;cursor:pointer;font-family:inherit;font-size:13px;white-space:nowrap">
-        خروج
+        ${t("common.buttons.logoutShort")}
       </button>
     `;
-    corner.replaceWith(wrap);
+    if (!existing) corner.replaceWith(wrap);
     document.getElementById("nav-logout").addEventListener("click", () => {
       localStorage.removeItem("token");
       localStorage.removeItem("user");
@@ -158,12 +166,21 @@
     );
   }
 
-  function run() {
+  function render() {
     const token = getTokenSafe();
     const user = token ? getUserSafe() : null;
     injectRoleLink(user);
     injectUniversalLinks(user);
     renderUserCorner(user);
+  }
+
+  function run() {
+    if (window.HarthI18n) {
+      window.HarthI18n.ready().then(render);
+      document.addEventListener("harth:langchange", render);
+    } else {
+      render();
+    }
   }
 
   if (document.readyState === "loading") {

@@ -163,6 +163,10 @@ async function createRental({
     const dailyPrice = Number(eq.daily_price);
     const total =
       Math.round((dailyPrice * days + Number.EPSILON) * 100) / 100;
+    const commissionAmountSnapshot =
+      Math.round(
+        ((Number(eq.daily_commission_amount) || 0) * days + Number.EPSILON) * 100,
+      ) / 100;
 
     // Snapshot the security deposit at booking time. Listing-side updates
     // to deposit_amount don't retroactively change existing rentals.
@@ -192,6 +196,7 @@ async function createRental({
         end_date: endDate,
         daily_price_snapshot: dailyPrice,
         total_price: total,
+        commission_amount_snapshot: commissionAmountSnapshot,
         status: "approved",
         payment_status: "pending",
         approved_at: trx.fn.now(),

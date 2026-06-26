@@ -98,9 +98,15 @@ function logout() {
   // localStorage.removeItem('userRole'); // legacy
 }
 
+function t(key) {
+  return window.HarthI18n ? window.HarthI18n.t(key) : key;
+}
+
 // Render header auth state
 function renderHeaderAuthState() {
   const authHeader = document.getElementById("auth-header");
+  // A previous render may have already swapped #login-link for the user
+  // dropdown <div> — find whichever is currently in the DOM.
   const loginLink = document.getElementById("login-link");
 
   if (!authHeader || !loginLink) return;
@@ -154,7 +160,7 @@ function renderHeaderAuthState() {
           " onmouseover="this.style.background='rgba(106,176,76,.12)';this.style.color='#fff'"
              onmouseout="this.style.background='';this.style.color='rgba(255,255,255,.85)'">
             <i class="fas fa-user-circle" style="color:#6ab04c;width:16px;text-align:center"></i>
-            الملف الشخصي
+            ${t("common.buttons.profile")}
           </a>
           <a href="kyc.html" style="
             display:flex;align-items:center;gap:10px;
@@ -163,7 +169,7 @@ function renderHeaderAuthState() {
           " onmouseover="this.style.background='rgba(106,176,76,.12)';this.style.color='#fff'"
              onmouseout="this.style.background='';this.style.color='rgba(255,255,255,.85)'">
             <i class="fas fa-shield-alt" style="color:#f1c40f;width:16px;text-align:center"></i>
-            تحقّق الهوية
+            ${t("common.buttons.verifyIdentity")}
           </a>
           <div style="height:1px;background:rgba(255,255,255,.07);margin:0 12px"></div>
           <button onclick="logout();window.location.reload();" style="
@@ -174,7 +180,7 @@ function renderHeaderAuthState() {
           " onmouseover="this.style.background='rgba(231,76,60,.12)';this.style.color='#ff7675'"
              onmouseout="this.style.background='';this.style.color='rgba(255,255,255,.75)'">
             <i class="fas fa-sign-out-alt" style="color:#ff7675;width:16px;text-align:center"></i>
-            تسجيل خروج
+            ${t("common.buttons.logout")}
           </button>
         </div>
       </div>
@@ -199,7 +205,7 @@ function renderHeaderAuthState() {
     });
   } else {
     // Not logged
-    loginLink.textContent = "تسجيل دخول";
+    loginLink.textContent = t("common.buttons.login");
     loginLink.href = "register.html";
   }
 }
@@ -222,8 +228,11 @@ function addToCart(item) {
   }
   localStorage.setItem("cart", JSON.stringify(cart));
   updateCartBadge();
+  const count = cart.reduce((sum, c) => sum + c.qty, 0);
   alert(
-    `${item.name} مضاف للسلة (${cart.reduce((sum, c) => sum + c.qty, 0)} عناصر)`,
+    window.HarthI18n
+      ? window.HarthI18n.t("basket.addedToCartAlert", { name: item.name, count })
+      : `${item.name} مضاف للسلة (${count} عناصر)`,
   );
 }
 
@@ -246,10 +255,10 @@ function updateQty(id, newQty) {
 
 function updateCartDisplay() {
   const tbody = document.getElementById("cartItems");
+  const currency = t("common.currency");
   if (tbody && cart.length === 0) {
-    tbody.innerHTML =
-      '<tr><td colspan="6" style="text-align:center;padding:40px;color:#a2fba2">السلة فارغة 🛒</td></tr>';
-    document.getElementById("subtotal").textContent = "0.00 ر.ع";
+    tbody.innerHTML = `<tr><td colspan="6" style="text-align:center;padding:40px;color:#a2fba2">${t("basket.cartEmpty")} 🛒</td></tr>`;
+    document.getElementById("subtotal").textContent = `0.00 ${currency}`;
     calculateTotal();
     return;
   }
@@ -258,22 +267,22 @@ function updateCartDisplay() {
     .map(
       (item) => `
     <tr>
-      <td data-label="المنتج"><img src="${item.img}" alt="${
+      <td data-label="${t("basket.table.product")}"><img src="${item.img}" alt="${
         item.name
       }" class="cart-img" onerror="this.src='https://via.placeholder.com/65x65/2c3e50/fff?text=📦'" /></td>
-      <td data-label="التفاصيل">${item.name}</td>
-      <td data-label="الكمية"><input type="number" class="qty-input" value="${
+      <td data-label="${t("basket.table.details")}">${item.name}</td>
+      <td data-label="${t("basket.table.quantity")}"><input type="number" class="qty-input" value="${
         item.qty
       }" min="1" onchange="updateQty('${item.id}', this.value)" /></td>
-      <td data-label="سعر الوحدة" class="price">${item.price.toFixed(
+      <td data-label="${t("basket.table.unitPrice")}" class="price">${item.price.toFixed(
         2,
-      )} ر.ع</td>
-      <td data-label="الإجمالي" class="price">${(item.price * item.qty).toFixed(
+      )} ${currency}</td>
+      <td data-label="${t("basket.table.total")}" class="price">${(item.price * item.qty).toFixed(
         2,
-      )} ر.ع</td>
-      <td data-label="إجراء"><button class="remove-btn" onclick="removeFromCart('${
+      )} ${currency}</td>
+      <td data-label="${t("basket.table.action")}"><button class="remove-btn" onclick="removeFromCart('${
         item.id
-      }')"><i class="fas fa-trash"></i> إزالة</button></td>
+      }')"><i class="fas fa-trash"></i> ${t("common.buttons.remove")}</button></td>
     </tr>
   `,
     )
@@ -306,7 +315,7 @@ function initRegisterPage() {
         if (result.success) {
           window.location.href = "index.html";
         } else {
-          alert("خطأ في البريد أو كلمة المرور");
+          alert(t("register.alerts.invalidCredentials"));
         }
       } else {
         createSection.style.display = "block";
@@ -329,7 +338,7 @@ function initRegisterPage() {
         };
 
         if (!userData.email || !userData.password || !userData.full_name) {
-          alert("املأ البريد وكلمة المرور والاسم");
+          alert(t("register.alerts.missingFields"));
           return;
         }
 
@@ -337,7 +346,7 @@ function initRegisterPage() {
         if (result.success) {
           window.location.href = "index.html";
         } else {
-          alert("خطأ في التسجيل: " + (result.error || "البيانات موجودة"));
+          alert(t("register.alerts.registerError") + ": " + (result.error || t("register.alerts.dataExists")));
         }
       });
     }
@@ -347,9 +356,18 @@ function initRegisterPage() {
 // DOMContentLoaded - main init
 document.addEventListener("DOMContentLoaded", () => {
   updateCartBadge();
-  if (document.getElementById("cartItems")) updateCartDisplay();
 
-  renderHeaderAuthState(); // Always call header render
+  function renderTranslatedUi() {
+    if (document.getElementById("cartItems")) updateCartDisplay();
+    renderHeaderAuthState(); // Always call header render
+  }
+
+  if (window.HarthI18n) {
+    window.HarthI18n.ready().then(renderTranslatedUi);
+    document.addEventListener("harth:langchange", renderTranslatedUi);
+  } else {
+    renderTranslatedUi();
+  }
 
   initRegisterPage(); // Only if register page
 });

@@ -239,7 +239,7 @@ footer {
 .price-tag {
   position: absolute;
   top: 15px;
-  left: 15px;
+  inset-inline-end: 15px;
   background: #6ab04c;
   color: white;
   padding: 6px 12px;
@@ -425,7 +425,7 @@ footer {
 .treatment-box {
   background: rgba(106, 176, 76, 0.2);
   padding: 15px;
-  border-right: 4px solid #6ab04c;
+  border-inline-start: 4px solid #6ab04c;
   border-radius: 10px;
   margin-top: 15px;
 }
@@ -534,7 +534,7 @@ footer {
   padding: 12px 18px;
   border-radius: 20px 20px 20px 5px;
   max-width: 80%;
-  border-right: 4px solid #6ab04c;
+  border-inline-start: 4px solid #6ab04c;
   font-size: 14px;
   line-height: 1.5;
 }
@@ -616,7 +616,7 @@ footer {
 .ai-floating-button {
   position: fixed; /* يجعله ثابتاً في مكانه عند التمرير */
   bottom: 30px; /* المسافة من الأسفل */
-  right: 30px; /* المسافة من اليمين */
+  inset-inline-start: 30px; /* المسافة من جهة البداية */
   width: 60px;
   height: 60px;
   background: #6ab04c; /* اللون الأخضر المميز لموقعك */
@@ -655,7 +655,7 @@ footer {
 .basket-floating-button {
   position: fixed;
   bottom: 30px;
-  left: 30px;
+  inset-inline-end: 30px;
   width: 60px;
   height: 60px;
   background: #ff6b35;
@@ -816,7 +816,7 @@ footer {
   background-position: left 15px center;
   background-repeat: no-repeat;
   background-size: 16px;
-  padding-left: 50px;
+  padding-inline-end: 50px;
   appearance: none;
 }
 
@@ -831,7 +831,7 @@ footer {
 .country-code {
   background: rgba(255, 255, 255, 0.05);
   padding: 15px 20px;
-  border-right: 1px solid rgba(255, 255, 255, 0.1);
+  border-inline-start: 1px solid rgba(255, 255, 255, 0.1);
   display: flex;
   align-items: center;
   gap: 8px;
@@ -951,8 +951,7 @@ footer {
   opacity: 0.95;
   margin: 0;
   max-width: 600px;
-  margin-left: auto;
-  margin-right: auto;
+  margin-inline: auto;
 }
 
 /* Content layout */
@@ -994,7 +993,7 @@ footer {
   content: "";
   position: absolute;
   bottom: -3px;
-  left: 0;
+  inset-inline-start: 0;
   width: 60px;
   height: 3px;
   background: #3b82f6;
@@ -1079,8 +1078,8 @@ footer {
 }
 
 .price-section-formal {
-  text-align: left;
-  margin-left: auto;
+  text-align: end;
+  margin-inline-start: auto;
 }
 
 .price-small {
@@ -1249,7 +1248,7 @@ footer {
   background-position: left 18px center;
   background-repeat: no-repeat;
   background-size: 16px;
-  padding-left: 55px;
+  padding-inline-end: 55px;
   cursor: pointer;
   appearance: none;
 }
@@ -1265,7 +1264,7 @@ footer {
 .country-code-formal {
   background: #f8fafc;
   padding: 16px 24px;
-  border-right: 1px solid #e5e7eb;
+  border-inline-start: 1px solid #e5e7eb;
   display: flex;
   align-items: center;
   gap: 12px;
@@ -1447,7 +1446,7 @@ footer {
   font-family: "Cairo", sans-serif;
   box-sizing: border-box;
   transition: 0.3s;
-  text-align: right;
+  text-align: start;
 }
 
 .input-field input:focus {
@@ -1591,7 +1590,7 @@ footer {
 }
 
 .radio-container input {
-  margin-left: 8px;
+  margin-inline-end: 8px;
   accent-color: #6ab04c; /* يغير لون الدائرة للأخضر */
   width: 18px;
   height: 18px;
@@ -1666,8 +1665,7 @@ footer {
   overflow: hidden;
   box-shadow: 0 20px 40px rgba(0, 0, 0, 0.2);
   font-size: 16px;
-  direction: rtl;
-  text-align: right;
+  text-align: start;
 }
 
 /* رأس الجدول */
@@ -1715,7 +1713,7 @@ footer {
     rgba(255, 193, 7, 0.3),
     rgba(255, 152, 0, 0.3)
   ) !important;
-  border-left: 5px solid #ffc107;
+  border-inline-end: 5px solid #ffc107;
   box-shadow: inset 0 0 20px rgba(255, 193, 7, 0.2);
 }
 
@@ -1763,7 +1761,7 @@ footer {
 .test-btn-top {
   position: absolute;
   top: 10px;
-  left: 10px;
+  inset-inline-end: 10px;
   background: rgba(255, 0, 0, 0.6);
   color: white;
   border: none;
@@ -1782,7 +1780,7 @@ footer {
   padding: 8px 22px;
   border-radius: 12px;
   font-weight: bold;
-  margin-right: 15px; /* مسافة بسيطة عن باقي الأزرار */
+  margin-inline-start: 15px; /* مسافة بسيطة عن باقي الأزرار */
   box-shadow: 0 4px 15px rgba(106, 176, 76, 0.3);
   transition: all 0.3s ease;
 }
@@ -1805,7 +1803,7 @@ footer {
   border: 1px solid rgba(255, 255, 255, 0.3) !important;
   transition: background 0.3s ease !important;
   cursor: pointer !important;
-  margin-right: 10px; /* يعطيه مسافة عن باقي الأزرار */
+  margin-inline-start: 10px; /* يعطيه مسافة عن باقي الأزرار */
 }
 
 /* حالة التمرير (Hover) - تغيير لون فقط بدون حركة */
@@ -1836,7 +1834,7 @@ footer {
   justify-content: center;
   position: absolute;
   top: -8px;
-  left: -8px;
+  inset-inline-end: -8px;
 }
 
 /* تعديل في Body */
@@ -1864,7 +1862,7 @@ body {
   content: "عضوية PRO";
   position: absolute;
   top: 10px;
-  right: -30px;
+  inset-inline-start: -30px;
   background: #8e44ad;
   color: white;
   padding: 5px 40px;
@@ -1959,7 +1957,7 @@ body {
 .cart-table {
   width: 100%;
   border-collapse: collapse;
-  text-align: right;
+  text-align: start;
   color: #fff; /* تأكيد لون النص في الجدول */
 }
 
@@ -2196,7 +2194,7 @@ body {
 .top-navigation {
   position: absolute;
   top: 20px;
-  right: 20px; /* ليظهر في جهة اليمين كون الموقع RTL */
+  inset-inline-end: 20px;
   z-index: 1000;
 }
 
@@ -2220,7 +2218,11 @@ body {
 .back-btn:hover {
   background: #6ab04c !important;
   box-shadow: 0 4px 15px rgba(106, 176, 76, 0.4) !important;
-  transform: translateX(-5px); /* حركة خفيفة عند تمرير الماوس */
+  transform: translateX(5px); /* حركة خفيفة عند تمرير الماوس */
+}
+
+[dir="rtl"] .back-btn:hover {
+  transform: translateX(-5px);
 }
 
 /* أيقونة السهم */
@@ -2318,7 +2320,6 @@ body {
   align-items: center;
   justify-content: center; /* يضمن توسيط المحتوى بالكامل في الصفحة */
   padding: 20px;
-  direction: rtl; /* لضمان الترتيب العربي */
 }
 
 /* الشريط الذي يحتوي على كل شيء (الكبسولة) */
@@ -2375,7 +2376,6 @@ nav {
 }
 /* إعدادات الصفحة العامة */
 body {
-  direction: rtl; /* لضمان الترتيب من اليمين لليسار */
   margin: 0;
   font-family: sans-serif;
 }

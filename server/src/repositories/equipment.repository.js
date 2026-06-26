@@ -46,6 +46,17 @@ const PUBLIC_FIELDS = [
   "updated_at",
 ];
 
+// Extra breakdown fields shown only to the listing's owner or an admin —
+// never returned to buyers (PUBLIC_FIELDS stays buyer-safe).
+const OWNER_FIELDS = [
+  ...PUBLIC_FIELDS,
+  "farmer_daily_price",
+  "farmer_sale_price",
+  "commission_percentage",
+  "daily_commission_amount",
+  "sale_commission_amount",
+];
+
 /**
  * Apply shared filters to either a data query or a count query.
  * Mutates and returns the query builder.
@@ -99,6 +110,7 @@ async function list({
   filters = {},
   sort = "newest",
   includeHidden = false,
+  fields = PUBLIC_FIELDS,
 } = {}) {
   const safePage = Math.max(1, parseInt(page, 10) || 1);
   const safeLimit = Math.min(100, Math.max(1, parseInt(limit, 10) || 20));
@@ -114,7 +126,7 @@ async function list({
     baseFilters._publicVisibility = true;
   }
 
-  const dataQuery = knex("equipment").select(PUBLIC_FIELDS);
+  const dataQuery = knex("equipment").select(fields);
   const countQuery = knex("equipment").count("* as count").first();
 
   for (const qb of [dataQuery, countQuery]) {
@@ -147,8 +159,24 @@ async function getById(id) {
   return knex("equipment").where({ id }).first(PUBLIC_FIELDS);
 }
 
+/**
+ * Just the commission breakdown columns — merged onto a public getById()
+ * result by the controller when the requester is the owner/admin.
+ */
+async function getOwnerFieldsById(id) {
+  return knex("equipment")
+    .where({ id })
+    .first(
+      "farmer_daily_price",
+      "farmer_sale_price",
+      "commission_percentage",
+      "daily_commission_amount",
+      "sale_commission_amount",
+    );
+}
+
 async function create(data) {
-  const [row] = await knex("equipment").insert(data).returning(PUBLIC_FIELDS);
+  const [row] = await knex("equipment").insert(data).returning(OWNER_FIELDS);
   return row;
 }
 
@@ -156,7 +184,7 @@ async function update(id, data) {
   const [row] = await knex("equipment")
     .where({ id })
     .update(data)
-    .returning(PUBLIC_FIELDS);
+    .returning(OWNER_FIELDS);
   return row;
 }
 
@@ -170,6 +198,7 @@ async function listByOwner(ownerId, { page = 1, limit = 20 } = {}) {
     limit,
     filters: { owner_id: ownerId },
     includeHidden: true,
+    fields: OWNER_FIELDS,
   });
 }
 
@@ -263,6 +292,7 @@ async function pendingCount() {
 module.exports = {
   list,
   getById,
+  getOwnerFieldsById,
   create,
   update,
   remove,
@@ -273,5 +303,6 @@ module.exports = {
   listPending,
   pendingCount,
   PUBLIC_FIELDS,
+  OWNER_FIELDS,
   ALLOWED_SORTS,
 };

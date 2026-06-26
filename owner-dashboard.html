@@ -773,11 +773,23 @@
             <label id="f-daily-wrap">
               سعر اليوم (ريال) *
               <input type="number" id="f-daily-price" min="0" step="0.01" />
+              <small style="color:var(--color-text-soft);display:block;margin-top:4px">
+                عمولة المنصة (<span id="f-daily-commission-pct">10</span>%):
+                <span id="f-daily-commission-amount">0.00</span> ريال —
+                السعر النهائي المعروض للمستخدم:
+                <strong id="f-daily-final-price">0.00</strong> ريال
+              </small>
             </label>
 
             <label id="f-sale-wrap">
               سعر البيع (ريال)
               <input type="number" id="f-sale-price" min="0" step="0.01" />
+              <small style="color:var(--color-text-soft);display:block;margin-top:4px">
+                عمولة المنصة (<span id="f-sale-commission-pct">10</span>%):
+                <span id="f-sale-commission-amount">0.00</span> ريال —
+                السعر النهائي المعروض للمستخدم:
+                <strong id="f-sale-final-price">0.00</strong> ريال
+              </small>
             </label>
 
             <!-- Optional security deposit. Held when the rental starts and
@@ -1337,6 +1349,9 @@
           $("#f-status").value = "available";
           $("#f-listing-type").value = "rent";
           $("#f-stock").value = "1";
+          commissionPct = 10;
+          updateCommissionPreview("daily");
+          updateCommissionPreview("sale");
           // Clear specs fields and PDF state
           const pdfUrlEl = $("#f-datasheet-pdf-url");
           const pdfInfoEl = $("#pdf-upload-info");
@@ -1362,6 +1377,28 @@
             $("#btn-cancel-edit").classList.add("hidden");
           }
         }
+
+        // Client-side preview only — purely cosmetic feedback while typing.
+        // The server is the sole source of truth: it recomputes and stores
+        // the authoritative commission/final price on save, ignoring any
+        // commission/final value sent from the client.
+        let commissionPct = 10;
+
+        function updateCommissionPreview(kind) {
+          const input = $(`#f-${kind}-price`);
+          const pctEl = $(`#f-${kind}-commission-pct`);
+          const amountEl = $(`#f-${kind}-commission-amount`);
+          const finalEl = $(`#f-${kind}-final-price`);
+          const farmerPrice = Number(input.value) || 0;
+          const commission = Math.round((farmerPrice * commissionPct / 100 + Number.EPSILON) * 100) / 100;
+          const final = Math.round((farmerPrice + commission + Number.EPSILON) * 100) / 100;
+          pctEl.textContent = commissionPct;
+          amountEl.textContent = commission.toFixed(2);
+          finalEl.textContent = final.toFixed(2);
+        }
+
+        $("#f-daily-price").addEventListener("input", () => updateCommissionPreview("daily"));
+        $("#f-sale-price").addEventListener("input", () => updateCommissionPreview("sale"));
 
         function toggleListingPriceFields() {
           const t = $("#f-listing-type").value;
@@ -1718,12 +1755,20 @@
             $("#f-category").value = eq.category || "other";
             $("#f-listing-type").value = eq.listing_type || "rent";
             $("#f-status").value = eq.status || "available";
-            $("#f-daily-price").value = eq.daily_price ?? "";
-            $("#f-sale-price").value = eq.sale_price ?? "";
+            // Prefill with the FARMER's base price (not the marked-up final
+            // price the buyer sees) — handleSubmit always re-sends this
+            // field, so prefilling with the final price would double the
+            // commission on every save.
+            $("#f-daily-price").value = eq.farmer_daily_price ?? "";
+            $("#f-sale-price").value = eq.farmer_sale_price ?? "";
             $("#f-deposit-amount").value = eq.deposit_amount ?? "";
             $("#f-stock").value = eq.stock ?? 1;
             $("#f-governorate").value = eq.governorate || "";
             $("#f-description").value = eq.description || "";
+
+            commissionPct = Number(eq.commission_percentage) || 10;
+            updateCommissionPreview("daily");
+            updateCommissionPreview("sale");
 
             currentImages = (Array.isArray(eq.images) ? eq.images : []).map(
               (u) => ({

@@ -24,62 +24,21 @@
   /* ─── Canonical desktop nav items ───────────────────────────────── */
   // roles: "*"   → shown to everyone (including guests)
   // roles: [..] → shown only when logged-in user's role is in the array
-  const NAV_ITEMS = [
-    {
-      href:  "index.html",
-      label: "الرئيسية",
-      icon:  "fa-home",
-      roles: "*",
-    },
-    {
-      href:  "tools.html",
-      label: "تأجير معدات",
-      icon:  "fa-tractor",
-      roles: "*",
-    },
-    {
-      href:  "basket.html",
-      label: "بيع معدات",
-      icon:  "fa-store",
-      roles: "*",
-    },
-    {
-      href:  "owner-dashboard.html",
-      label: "لوحة المالك",
-      icon:  "fa-tachometer-alt",
-      roles: ["owner", "admin"],
-    },
-    {
-      href:  "my-orders.html",
-      label: "طلباتي",
-      icon:  "fa-box",
-      roles: ["renter", "owner", "admin"],
-    },
-    {
-      href:  "delivery.html",
-      label: "التوصيل",
-      icon:  "fa-truck",
-      roles: ["delivery", "admin"],
-    },
-    {
-      href:  "track.html",
-      label: "تتبع الطلبات",
-      icon:  "fa-map-marker-alt",
-      roles: ["renter", "owner", "delivery"],
-    },
-    {
-      href:  "loyalty.html",
-      label: "برنامج الولاء",
-      icon:  "fa-medal",
-      roles: ["renter", "owner"],
-    },
-    {
-      href:  "support.html",
-      label: "الدعم الفني",
-      icon:  "fa-headset",
-      roles: "*",
-    },
-  ];
+  // label: translation key, resolved at render time via window.HarthI18n.
+  function navItems() {
+    const t = window.HarthI18n ? window.HarthI18n.t : (k) => k;
+    return [
+      { href: "index.html", label: t("nav.home"), icon: "fa-home", roles: "*" },
+      { href: "tools.html", label: t("nav.rentEquipment"), icon: "fa-tractor", roles: "*" },
+      { href: "basket.html", label: t("nav.sellEquipment"), icon: "fa-store", roles: "*" },
+      { href: "owner-dashboard.html", label: t("nav.ownerDashboard"), icon: "fa-tachometer-alt", roles: ["owner", "admin"] },
+      { href: "my-orders.html", label: t("nav.myOrders"), icon: "fa-box", roles: ["renter", "owner", "admin"] },
+      { href: "delivery.html", label: t("nav.delivery"), icon: "fa-truck", roles: ["delivery", "admin"] },
+      { href: "track.html", label: t("nav.trackOrders"), icon: "fa-map-marker-alt", roles: ["renter", "owner", "delivery"] },
+      { href: "loyalty.html", label: t("nav.loyalty"), icon: "fa-medal", roles: ["renter", "owner"] },
+      { href: "support.html", label: t("nav.support"), icon: "fa-headset", roles: "*" },
+    ];
+  }
 
   /* ─── Helpers ────────────────────────────────────────────────────── */
   function getUser() {
@@ -136,7 +95,7 @@
     if (!ul) return;
 
     const role = user?.role || null;
-    ul.innerHTML = NAV_ITEMS
+    ul.innerHTML = navItems()
       .filter(i => allowed(i, role))
       .map(i => `<li><a href="${i.href}" class="nav-item${isActive(i.href) ? " active" : ""}">
           <i class="fas ${i.icon}"></i> ${i.label}
@@ -151,8 +110,13 @@
 
     injectCSS();
 
-    const user = getUser();
-    updateDesktopNav(user);
+    const render = () => updateDesktopNav(getUser());
+    if (window.HarthI18n) {
+      window.HarthI18n.ready().then(render);
+      document.addEventListener("harth:langchange", render);
+    } else {
+      render();
+    }
   }
 
   // Run after DOM is ready (works whether script is defer or at body end)

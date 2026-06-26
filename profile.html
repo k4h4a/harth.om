@@ -3,7 +3,23 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>الملف الشخصي — حرث</title>
+  <script>
+    (function () {
+      try {
+        if (localStorage.getItem("harth_lang") === "en") {
+          document.documentElement.lang = "en";
+          document.documentElement.dir = "ltr";
+        }
+      } catch (e) {}
+      document.documentElement.classList.add("i18n-loading");
+    })();
+  </script>
+  <style>
+    html.i18n-loading body {
+      visibility: hidden;
+    }
+  </style>
+  <title data-i18n="profile.title">الملف الشخصي — حرث</title>
   <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
   <link rel="stylesheet" href="design-system.css" />
@@ -13,7 +29,7 @@
   <style>
     /* ── Reset & Base ─────────────────────────────────────────── */
     *{margin:0;padding:0;box-sizing:border-box}
-    body{font-family:"Cairo",sans-serif;direction:rtl;background:#0a1a0a;min-height:100vh;color:#fff;padding-bottom:80px}
+    body{font-family:"Cairo",sans-serif;background:#0a1a0a;min-height:100vh;color:#fff;padding-bottom:80px}
 
     /* ── Layout ───────────────────────────────────────────────── */
     .pf-wrap{display:grid;grid-template-columns:260px 1fr;gap:24px;max-width:1120px;margin:24px auto;padding:0 16px;align-items:start}
@@ -93,7 +109,7 @@
 
     /* Password strength */
     .pwd-wrap{position:relative}
-    .pwd-toggle{position:absolute;left:12px;top:50%;transform:translateY(-50%);background:none;border:none;color:rgba(255,255,255,.4);cursor:pointer;font-size:15px}
+    .pwd-toggle{position:absolute;inset-inline-end:12px;top:50%;transform:translateY(-50%);background:none;border:none;color:rgba(255,255,255,.4);cursor:pointer;font-size:15px}
     .strength-bar{height:4px;border-radius:2px;margin-top:6px;background:rgba(255,255,255,.1);overflow:hidden}
     .strength-fill{height:100%;border-radius:2px;transition:width .4s, background .4s;width:0}
 
@@ -117,9 +133,10 @@
     .sw{position:relative;width:46px;height:25px;flex-shrink:0}
     .sw input{opacity:0;width:0;height:0}
     .sw-slider{position:absolute;inset:0;background:rgba(255,255,255,.15);border-radius:25px;cursor:pointer;transition:.3s}
-    .sw-slider:before{content:"";position:absolute;width:19px;height:19px;background:#fff;border-radius:50%;bottom:3px;right:3px;transition:.3s;box-shadow:0 2px 5px rgba(0,0,0,.3)}
+    .sw-slider:before{content:"";position:absolute;width:19px;height:19px;background:#fff;border-radius:50%;bottom:3px;inset-inline-end:3px;transition:.3s;box-shadow:0 2px 5px rgba(0,0,0,.3)}
     .sw input:checked+.sw-slider{background:#6ab04c}
-    .sw input:checked+.sw-slider:before{transform:translateX(-21px)}
+    .sw input:checked+.sw-slider:before{transform:translateX(21px)}
+    [dir="rtl"] .sw input:checked+.sw-slider:before{transform:translateX(-21px)}
 
     /* Session card */
     .session-card{background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.09);border-radius:12px;padding:14px 16px;display:flex;align-items:center;gap:12px;margin-bottom:8px}
@@ -217,25 +234,25 @@
     <div class="header-capsule">
       <div class="section right">
         <div class="site-brand">
-          <img src="شعار حرث.jpeg" alt="شعار حرث" />
-          <h1>حــرث</h1>
+          <img src="شعار حرث.jpeg" alt="شعار حرث" data-i18n-alt="common.siteName" />
+          <h1 data-i18n="common.siteName">حــرث</h1>
         </div>
       </div>
       <nav class="section center"><ul class="nav-links"></ul></nav>
       <div class="section left" id="auth-header">
-        <a href="register.html" class="hs-btn hs-btn--ghost hs-btn--sm" id="login-link">تسجيل دخول</a>
+        <a href="register.html" class="hs-btn hs-btn--ghost hs-btn--sm" id="login-link" data-i18n="common.buttons.login">تسجيل دخول</a>
       </div>
     </div>
   </header>
 
   <!-- Mobile tabs -->
   <div class="pf-tabs-mobile" id="mobile-tabs">
-    <button class="pf-tab-btn active" data-panel="profile"><i class="fas fa-user"></i> الملف</button>
-    <button class="pf-tab-btn" data-panel="security"><i class="fas fa-lock"></i> الأمان</button>
-    <button class="pf-tab-btn" data-panel="prefs"><i class="fas fa-sliders-h"></i> التخصيص</button>
-    <button class="pf-tab-btn" data-panel="billing"><i class="fas fa-credit-card"></i> الفواتير</button>
-    <button class="pf-tab-btn" data-panel="support"><i class="fas fa-headset"></i> الدعم</button>
-    <button class="pf-tab-btn" data-panel="danger"><i class="fas fa-exclamation-triangle"></i> الخطر</button>
+    <button class="pf-tab-btn active" data-panel="profile"><i class="fas fa-user"></i> <span data-i18n="profile.tabs.profile">الملف</span></button>
+    <button class="pf-tab-btn" data-panel="security"><i class="fas fa-lock"></i> <span data-i18n="profile.tabs.security">الأمان</span></button>
+    <button class="pf-tab-btn" data-panel="prefs"><i class="fas fa-sliders-h"></i> <span data-i18n="profile.tabs.prefs">التخصيص</span></button>
+    <button class="pf-tab-btn" data-panel="billing"><i class="fas fa-credit-card"></i> <span data-i18n="profile.tabs.billing">الفواتير</span></button>
+    <button class="pf-tab-btn" data-panel="support"><i class="fas fa-headset"></i> <span data-i18n="profile.tabs.support">الدعم</span></button>
+    <button class="pf-tab-btn" data-panel="danger"><i class="fas fa-exclamation-triangle"></i> <span data-i18n="profile.tabs.danger">الخطر</span></button>
   </div>
 
   <div class="pf-wrap">
@@ -249,35 +266,35 @@
           <div class="pf-avatar-overlay"><i class="fas fa-camera"></i></div>
         </div>
         <input type="file" id="avatar-file-input" accept="image/jpeg,image/png,image/webp" />
-        <div class="pf-uname" id="sidebar-name">جارٍ التحميل...</div>
+        <div class="pf-uname" id="sidebar-name" data-i18n="common.loading">جارٍ التحميل...</div>
         <div class="pf-uemail" id="sidebar-email">—</div>
-        <div class="pf-role-badge" id="sidebar-role"><i class="fas fa-shield-alt"></i> عضو</div>
+        <div class="pf-role-badge" id="sidebar-role"><i class="fas fa-shield-alt"></i> <span data-i18n="profile.memberBadge">عضو</span></div>
       </div>
       <div class="pf-stats">
-        <div class="pf-stat"><div class="pf-stat-num" id="stat-orders">—</div><div class="pf-stat-lbl">طلب</div></div>
-        <div class="pf-stat"><div class="pf-stat-num" id="stat-listings">—</div><div class="pf-stat-lbl">إعلان</div></div>
-        <div class="pf-stat"><div class="pf-stat-num" id="stat-rating">—</div><div class="pf-stat-lbl">تقييم</div></div>
+        <div class="pf-stat"><div class="pf-stat-num" id="stat-orders">—</div><div class="pf-stat-lbl" data-i18n="profile.stats.orders">طلب</div></div>
+        <div class="pf-stat"><div class="pf-stat-num" id="stat-listings">—</div><div class="pf-stat-lbl" data-i18n="profile.stats.listings">إعلان</div></div>
+        <div class="pf-stat"><div class="pf-stat-num" id="stat-rating">—</div><div class="pf-stat-lbl" data-i18n="profile.stats.rating">تقييم</div></div>
       </div>
       <nav class="pf-nav">
         <div class="pf-nav-item active" data-panel="profile">
-          <span class="nav-ico"><i class="fas fa-user"></i></span> الملف الشخصي
+          <span class="nav-ico"><i class="fas fa-user"></i></span> <span data-i18n="profile.nav.profile">الملف الشخصي</span>
         </div>
         <div class="pf-nav-item" data-panel="security">
-          <span class="nav-ico"><i class="fas fa-lock"></i></span> الأمان والخصوصية
+          <span class="nav-ico"><i class="fas fa-lock"></i></span> <span data-i18n="profile.nav.security">الأمان والخصوصية</span>
         </div>
         <div class="pf-nav-item" data-panel="prefs">
-          <span class="nav-ico"><i class="fas fa-sliders-h"></i></span> التخصيص
+          <span class="nav-ico"><i class="fas fa-sliders-h"></i></span> <span data-i18n="profile.nav.prefs">التخصيص</span>
         </div>
         <div class="pf-nav-sep"></div>
         <div class="pf-nav-item" data-panel="billing">
-          <span class="nav-ico"><i class="fas fa-credit-card"></i></span> الاشتراك والفواتير
+          <span class="nav-ico"><i class="fas fa-credit-card"></i></span> <span data-i18n="profile.nav.billing">الاشتراك والفواتير</span>
         </div>
         <div class="pf-nav-item" data-panel="support">
-          <span class="nav-ico"><i class="fas fa-headset"></i></span> الدعم والمساعدة
+          <span class="nav-ico"><i class="fas fa-headset"></i></span> <span data-i18n="profile.nav.support">الدعم والمساعدة</span>
         </div>
         <div class="pf-nav-sep"></div>
         <div class="pf-nav-item" data-panel="danger" style="color:#ff7675">
-          <span class="nav-ico" style="color:#ff7675"><i class="fas fa-exclamation-triangle"></i></span> منطقة الخطر
+          <span class="nav-ico" style="color:#ff7675"><i class="fas fa-exclamation-triangle"></i></span> <span data-i18n="profile.nav.danger">منطقة الخطر</span>
         </div>
       </nav>
     </aside>
@@ -288,13 +305,13 @@
       <!-- ═══ PANEL: Profile ═══ -->
       <div class="pf-panel active" id="panel-profile">
         <div class="panel-header">
-          <h2>الملف الشخصي</h2>
-          <p>إدارة معلوماتك الشخصية والصورة والموقع</p>
+          <h2 data-i18n="profile.panels.profile.heading">الملف الشخصي</h2>
+          <p data-i18n="profile.panels.profile.subheading">إدارة معلوماتك الشخصية والصورة والموقع</p>
         </div>
 
         <!-- Avatar card -->
         <div class="pf-card">
-          <div class="pf-card-title"><i class="fas fa-camera"></i> الصورة الشخصية</div>
+          <div class="pf-card-title"><i class="fas fa-camera"></i> <span data-i18n="profile.panels.profile.avatarCardTitle">الصورة الشخصية</span></div>
           <div style="display:flex;align-items:center;gap:20px;flex-wrap:wrap">
             <div class="pf-avatar-wrap" style="width:90px;height:90px" onclick="document.getElementById('avatar-file-input').click()">
               <div class="pf-avatar-ph" id="main-avatar-ph" style="width:90px;height:90px;font-size:36px">?</div>
@@ -302,14 +319,14 @@
               <div class="pf-avatar-overlay"><i class="fas fa-camera"></i></div>
             </div>
             <div>
-              <div style="font-size:14px;font-weight:700;margin-bottom:6px">تغيير الصورة الشخصية</div>
-              <div style="font-size:12px;color:rgba(255,255,255,.5);margin-bottom:12px">JPG، PNG، أو WEBP حتى 5 ميجابايت</div>
+              <div style="font-size:14px;font-weight:700;margin-bottom:6px" data-i18n="profile.panels.profile.changeAvatarLabel">تغيير الصورة الشخصية</div>
+              <div style="font-size:12px;color:rgba(255,255,255,.5);margin-bottom:12px" data-i18n="profile.panels.profile.avatarHint">JPG، PNG، أو WEBP حتى 5 ميجابايت</div>
               <div style="display:flex;gap:8px;flex-wrap:wrap">
                 <button class="btn btn-ghost btn-sm" onclick="document.getElementById('avatar-file-input').click()">
-                  <i class="fas fa-upload"></i> رفع صورة
+                  <i class="fas fa-upload"></i> <span data-i18n="profile.panels.profile.uploadBtn">رفع صورة</span>
                 </button>
                 <button class="btn btn-danger btn-sm" id="remove-avatar-btn" onclick="removeAvatar()">
-                  <i class="fas fa-trash"></i> حذف الصورة
+                  <i class="fas fa-trash"></i> <span data-i18n="profile.panels.profile.removeAvatarBtn">حذف الصورة</span>
                 </button>
               </div>
             </div>
@@ -318,80 +335,80 @@
 
         <!-- Personal info -->
         <div class="pf-card">
-          <div class="pf-card-title"><i class="fas fa-id-card"></i> المعلومات الشخصية</div>
+          <div class="pf-card-title"><i class="fas fa-id-card"></i> <span data-i18n="profile.panels.profile.personalInfoTitle">المعلومات الشخصية</span></div>
           <div class="form-grid">
             <div>
-              <label class="f-label">الاسم الكامل *</label>
-              <input type="text" class="f-input" id="f-name" maxlength="100" placeholder="اسمك الكريم" />
+              <label class="f-label" data-i18n="profile.panels.profile.fullNameLabel">الاسم الكامل *</label>
+              <input type="text" class="f-input" id="f-name" maxlength="100" placeholder="اسمك الكريم" data-i18n-placeholder="profile.panels.profile.fullNamePlaceholder" />
             </div>
             <div>
-              <label class="f-label">اسم المستخدم</label>
-              <input type="text" class="f-input" id="f-username" maxlength="50" placeholder="مثال: ahmed_farmer" />
-              <div class="f-hint">يستخدم في الرابط الشخصي — أحرف إنجليزية وأرقام فقط</div>
+              <label class="f-label" data-i18n="profile.panels.profile.usernameLabel">اسم المستخدم</label>
+              <input type="text" class="f-input" id="f-username" maxlength="50" placeholder="مثال: ahmed_farmer" data-i18n-placeholder="profile.panels.profile.usernamePlaceholder" />
+              <div class="f-hint" data-i18n="profile.panels.profile.usernameHint">يستخدم في الرابط الشخصي — أحرف إنجليزية وأرقام فقط</div>
             </div>
             <div>
-              <label class="f-label">البريد الإلكتروني</label>
+              <label class="f-label" data-i18n="profile.panels.profile.emailLabel">البريد الإلكتروني</label>
               <input type="email" class="f-input" id="f-email" readonly />
-              <div class="f-hint">لتغيير الإيميل انتقل لقسم الأمان</div>
+              <div class="f-hint" data-i18n="profile.panels.profile.emailHint">لتغيير الإيميل انتقل لقسم الأمان</div>
             </div>
             <div>
-              <label class="f-label">رقم الهاتف</label>
+              <label class="f-label" data-i18n="profile.panels.profile.phoneLabel">رقم الهاتف</label>
               <input type="tel" class="f-input" id="f-phone" maxlength="20" placeholder="+968 XXXX XXXX" />
             </div>
             <div>
-              <label class="f-label">تاريخ الميلاد</label>
+              <label class="f-label" data-i18n="profile.panels.profile.birthDateLabel">تاريخ الميلاد</label>
               <input type="date" class="f-input" id="f-birth-date" />
             </div>
             <div>
-              <label class="f-label">الجنس</label>
+              <label class="f-label" data-i18n="profile.panels.profile.genderLabel">الجنس</label>
               <select class="f-select" id="f-gender">
-                <option value="">— اختر —</option>
-                <option value="male">ذكر</option>
-                <option value="female">أنثى</option>
-                <option value="prefer_not">أفضل عدم الإفصاح</option>
+                <option value="" data-i18n="profile.panels.profile.genderChoose">— اختر —</option>
+                <option value="male" data-i18n="profile.panels.profile.genderMale">ذكر</option>
+                <option value="female" data-i18n="profile.panels.profile.genderFemale">أنثى</option>
+                <option value="prefer_not" data-i18n="profile.panels.profile.genderPreferNot">أفضل عدم الإفصاح</option>
               </select>
             </div>
             <div class="form-full">
-              <label class="f-label">نبذة تعريفية</label>
-              <textarea class="f-input" id="f-bio" maxlength="300" placeholder="عرّف بنفسك باختصار..."></textarea>
-              <div class="f-hint"><span id="bio-count">0</span>/300 حرف</div>
+              <label class="f-label" data-i18n="profile.panels.profile.bioLabel">نبذة تعريفية</label>
+              <textarea class="f-input" id="f-bio" maxlength="300" placeholder="عرّف بنفسك باختصار..." data-i18n-placeholder="profile.panels.profile.bioPlaceholder"></textarea>
+              <div class="f-hint"><span id="bio-count">0</span>/300 <span data-i18n="profile.panels.profile.bioCharSuffix">حرف</span></div>
             </div>
           </div>
         </div>
 
         <!-- Location -->
         <div class="pf-card">
-          <div class="pf-card-title"><i class="fas fa-map-marker-alt"></i> الموقع</div>
+          <div class="pf-card-title"><i class="fas fa-map-marker-alt"></i> <span data-i18n="profile.panels.profile.locationTitle">الموقع</span></div>
           <div class="form-grid">
             <div>
-              <label class="f-label">الدولة</label>
+              <label class="f-label" data-i18n="profile.panels.profile.countryLabel">الدولة</label>
               <select class="f-select" id="f-country">
-                <option value="">— اختر الدولة —</option>
-                <option value="OM">سلطنة عُمان</option>
-                <option value="SA">المملكة العربية السعودية</option>
-                <option value="AE">الإمارات العربية المتحدة</option>
-                <option value="KW">الكويت</option>
-                <option value="BH">البحرين</option>
-                <option value="QA">قطر</option>
-                <option value="YE">اليمن</option>
-                <option value="JO">الأردن</option>
-                <option value="EG">مصر</option>
-                <option value="OTHER">أخرى</option>
+                <option value="" data-i18n="profile.panels.profile.countryChoose">— اختر الدولة —</option>
+                <option value="OM" data-i18n="profile.panels.profile.countries.OM">سلطنة عُمان</option>
+                <option value="SA" data-i18n="profile.panels.profile.countries.SA">المملكة العربية السعودية</option>
+                <option value="AE" data-i18n="profile.panels.profile.countries.AE">الإمارات العربية المتحدة</option>
+                <option value="KW" data-i18n="profile.panels.profile.countries.KW">الكويت</option>
+                <option value="BH" data-i18n="profile.panels.profile.countries.BH">البحرين</option>
+                <option value="QA" data-i18n="profile.panels.profile.countries.QA">قطر</option>
+                <option value="YE" data-i18n="profile.panels.profile.countries.YE">اليمن</option>
+                <option value="JO" data-i18n="profile.panels.profile.countries.JO">الأردن</option>
+                <option value="EG" data-i18n="profile.panels.profile.countries.EG">مصر</option>
+                <option value="OTHER" data-i18n="profile.panels.profile.countries.OTHER">أخرى</option>
               </select>
             </div>
             <div>
-              <label class="f-label">المحافظة / المدينة</label>
-              <input type="text" class="f-input" id="f-city" maxlength="100" placeholder="مثال: مسقط" />
+              <label class="f-label" data-i18n="profile.panels.profile.cityLabel">المحافظة / المدينة</label>
+              <input type="text" class="f-input" id="f-city" maxlength="100" placeholder="مثال: مسقط" data-i18n-placeholder="profile.panels.profile.cityPlaceholder" />
             </div>
           </div>
         </div>
 
         <div class="btn-row">
           <button class="btn btn-primary" id="save-profile-btn" onclick="saveProfile()">
-            <i class="fas fa-check"></i> حفظ التعديلات
+            <i class="fas fa-check"></i> <span data-i18n="profile.panels.profile.saveBtn">حفظ التعديلات</span>
           </button>
           <button class="btn btn-ghost" onclick="loadProfile()">
-            <i class="fas fa-times"></i> إلغاء التعديلات
+            <i class="fas fa-times"></i> <span data-i18n="profile.panels.profile.cancelBtn">إلغاء التعديلات</span>
           </button>
         </div>
       </div>
@@ -399,117 +416,117 @@
       <!-- ═══ PANEL: Security ═══ -->
       <div class="pf-panel" id="panel-security">
         <div class="panel-header">
-          <h2>الأمان والخصوصية</h2>
-          <p>إدارة كلمة المرور والمصادقة الثنائية والجلسات النشطة</p>
+          <h2 data-i18n="profile.panels.security.heading">الأمان والخصوصية</h2>
+          <p data-i18n="profile.panels.security.subheading">إدارة كلمة المرور والمصادقة الثنائية والجلسات النشطة</p>
         </div>
 
         <!-- Change Password -->
         <div class="pf-card">
-          <div class="pf-card-title"><i class="fas fa-key"></i> تغيير كلمة المرور</div>
+          <div class="pf-card-title"><i class="fas fa-key"></i> <span data-i18n="profile.panels.security.changePasswordTitle">تغيير كلمة المرور</span></div>
           <div style="max-width:420px;display:flex;flex-direction:column;gap:12px">
             <div>
-              <label class="f-label">كلمة المرور الحالية</label>
+              <label class="f-label" data-i18n="profile.panels.security.currentPasswordLabel">كلمة المرور الحالية</label>
               <div class="pwd-wrap">
-                <input type="password" class="f-input" id="pwd-current" placeholder="••••••••" style="padding-left:40px" />
+                <input type="password" class="f-input" id="pwd-current" placeholder="••••••••" style="padding-inline-end:40px" />
                 <button class="pwd-toggle" onclick="togglePwd('pwd-current',this)"><i class="fas fa-eye"></i></button>
               </div>
             </div>
             <div>
-              <label class="f-label">كلمة المرور الجديدة</label>
+              <label class="f-label" data-i18n="profile.panels.security.newPasswordLabel">كلمة المرور الجديدة</label>
               <div class="pwd-wrap">
-                <input type="password" class="f-input" id="pwd-new" placeholder="8 أحرف على الأقل" style="padding-left:40px" oninput="checkStrength(this.value)" />
+                <input type="password" class="f-input" id="pwd-new" placeholder="8 أحرف على الأقل" data-i18n-placeholder="profile.panels.security.newPasswordPlaceholder" style="padding-inline-end:40px" oninput="checkStrength(this.value)" />
                 <button class="pwd-toggle" onclick="togglePwd('pwd-new',this)"><i class="fas fa-eye"></i></button>
               </div>
               <div class="strength-bar"><div class="strength-fill" id="strength-fill"></div></div>
-              <div class="f-hint" id="strength-hint">أدخل كلمة مرور قوية تحتوي على أرقام وحروف ورموز</div>
+              <div class="f-hint" id="strength-hint" data-i18n="profile.panels.security.strengthHintDefault">أدخل كلمة مرور قوية تحتوي على أرقام وحروف ورموز</div>
             </div>
             <div>
-              <label class="f-label">تأكيد كلمة المرور الجديدة</label>
+              <label class="f-label" data-i18n="profile.panels.security.confirmPasswordLabel">تأكيد كلمة المرور الجديدة</label>
               <div class="pwd-wrap">
-                <input type="password" class="f-input" id="pwd-confirm" placeholder="أعد كتابة كلمة المرور" style="padding-left:40px" />
+                <input type="password" class="f-input" id="pwd-confirm" placeholder="أعد كتابة كلمة المرور" data-i18n-placeholder="profile.panels.security.confirmPasswordPlaceholder" style="padding-inline-end:40px" />
                 <button class="pwd-toggle" onclick="togglePwd('pwd-confirm',this)"><i class="fas fa-eye"></i></button>
               </div>
             </div>
             <button class="btn btn-primary" style="width:fit-content" onclick="changePassword()">
-              <i class="fas fa-shield-alt"></i> تغيير كلمة المرور
+              <i class="fas fa-shield-alt"></i> <span data-i18n="profile.panels.security.changePasswordBtn">تغيير كلمة المرور</span>
             </button>
           </div>
         </div>
 
         <!-- 2FA -->
         <div class="pf-card">
-          <div class="pf-card-title"><i class="fas fa-mobile-alt"></i> المصادقة الثنائية (2FA)</div>
+          <div class="pf-card-title"><i class="fas fa-mobile-alt"></i> <span data-i18n="profile.panels.security.twoFaTitle">المصادقة الثنائية (2FA)</span></div>
           <div class="toggle-row" style="border:none;padding:0 0 14px">
             <div class="toggle-info">
-              <div class="toggle-lbl">تفعيل المصادقة الثنائية</div>
-              <div class="toggle-sub">طبقة أمان إضافية عند كل تسجيل دخول</div>
+              <div class="toggle-lbl" data-i18n="profile.panels.security.twoFaToggleLabel">تفعيل المصادقة الثنائية</div>
+              <div class="toggle-sub" data-i18n="profile.panels.security.twoFaToggleSub">طبقة أمان إضافية عند كل تسجيل دخول</div>
             </div>
             <label class="sw"><input type="checkbox" id="sw-2fa" onchange="toggle2FA(this.checked)" /><span class="sw-slider"></span></label>
           </div>
           <div id="twofa-setup" style="display:none">
             <div style="background:rgba(106,176,76,.08);border:1px solid rgba(106,176,76,.2);border-radius:12px;padding:16px;margin-top:10px">
-              <div style="font-size:13px;margin-bottom:12px;color:rgba(255,255,255,.75)">
+              <div style="font-size:13px;margin-bottom:12px;color:rgba(255,255,255,.75)" data-i18n="profile.panels.security.twoFaScanInstructions">
                 امسح الرمز التالي بتطبيق المصادقة (Google Authenticator / Authy):
               </div>
               <div class="twofa-qr">
                 <img src="https://api.qrserver.com/v1/create-qr-code/?size=140x140&data=otpauth://totp/Harth:user@harth.om?secret=JBSWY3DPEHPK3PXP&issuer=Harth" width="140" height="140" alt="2FA QR" />
               </div>
-              <div style="font-size:12px;color:rgba(255,255,255,.5);margin:8px 0">رمز الإعداد اليدوي: <code style="color:#6ab04c;background:rgba(106,176,76,.1);padding:2px 8px;border-radius:4px">JBSWY3DPEHPK3PXP</code></div>
-              <div style="font-size:13px;font-weight:700;margin-bottom:6px;margin-top:14px">رموز الطوارئ:</div>
+              <div style="font-size:12px;color:rgba(255,255,255,.5);margin:8px 0"><span data-i18n="profile.panels.security.twoFaManualCode">رمز الإعداد اليدوي:</span> <code style="color:#6ab04c;background:rgba(106,176,76,.1);padding:2px 8px;border-radius:4px">JBSWY3DPEHPK3PXP</code></div>
+              <div style="font-size:13px;font-weight:700;margin-bottom:6px;margin-top:14px" data-i18n="profile.panels.security.twoFaBackupCodesTitle">رموز الطوارئ:</div>
               <div class="backup-codes" id="backup-codes"></div>
-              <div class="f-hint">احفظ هذه الرموز في مكان آمن — كل رمز يُستخدم مرة واحدة فقط</div>
+              <div class="f-hint" data-i18n="profile.panels.security.twoFaBackupCodesHint">احفظ هذه الرموز في مكان آمن — كل رمز يُستخدم مرة واحدة فقط</div>
             </div>
           </div>
         </div>
 
         <!-- Sessions -->
         <div class="pf-card">
-          <div class="pf-card-title"><i class="fas fa-desktop"></i> الجلسات النشطة</div>
+          <div class="pf-card-title"><i class="fas fa-desktop"></i> <span data-i18n="profile.panels.security.sessionsTitle">الجلسات النشطة</span></div>
           <div id="sessions-list"><div style="text-align:center;padding:20px;color:rgba(255,255,255,.4)"><div class="spin" style="width:22px;height:22px;border-width:2px"></div></div></div>
           <div class="btn-row">
             <button class="btn btn-danger btn-sm" onclick="revokeAllSessions()">
-              <i class="fas fa-sign-out-alt"></i> تسجيل خروج من جميع الأجهزة
+              <i class="fas fa-sign-out-alt"></i> <span data-i18n="profile.panels.security.revokeAllBtn">تسجيل خروج من جميع الأجهزة</span>
             </button>
           </div>
         </div>
 
         <!-- Activity Log -->
         <div class="pf-card">
-          <div class="pf-card-title"><i class="fas fa-history"></i> سجل النشاطات الأمنية</div>
+          <div class="pf-card-title"><i class="fas fa-history"></i> <span data-i18n="profile.panels.security.activityTitle">سجل النشاطات الأمنية</span></div>
           <div id="activity-log"><div style="text-align:center;padding:20px;color:rgba(255,255,255,.4)"><div class="spin" style="width:22px;height:22px;border-width:2px"></div></div></div>
         </div>
 
         <!-- Data Export -->
         <div class="pf-card">
-          <div class="pf-card-title"><i class="fas fa-download"></i> تنزيل بيانات الحساب</div>
-          <p style="font-size:13px;color:rgba(255,255,255,.6);margin-bottom:14px">تنزيل نسخة كاملة من بياناتك الشخصية والنشاطات والطلبات بصيغة JSON.</p>
-          <button class="btn btn-ghost" onclick="exportData()"><i class="fas fa-file-download"></i> تنزيل البيانات</button>
+          <div class="pf-card-title"><i class="fas fa-download"></i> <span data-i18n="profile.panels.security.exportTitle">تنزيل بيانات الحساب</span></div>
+          <p style="font-size:13px;color:rgba(255,255,255,.6);margin-bottom:14px" data-i18n="profile.panels.security.exportDesc">تنزيل نسخة كاملة من بياناتك الشخصية والنشاطات والطلبات بصيغة JSON.</p>
+          <button class="btn btn-ghost" onclick="exportData()"><i class="fas fa-file-download"></i> <span data-i18n="profile.panels.security.exportBtn">تنزيل البيانات</span></button>
         </div>
       </div>
 
       <!-- ═══ PANEL: Preferences ═══ -->
       <div class="pf-panel" id="panel-prefs">
         <div class="panel-header">
-          <h2>التخصيص</h2>
-          <p>تخصيص مظهر التطبيق وإعدادات الإشعارات</p>
+          <h2 data-i18n="profile.panels.prefs.heading">التخصيص</h2>
+          <p data-i18n="profile.panels.prefs.subheading">تخصيص مظهر التطبيق وإعدادات الإشعارات</p>
         </div>
 
         <!-- Display -->
         <div class="pf-card">
-          <div class="pf-card-title"><i class="fas fa-palette"></i> المظهر والعرض</div>
+          <div class="pf-card-title"><i class="fas fa-palette"></i> <span data-i18n="profile.panels.prefs.displayTitle">المظهر والعرض</span></div>
           <div class="toggle-row">
             <div class="toggle-info">
-              <div class="toggle-lbl">الوضع الليلي</div>
-              <div class="toggle-sub">خلفية داكنة تريح العين</div>
+              <div class="toggle-lbl" data-i18n="profile.panels.prefs.darkModeLabel">الوضع الليلي</div>
+              <div class="toggle-sub" data-i18n="profile.panels.prefs.darkModeSub">خلفية داكنة تريح العين</div>
             </div>
             <label class="sw"><input type="checkbox" id="sw-dark" checked onchange="toggleTheme(this.checked)" /><span class="sw-slider"></span></label>
           </div>
           <div class="toggle-row">
             <div class="toggle-info">
-              <div class="toggle-lbl">اللغة</div>
-              <div class="toggle-sub">لغة واجهة التطبيق</div>
+              <div class="toggle-lbl" data-i18n="profile.panels.prefs.languageLabel">اللغة</div>
+              <div class="toggle-sub" data-i18n="profile.panels.prefs.languageSub">لغة واجهة التطبيق</div>
             </div>
-            <select class="f-select" id="pref-lang" style="width:auto;min-width:130px" onchange="savePref('language',this.value)">
+            <select class="f-select" id="pref-lang" style="width:auto;min-width:130px" onchange="changeAppLanguage(this.value)">
               <option value="ar">العربية</option>
               <option value="en">English</option>
             </select>
@@ -518,32 +535,32 @@
 
         <!-- Notifications -->
         <div class="pf-card">
-          <div class="pf-card-title"><i class="fas fa-bell"></i> إشعارات التطبيق</div>
+          <div class="pf-card-title"><i class="fas fa-bell"></i> <span data-i18n="profile.panels.prefs.appNotifTitle">إشعارات التطبيق</span></div>
           <div class="toggle-row">
             <div class="toggle-info">
-              <div class="toggle-lbl">إشعارات الطلبات والحجوزات</div>
-              <div class="toggle-sub">عند تحديث حالة الطلب أو الحجز</div>
+              <div class="toggle-lbl" data-i18n="profile.panels.prefs.notifOrdersLabel">إشعارات الطلبات والحجوزات</div>
+              <div class="toggle-sub" data-i18n="profile.panels.prefs.notifOrdersSub">عند تحديث حالة الطلب أو الحجز</div>
             </div>
             <label class="sw"><input type="checkbox" id="sw-notif-orders" onchange="savePref('notif_orders',this.checked)" /><span class="sw-slider"></span></label>
           </div>
           <div class="toggle-row">
             <div class="toggle-info">
-              <div class="toggle-lbl">إشعارات الرسائل</div>
-              <div class="toggle-sub">عند استلام رسالة جديدة</div>
+              <div class="toggle-lbl" data-i18n="profile.panels.prefs.notifMsgsLabel">إشعارات الرسائل</div>
+              <div class="toggle-sub" data-i18n="profile.panels.prefs.notifMsgsSub">عند استلام رسالة جديدة</div>
             </div>
             <label class="sw"><input type="checkbox" id="sw-notif-msgs" onchange="savePref('notif_messages',this.checked)" /><span class="sw-slider"></span></label>
           </div>
           <div class="toggle-row">
             <div class="toggle-info">
-              <div class="toggle-lbl">العروض والتخفيضات</div>
-              <div class="toggle-sub">عروض خاصة وبرنامج الولاء</div>
+              <div class="toggle-lbl" data-i18n="profile.panels.prefs.notifPromosLabel">العروض والتخفيضات</div>
+              <div class="toggle-sub" data-i18n="profile.panels.prefs.notifPromosSub">عروض خاصة وبرنامج الولاء</div>
             </div>
             <label class="sw"><input type="checkbox" id="sw-notif-promos" onchange="savePref('notif_promos',this.checked)" /><span class="sw-slider"></span></label>
           </div>
           <div class="toggle-row">
             <div class="toggle-info">
-              <div class="toggle-lbl">تنبيهات الأمان</div>
-              <div class="toggle-sub">تسجيل دخول جديد أو تغيير في الحساب</div>
+              <div class="toggle-lbl" data-i18n="profile.panels.prefs.notifSecurityLabel">تنبيهات الأمان</div>
+              <div class="toggle-sub" data-i18n="profile.panels.prefs.notifSecuritySub">تسجيل دخول جديد أو تغيير في الحساب</div>
             </div>
             <label class="sw"><input type="checkbox" id="sw-notif-security" onchange="savePref('notif_security',this.checked)" /><span class="sw-slider"></span></label>
           </div>
@@ -551,25 +568,25 @@
 
         <!-- Email Notifications -->
         <div class="pf-card">
-          <div class="pf-card-title"><i class="fas fa-envelope"></i> إشعارات البريد الإلكتروني</div>
+          <div class="pf-card-title"><i class="fas fa-envelope"></i> <span data-i18n="profile.panels.prefs.emailNotifTitle">إشعارات البريد الإلكتروني</span></div>
           <div class="toggle-row">
             <div class="toggle-info">
-              <div class="toggle-lbl">إشعارات البريد الإلكتروني</div>
-              <div class="toggle-sub">استلام تحديثات على بريدك الإلكتروني</div>
+              <div class="toggle-lbl" data-i18n="profile.panels.prefs.notifEmailLabel">إشعارات البريد الإلكتروني</div>
+              <div class="toggle-sub" data-i18n="profile.panels.prefs.notifEmailSub">استلام تحديثات على بريدك الإلكتروني</div>
             </div>
             <label class="sw"><input type="checkbox" id="sw-notif-email" onchange="savePref('notif_email',this.checked)" /><span class="sw-slider"></span></label>
           </div>
           <div class="toggle-row">
             <div class="toggle-info">
-              <div class="toggle-lbl">إشعارات واتساب</div>
-              <div class="toggle-sub">تحديثات مهمة عبر واتساب</div>
+              <div class="toggle-lbl" data-i18n="profile.panels.prefs.notifWaLabel">إشعارات واتساب</div>
+              <div class="toggle-sub" data-i18n="profile.panels.prefs.notifWaSub">تحديثات مهمة عبر واتساب</div>
             </div>
             <label class="sw"><input type="checkbox" id="sw-notif-wa" onchange="savePref('notif_whatsapp',this.checked)" /><span class="sw-slider"></span></label>
           </div>
           <div class="toggle-row">
             <div class="toggle-info">
-              <div class="toggle-lbl">تنبيه تسجيل الدخول</div>
-              <div class="toggle-sub">إشعار عند دخول من جهاز جديد</div>
+              <div class="toggle-lbl" data-i18n="profile.panels.prefs.loginAlertsLabel">تنبيه تسجيل الدخول</div>
+              <div class="toggle-sub" data-i18n="profile.panels.prefs.loginAlertsSub">إشعار عند دخول من جهاز جديد</div>
             </div>
             <label class="sw"><input type="checkbox" id="sw-login-alerts" onchange="savePref('login_alerts',this.checked)" /><span class="sw-slider"></span></label>
           </div>
@@ -579,54 +596,54 @@
       <!-- ═══ PANEL: Billing ═══ -->
       <div class="pf-panel" id="panel-billing">
         <div class="panel-header">
-          <h2>الاشتراك والفواتير</h2>
-          <p>إدارة باقتك وطرق الدفع وتاريخ الفواتير</p>
+          <h2 data-i18n="profile.panels.billing.heading">الاشتراك والفواتير</h2>
+          <p data-i18n="profile.panels.billing.subheading">إدارة باقتك وطرق الدفع وتاريخ الفواتير</p>
         </div>
 
         <!-- Current plan -->
         <div class="pf-card">
-          <div class="pf-card-title"><i class="fas fa-crown"></i> باقتك الحالية</div>
+          <div class="pf-card-title"><i class="fas fa-crown"></i> <span data-i18n="profile.panels.billing.currentPlanTitle">باقتك الحالية</span></div>
           <div class="plan-card">
             <div class="plan-ico">🌟</div>
             <div style="flex:1">
-              <div class="plan-name" id="plan-name">الباقة المجانية</div>
-              <div class="plan-meta" id="plan-meta">وصول أساسي لجميع ميزات المنصة</div>
+              <div class="plan-name" id="plan-name" data-i18n="profile.panels.billing.freePlanName">الباقة المجانية</div>
+              <div class="plan-meta" id="plan-meta" data-i18n="profile.panels.billing.freePlanMeta">وصول أساسي لجميع ميزات المنصة</div>
             </div>
-            <button class="btn btn-primary" onclick="switchTab('support')"><i class="fas fa-arrow-up"></i> ترقية</button>
+            <button class="btn btn-primary" onclick="switchTab('support')"><i class="fas fa-arrow-up"></i> <span data-i18n="profile.panels.billing.upgradeBtn">ترقية</span></button>
           </div>
           <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-top:4px">
             <div style="background:rgba(255,255,255,.04);border-radius:10px;padding:14px;text-align:center">
               <div style="font-size:22px;font-weight:800;color:#6ab04c">∞</div>
-              <div style="font-size:11px;color:rgba(255,255,255,.5);margin-top:2px">إعلانات نشطة</div>
+              <div style="font-size:11px;color:rgba(255,255,255,.5);margin-top:2px" data-i18n="profile.panels.billing.activeListingsLabel">إعلانات نشطة</div>
             </div>
             <div style="background:rgba(255,255,255,.04);border-radius:10px;padding:14px;text-align:center">
               <div style="font-size:22px;font-weight:800;color:#6ab04c">5%</div>
-              <div style="font-size:11px;color:rgba(255,255,255,.5);margin-top:2px">عمولة المنصة</div>
+              <div style="font-size:11px;color:rgba(255,255,255,.5);margin-top:2px" data-i18n="profile.panels.billing.commissionLabel">عمولة المنصة</div>
             </div>
             <div style="background:rgba(255,255,255,.04);border-radius:10px;padding:14px;text-align:center">
-              <div style="font-size:22px;font-weight:800;color:#6ab04c">دائم</div>
-              <div style="font-size:11px;color:rgba(255,255,255,.5);margin-top:2px">صلاحية الحساب</div>
+              <div style="font-size:22px;font-weight:800;color:#6ab04c" data-i18n="profile.panels.billing.accountValidityValue">دائم</div>
+              <div style="font-size:11px;color:rgba(255,255,255,.5);margin-top:2px" data-i18n="profile.panels.billing.accountValidityLabel">صلاحية الحساب</div>
             </div>
           </div>
         </div>
 
         <!-- Payment methods -->
         <div class="pf-card">
-          <div class="pf-card-title"><i class="fas fa-credit-card"></i> طرق الدفع المحفوظة</div>
+          <div class="pf-card-title"><i class="fas fa-credit-card"></i> <span data-i18n="profile.panels.billing.paymentMethodsTitle">طرق الدفع المحفوظة</span></div>
           <div style="background:rgba(255,255,255,.04);border:1px dashed rgba(255,255,255,.18);border-radius:12px;padding:20px;text-align:center;color:rgba(255,255,255,.45)">
             <i class="fas fa-credit-card" style="font-size:32px;margin-bottom:10px;display:block"></i>
-            <div style="font-size:14px">لا توجد طرق دفع محفوظة</div>
+            <div style="font-size:14px" data-i18n="profile.panels.billing.noPaymentMethods">لا توجد طرق دفع محفوظة</div>
           </div>
-          <button class="btn btn-ghost btn-sm" style="margin-top:12px"><i class="fas fa-plus"></i> إضافة طريقة دفع</button>
+          <button class="btn btn-ghost btn-sm" style="margin-top:12px"><i class="fas fa-plus"></i> <span data-i18n="profile.panels.billing.addPaymentMethodBtn">إضافة طريقة دفع</span></button>
         </div>
 
         <!-- Invoices -->
         <div class="pf-card">
-          <div class="pf-card-title"><i class="fas fa-file-invoice"></i> سجل الفواتير</div>
+          <div class="pf-card-title"><i class="fas fa-file-invoice"></i> <span data-i18n="profile.panels.billing.invoicesTitle">سجل الفواتير</span></div>
           <div id="invoices-list">
             <div style="background:rgba(255,255,255,.04);border:1px dashed rgba(255,255,255,.18);border-radius:12px;padding:24px;text-align:center;color:rgba(255,255,255,.45)">
               <i class="fas fa-receipt" style="font-size:32px;margin-bottom:10px;display:block"></i>
-              <div style="font-size:14px">لا توجد فواتير بعد</div>
+              <div style="font-size:14px" data-i18n="profile.panels.billing.noInvoices">لا توجد فواتير بعد</div>
             </div>
           </div>
         </div>
@@ -635,54 +652,54 @@
       <!-- ═══ PANEL: Support ═══ -->
       <div class="pf-panel" id="panel-support">
         <div class="panel-header">
-          <h2>الدعم والمساعدة</h2>
-          <p>تواصل مع فريق الدعم أو ابحث في مركز المساعدة</p>
+          <h2 data-i18n="profile.panels.support.heading">الدعم والمساعدة</h2>
+          <p data-i18n="profile.panels.support.subheading">تواصل مع فريق الدعم أو ابحث في مركز المساعدة</p>
         </div>
 
         <div class="pf-card">
-          <div class="pf-card-title"><i class="fas fa-rocket"></i> روابط سريعة</div>
+          <div class="pf-card-title"><i class="fas fa-rocket"></i> <span data-i18n="profile.panels.support.quickLinksTitle">روابط سريعة</span></div>
           <a class="sup-link" href="support.html">
             <div class="sl-ico" style="background:rgba(52,152,219,.2);color:#74b9ff"><i class="fas fa-book-open"></i></div>
-            <div class="sl-txt"><div class="sl-lbl">مركز المساعدة</div><div class="sl-sub">مقالات وأسئلة شائعة</div></div>
+            <div class="sl-txt"><div class="sl-lbl" data-i18n="profile.panels.support.helpCenterLabel">مركز المساعدة</div><div class="sl-sub" data-i18n="profile.panels.support.helpCenterSub">مقالات وأسئلة شائعة</div></div>
             <i class="fas fa-chevron-left sl-arr"></i>
           </a>
           <a class="sup-link" href="support.html#new">
             <div class="sl-ico" style="background:rgba(106,176,76,.2);color:#6ab04c"><i class="fas fa-ticket-alt"></i></div>
-            <div class="sl-txt"><div class="sl-lbl">فتح تذكرة دعم</div><div class="sl-sub">تواصل مع فريق الدعم</div></div>
+            <div class="sl-txt"><div class="sl-lbl" data-i18n="profile.panels.support.ticketLabel">فتح تذكرة دعم</div><div class="sl-sub" data-i18n="profile.panels.support.ticketSub">تواصل مع فريق الدعم</div></div>
             <i class="fas fa-chevron-left sl-arr"></i>
           </a>
           <a class="sup-link" href="https://wa.me/96812345678" target="_blank" rel="noopener">
             <div class="sl-ico" style="background:rgba(37,211,102,.2);color:#25d366"><i class="fab fa-whatsapp"></i></div>
-            <div class="sl-txt"><div class="sl-lbl">واتساب</div><div class="sl-sub">رد فوري خلال دقائق</div></div>
+            <div class="sl-txt"><div class="sl-lbl" data-i18n="profile.panels.support.whatsappLabel">واتساب</div><div class="sl-sub" data-i18n="profile.panels.support.whatsappSub">رد فوري خلال دقائق</div></div>
             <i class="fas fa-chevron-left sl-arr"></i>
           </a>
           <a class="sup-link" href="mailto:support@harth.om">
             <div class="sl-ico" style="background:rgba(231,76,60,.2);color:#ff7675"><i class="fas fa-envelope"></i></div>
-            <div class="sl-txt"><div class="sl-lbl">البريد الإلكتروني</div><div class="sl-sub">support@harth.om</div></div>
+            <div class="sl-txt"><div class="sl-lbl" data-i18n="profile.panels.support.emailLabel">البريد الإلكتروني</div><div class="sl-sub">support@harth.om</div></div>
             <i class="fas fa-chevron-left sl-arr"></i>
           </a>
         </div>
 
         <!-- Quick report -->
         <div class="pf-card">
-          <div class="pf-card-title"><i class="fas fa-flag"></i> الإبلاغ عن مشكلة</div>
+          <div class="pf-card-title"><i class="fas fa-flag"></i> <span data-i18n="profile.panels.support.reportTitle">الإبلاغ عن مشكلة</span></div>
           <div style="display:flex;flex-direction:column;gap:10px">
             <div>
-              <label class="f-label">نوع المشكلة</label>
+              <label class="f-label" data-i18n="profile.panels.support.reportTypeLabel">نوع المشكلة</label>
               <select class="f-select" id="report-type">
-                <option value="bug">خطأ تقني</option>
-                <option value="billing">مشكلة مالية</option>
-                <option value="account">مشكلة في الحساب</option>
-                <option value="content">محتوى مسيء</option>
-                <option value="other">أخرى</option>
+                <option value="bug" data-i18n="profile.panels.support.reportTypes.bug">خطأ تقني</option>
+                <option value="billing" data-i18n="profile.panels.support.reportTypes.billing">مشكلة مالية</option>
+                <option value="account" data-i18n="profile.panels.support.reportTypes.account">مشكلة في الحساب</option>
+                <option value="content" data-i18n="profile.panels.support.reportTypes.content">محتوى مسيء</option>
+                <option value="other" data-i18n="profile.panels.support.reportTypes.other">أخرى</option>
               </select>
             </div>
             <div>
-              <label class="f-label">وصف المشكلة</label>
-              <textarea class="f-input" id="report-body" style="min-height:80px" placeholder="اشرح المشكلة بالتفصيل..."></textarea>
+              <label class="f-label" data-i18n="profile.panels.support.reportBodyLabel">وصف المشكلة</label>
+              <textarea class="f-input" id="report-body" style="min-height:80px" placeholder="اشرح المشكلة بالتفصيل..." data-i18n-placeholder="profile.panels.support.reportBodyPlaceholder"></textarea>
             </div>
             <button class="btn btn-primary" style="width:fit-content" onclick="submitReport()">
-              <i class="fas fa-paper-plane"></i> إرسال البلاغ
+              <i class="fas fa-paper-plane"></i> <span data-i18n="profile.panels.support.submitReportBtn">إرسال البلاغ</span>
             </button>
           </div>
         </div>
@@ -691,47 +708,47 @@
       <!-- ═══ PANEL: Danger Zone ═══ -->
       <div class="pf-panel" id="panel-danger">
         <div class="panel-header">
-          <h2>منطقة الخطر</h2>
-          <p>إجراءات لا يمكن التراجع عنها — تصرف بحذر</p>
+          <h2 data-i18n="profile.panels.danger.heading">منطقة الخطر</h2>
+          <p data-i18n="profile.panels.danger.subheading">إجراءات لا يمكن التراجع عنها — تصرف بحذر</p>
         </div>
 
         <!-- Deactivate -->
         <div class="danger-card">
-          <h4><i class="fas fa-pause-circle"></i> تعطيل الحساب مؤقتاً</h4>
-          <p>سيتم إخفاء إعلاناتك وتعليق حسابك مؤقتاً. يمكنك إعادة تفعيله في أي وقت بتسجيل الدخول.</p>
+          <h4><i class="fas fa-pause-circle"></i> <span data-i18n="profile.panels.danger.deactivateTitle">تعطيل الحساب مؤقتاً</span></h4>
+          <p data-i18n="profile.panels.danger.deactivateDesc">سيتم إخفاء إعلاناتك وتعليق حسابك مؤقتاً. يمكنك إعادة تفعيله في أي وقت بتسجيل الدخول.</p>
           <button class="btn btn-danger" style="margin-top:12px" onclick="openDeactivateModal()">
-            <i class="fas fa-pause"></i> تعطيل الحساب مؤقتاً
+            <i class="fas fa-pause"></i> <span data-i18n="profile.panels.danger.deactivateBtn">تعطيل الحساب مؤقتاً</span>
           </button>
         </div>
 
         <!-- Delete -->
         <div class="danger-card" style="margin-top:16px">
-          <h4><i class="fas fa-skull-crossbones"></i> حذف الحساب نهائياً</h4>
-          <p>سيتم حذف جميع بياناتك، إعلاناتك، طلباتك، ونقاط الولاء بشكل نهائي ولا يمكن التراجع عن هذا الإجراء إطلاقاً.</p>
+          <h4><i class="fas fa-skull-crossbones"></i> <span data-i18n="profile.panels.danger.deleteTitle">حذف الحساب نهائياً</span></h4>
+          <p data-i18n="profile.panels.danger.deleteDesc">سيتم حذف جميع بياناتك، إعلاناتك، طلباتك، ونقاط الولاء بشكل نهائي ولا يمكن التراجع عن هذا الإجراء إطلاقاً.</p>
 
           <!-- Step 1 -->
           <div class="danger-step active" id="del-step-1">
             <button class="btn btn-danger" style="margin-top:12px" onclick="showStep(2)">
-              <i class="fas fa-trash-alt"></i> البدء في حذف الحساب
+              <i class="fas fa-trash-alt"></i> <span data-i18n="profile.panels.danger.startDeleteBtn">البدء في حذف الحساب</span>
             </button>
           </div>
 
           <!-- Step 2 -->
           <div class="danger-step" id="del-step-2">
             <div style="background:rgba(231,76,60,.1);border:1px solid rgba(231,76,60,.25);border-radius:10px;padding:14px;margin-top:12px">
-              <div style="font-size:13px;font-weight:700;color:#ff7675;margin-bottom:8px">⚠️ تأكيد الحذف</div>
-              <p style="font-size:13px;color:rgba(255,255,255,.7);margin-bottom:10px">اكتب <strong style="color:#ff7675">DELETE</strong> في الحقل أدناه للتأكيد:</p>
-              <input type="text" class="confirm-input" id="del-confirm-text" placeholder="اكتب DELETE هنا" />
+              <div style="font-size:13px;font-weight:700;color:#ff7675;margin-bottom:8px" data-i18n="profile.panels.danger.confirmDeleteTitle">⚠️ تأكيد الحذف</div>
+              <p style="font-size:13px;color:rgba(255,255,255,.7);margin-bottom:10px" data-i18n-html="profile.panels.danger.confirmDeleteInstructions">اكتب <strong style="color:#ff7675">DELETE</strong> في الحقل أدناه للتأكيد:</p>
+              <input type="text" class="confirm-input" id="del-confirm-text" placeholder="اكتب DELETE هنا" data-i18n-placeholder="profile.panels.danger.confirmDeletePlaceholder" />
               <div style="margin-top:10px">
-                <label class="f-label">كلمة المرور للتحقق النهائي</label>
+                <label class="f-label" data-i18n="profile.panels.danger.passwordVerifyLabel">كلمة المرور للتحقق النهائي</label>
                 <div class="pwd-wrap">
-                  <input type="password" class="confirm-input" id="del-password" placeholder="كلمة مرورك الحالية" style="padding-left:40px" />
+                  <input type="password" class="confirm-input" id="del-password" placeholder="كلمة مرورك الحالية" data-i18n-placeholder="profile.panels.danger.passwordVerifyPlaceholder" style="padding-inline-end:40px" />
                   <button class="pwd-toggle" onclick="togglePwd('del-password',this)"><i class="fas fa-eye"></i></button>
                 </div>
               </div>
               <div style="display:flex;gap:10px;margin-top:14px;flex-wrap:wrap">
-                <button class="btn btn-danger" onclick="deleteAccount()"><i class="fas fa-trash-alt"></i> تأكيد الحذف النهائي</button>
-                <button class="btn btn-ghost btn-sm" onclick="showStep(1)">إلغاء</button>
+                <button class="btn btn-danger" onclick="deleteAccount()"><i class="fas fa-trash-alt"></i> <span data-i18n="profile.panels.danger.confirmDeleteFinalBtn">تأكيد الحذف النهائي</span></button>
+                <button class="btn btn-ghost btn-sm" onclick="showStep(1)" data-i18n="profile.panels.danger.cancelBtn">إلغاء</button>
               </div>
             </div>
           </div>
@@ -744,17 +761,19 @@
   <!-- Deactivate Modal -->
   <div class="modal-overlay" id="deactivate-modal">
     <div class="modal-box">
-      <h3 style="color:#f1c40f"><i class="fas fa-pause-circle"></i> تعطيل الحساب</h3>
-      <p>هل أنت متأكد من تعطيل حسابك مؤقتاً؟ سيتم إخفاء جميع إعلاناتك ولن يتمكن المستخدمون من التواصل معك حتى تعيد التفعيل.</p>
+      <h3 style="color:#f1c40f"><i class="fas fa-pause-circle"></i> <span data-i18n="profile.deactivateModal.title">تعطيل الحساب</span></h3>
+      <p data-i18n="profile.deactivateModal.body">هل أنت متأكد من تعطيل حسابك مؤقتاً؟ سيتم إخفاء جميع إعلاناتك ولن يتمكن المستخدمون من التواصل معك حتى تعيد التفعيل.</p>
       <div class="modal-btns">
-        <button class="btn btn-ghost btn-sm" onclick="closeDeactivateModal()">إلغاء</button>
-        <button class="btn btn-danger" onclick="deactivateAccount()"><i class="fas fa-pause"></i> تعطيل الحساب</button>
+        <button class="btn btn-ghost btn-sm" onclick="closeDeactivateModal()" data-i18n="profile.deactivateModal.cancelBtn">إلغاء</button>
+        <button class="btn btn-danger" onclick="deactivateAccount()"><i class="fas fa-pause"></i> <span data-i18n="profile.deactivateModal.confirmBtn">تعطيل الحساب</span></button>
       </div>
     </div>
   </div>
 
   <div id="toast"></div>
 
+  <script src="i18n.js"></script>
+  <script src="lang-switcher.js"></script>
   <script src="design-system.js"></script>
   <script src="unified-nav.js"></script>
   <script src="script.js"></script>
@@ -764,6 +783,12 @@
 
     // ── Helpers ────────────────────────────────────────────────
     const esc = s => s == null ? "" : String(s).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'})[c]);
+    function t(key, vars) {
+      return window.HarthI18n ? window.HarthI18n.t(key, vars) : key;
+    }
+    function localeTag() {
+      return window.HarthI18n ? window.HarthI18n.localeTag() : "ar";
+    }
     function toast(msg, err = false) {
       const el = document.getElementById("toast");
       el.textContent = msg;
@@ -771,19 +796,27 @@
       el.classList.add("show");
       setTimeout(() => el.classList.remove("show"), 3200);
     }
+    function dateLocale() {
+      return localeTag() === "ar" ? "ar-SA" : "en-US";
+    }
     function fmtDate(d) {
       if (!d) return "—";
-      return new Date(d).toLocaleDateString("ar-SA", { year:"numeric", month:"short", day:"numeric" });
+      return new Date(d).toLocaleDateString(dateLocale(), { year:"numeric", month:"short", day:"numeric" });
     }
     function fmtDateTime(d) {
       if (!d) return "—";
-      return new Date(d).toLocaleString("ar-SA", { year:"numeric", month:"short", day:"numeric", hour:"2-digit", minute:"2-digit" });
+      return new Date(d).toLocaleString(dateLocale(), { year:"numeric", month:"short", day:"numeric", hour:"2-digit", minute:"2-digit" });
     }
     function setBtnLoading(btn, loading, origHTML) {
       btn.disabled = loading;
-      if (loading) btn.innerHTML = '<span class="spin"></span> جارٍ الحفظ...';
+      if (loading) btn.innerHTML = `<span class="spin"></span> ${t("profile.toasts.savingBtn")}`;
       else btn.innerHTML = origHTML;
     }
+    async function changeAppLanguage(lang) {
+      if (window.HarthI18n) await window.HarthI18n.setLanguage(lang);
+      savePref("language", lang);
+    }
+    window.changeAppLanguage = changeAppLanguage;
 
     // ── Panel switching ────────────────────────────────────────
     function switchPanel(id) {
@@ -817,7 +850,7 @@
     function populateProfile(data) {
       const p = data.profile || {};
       // Sidebar
-      const initials = (data.name || "؟").split(" ").map(w => w[0]).join("").slice(0,2);
+      const initials = (data.name || "?").split(" ").map(w => w[0]).join("").slice(0,2);
       document.getElementById("sidebar-avatar-ph").textContent = initials;
       document.getElementById("main-avatar-ph").textContent    = initials;
       document.getElementById("sidebar-name").textContent  = data.name  || "—";
@@ -859,7 +892,7 @@
       setToggle("sw-notif-email",   p.notif_email   !== false);
       setToggle("sw-notif-wa",      !!p.notif_whatsapp);
       setToggle("sw-login-alerts",  p.login_alerts  !== false);
-      setSelect("pref-lang",        p.language || "ar");
+      setSelect("pref-lang",        p.language || (window.HarthI18n ? window.HarthI18n.getLanguage() : "ar"));
 
       // Stats (placeholder)
       document.getElementById("stat-orders").textContent   = "—";
@@ -874,8 +907,13 @@
     function setToggle(id, val) { const el = document.getElementById(id); if (el) el.checked = !!val; }
 
     function roleLabel(role) {
-      const map = { owner:"مالك معدات", renter:"مستأجر", delivery:"مندوب توصيل", admin:"مدير النظام" };
-      return `<i class="fas fa-shield-alt"></i> ${map[role] || "عضو"}`;
+      const map = {
+        owner: t("profile.roles.owner"),
+        renter: t("profile.roles.renter"),
+        delivery: t("profile.roles.delivery"),
+        admin: t("profile.roles.admin"),
+      };
+      return `<i class="fas fa-shield-alt"></i> ${map[role] || t("profile.roles.default")}`;
     }
 
     // ── Save Profile ───────────────────────────────────────────
@@ -894,10 +932,10 @@
           city:       document.getElementById("f-city").value.trim()     || undefined,
           phone:      document.getElementById("f-phone").value.trim()    || undefined,
         };
-        if (!payload.name) { toast("الاسم مطلوب", true); return; }
+        if (!payload.name) { toast(t("profile.toasts.nameRequired"), true); return; }
         const res = await apiFetch("/profile/me", { method:"PUT", body: JSON.stringify(payload) });
-        if (!res?.success) throw new Error(res?.error?.message || "فشل الحفظ");
-        toast("✓ تم حفظ الملف الشخصي بنجاح");
+        if (!res?.success) throw new Error(res?.error?.message || t("profile.toasts.saveFailed"));
+        toast(t("profile.toasts.profileSaved"));
         // Update sidebar name
         document.getElementById("sidebar-name").textContent = payload.name;
         const stored = JSON.parse(localStorage.getItem("user") || "{}");
@@ -914,7 +952,7 @@
     document.getElementById("avatar-file-input").addEventListener("change", async (e) => {
       const file = e.target.files[0];
       if (!file) return;
-      if (file.size > 5 * 1024 * 1024) { toast("الصورة أكبر من 5 ميجابايت", true); return; }
+      if (file.size > 5 * 1024 * 1024) { toast(t("profile.toasts.avatarTooLarge"), true); return; }
       const preview = URL.createObjectURL(file);
       setAvatarPreview(preview);
       try {
@@ -926,8 +964,8 @@
           body: fd,
         });
         const data = await res.json();
-        if (!data.success) throw new Error("فشل رفع الصورة");
-        toast("✓ تم تحديث الصورة الشخصية");
+        if (!data.success) throw new Error(t("profile.toasts.avatarUploadFailed"));
+        toast(t("profile.toasts.avatarUpdated"));
       } catch (err) {
         toast(err.message, true);
       }
@@ -945,14 +983,14 @@
     async function removeAvatar() {
       try {
         const res = await apiFetch("/profile/avatar", { method:"DELETE" });
-        if (!res?.success) throw new Error("فشل الحذف");
+        if (!res?.success) throw new Error(t("profile.toasts.avatarDeleteFailed"));
         ["sidebar-avatar","main-avatar"].forEach(id => {
           const img = document.getElementById(id);
           if (img) img.style.display = "none";
         });
         document.getElementById("sidebar-avatar-ph").style.display = "flex";
         document.getElementById("main-avatar-ph").style.display    = "flex";
-        toast("تم حذف الصورة");
+        toast(t("profile.toasts.avatarRemoved"));
       } catch (err) { toast(err.message, true); }
     }
     window.removeAvatar = removeAvatar;
@@ -976,10 +1014,12 @@
       if (/[0-9]/.test(v)) score++;
       if (/[^a-zA-Z0-9]/.test(v)) score++;
       const colors = ["#e74c3c","#e67e22","#f1c40f","#6ab04c"];
-      const labels = ["ضعيفة","مقبولة","جيدة","قوية"];
+      const labels = t("profile.panels.security.strengthLevels");
       fill.style.width  = (score * 25) + "%";
       fill.style.background = colors[score - 1] || "#e74c3c";
-      hint.textContent  = score ? "قوة كلمة المرور: " + labels[score - 1] : "أدخل كلمة مرور قوية";
+      hint.textContent  = score
+        ? t("profile.panels.security.strengthLabel", { level: labels[score - 1] })
+        : t("profile.panels.security.strengthHintDefault");
     }
     window.checkStrength = checkStrength;
 
@@ -987,15 +1027,15 @@
       const cur  = document.getElementById("pwd-current").value;
       const nw   = document.getElementById("pwd-new").value;
       const conf = document.getElementById("pwd-confirm").value;
-      if (!cur || !nw) { toast("أدخل كلمة المرور الحالية والجديدة", true); return; }
-      if (nw.length < 8) { toast("كلمة المرور الجديدة أقل من 8 أحرف", true); return; }
-      if (nw !== conf)   { toast("كلمتا المرور غير متطابقتين", true); return; }
+      if (!cur || !nw) { toast(t("profile.toasts.fillCurrentAndNewPassword"), true); return; }
+      if (nw.length < 8) { toast(t("profile.toasts.newPasswordTooShort"), true); return; }
+      if (nw !== conf)   { toast(t("profile.toasts.passwordsDontMatch"), true); return; }
       try {
         const res = await apiFetch("/profile/change-password", {
           method:"POST", body: JSON.stringify({ current_password: cur, new_password: nw })
         });
-        if (!res?.success) throw new Error(res?.error?.message || "فشل");
-        toast("✓ تم تغيير كلمة المرور بنجاح");
+        if (!res?.success) throw new Error(res?.error?.message || t("profile.toasts.genericFailed"));
+        toast(t("profile.toasts.passwordChanged"));
         ["pwd-current","pwd-new","pwd-confirm"].forEach(id => { document.getElementById(id).value = ""; });
       } catch (err) { toast(err.message, true); }
     }
@@ -1014,7 +1054,7 @@
       }
       try {
         await apiFetch("/profile/2fa/toggle", { method:"POST", body: JSON.stringify({ enabled }) });
-        toast(enabled ? "✓ تم تفعيل المصادقة الثنائية" : "تم تعطيل المصادقة الثنائية");
+        toast(enabled ? t("profile.toasts.twoFaEnabled") : t("profile.toasts.twoFaDisabled"));
       } catch (_e) {}
     }
     window.toggle2FA = toggle2FA;
@@ -1039,9 +1079,10 @@
     }
 
     function renderMockSessions() {
+      const loc = t("profile.panels.security.mockLocation");
       const mock = [
-        { id:"current", device_name:"Chrome على Windows", device_type:"desktop", ip_address:"192.168.1.1", location:"مسقط، عُمان", last_active: new Date().toISOString(), is_current:true },
-        { id:"s2", device_name:"Safari على iPhone", device_type:"mobile", ip_address:"10.0.0.2", location:"مسقط، عُمان", last_active: new Date(Date.now()-3600000).toISOString(), is_current:false },
+        { id:"current", device_name:"Chrome — Windows", device_type:"desktop", ip_address:"192.168.1.1", location: loc, last_active: new Date().toISOString(), is_current:true },
+        { id:"s2", device_name:"Safari — iPhone", device_type:"mobile", ip_address:"10.0.0.2", location: loc, last_active: new Date(Date.now()-3600000).toISOString(), is_current:false },
       ];
       const html = mock.map(s => sessionCardHTML(s)).join("");
       return html;
@@ -1053,11 +1094,11 @@
         <div class="session-ico"><i class="fas ${ico}"></i></div>
         <div class="session-info">
           <div class="session-name">
-            ${esc(s.device_name || "جهاز غير معروف")}
-            ${s.is_current ? '<span class="session-current-badge">الجلسة الحالية</span>' : ""}
+            ${esc(s.device_name || t("profile.panels.security.unknownDevice"))}
+            ${s.is_current ? `<span class="session-current-badge">${t("profile.panels.security.currentSessionBadge")}</span>` : ""}
           </div>
           <div class="session-meta">
-            ${s.location ? esc(s.location) + " · " : ""}${esc(s.ip_address || "")} · آخر نشاط: ${fmtDateTime(s.last_active)}
+            ${s.location ? esc(s.location) + " · " : ""}${esc(s.ip_address || "")} · ${t("profile.panels.security.lastActiveLabel", { time: fmtDateTime(s.last_active) })}
           </div>
         </div>
         ${!s.is_current ? `<button class="btn btn-danger btn-sm revoke-btn" data-id="${esc(s.id)}"><i class="fas fa-times"></i></button>` : ""}
@@ -1071,7 +1112,7 @@
       try {
         await apiFetch(`/profile/sessions/${id}`, { method:"DELETE" });
         btn.closest(".session-card").remove();
-        toast("تم إنهاء الجلسة");
+        toast(t("profile.toasts.sessionEnded"));
       } catch (err) {
         btn.disabled = false;
         btn.innerHTML = orig;
@@ -1080,10 +1121,10 @@
     }
 
     async function revokeAllSessions() {
-      if (!confirm("هل تريد تسجيل الخروج من جميع الأجهزة؟")) return;
+      if (!confirm(t("profile.toasts.confirmRevokeAll"))) return;
       try {
         await apiFetch("/profile/sessions", { method:"DELETE" });
-        toast("✓ تم تسجيل الخروج من جميع الأجهزة");
+        toast(t("profile.toasts.allSessionsRevoked"));
         document.getElementById("sessions-list").innerHTML = renderMockSessions().replace(/revoke-btn.*?<\/button>/gs, "");
       } catch (err) { toast(err.message, true); }
     }
@@ -1104,9 +1145,9 @@
 
     function renderMockActivity() {
       const mock = [
-        { action:"login", description:"تسجيل دخول ناجح", ip_address:"192.168.1.1", device_info:"Chrome", risk_level:"low", created_at: new Date().toISOString() },
-        { action:"profile_update", description:"تم تحديث معلومات الملف الشخصي", ip_address:"192.168.1.1", device_info:"Chrome", risk_level:"low", created_at: new Date(Date.now()-86400000).toISOString() },
-        { action:"password_change", description:"تم تغيير كلمة المرور", ip_address:"192.168.1.2", device_info:"Safari", risk_level:"medium", created_at: new Date(Date.now()-172800000).toISOString() },
+        { action:"login", description:t("profile.panels.security.mockActivity.login"), ip_address:"192.168.1.1", device_info:"Chrome", risk_level:"low", created_at: new Date().toISOString() },
+        { action:"profile_update", description:t("profile.panels.security.mockActivity.profileUpdate"), ip_address:"192.168.1.1", device_info:"Chrome", risk_level:"low", created_at: new Date(Date.now()-86400000).toISOString() },
+        { action:"password_change", description:t("profile.panels.security.mockActivity.passwordChange"), ip_address:"192.168.1.2", device_info:"Safari", risk_level:"medium", created_at: new Date(Date.now()-172800000).toISOString() },
       ];
       return mock.map(a => activityRowHTML(a)).join("");
     }
@@ -1128,13 +1169,13 @@
     async function exportData() {
       try {
         const res = await apiFetch("/profile/export-data", { method:"POST" });
-        if (!res?.success) throw new Error("فشل التصدير");
+        if (!res?.success) throw new Error(t("profile.toasts.exportFailed"));
         const blob = new Blob([JSON.stringify(res.data, null, 2)], { type:"application/json" });
         const url  = URL.createObjectURL(blob);
         const a    = document.createElement("a");
         a.href = url; a.download = "harth-account-data.json"; a.click();
         URL.revokeObjectURL(url);
-        toast("✓ تم تنزيل بياناتك");
+        toast(t("profile.toasts.dataExported"));
       } catch (err) { toast(err.message, true); }
     }
     window.exportData = exportData;
@@ -1187,8 +1228,8 @@
     async function deactivateAccount() {
       try {
         const res = await apiFetch("/profile/deactivate", { method:"POST" });
-        if (!res?.success) throw new Error("فشل");
-        toast("تم تعطيل حسابك. سنشتاق إليك!");
+        if (!res?.success) throw new Error(t("profile.toasts.deactivateFailed"));
+        toast(t("profile.toasts.accountDeactivated"));
         closeDeactivateModal();
         setTimeout(() => { localStorage.clear(); window.location.href = "register.html"; }, 1500);
       } catch (err) { toast(err.message, true); }
@@ -1198,12 +1239,12 @@
     async function deleteAccount() {
       const confirm_text = document.getElementById("del-confirm-text").value.trim();
       const password     = document.getElementById("del-password").value;
-      if (confirm_text !== "DELETE") { toast("اكتب DELETE بالضبط للتأكيد", true); return; }
-      if (!password) { toast("أدخل كلمة المرور", true); return; }
+      if (confirm_text !== "DELETE") { toast(t("profile.toasts.typeDeleteExactly"), true); return; }
+      if (!password) { toast(t("profile.toasts.enterPassword"), true); return; }
       try {
         const res = await apiFetch("/profile", { method:"DELETE", body: JSON.stringify({ confirm_text, password }) });
-        if (!res?.success) throw new Error(res?.error?.message || "فشل");
-        toast("تم حذف حسابك نهائياً");
+        if (!res?.success) throw new Error(res?.error?.message || t("profile.toasts.deleteFailed"));
+        toast(t("profile.toasts.accountDeleted"));
         setTimeout(() => { localStorage.clear(); window.location.href = "index.html"; }, 1800);
       } catch (err) { toast(err.message, true); }
     }
@@ -1213,13 +1254,13 @@
     async function submitReport() {
       const type = document.getElementById("report-type").value;
       const body = document.getElementById("report-body").value.trim();
-      if (!body || body.length < 10) { toast("يرجى كتابة وصف أكثر تفصيلاً", true); return; }
+      if (!body || body.length < 10) { toast(t("profile.toasts.describeIssueMore"), true); return; }
       try {
         await apiFetch("/support/tickets", {
           method:"POST",
-          body: JSON.stringify({ category:"technical", priority:"medium", subject: "بلاغ: " + type, body })
+          body: JSON.stringify({ category:"technical", priority:"medium", subject: t("profile.panels.support.reportSubjectPrefix") + ": " + t(`profile.panels.support.reportTypes.${type}`), body })
         });
-        toast("✓ تم إرسال بلاغك، سنتواصل معك قريباً");
+        toast(t("profile.toasts.reportSent"));
         document.getElementById("report-body").value = "";
       } catch (err) { toast(err.message, true); }
     }
@@ -1227,12 +1268,25 @@
 
     // ── Auth guard ─────────────────────────────────────────────
     document.addEventListener("DOMContentLoaded", () => {
-      if (!getToken || !getToken()) {
-        toast("يرجى تسجيل الدخول أولاً", true);
-        setTimeout(() => { window.location.href = "register.html?redirect=profile.html"; }, 1200);
-        return;
+      function init() {
+        if (!getToken || !getToken()) {
+          toast(t("profile.toasts.loginFirst"), true);
+          setTimeout(() => { window.location.href = "register.html?redirect=profile.html"; }, 1200);
+          return;
+        }
+        loadProfile();
       }
-      loadProfile();
+      if (window.HarthI18n) {
+        window.HarthI18n.ready().then(() => {
+          document.getElementById("pref-lang").value = window.HarthI18n.getLanguage();
+          init();
+        });
+        document.addEventListener("harth:langchange", (e) => {
+          document.getElementById("pref-lang").value = e.detail.lang;
+        });
+      } else {
+        init();
+      }
     });
 
   })();

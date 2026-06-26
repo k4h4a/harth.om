@@ -3,7 +3,23 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>تأجير المعدات - حرث</title>
+    <script>
+      (function () {
+        try {
+          if (localStorage.getItem("harth_lang") === "en") {
+            document.documentElement.lang = "en";
+            document.documentElement.dir = "ltr";
+          }
+        } catch (e) {}
+        document.documentElement.classList.add("i18n-loading");
+      })();
+    </script>
+    <style>
+      html.i18n-loading body {
+        visibility: hidden;
+      }
+    </style>
+    <title data-i18n="tools.title">تأجير المعدات - حرث</title>
 
     <link
       href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;700&display=swap"
@@ -703,18 +719,18 @@
       <div class="header-capsule">
         <div class="section right">
           <div class="site-brand">
-            <img src="شعار حرث.jpeg" alt="Logo" />
-            <h1>حــرث</h1>
+            <img src="شعار حرث.jpeg" alt="Logo" data-i18n-alt="common.siteName" />
+            <h1 data-i18n="common.siteName">حــرث</h1>
           </div>
         </div>
 
         <nav class="section center">
           <ul class="nav-links">
-            <li><a href="track.html" class="nav-item">تتبع</a></li>
-            <li><a href="delivery.html" class="nav-item">توصيل</a></li>
-            <li><a href="basket.html" class="nav-item">بيع معدات</a></li>
-            <li><a href="tools.html" class="nav-item">تأجير معدات</a></li>
-            <li><a href="index.html" class="nav-item">الرئيسية</a></li>
+            <li><a href="track.html" class="nav-item" data-i18n="nav.trackOrders">تتبع</a></li>
+            <li><a href="delivery.html" class="nav-item" data-i18n="nav.delivery">توصيل</a></li>
+            <li><a href="basket.html" class="nav-item" data-i18n="nav.sellEquipment">بيع معدات</a></li>
+            <li><a href="tools.html" class="nav-item" data-i18n="nav.rentEquipment">تأجير معدات</a></li>
+            <li><a href="index.html" class="nav-item" data-i18n="nav.home">الرئيسية</a></li>
           </ul>
         </nav>
 
@@ -723,6 +739,7 @@
             href="register.html"
             class="hs-btn hs-btn--ghost hs-btn--sm"
             id="login-link"
+            data-i18n="common.buttons.login"
             >تسجيل دخول</a
           >
         </div>
@@ -740,68 +757,68 @@
       ></div>
 
       <div style="text-align: center; margin-top: 30px">
-        <h2 style="font-size: 32px">معداتك للإيجار</h2>
-        <p>تصفح المعدات المتوفرة واستأجرها مباشرة من أصحابها</p>
+        <h2 style="font-size: 32px" data-i18n="tools.pageHeading">معداتك للإيجار</h2>
+        <p data-i18n="tools.pageSubheading">تصفح المعدات المتوفرة واستأجرها مباشرة من أصحابها</p>
       </div>
 
       <div class="marketplace-layout">
         <aside class="filters-sidebar" id="filters-sidebar">
           <div class="filters-sidebar-head">
-            <h3><i class="fas fa-sliders-h"></i> الفلاتر</h3>
-            <button type="button" class="filters-close-btn" id="filters-close" aria-label="إغلاق الفلاتر">
+            <h3><i class="fas fa-sliders-h"></i> <span data-i18n="home.marketplace.filters">الفلاتر</span></h3>
+            <button type="button" class="filters-close-btn" id="filters-close" aria-label="إغلاق الفلاتر" data-i18n-aria-label="home.marketplace.closeFiltersAriaLabel">
               <i class="fas fa-times"></i>
             </button>
           </div>
 
           <div class="filter-group">
-            <label class="filter-group-title" for="filter-category">الفئة</label>
-            <select id="filter-category" class="hs-select" title="فئة المعدات">
-              <option value="">كل الفئات</option>
-              <option value="tractor">الجرارات</option>
-              <option value="harvester">معدات الحصاد</option>
-              <option value="sprayer">المرشات والري</option>
-              <option value="tools">الأدوات اليدوية</option>
-              <option value="seeds">البذور</option>
-              <option value="fertilizer">الأسمدة</option>
-              <option value="pesticide">المبيدات</option>
-              <option value="other">أخرى</option>
+            <label class="filter-group-title" for="filter-category" data-i18n="home.marketplace.categoryLabel">الفئة</label>
+            <select id="filter-category" class="hs-select" title="فئة المعدات" data-i18n-title="tools.categoryTitle">
+              <option value="" data-i18n="common.categories.full.all">كل الفئات</option>
+              <option value="tractor" data-i18n="common.categories.full.tractor">الجرارات</option>
+              <option value="harvester" data-i18n="common.categories.full.harvester">معدات الحصاد</option>
+              <option value="sprayer" data-i18n="common.categories.full.sprayer">المرشات والري</option>
+              <option value="tools" data-i18n="common.categories.full.tools">الأدوات اليدوية</option>
+              <option value="seeds" data-i18n="common.categories.full.seeds">البذور</option>
+              <option value="fertilizer" data-i18n="common.categories.full.fertilizer">الأسمدة</option>
+              <option value="pesticide" data-i18n="common.categories.full.pesticide">المبيدات</option>
+              <option value="other" data-i18n="common.categories.full.other">أخرى</option>
             </select>
           </div>
 
           <div class="filter-group">
-            <label class="filter-group-title" for="filter-governorate">المحافظة</label>
-            <select id="filter-governorate" class="hs-select" title="المحافظة">
-              <option value="">كل المحافظات</option>
-              <option value="muscat">مسقط</option>
-              <option value="dhofar">ظفار</option>
-              <option value="musandam">مسندم</option>
-              <option value="buraimi">البريمي</option>
-              <option value="dakhiliyah">الداخلية</option>
-              <option value="north_batinah">شمال الباطنة</option>
-              <option value="south_batinah">جنوب الباطنة</option>
-              <option value="south_sharqiyah">جنوب الشرقية</option>
-              <option value="north_sharqiyah">شمال الشرقية</option>
-              <option value="dhahirah">الظاهرة</option>
-              <option value="wusta">الوسطى</option>
+            <label class="filter-group-title" for="filter-governorate" data-i18n="home.marketplace.governorateLabel">المحافظة</label>
+            <select id="filter-governorate" class="hs-select" title="المحافظة" data-i18n-title="home.marketplace.governorateLabel">
+              <option value="" data-i18n="common.governorates.all">كل المحافظات</option>
+              <option value="muscat" data-i18n="common.governorates.muscat">مسقط</option>
+              <option value="dhofar" data-i18n="common.governorates.dhofar">ظفار</option>
+              <option value="musandam" data-i18n="common.governorates.musandam">مسندم</option>
+              <option value="buraimi" data-i18n="common.governorates.buraimi">البريمي</option>
+              <option value="dakhiliyah" data-i18n="common.governorates.dakhiliyah">الداخلية</option>
+              <option value="north_batinah" data-i18n="common.governorates.north_batinah">شمال الباطنة</option>
+              <option value="south_batinah" data-i18n="common.governorates.south_batinah">جنوب الباطنة</option>
+              <option value="south_sharqiyah" data-i18n="common.governorates.south_sharqiyah">جنوب الشرقية</option>
+              <option value="north_sharqiyah" data-i18n="common.governorates.north_sharqiyah">شمال الشرقية</option>
+              <option value="dhahirah" data-i18n="common.governorates.dhahirah">الظاهرة</option>
+              <option value="wusta" data-i18n="common.governorates.wusta">الوسطى</option>
             </select>
           </div>
 
           <div class="filter-group">
-            <span class="filter-group-title">نطاق السعر اليومي (ر.ع)</span>
+            <span class="filter-group-title" data-i18n="tools.dailyPriceRangeLabel">نطاق السعر اليومي (ر.ع)</span>
             <div class="price-range-inputs">
-              <input type="number" id="filter-min-price" class="hs-input" placeholder="من" min="0" inputmode="decimal" />
+              <input type="number" id="filter-min-price" class="hs-input" placeholder="من" data-i18n-placeholder="home.marketplace.priceFrom" min="0" inputmode="decimal" />
               <span class="price-range-sep">—</span>
-              <input type="number" id="filter-max-price" class="hs-input" placeholder="إلى" min="0" inputmode="decimal" />
+              <input type="number" id="filter-max-price" class="hs-input" placeholder="إلى" data-i18n-placeholder="home.marketplace.priceTo" min="0" inputmode="decimal" />
             </div>
           </div>
 
           <div class="filter-group">
-            <label class="filter-group-title" for="filter-min-rating">التقييم الأدنى</label>
+            <label class="filter-group-title" for="filter-min-rating" data-i18n="home.marketplace.minRatingLabel">التقييم الأدنى</label>
             <select id="filter-min-rating" class="hs-select">
-              <option value="">أي تقييم</option>
-              <option value="4">4 نجوم فأكثر</option>
-              <option value="3">3 نجوم فأكثر</option>
-              <option value="2">2 نجوم فأكثر</option>
+              <option value="" data-i18n="home.marketplace.anyRating">أي تقييم</option>
+              <option value="4" data-i18n="home.marketplace.rating4Plus">4 نجوم فأكثر</option>
+              <option value="3" data-i18n="home.marketplace.rating3Plus">3 نجوم فأكثر</option>
+              <option value="2" data-i18n="home.marketplace.rating2Plus">2 نجوم فأكثر</option>
             </select>
           </div>
 
@@ -812,18 +829,20 @@
               id="filter-favorites-toggle"
               aria-pressed="false"
               title="إظهار المفضلة فقط"
+              data-i18n-title="tools.favoritesOnlyTitle"
             >
               <i class="far fa-heart"></i>
-              <span>المفضلة فقط</span>
+              <span data-i18n="tools.favoritesOnlyLabel">المفضلة فقط</span>
             </button>
           </div>
 
           <div class="filters-sidebar-actions">
-            <button type="button" class="hs-btn hs-btn--block" id="apply-filters">تطبيق الفلاتر</button>
+            <button type="button" class="hs-btn hs-btn--block" id="apply-filters" data-i18n="common.buttons.applyFilters">تطبيق الفلاتر</button>
             <button
               type="button"
               class="hs-btn hs-btn--ghost hs-btn--block"
               onclick="clearFilters()"
+              data-i18n="common.buttons.clearAll"
             >
               مسح الكل
             </button>
@@ -839,19 +858,21 @@
                 id="filter-search"
                 class="hs-input"
                 placeholder="ابحث عن معدة..."
+                data-i18n-placeholder="tools.searchPlaceholder"
                 title="البحث في أسماء ووصف المعدات"
+                data-i18n-title="tools.searchTitle"
               />
             </div>
             <div class="listings-result-count" id="result-count"></div>
             <button type="button" class="hs-btn hs-btn--secondary hs-btn--sm" id="filters-drawer-btn">
-              <i class="fas fa-sliders-h"></i> الفلاتر
+              <i class="fas fa-sliders-h"></i> <span data-i18n="home.marketplace.filters">الفلاتر</span>
             </button>
-            <select id="filter-sort" class="hs-select" title="ترتيب النتائج">
-              <option value="newest">الأحدث أولاً</option>
-              <option value="oldest">الأقدم أولاً</option>
-              <option value="price_low">السعر (أقل إلى أعلى)</option>
-              <option value="price_high">السعر (أعلى إلى أقل)</option>
-              <option value="rating">الأعلى تقييماً</option>
+            <select id="filter-sort" class="hs-select" title="ترتيب النتائج" data-i18n-title="home.marketplace.sortAriaLabel">
+              <option value="newest" data-i18n="home.marketplace.sortNewest">الأحدث أولاً</option>
+              <option value="oldest" data-i18n="home.marketplace.sortOldest">الأقدم أولاً</option>
+              <option value="price_low" data-i18n="home.marketplace.sortPriceLow">السعر (أقل إلى أعلى)</option>
+              <option value="price_high" data-i18n="home.marketplace.sortPriceHigh">السعر (أعلى إلى أقل)</option>
+              <option value="rating" data-i18n="home.marketplace.sortRating">الأعلى تقييماً</option>
             </select>
           </div>
 
@@ -993,8 +1014,8 @@
             <circle cx="30" cy="24" r="2" fill="currentColor" />
           </svg>
         </div>
-        <h3 class="hs-empty__title">لا توجد معدات متاحة</h3>
-        <p class="hs-empty__desc">
+        <h3 class="hs-empty__title" data-i18n="tools.emptyTitle">لا توجد معدات متاحة</h3>
+        <p class="hs-empty__desc" data-i18n="tools.emptyDesc">
           لم نعثر على معدات متاحة للإيجار بالمعايير المحددة. جرب تعديل المرشحات
           أو ابحث عن شيء آخر.
         </p>
@@ -1005,7 +1026,7 @@
             onclick="clearFilters()"
           >
             <i class="fas fa-filter"></i>
-            مسح المرشحات
+            <span data-i18n="common.buttons.clearFilters">مسح المرشحات</span>
           </button>
         </div>
       </div>
@@ -1020,7 +1041,7 @@
     <!-- Rental booking modal -->
     <div class="modal-backdrop" id="modal-backdrop">
       <div class="modal" role="dialog" aria-labelledby="modal-title">
-        <h3 id="modal-title">حجز إيجار</h3>
+        <h3 id="modal-title" data-i18n="tools.modal.title">حجز إيجار</h3>
         <p
           id="modal-equipment-name"
           style="color: #666; font-size: 14px; margin: 0 0 8px"
@@ -1050,22 +1071,22 @@
         <input type="hidden" id="rental-start" />
         <input type="hidden" id="rental-end" />
 
-        <label>تواريخ الإيجار</label>
+        <label data-i18n="tools.modal.datesLabel">تواريخ الإيجار</label>
         <div class="rental-calendar" id="rental-calendar">
           <div class="rc-range-readout">
-            <span>من <strong id="rc-start-label">--</strong></span>
-            <span>إلى <strong id="rc-end-label">--</strong></span>
+            <span><span data-i18n="tools.modal.fromLabel">من</span> <strong id="rc-start-label">--</strong></span>
+            <span><span data-i18n="tools.modal.toLabel">إلى</span> <strong id="rc-end-label">--</strong></span>
           </div>
           <div class="rc-header">
-            <button type="button" id="rc-prev" aria-label="الشهر السابق">
+            <button type="button" id="rc-prev" aria-label="الشهر السابق" data-i18n-aria-label="tools.modal.prevMonthAriaLabel">
               <i class="fas fa-chevron-right"></i>
             </button>
             <span id="rc-month-label"></span>
-            <button type="button" id="rc-next" aria-label="الشهر التالي">
+            <button type="button" id="rc-next" aria-label="الشهر التالي" data-i18n-aria-label="tools.modal.nextMonthAriaLabel">
               <i class="fas fa-chevron-left"></i>
             </button>
           </div>
-          <div class="rc-weekdays">
+          <div class="rc-weekdays" id="rc-weekdays">
             <div>أحد</div>
             <div>إثن</div>
             <div>ثلا</div>
@@ -1076,22 +1097,23 @@
           </div>
           <div class="rc-days" id="rc-days"></div>
           <div class="rc-legend">
-            <span><i class="rc-dot-booked"></i> أيام مستأجرة</span>
-            <span><i class="rc-dot-selected"></i> الفترة المختارة</span>
+            <span><i class="rc-dot-booked"></i> <span data-i18n="tools.modal.legendBooked">أيام مستأجرة</span></span>
+            <span><i class="rc-dot-selected"></i> <span data-i18n="tools.modal.legendSelected">الفترة المختارة</span></span>
           </div>
           <div class="rc-footer">
-            <button type="button" id="rc-clear">مسح</button>
-            <button type="button" id="rc-today">اليوم</button>
+            <button type="button" id="rc-clear" data-i18n="tools.modal.clearBtn">مسح</button>
+            <button type="button" id="rc-today" data-i18n="tools.modal.todayBtn">اليوم</button>
           </div>
         </div>
 
         <div id="availability-hint" class="availability-hint"></div>
 
-        <label for="rental-notes">ملاحظات (اختياري)</label>
+        <label for="rental-notes" data-i18n="tools.modal.notesLabel">ملاحظات (اختياري)</label>
         <textarea
           id="rental-notes"
           maxlength="2000"
           placeholder="أي ملاحظات للمالك..."
+          data-i18n-placeholder="tools.modal.notesPlaceholder"
         ></textarea>
 
         <div
@@ -1102,9 +1124,9 @@
 
         <div class="modal-actions">
           <button type="button" class="btn-primary-green" id="confirm-rental">
-            <i class="fas fa-shopping-cart"></i> إضافة للسلة
+            <i class="fas fa-shopping-cart"></i> <span data-i18n="common.buttons.addToCart">إضافة للسلة</span>
           </button>
-          <button type="button" class="btn-secondary-grey" id="cancel-rental">
+          <button type="button" class="btn-secondary-grey" id="cancel-rental" data-i18n="common.buttons.cancel">
             إلغاء
           </button>
         </div>
@@ -1121,16 +1143,18 @@
         <a href="77556094" class="wa"><i class="fab fa-whatsapp"></i></a>
       </div>
       <div class="footer-bottom">
-        <p>&copy; 2026 جميع الحقوق محفوظة لفريق حرث</p>
+        <p data-i18n="home.footer.rights">&copy; 2026 جميع الحقوق محفوظة لفريق حرث</p>
       </div>
     </footer>
 
     <div id="toast"></div>
 
-    <a href="checkout.html" class="basket-floating-button" title="سلة المبيعات"
+    <a href="checkout.html" class="basket-floating-button" title="سلة المبيعات" data-i18n-title="home.cartButtonTitle"
       >🛒</a
     >
 
+    <script src="i18n.js"></script>
+    <script src="lang-switcher.js"></script>
     <script src="design-system.js"></script>
     <script src="equipment-pdf.js"></script>
     <script src="unified-nav.js"></script>
@@ -1160,6 +1184,13 @@
         const $ = (s) => document.querySelector(s);
         const $$ = (s) => document.querySelectorAll(s);
 
+        function t(key, vars) {
+          return window.HarthI18n ? window.HarthI18n.t(key, vars) : key;
+        }
+        function localeTag() {
+          return window.HarthI18n ? window.HarthI18n.localeTag() : "ar";
+        }
+
         function showToast(msg, isError = false) {
           const t = $("#toast");
           t.textContent = msg;
@@ -1184,18 +1215,8 @@
         }
 
         function categoryLabel(c) {
-          return (
-            {
-              tractor: "جرار",
-              sprayer: "مرشة",
-              harvester: "حصادة",
-              tools: "أدوات",
-              seeds: "بذور",
-              fertilizer: "أسمدة",
-              pesticide: "مبيدات",
-              other: "أخرى",
-            }[c] || c
-          );
+          const label = t(`common.categories.short.${c}`);
+          return label.startsWith("common.categories.short.") ? c || "" : label;
         }
 
         // ---------- Clear all filters ----------
@@ -1228,7 +1249,7 @@
           closeFiltersSheet();
 
           // Show success toast
-          showToast("تم مسح جميع المرشحات ✓");
+          showToast(t("home.marketplace.filtersCleared"));
         }
 
         // ---------- Load and render equipment list ----------
@@ -1252,8 +1273,8 @@
               $("#empty-state").style.display = "block";
               $("#empty-state").innerHTML = `
                 <i class="far fa-heart" style="font-size:64px;color:#6ab04c;display:block;margin-bottom:12px"></i>
-                <h3>سجّل دخول لرؤية مفضلتك</h3>
-                <p style="margin-top:8px"><a href="register.html" style="color:#6ab04c">تسجيل الدخول</a></p>
+                <h3>${t("tools.loginToSeeFavorites")}</h3>
+                <p style="margin-top:8px"><a href="register.html" style="color:#6ab04c">${t("tools.loginLink")}</a></p>
               `;
               return;
             }
@@ -1277,8 +1298,8 @@
               setResultCount(res.pagination);
             } catch (err) {
               $("#load-state").innerHTML =
-                `<p style="color:#ffb3b3">خطأ: ${escapeHtml(err.message)}</p>`;
-              showToast(err.message || "خطأ", true);
+                `<p style="color:#ffb3b3">${t("tools.loadErrorPrefix")}: ${escapeHtml(err.message)}</p>`;
+              showToast(err.message || t("tools.genericError"), true);
             }
             return;
           }
@@ -1319,15 +1340,17 @@
             setResultCount(res.pagination);
           } catch (err) {
             $("#load-state").innerHTML =
-              `<p style="color:#ffb3b3">خطأ في التحميل: ${escapeHtml(err.message)}</p>`;
-            showToast(err.message || "خطأ في التحميل", true);
+              `<p style="color:#ffb3b3">${t("tools.loadErrorWithDetailPrefix")}: ${escapeHtml(err.message)}</p>`;
+            showToast(err.message || t("tools.loadErrorWithDetailPrefix"), true);
           }
         }
 
         function setResultCount(pagination) {
           const el = $("#result-count");
           if (!el || !pagination) return;
-          el.textContent = `${Number(pagination.total || 0).toLocaleString("ar")} نتيجة`;
+          el.textContent = t("home.marketplace.resultsCount", {
+            n: Number(pagination.total || 0).toLocaleString(localeTag()),
+          });
         }
 
         function renderGrid(items) {
@@ -1366,9 +1389,9 @@
             const dep = Number(eq.deposit_amount || 0);
             const depHtml =
               dep > 0
-                ? `<div class="deposit-hint" title="يُحجز ويُعاد عند إرجاع المعدة سليمة">
+                ? `<div class="deposit-hint" title="${t("tools.depositHintTitle")}">
                    <i class="fas fa-shield-alt" style="color:#f1c40f"></i>
-                   تأمين ${escapeHtml(dep.toFixed(2))} ر.ع
+                   ${t("tools.depositHintLabel", { amount: escapeHtml(dep.toFixed(2)), currency: t("common.currency") })}
                  </div>`
                 : "";
 
@@ -1382,10 +1405,10 @@
                     ? `<img src="${escapeHtml(img)}" alt="${escapeHtml(eq.name)}" class="equip-img" />`
                     : `<div class="equip-img" style="background:#333;display:flex;align-items:center;justify-content:center"><i class="fas fa-image" style="font-size:40px;color:#888"></i></div>`
                 }
-                <button type="button" class="listing-fav-btn" data-id="${eq.id}" aria-pressed="false" title="إضافة للمفضلة">
+                <button type="button" class="listing-fav-btn" data-id="${eq.id}" aria-pressed="false" title="${t("home.marketplace.favoriteAriaLabel")}">
                   <i class="far fa-heart"></i>
                 </button>
-                <div class="price-tag">${escapeHtml(String(eq.daily_price))} ر.ع / يوم</div>
+                <div class="price-tag">${escapeHtml(String(eq.daily_price))} ${t("common.currency")} / ${t("common.perDay")}</div>
               </div>
               <div class="equip-details">
                 <h3>${escapeHtml(eq.name)}</h3>
@@ -1399,17 +1422,17 @@
                 </div>
                 <div class="owner-info">
                   <i class="fas fa-star" style="color:#f1c40f"></i>
-                  <span>${Number(eq.avg_rating || 0).toFixed(1)} (${eq.ratings_count || 0} تقييم)</span>
+                  <span>${Number(eq.avg_rating || 0).toFixed(1)} (${eq.ratings_count || 0} ${t("tools.ratingsSuffix")})</span>
                 </div>
                 ${trustLineHtml}
                 ${depHtml}
               </div>
               <div class="contact-buttons">
                 <button class="btn-order book-btn" data-id="${eq.id}">
-                  <i class="fas fa-calendar-check"></i> حجز
+                  <i class="fas fa-calendar-check"></i> ${t("tools.bookBtn")}
                 </button>
-                <button class="btn-pdf-datasheet pdf-btn" title="عرض الملف الفني PDF" style="background:linear-gradient(135deg,#8e44ad,#9b59b6);color:#fff;border:none;padding:9px 14px;border-radius:10px;font-family:inherit;font-size:13px;font-weight:600;cursor:pointer;display:flex;align-items:center;gap:5px;white-space:nowrap;transition:.15s">
-                  <i class="fas fa-file-pdf"></i> الملف الفني
+                <button class="btn-pdf-datasheet pdf-btn" title="${t("tools.pdfBtnTitle")}" style="background:linear-gradient(135deg,#8e44ad,#9b59b6);color:#fff;border:none;padding:9px 14px;border-radius:10px;font-family:inherit;font-size:13px;font-weight:600;cursor:pointer;display:flex;align-items:center;gap:5px;white-space:nowrap;transition:.15s">
+                  <i class="fas fa-file-pdf"></i> ${t("tools.pdfBtnLabel")}
                 </button>
               </div>
             `;
@@ -1436,7 +1459,7 @@
         // get redirected to register instead of a dead click.
         async function toggleFavorite(btn) {
           if (!getToken || !getToken()) {
-            showToast("سجّل دخول لإضافة المعدة للمفضلة", true);
+            showToast(t("home.marketplace.loginToFavorite"), true);
             return;
           }
           const id = btn.dataset.id;
@@ -1447,7 +1470,7 @@
               await apiFetch(`/wishlist/${id}`, { method: "DELETE" });
               btn.setAttribute("aria-pressed", "false");
               icon.className = "far fa-heart";
-              showToast("تمت الإزالة من المفضلة");
+              showToast(t("home.marketplace.removedFromFavorites"));
             } else {
               await apiFetch("/wishlist", {
                 method: "POST",
@@ -1455,10 +1478,10 @@
               });
               btn.setAttribute("aria-pressed", "true");
               icon.className = "fas fa-heart";
-              showToast("أضيف للمفضلة ✓");
+              showToast(t("home.marketplace.addedToFavorites"));
             }
           } catch (_e) {
-            showToast("حدث خطأ، حاول مرة أخرى", true);
+            showToast(t("common.errorGeneric"), true);
           }
         }
 
@@ -1469,16 +1492,16 @@
           const b = trust.badges;
           const items = [];
           if (b.verified) {
-            items.push(badge("check-circle", "#6ab04c", "موثَّق"));
+            items.push(badge("check-circle", "#6ab04c", t("home.marketplace.verifiedBadge")));
           }
           if (b.top_seller) {
-            items.push(badge("star", "#f1c40f", "بائع مميَّز"));
+            items.push(badge("star", "#f1c40f", t("home.marketplace.topSellerBadge")));
           }
           if (b.fast_shipping) {
-            items.push(badge("truck-fast", "#3498db", "شحن سريع"));
+            items.push(badge("truck-fast", "#3498db", t("tools.badges.fastShipping")));
           }
           if (b.quick_responder) {
-            items.push(badge("bolt", "#e67e22", "ردّ سريع"));
+            items.push(badge("bolt", "#e67e22", t("tools.badges.quickResponder")));
           }
           if (b.is_pro && !b.verified) {
             // Show PRO only if not already showing موثَّق — keep the row
@@ -1502,17 +1525,17 @@
           if (!trust) return "";
           const parts = [];
           if (trust.completed_transactions > 0) {
-            parts.push(`${trust.completed_transactions} طلب مكتمل`);
+            parts.push(t("tools.trustLine.completedOrders", { n: trust.completed_transactions }));
           }
           if (
             trust.completion_rate != null &&
             trust.completed_transactions >= 3
           ) {
-            parts.push(`إكمال ${trust.completion_rate}%`);
+            parts.push(t("tools.trustLine.completionRate", { pct: trust.completion_rate }));
           }
           if (trust.avg_response_hours != null) {
             const h = Math.round(trust.avg_response_hours * 10) / 10;
-            parts.push(`ردّ ~${h} ساعة`);
+            parts.push(t("tools.trustLine.avgResponse", { h }));
           }
           if (!parts.length) return "";
           return `<div class="trust-stats">${parts.map(escapeHtml).join(" · ")}</div>`;
@@ -1535,13 +1558,13 @@
             return b;
           };
           wrap.appendChild(
-            mk("السابق", Math.max(1, p.page - 1), { disabled: p.page === 1 }),
+            mk(t("common.buttons.previous"), Math.max(1, p.page - 1), { disabled: p.page === 1 }),
           );
           for (let i = 1; i <= p.pages; i++) {
-            wrap.appendChild(mk(String(i), i, { active: i === p.page }));
+            wrap.appendChild(mk(i.toLocaleString(localeTag()), i, { active: i === p.page }));
           }
           wrap.appendChild(
-            mk("التالي", Math.min(p.pages, p.page + 1), {
+            mk(t("common.buttons.next"), Math.min(p.pages, p.page + 1), {
               disabled: p.page === p.pages,
             }),
           );
@@ -1550,14 +1573,16 @@
         // ---------- Booking modal ----------
         function openBookingModal(eq) {
           if (!getToken || !getToken()) {
-            showToast("يجب تسجيل الدخول أولاً", true);
+            showToast(t("tools.modal.loginRequired"), true);
             setTimeout(() => (window.location.href = "register.html"), 1200);
             return;
           }
           activeEquipment = eq;
           $("#modal-equipment-name").textContent = eq.name;
-          $("#modal-daily-price").textContent =
-            `السعر اليومي: ${eq.daily_price} ر.ع`;
+          $("#modal-daily-price").textContent = t("tools.modal.dailyPriceLabel", {
+            price: eq.daily_price,
+            currency: t("common.currency"),
+          });
 
           // Deposit notice in the modal. We always show this BEFORE the
           // user picks dates so they aren't surprised at total time.
@@ -1568,9 +1593,7 @@
               depBlock.style.display = "block";
               depBlock.innerHTML = `
                 <i class="fas fa-shield-alt" style="color:#f1c40f"></i>
-                <strong>تأمين قابل للاسترداد:</strong> ${dep.toFixed(2)} ر.ع.
-                يُحجز المبلغ مع الحجز ويُعاد إليك عند إرجاع المعدة سليمة.
-                إذا تضرّرت أو لم تُعد، يحقّ للمالك احتجاز جزء أو كلّ التأمين.
+                ${t("tools.modal.depositNotice", { amount: dep.toFixed(2), currency: t("common.currency") })}
               `;
             } else {
               depBlock.style.display = "none";
@@ -1635,10 +1658,16 @@
           return `${y}-${mm}-${dd}`;
         }
 
-        const RC_MONTH_NAMES = [
-          "يناير", "فبراير", "مارس", "أبريل", "مايو", "يونيو",
-          "يوليو", "أغسطس", "سبتمبر", "أكتوبر", "نوفمبر", "ديسمبر",
-        ];
+        function monthNames() {
+          return t("tools.modal.monthNames");
+        }
+
+        function renderWeekdayHeaders() {
+          const wrap = $("#rc-weekdays");
+          if (!wrap) return;
+          const days = t("tools.modal.weekdays");
+          wrap.innerHTML = days.map((d) => `<div>${d}</div>`).join("");
+        }
 
         function syncHiddenInputsAndCheck() {
           $("#rental-start").value = selStart || "";
@@ -1649,9 +1678,10 @@
         }
 
         function renderCalendar() {
+          renderWeekdayHeaders();
           const monthLabel = $("#rc-month-label");
           if (monthLabel) {
-            monthLabel.textContent = `${RC_MONTH_NAMES[calViewMonth]} ${calViewYear}`;
+            monthLabel.textContent = `${monthNames()[calViewMonth]} ${calViewYear.toLocaleString(localeTag())}`;
           }
           const grid = $("#rc-days");
           if (!grid) return;
@@ -1675,7 +1705,7 @@
             const dateStr = toISODate(calViewYear, calViewMonth, d);
             const cell = document.createElement("div");
             cell.className = "rc-day";
-            cell.textContent = String(d);
+            cell.textContent = d.toLocaleString(localeTag());
 
             const isPast = dateStr < todayStr;
             const isBooked = isDateBooked(dateStr);
@@ -1686,7 +1716,7 @@
               cell.classList.add("rc-disabled");
             } else if (isBooked) {
               cell.classList.add("rc-booked");
-              cell.title = "هذا اليوم محجوز";
+              cell.title = t("tools.modal.dayBookedTitle");
             } else {
               // Once a start is chosen, block end-dates that would cross a
               // booked day (the range would conflict server-side anyway).
@@ -1731,7 +1761,7 @@
           } else {
             const limit = nextBookedAfter(selStart);
             if (limit && dateStr > limit) {
-              showToast("هذه الفترة تتضمن أيامًا محجوزة", true);
+              showToast(t("tools.modal.rangeIncludesBooked"), true);
               return;
             }
             selEnd = dateStr;
@@ -1759,7 +1789,7 @@
             return;
           }
           if (new Date(end) < new Date(start)) {
-            hint.textContent = "تاريخ النهاية يجب أن يكون بعد البداية";
+            hint.textContent = t("tools.modal.endBeforeStart");
             hint.className = "availability-hint bad";
             preview.style.display = "none";
             return;
@@ -1771,30 +1801,41 @@
             );
             if (!res || !res.success) {
               hint.textContent =
-                (res && res.error && res.error.message) || "تعذّر التحقق";
+                (res && res.error && res.error.message) || t("tools.modal.checkFailed");
               hint.className = "availability-hint bad";
               return;
             }
             if (res.available) {
-              hint.textContent = `✓ متاح لـ ${res.days} يوم`;
+              hint.textContent = t("tools.modal.availableForDays", { days: res.days });
               hint.className = "availability-hint ok";
               const rentalCost = Number(activeEquipment.daily_price) * res.days;
               const dep = Number(activeEquipment.deposit_amount || 0);
               const grand = rentalCost + dep;
+              const currency = t("common.currency");
               preview.style.display = "block";
               preview.innerHTML =
                 dep > 0
-                  ? `الإيجار: ${rentalCost.toFixed(2)} ر.ع (${res.days} يوم × ${activeEquipment.daily_price} ر.ع)
-                   <br>تأمين قابل للاسترداد: ${dep.toFixed(2)} ر.ع
-                   <br><strong>الإجمالي عند الحجز: ${grand.toFixed(2)} ر.ع</strong>`
-                  : `الإجمالي المتوقع: ${rentalCost.toFixed(2)} ر.ع (${res.days} يوم × ${activeEquipment.daily_price} ر.ع)`;
+                  ? t("tools.modal.previewWithDeposit", {
+                      cost: rentalCost.toFixed(2),
+                      days: res.days,
+                      price: activeEquipment.daily_price,
+                      deposit: dep.toFixed(2),
+                      grand: grand.toFixed(2),
+                      currency,
+                    })
+                  : t("tools.modal.previewNoDeposit", {
+                      cost: rentalCost.toFixed(2),
+                      days: res.days,
+                      price: activeEquipment.daily_price,
+                      currency,
+                    });
             } else {
-              hint.textContent = "✗ هذه الفترة محجوزة. جرّب تواريخ أخرى.";
+              hint.textContent = t("tools.modal.periodBooked");
               hint.className = "availability-hint bad";
               preview.style.display = "none";
             }
           } catch (err) {
-            hint.textContent = err.message || "خطأ في التحقق";
+            hint.textContent = err.message || t("tools.modal.checkError");
             hint.className = "availability-hint bad";
           }
         }
@@ -1825,11 +1866,11 @@
           const notes = $("#rental-notes").value.trim();
 
           if (!start || !end) {
-            showToast("اختر تواريخ البداية والنهاية", true);
+            showToast(t("tools.modal.pickDates"), true);
             return;
           }
           if (new Date(end) < new Date(start)) {
-            showToast("تاريخ النهاية يجب أن يكون بعد البداية", true);
+            showToast(t("tools.modal.endBeforeStart"), true);
             return;
           }
 
@@ -1861,9 +1902,7 @@
 
           saveRentalCart(filtered);
           closeModal();
-          showToast(
-            `✓ تمت إضافة "${activeEquipment.name}" للسلة (${days} يوم)`,
-          );
+          showToast(t("tools.modal.addedToCart", { name: activeEquipment.name, days }));
 
           setTimeout(() => {
             window.location.href = "checkout.html";
@@ -1932,7 +1971,19 @@
 
         // ---------- Wire up ----------
         document.addEventListener("DOMContentLoaded", () => {
-          loadEquipment().then(handleHashDeepLink);
+          function loadTranslatedEquipment() {
+            renderWeekdayHeaders();
+            loadEquipment().then(handleHashDeepLink);
+          }
+          if (window.HarthI18n) {
+            window.HarthI18n.ready().then(loadTranslatedEquipment);
+            document.addEventListener("harth:langchange", () => {
+              loadTranslatedEquipment();
+              if ($("#modal-backdrop").classList.contains("open")) renderCalendar();
+            });
+          } else {
+            loadTranslatedEquipment();
+          }
           loadToolsTopBanner();
 
           let searchDebounce;

@@ -3,7 +3,25 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>بيع معدات - حرث</title>
+    <script>
+      // Apply the saved language/direction before first paint so there's no
+      // flash of Arabic/RTL when the visitor's saved language is English.
+      (function () {
+        try {
+          if (localStorage.getItem("harth_lang") === "en") {
+            document.documentElement.lang = "en";
+            document.documentElement.dir = "ltr";
+          }
+        } catch (e) {}
+        document.documentElement.classList.add("i18n-loading");
+      })();
+    </script>
+    <style>
+      html.i18n-loading body {
+        visibility: hidden;
+      }
+    </style>
+    <title data-i18n="basket.market.title">بيع معدات - حرث</title>
 
     <link
       href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;700&display=swap"
@@ -399,85 +417,85 @@
         </div>
         <nav class="section center">
           <ul class="nav-links">
-            <li><a href="track.html" class="nav-item">تتبع</a></li>
-            <li><a href="delivery.html" class="nav-item">توصيل</a></li>
-            <li><a href="basket.html" class="nav-item">بيع معدات</a></li>
-            <li><a href="tools.html" class="nav-item">تأجير معدات</a></li>
-            <li><a href="index.html" class="nav-item">الرئيسية</a></li>
+            <li><a href="track.html" class="nav-item" data-i18n="nav.trackOrders">تتبع الطلبات</a></li>
+            <li><a href="delivery.html" class="nav-item" data-i18n="nav.delivery">التوصيل</a></li>
+            <li><a href="basket.html" class="nav-item" data-i18n="nav.sellEquipment">بيع المعدات</a></li>
+            <li><a href="tools.html" class="nav-item" data-i18n="nav.rentEquipment">تأجير المعدات</a></li>
+            <li><a href="index.html" class="nav-item" data-i18n="nav.home">الرئيسية</a></li>
           </ul>
         </nav>
         <div class="section left" id="auth-header">
-          <a href="register.html" class="hs-btn hs-btn--ghost hs-btn--sm" id="login-link">تسجيل دخول</a>
+          <a href="register.html" class="hs-btn hs-btn--ghost hs-btn--sm" id="login-link" data-i18n="common.buttons.login">تسجيل دخول</a>
         </div>
       </div>
     </header>
 
     <main>
       <div style="text-align: center; margin-top: 30px">
-        <h2 style="font-size: 32px; text-shadow: 2px 2px 10px rgba(0, 0, 0, 0.3)">
+        <h2 style="font-size: 32px; text-shadow: 2px 2px 10px rgba(0, 0, 0, 0.3)" data-i18n="basket.market.pageHeading">
           بيع معدات زراعية
         </h2>
-        <p>آلات ومعدات زراعية عالية الجودة لمزارعك</p>
+        <p data-i18n="basket.market.pageSubheading">آلات ومعدات زراعية عالية الجودة لمزارعك</p>
       </div>
 
       <div class="marketplace-layout">
         <aside class="filters-sidebar" id="filters-sidebar">
           <div class="filters-sidebar-head">
-            <h3><i class="fas fa-sliders-h"></i> الفلاتر</h3>
-            <button type="button" class="filters-close-btn" id="filters-close" aria-label="إغلاق الفلاتر">
+            <h3><i class="fas fa-sliders-h"></i> <span data-i18n="basket.market.filtersTitle">الفلاتر</span></h3>
+            <button type="button" class="filters-close-btn" id="filters-close" data-i18n-aria-label="basket.market.closeFiltersAriaLabel" aria-label="إغلاق الفلاتر">
               <i class="fas fa-times"></i>
             </button>
           </div>
 
           <div class="filter-group">
-            <label class="filter-group-title" for="filter-category">التصنيف</label>
+            <label class="filter-group-title" for="filter-category" data-i18n="basket.market.categoryLabel">التصنيف</label>
             <select id="filter-category" class="hs-select">
-              <option value="">كل التصنيفات</option>
-              <option value="tractor">جرارات</option>
-              <option value="sprayer">مرشات</option>
-              <option value="harvester">حصادات</option>
-              <option value="tools">أدوات</option>
-              <option value="seeds">بذور</option>
-              <option value="fertilizer">أسمدة</option>
-              <option value="pesticide">مبيدات</option>
-              <option value="other">أخرى</option>
+              <option value="" data-i18n="common.categories.full.all">كل التصنيفات</option>
+              <option value="tractor" data-i18n="common.categories.full.tractor">الجرارات</option>
+              <option value="sprayer" data-i18n="common.categories.full.sprayer">المرشات والري</option>
+              <option value="harvester" data-i18n="common.categories.full.harvester">معدات الحصاد</option>
+              <option value="tools" data-i18n="common.categories.full.tools">الأدوات اليدوية</option>
+              <option value="seeds" data-i18n="common.categories.full.seeds">البذور</option>
+              <option value="fertilizer" data-i18n="common.categories.full.fertilizer">الأسمدة</option>
+              <option value="pesticide" data-i18n="common.categories.full.pesticide">المبيدات</option>
+              <option value="other" data-i18n="common.categories.full.other">أخرى</option>
             </select>
           </div>
 
           <div class="filter-group">
-            <label class="filter-group-title" for="filter-governorate">المحافظة</label>
+            <label class="filter-group-title" for="filter-governorate" data-i18n="basket.market.governorateLabel">المحافظة</label>
             <select id="filter-governorate" class="hs-select">
-              <option value="">كل المحافظات</option>
-              <option value="muscat">مسقط</option>
-              <option value="dhofar">ظفار</option>
-              <option value="musandam">مسندم</option>
-              <option value="buraimi">البريمي</option>
-              <option value="dakhiliyah">الداخلية</option>
-              <option value="north_batinah">شمال الباطنة</option>
-              <option value="south_batinah">جنوب الباطنة</option>
-              <option value="south_sharqiyah">جنوب الشرقية</option>
-              <option value="north_sharqiyah">شمال الشرقية</option>
-              <option value="dhahirah">الظاهرة</option>
-              <option value="wusta">الوسطى</option>
+              <option value="" data-i18n="common.governorates.all">كل المحافظات</option>
+              <option value="muscat" data-i18n="common.governorates.muscat">مسقط</option>
+              <option value="dhofar" data-i18n="common.governorates.dhofar">ظفار</option>
+              <option value="musandam" data-i18n="common.governorates.musandam">مسندم</option>
+              <option value="buraimi" data-i18n="common.governorates.buraimi">البريمي</option>
+              <option value="dakhiliyah" data-i18n="common.governorates.dakhiliyah">الداخلية</option>
+              <option value="north_batinah" data-i18n="common.governorates.north_batinah">شمال الباطنة</option>
+              <option value="south_batinah" data-i18n="common.governorates.south_batinah">جنوب الباطنة</option>
+              <option value="south_sharqiyah" data-i18n="common.governorates.south_sharqiyah">جنوب الشرقية</option>
+              <option value="north_sharqiyah" data-i18n="common.governorates.north_sharqiyah">شمال الشرقية</option>
+              <option value="dhahirah" data-i18n="common.governorates.dhahirah">الظاهرة</option>
+              <option value="wusta" data-i18n="common.governorates.wusta">الوسطى</option>
             </select>
           </div>
 
           <div class="filter-group">
-            <span class="filter-group-title">نطاق السعر (ر.ع)</span>
+            <span class="filter-group-title" data-i18n="basket.market.priceRangeLabel">نطاق السعر (ر.ع)</span>
             <div class="price-range-inputs">
-              <input type="number" id="filter-min-price" class="hs-input" placeholder="من" min="0" inputmode="decimal" />
+              <input type="number" id="filter-min-price" class="hs-input" data-i18n-placeholder="basket.market.minPricePlaceholder" placeholder="من" min="0" inputmode="decimal" />
               <span class="price-range-sep">—</span>
-              <input type="number" id="filter-max-price" class="hs-input" placeholder="إلى" min="0" inputmode="decimal" />
+              <input type="number" id="filter-max-price" class="hs-input" data-i18n-placeholder="basket.market.maxPricePlaceholder" placeholder="إلى" min="0" inputmode="decimal" />
             </div>
           </div>
 
           <div class="filter-group">
-            <label class="filter-group-title" for="filter-min-rating">التقييم الأدنى</label>
+            <label class="filter-group-title" for="filter-min-rating" data-i18n="basket.market.minRatingLabel">التقييم الأدنى</label>
             <select id="filter-min-rating" class="hs-select">
-              <option value="">أي تقييم</option>
-              <option value="4">4 نجوم فأكثر</option>
-              <option value="3">3 نجوم فأكثر</option>
-              <option value="2">2 نجوم فأكثر</option>
+              <option value="" data-i18n="basket.market.anyRating">أي تقييم</option>
+              <option value="4" data-i18n="home.marketplace.rating4Plus">4 نجوم فأكثر</option>
+              <option value="3" data-i18n="home.marketplace.rating3Plus">3 نجوم فأكثر</option>
+              <option value="2" data-i18n="home.marketplace.rating2Plus">2 نجوم فأكثر</option>
             </select>
           </div>
 
@@ -487,16 +505,17 @@
               class="hs-btn hs-btn--ghost hs-btn--block"
               id="filter-favorites-toggle"
               aria-pressed="false"
+              data-i18n-title="basket.market.favoritesOnlyTitle"
               title="إظهار المفضلة فقط"
             >
               <i class="far fa-heart"></i>
-              <span>المفضلة فقط</span>
+              <span data-i18n="basket.market.favoritesOnlyLabel">المفضلة فقط</span>
             </button>
           </div>
 
           <div class="filters-sidebar-actions">
-            <button type="button" class="hs-btn hs-btn--block" id="apply-filters">تطبيق الفلاتر</button>
-            <button type="button" class="hs-btn hs-btn--ghost hs-btn--block" id="clear-filters">مسح الكل</button>
+            <button type="button" class="hs-btn hs-btn--block" id="apply-filters" data-i18n="common.buttons.applyFilters">تطبيق الفلاتر</button>
+            <button type="button" class="hs-btn hs-btn--ghost hs-btn--block" id="clear-filters" data-i18n="common.buttons.clearAll">مسح الكل</button>
           </div>
         </aside>
 
@@ -504,17 +523,17 @@
           <div class="listings-toolbar">
             <div class="search-field">
               <i class="fas fa-search"></i>
-              <input type="search" id="filter-search" class="hs-input" placeholder="ابحث بالاسم..." />
+              <input type="search" id="filter-search" class="hs-input" data-i18n-placeholder="basket.market.searchPlaceholder" placeholder="ابحث بالاسم..." />
             </div>
             <div class="listings-result-count" id="result-count"></div>
             <button type="button" class="hs-btn hs-btn--secondary hs-btn--sm" id="filters-drawer-btn">
-              <i class="fas fa-sliders-h"></i> الفلاتر
+              <i class="fas fa-sliders-h"></i> <span data-i18n="basket.market.filtersBtnLabel">الفلاتر</span>
             </button>
             <select id="filter-sort" class="hs-select">
-              <option value="newest">الأحدث</option>
-              <option value="sale_low">السعر: من الأقل</option>
-              <option value="sale_high">السعر: من الأعلى</option>
-              <option value="rating">الأعلى تقييماً</option>
+              <option value="newest" data-i18n="basket.market.sortNewest">الأحدث</option>
+              <option value="sale_low" data-i18n="basket.market.sortPriceLow">السعر: من الأقل</option>
+              <option value="sale_high" data-i18n="basket.market.sortPriceHigh">السعر: من الأعلى</option>
+              <option value="rating" data-i18n="basket.market.sortRating">الأعلى تقييماً</option>
             </select>
           </div>
 
@@ -541,12 +560,12 @@
             <path d="M24 24V40" stroke="currentColor" stroke-width="2"/>
           </svg>
         </div>
-        <h3 class="hs-empty__title">لا توجد منتجات متاحة</h3>
-        <p class="hs-empty__desc">لم نعثر على منتجات تطابق المرشحات المحددة. جرّب تغيير الفئة أو المحافظة، أو ابحث بكلمة مختلفة.</p>
+        <h3 class="hs-empty__title" data-i18n="basket.market.emptyTitle">لا توجد منتجات متاحة</h3>
+        <p class="hs-empty__desc" data-i18n="basket.market.emptyDesc">لم نعثر على منتجات تطابق المرشحات المحددة. جرّب تغيير الفئة أو المحافظة، أو ابحث بكلمة مختلفة.</p>
         <div class="hs-empty__cta">
           <button type="button" class="hs-btn hs-btn--secondary" id="empty-clear-filters">
             <i class="fas fa-filter"></i>
-            مسح الفلاتر
+            <span data-i18n="common.buttons.clearFilters">مسح الفلاتر</span>
           </button>
         </div>
       </div>
@@ -571,17 +590,19 @@
         <a href="#" class="yt"><i class="fab fa-youtube"></i></a>
       </div>
       <div class="footer-bottom">
-        <p>&copy; 2026 جميع الحقوق محفوظة لفريق حرث</p>
+        <p data-i18n="home.footer.rights">&copy; 2026 جميع الحقوق محفوظة لفريق حرث</p>
       </div>
     </footer>
 
     <div id="toast"></div>
 
-    <a href="checkout.html" class="basket-floating-button" title="سلة المبيعات">
+    <a href="checkout.html" class="basket-floating-button" data-i18n-title="home.cartButtonTitle" title="سلة المبيعات">
       🛒
       <span class="cart-badge" id="cart-badge" style="display: none">0</span>
     </a>
 
+    <script src="i18n.js"></script>
+    <script src="lang-switcher.js"></script>
     <script src="design-system.js"></script>
     <script src="equipment-pdf.js"></script>
     <script src="unified-nav.js"></script>
@@ -602,6 +623,13 @@
 
         const $ = (s) => document.querySelector(s);
 
+        function t(key, vars) {
+          return window.HarthI18n ? window.HarthI18n.t(key, vars) : key;
+        }
+        function localeTag() {
+          return window.HarthI18n ? window.HarthI18n.localeTag() : "ar";
+        }
+
         function showToast(msg, isError = false) {
           const t = $("#toast");
           t.textContent = msg;
@@ -618,11 +646,8 @@
         }
 
         function categoryLabel(c) {
-          return ({
-            tractor: "جرار", sprayer: "مرشة", harvester: "حصادة",
-            tools: "أدوات", seeds: "بذور", fertilizer: "أسمدة",
-            pesticide: "مبيدات", other: "أخرى",
-          })[c] || c;
+          const label = t(`common.categories.short.${c}`);
+          return label.startsWith("common.categories.short.") ? c || "" : label;
         }
 
         async function loadProducts() {
@@ -668,8 +693,8 @@
               renderPagination(res.pagination);
               setResultCount(res.pagination);
             } catch (err) {
-              $("#load-state").innerHTML = `<p style="color:#ffb3b3">خطأ: ${escapeHtml(err.message)}</p>`;
-              showToast(err.message || "خطأ في التحميل", true);
+              $("#load-state").innerHTML = `<p style="color:#ffb3b3">${t("tools.loadErrorPrefix")}: ${escapeHtml(err.message)}</p>`;
+              showToast(err.message || t("basket.market.genericLoadError"), true);
             }
             return;
           }
@@ -717,15 +742,17 @@
             renderPagination(res.pagination);
             setResultCount(res.pagination);
           } catch (err) {
-            $("#load-state").innerHTML = `<p style="color:#ffb3b3">خطأ: ${escapeHtml(err.message)}</p>`;
-            showToast(err.message || "خطأ في التحميل", true);
+            $("#load-state").innerHTML = `<p style="color:#ffb3b3">${t("tools.loadErrorPrefix")}: ${escapeHtml(err.message)}</p>`;
+            showToast(err.message || t("basket.market.genericLoadError"), true);
           }
         }
 
         function setResultCount(pagination) {
           const el = $("#result-count");
           if (!el || !pagination) return;
-          el.textContent = `${Number(pagination.total || 0).toLocaleString("ar")} نتيجة`;
+          el.textContent = t("home.marketplace.resultsCount", {
+            n: Number(pagination.total || 0).toLocaleString(localeTag()),
+          });
         }
 
         function showFavoritesNeedLogin() {
@@ -734,8 +761,8 @@
           $("#empty-state").style.display = "block";
           $("#empty-state").innerHTML = `
             <i class="far fa-heart" style="font-size:64px;color:#6ab04c;display:block;margin-bottom:12px"></i>
-            <h3>سجّل دخول لرؤية مفضلتك</h3>
-            <p style="margin-top:8px"><a href="register.html" style="color:#6ab04c">تسجيل الدخول</a></p>
+            <h3>${t("tools.loginToSeeFavorites")}</h3>
+            <p style="margin-top:8px"><a href="register.html" style="color:#6ab04c">${t("tools.loginLink")}</a></p>
           `;
         }
 
@@ -753,7 +780,11 @@
             const img = eq.primary_image_url || (Array.isArray(eq.images) && eq.images[0]) || "";
             const stock = Number(eq.stock || 0);
             const stockCls = stock <= 0 ? "out" : stock <= 3 ? "low" : "";
-            const stockText = stock <= 0 ? "نفذ المخزون" : stock <= 3 ? `بقي ${stock}` : `${stock} متوفر`;
+            const stockText = stock <= 0
+              ? t("basket.market.stockOut")
+              : stock <= 3
+                ? t("basket.market.stockLow", { n: stock })
+                : t("basket.market.stockAvailable", { n: stock });
             const isWish = wishlistCache.has(eq.id);
 
             const card = document.createElement("div");
@@ -764,10 +795,10 @@
                 ${img
                   ? `<img src="${escapeHtml(img)}" alt="${escapeHtml(eq.name)}" class="product-img" />`
                   : `<div class="product-img" style="background:#333;display:flex;align-items:center;justify-content:center"><i class="fas fa-box" style="font-size:48px;color:#888"></i></div>`}
-                <button class="wishlist-btn listing-fav-btn ${isWish ? "active" : ""}" data-id="${eq.id}" title="المفضلة">
+                <button class="wishlist-btn listing-fav-btn ${isWish ? "active" : ""}" data-id="${eq.id}" title="${t("basket.market.wishlistTitle")}">
                   <i class="fa${isWish ? "s" : "r"} fa-heart"></i>
                 </button>
-                <span class="product-price-tag">${escapeHtml(String(eq.sale_price))} ر.ع</span>
+                <span class="product-price-tag">${escapeHtml(String(eq.sale_price))} ${t("common.currency")}</span>
               </div>
               <div class="product-info">
                 <h3>${escapeHtml(eq.name)}</h3>
@@ -783,10 +814,10 @@
                 </div>
                 <div style="display:flex;gap:8px;margin-top:auto;padding-top:8px;align-items:center;flex-wrap:wrap">
                   <button class="btn-order add-cart-btn" data-id="${eq.id}" ${stock <= 0 ? "disabled" : ""}>
-                    <i class="fas fa-cart-plus"></i> أضف للسلة
+                    <i class="fas fa-cart-plus"></i> ${t("basket.market.addToCartBtn")}
                   </button>
-                  <button class="pdf-btn" title="الملف الفني PDF" style="background:linear-gradient(135deg,#8e44ad,#9b59b6);color:#fff;border:none;padding:8px 12px;border-radius:9px;font-size:12px;font-weight:600;cursor:pointer;display:flex;align-items:center;gap:4px;font-family:inherit">
-                    <i class="fas fa-file-pdf"></i> الملف الفني
+                  <button class="pdf-btn" title="${t("tools.pdfBtnTitle")}" style="background:linear-gradient(135deg,#8e44ad,#9b59b6);color:#fff;border:none;padding:8px 12px;border-radius:9px;font-size:12px;font-weight:600;cursor:pointer;display:flex;align-items:center;gap:4px;font-family:inherit">
+                    <i class="fas fa-file-pdf"></i> ${t("tools.pdfBtnLabel")}
                   </button>
                 </div>
               </div>
@@ -820,16 +851,16 @@
             });
             return b;
           };
-          wrap.appendChild(mk("السابق", Math.max(1, p.page - 1), { disabled: p.page === 1 }));
+          wrap.appendChild(mk(t("common.buttons.previous"), Math.max(1, p.page - 1), { disabled: p.page === 1 }));
           for (let i = 1; i <= p.pages; i++) {
-            wrap.appendChild(mk(String(i), i, { active: i === p.page }));
+            wrap.appendChild(mk(i.toLocaleString(localeTag()), i, { active: i === p.page }));
           }
-          wrap.appendChild(mk("التالي", Math.min(p.pages, p.page + 1), { disabled: p.page === p.pages }));
+          wrap.appendChild(mk(t("common.buttons.next"), Math.min(p.pages, p.page + 1), { disabled: p.page === p.pages }));
         }
 
         async function addToCartApi(equipmentId) {
           if (!getToken || !getToken()) {
-            showToast("يجب تسجيل الدخول أولاً", true);
+            showToast(t("basket.market.loginRequiredToast"), true);
             setTimeout(() => (window.location.href = "register.html"), 1200);
             return;
           }
@@ -839,29 +870,29 @@
               body: JSON.stringify({ equipment_id: equipmentId, quantity: 1 }),
             });
             if (!res || !res.success) {
-              throw new Error((res && res.error && res.error.message) || "فشل الإضافة");
+              throw new Error((res && res.error && res.error.message) || t("basket.market.addToCartFailedToast"));
             }
-            showToast("✓ تمت إضافة المنتج للسلة");
+            showToast(t("basket.market.addedToCartToast"));
             updateCartBadge();
           } catch (err) {
-            showToast(err.message || "فشل الإضافة", true);
+            showToast(err.message || t("basket.market.addToCartFailedToast"), true);
           }
         }
 
         async function toggleWishlist(equipmentId, btn) {
           if (!getToken || !getToken()) {
-            showToast("سجّل دخولك لحفظ المفضلة", true);
+            showToast(t("basket.market.loginToWishlistToast"), true);
             return;
           }
           const isActive = btn.classList.contains("active");
           try {
             if (isActive) {
               const res = await apiFetch(`/wishlist/${equipmentId}`, { method: "DELETE" });
-              if (!res || !res.success) throw new Error((res && res.error && res.error.message) || "فشل");
+              if (!res || !res.success) throw new Error((res && res.error && res.error.message) || t("basket.market.wishlistFailedToast"));
               btn.classList.remove("active");
               btn.querySelector("i").className = "far fa-heart";
               wishlistCache.delete(equipmentId);
-              showToast("أُزيلت من المفضلة");
+              showToast(t("basket.market.removedFromWishlistToast"));
 
               // If we're showing favorites only, the row needs to disappear.
               if (favoritesOnly) loadProducts();
@@ -870,14 +901,14 @@
                 method: "POST",
                 body: JSON.stringify({ equipment_id: equipmentId }),
               });
-              if (!res || !res.success) throw new Error((res && res.error && res.error.message) || "فشل");
+              if (!res || !res.success) throw new Error((res && res.error && res.error.message) || t("basket.market.wishlistFailedToast"));
               btn.classList.add("active");
               btn.querySelector("i").className = "fas fa-heart";
               wishlistCache.add(equipmentId);
-              showToast("✓ أُضيفت للمفضلة");
+              showToast(t("basket.market.addedToWishlistToast"));
             }
           } catch (err) {
-            showToast(err.message || "خطأ", true);
+            showToast(err.message || t("common.errorGeneric"), true);
           }
         }
 
@@ -929,7 +960,7 @@
           currentPage = 1;
           loadProducts();
           closeFiltersSheet();
-          showToast("تم مسح جميع المرشحات ✓");
+          showToast(t("basket.market.filtersClearedToast"));
         }
 
         // ---------- Mobile filter bottom sheet ----------
@@ -951,7 +982,15 @@
         }
 
         document.addEventListener("DOMContentLoaded", () => {
-          loadProducts().then(handleHashDeepLink);
+          function loadTranslatedProducts() {
+            loadProducts().then(handleHashDeepLink);
+          }
+          if (window.HarthI18n) {
+            window.HarthI18n.ready().then(loadTranslatedProducts);
+            document.addEventListener("harth:langchange", loadTranslatedProducts);
+          } else {
+            loadTranslatedProducts();
+          }
           updateCartBadge();
 
           $("#apply-filters").addEventListener("click", () => {

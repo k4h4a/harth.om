@@ -49,6 +49,7 @@ const ACTIONS = Object.freeze({
   PROMO_DELETED: "promo_deleted",
   COMMISSION_MARKED_PAID: "commission_marked_paid",
   COMMISSION_CANCELLED: "commission_cancelled",
+  COMMISSION_SETTINGS_UPDATED: "commission_settings_updated",
   // Payouts
   PAYOUT_CREATED: "payout_created",
   PAYOUT_CANCELLED: "payout_cancelled",

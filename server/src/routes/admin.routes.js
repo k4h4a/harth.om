@@ -197,17 +197,36 @@ router.patch(
 );
 router.delete("/promos/:id", [param("id").isUUID(), validate], ctrl.deletePromo);
 
+// ─── Commission settings (global rate) ──────────────────────────────
+router.get("/settings/commission", ctrl.getCommissionSettings);
+router.patch(
+  "/settings/commission",
+  [body("percentage").isFloat({ min: 0, max: 100 }), validate],
+  ctrl.updateCommissionSettings,
+);
+
 // ─── Commissions ───────────────────────────────────────────────────
+const commissionFilterValidators = [
+  query("status").optional().isIn(["pending", "paid", "cancelled"]),
+  query("owner_id").optional().isUUID(),
+  query("from").optional().isISO8601(),
+  query("to").optional().isISO8601(),
+  query("search").optional().isString().isLength({ max: 200 }),
+];
 router.get(
   "/commissions",
   [
     query("page").optional().isInt({ min: 1 }).toInt(),
     query("limit").optional().isInt({ min: 1, max: 100 }).toInt(),
-    query("status").optional().isIn(["pending", "paid", "cancelled"]),
-    query("owner_id").optional().isUUID(),
+    ...commissionFilterValidators,
     validate,
   ],
   ctrl.listCommissions,
+);
+router.get(
+  "/commissions/export",
+  [...commissionFilterValidators, validate],
+  ctrl.exportCommissions,
 );
 router.post(
   "/commissions/:id/pay",

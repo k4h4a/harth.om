@@ -1,6 +1,7 @@
 const adminRepo = require("../repositories/admin.repository");
 const promoRepo = require("../repositories/promo.repository");
 const commissionRepo = require("../repositories/commission.repository");
+const settingsRepo = require("../repositories/settings.repository");
 const orderRepo = require("../repositories/order.repository");
 const equipmentRepo = require("../repositories/equipment.repository");
 const payoutRepo = require("../repositories/payout.repository");
@@ -428,14 +429,95 @@ const deletePromo = asyncHandler(async (req, res) => {
 // ─── Commissions (admin view) ────────────────────────────────────────
 
 const listCommissions = asyncHandler(async (req, res) => {
-  const { page, limit, status, owner_id } = req.query;
+  const { page, limit, status, owner_id, from, to, search } = req.query;
   const result = await commissionRepo.listAll({
     page,
     limit,
     status,
     ownerId: owner_id,
+    from,
+    to,
+    search,
   });
   res.json({ success: true, ...result });
+});
+
+/**
+ * GET /admin/commissions/export — CSV download, same filters as listCommissions
+ * but unpaginated (capped server-side in the repository).
+ */
+const exportCommissions = asyncHandler(async (req, res) => {
+  const { status, owner_id, from, to, search } = req.query;
+  const rows = await commissionRepo.listForExport({
+    status,
+    ownerId: owner_id,
+    from,
+    to,
+    search,
+  });
+
+  const escapeCsv = (v) => {
+    if (v == null) return "";
+    const s = String(v);
+    return /[",\n]/.test(s) ? `"${s.replace(/"/g, '""')}"` : s;
+  };
+
+  const header = [
+    "date",
+    "owner_name",
+    "owner_email",
+    "equipment_name",
+    "gross_amount",
+    "rate",
+    "commission_amount",
+    "net_amount",
+    "status",
+  ];
+  const lines = [header.join(",")];
+  for (const r of rows) {
+    lines.push(
+      [
+        r.created_at,
+        r.owner_name,
+        r.owner_email,
+        r.equipment_name,
+        r.gross_amount,
+        r.rate,
+        r.commission_amount,
+        r.net_amount,
+        r.status,
+      ]
+        .map(escapeCsv)
+        .join(","),
+    );
+  }
+
+  res.setHeader("Content-Type", "text/csv; charset=utf-8");
+  res.setHeader(
+    "Content-Disposition",
+    `attachment; filename="commissions-${Date.now()}.csv"`,
+  );
+  res.send(lines.join("\n"));
+});
+
+// ─── Commission settings (global rate) ──────────────────────────────
+
+const getCommissionSettings = asyncHandler(async (req, res) => {
+  const settings = await settingsRepo.getCommissionSettings();
+  res.json({ success: true, settings });
+});
+
+const updateCommissionSettings = asyncHandler(async (req, res) => {
+  const before = await settingsRepo.getCommissionSettings();
+  const row = await settingsRepo.setCommissionPercentage(req.body.percentage, req.user.id);
+  auditService.record(req, {
+    action: A.COMMISSION_SETTINGS_UPDATED,
+    targetType: "commission_settings",
+    targetId: "1",
+    before: { percentage: before.percentage },
+    after: { percentage: row.percentage },
+  });
+  res.json({ success: true, settings: row });
 });
 
 const markCommissionPaid = asyncHandler(async (req, res) => {
@@ -861,8 +943,11 @@ module.exports = {
   updatePromo,
   deletePromo,
   listCommissions,
+  exportCommissions,
   markCommissionPaid,
   cancelCommission,
+  getCommissionSettings,
+  updateCommissionSettings,
   // Equipment
   listPendingEquipment,
   approveEquipment,

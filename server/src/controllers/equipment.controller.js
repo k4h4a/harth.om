@@ -1,8 +1,10 @@
 const equipmentRepo = require("../repositories/equipment.repository");
 const trustRepo = require("../repositories/trust.repository");
+const settingsRepo = require("../repositories/settings.repository");
 const knex = require("../db");
 const notificationService = require("../services/notification.service");
 const { AppError, asyncHandler } = require("../middleware/errorHandler");
+const { computeEquipmentPricing } = require("../utils/commission-pricing");
 
 /**
  * Shape-check helper. Converts JSON-compatible values from the request into
@@ -30,7 +32,31 @@ function normalizeForDb(body) {
     }
   });
 
+  // Commission/final-price fields are always server-computed — never trust
+  // a client-supplied value here, regardless of what the request sent.
+  delete out.commission_percentage;
+  delete out.daily_commission_amount;
+  delete out.sale_commission_amount;
+  delete out.farmer_daily_price;
+  delete out.farmer_sale_price;
+
   return out;
+}
+
+/**
+ * Mark up the farmer's entered price(s) by the current platform commission
+ * percentage and overwrite payload.daily_price/sale_price with the final,
+ * buyer-facing price. `payload.daily_price`/`sale_price` going in are the
+ * farmer's base price (already coerced to Number|null by normalizeForDb).
+ */
+async function applyCommissionPricing(payload) {
+  const percentage = await settingsRepo.getCommissionPercentage();
+  const pricing = computeEquipmentPricing({
+    farmerDailyPrice: payload.daily_price,
+    farmerSalePrice: payload.sale_price,
+    percentage,
+  });
+  Object.assign(payload, pricing);
 }
 
 /**
@@ -116,6 +142,16 @@ const getOne = asyncHandler(async (req, res) => {
     const profile = await trustRepo.computeForOwner(item.owner_id);
     item.trust = profile; // full profile, not compact
   }
+
+  // Commission breakdown is only for the owner/admin's eyes — buyers only
+  // ever see the final price already on `item`.
+  const isOwnerOrAdmin =
+    req.user && (req.user.role === "admin" || req.user.id === item.owner_id);
+  if (isOwnerOrAdmin) {
+    const ownerFields = await equipmentRepo.getOwnerFieldsById(item.id);
+    Object.assign(item, ownerFields);
+  }
+
   res.json({ success: true, item });
 });
 
@@ -131,6 +167,11 @@ const create = asyncHandler(async (req, res) => {
 
   // Default status if not provided.
   if (!payload.status) payload.status = "available";
+
+  // payload.daily_price/sale_price at this point are the farmer's entered
+  // base price; this overwrites them with the final, marked-up price and
+  // adds the farmer_*/commission_* breakdown fields.
+  await applyCommissionPricing(payload);
 
   // If primary_image_url not given but images has one, use the first.
   if (!payload.primary_image_url && Array.isArray(req.body.images) && req.body.images.length) {
@@ -189,6 +230,18 @@ const update = asyncHandler(async (req, res) => {
 
   // owner_id is not editable from here; prevent privilege escalation.
   delete payload.owner_id;
+
+  // Recompute commission only when the farmer is actually changing a price —
+  // otherwise leave the stored pricing breakdown untouched (a later global
+  // rate change shouldn't silently re-price listings nobody edited).
+  const changingDaily = Object.prototype.hasOwnProperty.call(req.body, "daily_price");
+  const changingSale = Object.prototype.hasOwnProperty.call(req.body, "sale_price");
+  if (changingDaily || changingSale) {
+    const ownerFields = await equipmentRepo.getOwnerFieldsById(id);
+    payload.daily_price = changingDaily ? payload.daily_price : ownerFields.farmer_daily_price;
+    payload.sale_price = changingSale ? payload.sale_price : ownerFields.farmer_sale_price;
+    await applyCommissionPricing(payload);
+  }
 
   const item = await equipmentRepo.update(id, payload);
 
