@@ -10,6 +10,7 @@ const {
   approveRejectValidator,
   listQueryValidator,
   availabilityValidator,
+  bookedDatesValidator,
   resolveDepositValidator,
 } = require("../validators/rental.validator");
 
@@ -21,6 +22,14 @@ router.get(
   "/availability/:id",
   availabilityValidator,
   ctrl.availability,
+);
+
+// Booked date ranges — public. Feeds the booking calendar so already-rented
+// days can be marked off before the user picks a range.
+router.get(
+  "/booked-dates/:id",
+  bookedDatesValidator,
+  ctrl.bookedDates,
 );
 
 // Create — any authenticated user

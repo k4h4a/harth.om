@@ -280,6 +280,16 @@ const availability = asyncHandler(async (req, res) => {
   res.json({ success: true, available, days });
 });
 
+/**
+ * GET /rentals/booked-dates/:id
+ * Public. Returns the booked date ranges for an equipment so the booking
+ * calendar can mark rented days off (and block them from selection).
+ */
+const bookedDates = asyncHandler(async (req, res) => {
+  const ranges = await rentalRepo.getBookedRanges(req.params.id);
+  res.json({ success: true, ranges });
+});
+
 module.exports = {
   create,
   list,
@@ -291,4 +301,5 @@ module.exports = {
   complete,
   resolveDeposit,
   availability,
+  bookedDates,
 };

@@ -7,7 +7,11 @@
       "Bash(find / -maxdepth 6 -iname \"__pw_*.png\" 2>/dev/null)",
       "Read(//c//**)",
       "Bash(node check.js)",
-      "Bash(echo \"EXIT_CODE=$?\")"
+      "Bash(echo \"EXIT_CODE=$?\")",
+      "Bash(node -c src/repositories/rental.repository.js)",
+      "Bash(node -c src/controllers/rental.controller.js)",
+      "Bash(node -c src/validators/rental.validator.js)",
+      "Bash(node -c src/routes/rental.routes.js)"
     ]
   }
 }

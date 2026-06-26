@@ -77,6 +77,24 @@
         cursor: not-allowed;
         text-decoration: none;
       }
+
+      /* Force a solid background so native dropdown options stay readable
+         (white text on the browser's default white option list was
+         rendering invisible). */
+      #reg-governorate {
+        background: rgba(20, 40, 15, 0.95) !important;
+        color: #ffffff !important;
+      }
+      #reg-governorate option {
+        background: #1a2e10;
+        color: #ffffff;
+        padding: 6px 10px;
+      }
+      #reg-governorate option:checked,
+      #reg-governorate option:hover {
+        background: #2d5016;
+        color: #ffffff;
+      }
     </style>
   
     <!-- HARTH-RESPONSIVE-CSS -->

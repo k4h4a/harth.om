@@ -77,6 +77,22 @@ async function isAvailable({ equipmentId, startDate, endDate }) {
 }
 
 /**
+ * Booked date ranges for an equipment (today onward), used to render a
+ * calendar with already-rented days marked off. Only blocking statuses
+ * count — completed/cancelled/rejected rentals don't occupy a date.
+ */
+async function getBookedRanges(equipmentId) {
+  const today = new Date().toISOString().slice(0, 10);
+  const rows = await knex("rentals")
+    .where("equipment_id", equipmentId)
+    .whereIn("status", BLOCKING_STATUSES)
+    .andWhere("end_date", ">=", today)
+    .orderBy("start_date", "asc")
+    .select("start_date", "end_date");
+  return rows;
+}
+
+/**
  * Compute number of rental days (inclusive). 1 day = same start/end date.
  */
 function daysBetween(start, end) {
@@ -602,6 +618,7 @@ module.exports = {
   createRental,
   isAvailable,
   countOverlapping,
+  getBookedRanges,
   daysBetween,
   getById,
   getByTracking,

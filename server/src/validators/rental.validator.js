@@ -81,6 +81,11 @@ const availabilityValidator = [
   validate,
 ];
 
+const bookedDatesValidator = [
+  param("id").isUUID().withMessage("Invalid equipment id"),
+  validate,
+];
+
 const resolveDepositValidator = [
   param("id").isUUID().withMessage("Invalid rental id"),
   body("resolution")
@@ -103,5 +108,6 @@ module.exports = {
   approveRejectValidator,
   listQueryValidator,
   availabilityValidator,
+  bookedDatesValidator,
   resolveDepositValidator,
 };

@@ -267,6 +267,23 @@
         border-color: var(--color-brand-500);
         box-shadow: 0 0 0 3px rgba(106, 176, 76, 0.1);
       }
+      /* Force a solid background so native dropdown options stay readable
+         (white --color-text on the browser's default white option list
+         was rendering invisible text). */
+      .form-grid select {
+        background: rgba(20, 40, 15, 0.95) !important;
+        color: #ffffff !important;
+      }
+      .form-grid select option {
+        background: #1a2e10;
+        color: #ffffff;
+        padding: 6px 10px;
+      }
+      .form-grid select option:checked,
+      .form-grid select option:hover {
+        background: #2d5016;
+        color: #ffffff;
+      }
       .form-grid textarea {
         grid-column: 1 / -1;
         min-height: 70px;
@@ -504,6 +521,20 @@
         border: var(--border-width) solid var(--border-soft);
         border-radius: var(--r-sm);
         font-family: inherit;
+      }
+      .filter-bar select {
+        background: rgba(20, 40, 15, 0.95) !important;
+        color: #ffffff !important;
+      }
+      .filter-bar select option {
+        background: #1a2e10;
+        color: #ffffff;
+        padding: 6px 10px;
+      }
+      .filter-bar select option:checked,
+      .filter-bar select option:hover {
+        background: #2d5016;
+        color: #ffffff;
       }
 
       /* ============================================================
@@ -768,7 +799,7 @@
               </small>
             </label>
 
-            <label>
+            <label id="f-stock-wrap">
               الكمية المتاحة
               <input type="number" id="f-stock" min="0" step="1" value="1" />
             </label>
@@ -1336,6 +1367,9 @@
           const t = $("#f-listing-type").value;
           const daily = $("#f-daily-price");
           const sale = $("#f-sale-price");
+          const saleWrap = $("#f-sale-wrap");
+          const stock = $("#f-stock");
+          const stockWrap = $("#f-stock-wrap");
           const depositWrap = $("#f-deposit-wrap");
           const depositInput = $("#f-deposit-amount");
           if (t === "rent") {
@@ -1349,6 +1383,16 @@
           } else {
             daily.required = true;
             sale.required = true;
+          }
+          // For rent-only listings, sale price and stock quantity don't
+          // apply — hide them entirely instead of just making them optional.
+          if (t === "rent") {
+            saleWrap.style.display = "none";
+            stockWrap.style.display = "none";
+            stock.value = "1";
+          } else {
+            saleWrap.style.display = "";
+            stockWrap.style.display = "";
           }
           // Deposits only make sense for rentals (or 'both' which can be
           // rented). Hide it on sale-only and clear the field so the value
