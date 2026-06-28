@@ -3,7 +3,25 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>لوحة المالك - حرث</title>
+    <script>
+      // Apply the saved language/direction before first paint so there's no
+      // flash of Arabic/RTL when the visitor's saved language is English.
+      (function () {
+        try {
+          if (localStorage.getItem("harth_lang") === "en") {
+            document.documentElement.lang = "en";
+            document.documentElement.dir = "ltr";
+          }
+        } catch (e) {}
+        document.documentElement.classList.add("i18n-loading");
+      })();
+    </script>
+    <style>
+      html.i18n-loading body {
+        visibility: hidden;
+      }
+    </style>
+    <title data-i18n="ownerDashboard.title">لوحة المالك - حرث</title>
 
     <link
       href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;700&display=swap"
@@ -631,32 +649,32 @@
         </div>
         <nav class="section center">
           <ul class="nav-links">
-            <li><a href="index.html" class="nav-item">الرئيسية</a></li>
-            <li><a href="tools.html" class="nav-item">تأجير معدات</a></li>
-            <li><a href="basket.html" class="nav-item">بيع معدات</a></li>
+            <li><a href="index.html" class="nav-item" data-i18n="nav.home">الرئيسية</a></li>
+            <li><a href="tools.html" class="nav-item" data-i18n="nav.rentEquipment">تأجير معدات</a></li>
+            <li><a href="basket.html" class="nav-item" data-i18n="nav.sellEquipment">بيع معدات</a></li>
             <li>
-              <a href="owner-dashboard.html" class="nav-item">لوحة المالك</a>
+              <a href="owner-dashboard.html" class="nav-item" data-i18n="nav.ownerDashboard">لوحة المالك</a>
             </li>
           </ul>
         </nav>
         <div class="section left" id="auth-header">
-          <a href="register.html" class="hs-btn hs-btn--ghost hs-btn--sm" id="login-link">تسجيل دخول</a>
+          <a href="register.html" class="hs-btn hs-btn--ghost hs-btn--sm" id="login-link" data-i18n="common.buttons.login">تسجيل دخول</a>
         </div>
       </div>
     </header>
 
     <!-- ========== LOGIN GATE (shown if not logged in) ========== -->
     <section id="login-section" class="login-gate hidden">
-      <h2><i class="fas fa-user-shield"></i> تسجيل دخول المالك</h2>
-      <p style="color: var(--color-text-muted); font-size: 14px">
+      <h2><i class="fas fa-user-shield"></i> <span data-i18n="ownerDashboard.loginGate.heading">تسجيل دخول المالك</span></h2>
+      <p style="color: var(--color-text-muted); font-size: 14px" data-i18n="ownerDashboard.loginGate.desc">
         هذه اللوحة مخصّصة لأصحاب المعدات. سجّل دخولك بحساب مالك.
       </p>
-      <input type="email" id="login-email" placeholder="البريد الإلكتروني" />
-      <input type="password" id="login-password" placeholder="كلمة المرور" />
-      <button id="login-submit">دخول</button>
+      <input type="email" id="login-email" data-i18n-placeholder="ownerDashboard.loginGate.emailPlaceholder" placeholder="البريد الإلكتروني" />
+      <input type="password" id="login-password" data-i18n-placeholder="ownerDashboard.loginGate.passwordPlaceholder" placeholder="كلمة المرور" />
+      <button id="login-submit" data-i18n="ownerDashboard.loginGate.submitBtn">دخول</button>
       <p style="text-align: center; font-size: 13px; margin-top: 12px">
-        ليس لديك حساب؟
-        <a href="register.html" style="color: #6ab04c">سجّل كمالك</a>
+        <span data-i18n="ownerDashboard.loginGate.noAccountText">ليس لديك حساب؟</span>
+        <a href="register.html" style="color: #6ab04c" data-i18n="ownerDashboard.loginGate.registerLink">سجّل كمالك</a>
       </p>
     </section>
 
@@ -667,8 +685,8 @@
         <div style="display:flex;gap:12px;align-items:flex-start">
           <i class="fas fa-info-circle" id="status-banner-icon" style="font-size:24px;color:#f1c40f;margin-top:2px"></i>
           <div style="flex:1">
-            <div style="font-weight:700;font-size:16px" id="status-banner-title">حسابك قيد المراجعة</div>
-            <div style="font-size:14px;color:#ddd;margin-top:6px" id="status-banner-msg">
+            <div style="font-weight:700;font-size:16px" id="status-banner-title" data-i18n="ownerDashboard.statusBanner.defaultTitle">حسابك قيد المراجعة</div>
+            <div style="font-size:14px;color:#ddd;margin-top:6px" id="status-banner-msg" data-i18n="ownerDashboard.statusBanner.defaultMsg">
               حسابك كمزارع قيد المراجعة من قِبل الإدارة. ستُفعَّل صلاحية إضافة المعدات للبيع/الإيجار بعد الموافقة. يمكنك في هذه الأثناء تصفّح وشراء المنتجات من المتجر.
             </div>
           </div>
@@ -687,7 +705,7 @@
         <div style="display:flex;gap:12px;align-items:flex-start">
           <i class="fas fa-shield-alt" style="font-size:24px;color:#6ab04c;margin-top:2px"></i>
           <div style="flex:1">
-            <div style="font-weight:700;font-size:16px;color:#fff">
+            <div style="font-weight:700;font-size:16px;color:#fff" data-i18n="ownerDashboard.trustBanner.heading">
               عزّز ثقة المشترين بحسابك
             </div>
             <div id="trust-banner-msg" style="font-size:14px;color:#ddd;margin-top:6px"></div>
@@ -700,24 +718,24 @@
       <div class="dash-card">
         <h2>
           <i class="fas fa-tractor"></i>
-          <span id="welcome-text">مرحباً</span>
+          <span id="welcome-text" data-i18n="ownerDashboard.welcomeDefault">مرحباً</span>
         </h2>
         <div class="stats-row">
           <div class="stat-box">
             <div class="num" id="stat-total">0</div>
-            <div class="label">إجمالي المعدات</div>
+            <div class="label" data-i18n="ownerDashboard.stats.total">إجمالي المعدات</div>
           </div>
           <div class="stat-box">
             <div class="num" id="stat-available">0</div>
-            <div class="label">متاحة</div>
+            <div class="label" data-i18n="ownerDashboard.stats.available">متاحة</div>
           </div>
           <div class="stat-box">
             <div class="num" id="stat-rented">0</div>
-            <div class="label">مؤجرة</div>
+            <div class="label" data-i18n="ownerDashboard.stats.rented">مؤجرة</div>
           </div>
           <div class="stat-box">
             <div class="num" id="stat-hidden">0</div>
-            <div class="label">مخفية</div>
+            <div class="label" data-i18n="ownerDashboard.stats.hidden">مخفية</div>
           </div>
         </div>
       </div>
@@ -725,71 +743,61 @@
       <!-- Add / Edit form (hidden when account isn't approved) -->
       <div class="dash-card" id="equip-form-card">
         <h2 id="form-title">
-          <i class="fas fa-plus-circle"></i> إضافة معدة جديدة
+          <i class="fas fa-plus-circle"></i> <span data-i18n="ownerDashboard.form.addTitle">إضافة معدة جديدة</span>
         </h2>
         <form id="equip-form">
           <input type="hidden" id="equip-id" />
 
           <div class="form-grid">
             <label>
-              الاسم *
+              <span data-i18n="ownerDashboard.form.nameLabel">الاسم *</span>
               <input type="text" id="f-name" required maxlength="200" />
             </label>
 
             <label>
-              التصنيف *
+              <span data-i18n="ownerDashboard.form.categoryLabel">التصنيف *</span>
               <select id="f-category" required>
-                <option value="tractor">جرارات</option>
-                <option value="sprayer">مرشات</option>
-                <option value="harvester">حصادات</option>
-                <option value="tools">أدوات</option>
-                <option value="seeds">بذور</option>
-                <option value="fertilizer">أسمدة</option>
-                <option value="pesticide">مبيدات</option>
-                <option value="other">أخرى</option>
+                <option value="tractor" data-i18n="ownerDashboard.categories.tractor">جرارات</option>
+                <option value="sprayer" data-i18n="ownerDashboard.categories.sprayer">مرشات</option>
+                <option value="harvester" data-i18n="ownerDashboard.categories.harvester">حصادات</option>
+                <option value="tools" data-i18n="ownerDashboard.categories.tools">أدوات</option>
+                <option value="seeds" data-i18n="ownerDashboard.categories.seeds">بذور</option>
+                <option value="fertilizer" data-i18n="ownerDashboard.categories.fertilizer">أسمدة</option>
+                <option value="pesticide" data-i18n="ownerDashboard.categories.pesticide">مبيدات</option>
+                <option value="other" data-i18n="ownerDashboard.categories.other">أخرى</option>
               </select>
             </label>
 
             <label>
-              نوع الإدراج *
+              <span data-i18n="ownerDashboard.form.listingTypeLabel">نوع الإدراج *</span>
               <select id="f-listing-type" required>
-                <option value="rent">للإيجار</option>
-                <option value="sale">للبيع</option>
-                <option value="both">بيع وإيجار</option>
+                <option value="rent" data-i18n="ownerDashboard.form.listingTypeOptions.rent">للإيجار</option>
+                <option value="sale" data-i18n="ownerDashboard.form.listingTypeOptions.sale">للبيع</option>
+                <option value="both" data-i18n="ownerDashboard.form.listingTypeOptions.both">بيع وإيجار</option>
               </select>
             </label>
 
             <label>
-              الحالة
+              <span data-i18n="ownerDashboard.form.statusLabel">الحالة</span>
               <select id="f-status">
-                <option value="available">متاح</option>
-                <option value="rented">مؤجر</option>
-                <option value="maintenance">صيانة</option>
-                <option value="sold">مباع</option>
-                <option value="hidden">مخفي</option>
+                <option value="available" data-i18n="ownerDashboard.statusOptions.available">متاح</option>
+                <option value="rented" data-i18n="ownerDashboard.statusOptions.rented">مؤجر</option>
+                <option value="maintenance" data-i18n="ownerDashboard.statusOptions.maintenance">صيانة</option>
+                <option value="sold" data-i18n="ownerDashboard.statusOptions.sold">مباع</option>
+                <option value="hidden" data-i18n="ownerDashboard.statusOptions.hidden">مخفي</option>
               </select>
             </label>
 
             <label id="f-daily-wrap">
-              سعر اليوم (ريال) *
+              <span data-i18n="ownerDashboard.form.dailyPriceLabel">سعر اليوم (ريال) *</span>
               <input type="number" id="f-daily-price" min="0" step="0.01" />
-              <small style="color:var(--color-text-soft);display:block;margin-top:4px">
-                عمولة المنصة (<span id="f-daily-commission-pct">10</span>%):
-                <span id="f-daily-commission-amount">0.00</span> ريال —
-                السعر النهائي المعروض للمستخدم:
-                <strong id="f-daily-final-price">0.00</strong> ريال
-              </small>
+              <small id="f-daily-commission-hint" style="color:var(--color-text-soft);display:block;margin-top:4px"></small>
             </label>
 
             <label id="f-sale-wrap">
-              سعر البيع (ريال)
+              <span data-i18n="ownerDashboard.form.salePriceLabel">سعر البيع (ريال)</span>
               <input type="number" id="f-sale-price" min="0" step="0.01" />
-              <small style="color:var(--color-text-soft);display:block;margin-top:4px">
-                عمولة المنصة (<span id="f-sale-commission-pct">10</span>%):
-                <span id="f-sale-commission-amount">0.00</span> ريال —
-                السعر النهائي المعروض للمستخدم:
-                <strong id="f-sale-final-price">0.00</strong> ريال
-              </small>
+              <small id="f-sale-commission-hint" style="color:var(--color-text-soft);display:block;margin-top:4px"></small>
             </label>
 
             <!-- Optional security deposit. Held when the rental starts and
@@ -797,45 +805,47 @@
                  listing_type='sale' — it makes no sense to hold a deposit
                  against a sale. -->
             <label id="f-deposit-wrap">
-              تأمين قابل للاسترداد (ريال) <small style="color:var(--color-text-soft)">— اختياري</small>
+              <span data-i18n="ownerDashboard.form.depositLabel">تأمين قابل للاسترداد (ريال)</span> <small style="color:var(--color-text-soft)" data-i18n="ownerDashboard.form.depositOptionalHint">— اختياري</small>
               <input
                 type="number"
                 id="f-deposit-amount"
                 min="0"
                 step="0.01"
+                data-i18n-placeholder="ownerDashboard.form.depositPlaceholder"
                 placeholder="مثال: 50.00"
               />
-              <small style="color:var(--color-text-soft);display:block;margin-top:4px">
+              <small style="color:var(--color-text-soft);display:block;margin-top:4px" data-i18n="ownerDashboard.form.depositHint">
                 يُحجز من المستأجر عند الحجز ويُعاد عند إرجاع المعدة سليمة.
                 ينطبق فقط على المعدات للإيجار.
               </small>
             </label>
 
             <label id="f-stock-wrap">
-              الكمية المتاحة
+              <span data-i18n="ownerDashboard.form.stockLabel">الكمية المتاحة</span>
               <input type="number" id="f-stock" min="0" step="1" value="1" />
             </label>
 
             <label>
-              المحافظة
+              <span data-i18n="ownerDashboard.form.governorateLabel">المحافظة</span>
               <select id="f-governorate">
-                <option value="">بدون تحديد</option>
-                <option value="muscat">مسقط</option>
-                <option value="dhofar">ظفار</option>
-                <option value="musandam">مسندم</option>
-                <option value="buraimi">البريمي</option>
-                <option value="dakhiliyah">الداخلية</option>
-                <option value="north_batinah">شمال الباطنة</option>
-                <option value="south_batinah">جنوب الباطنة</option>
-                <option value="south_sharqiyah">جنوب الشرقية</option>
-                <option value="north_sharqiyah">شمال الشرقية</option>
-                <option value="dhahirah">الظاهرة</option>
-                <option value="wusta">الوسطى</option>
+                <option value="" data-i18n="ownerDashboard.form.noGovernorateOption">بدون تحديد</option>
+                <option value="muscat" data-i18n="common.governorates.muscat">مسقط</option>
+                <option value="dhofar" data-i18n="common.governorates.dhofar">ظفار</option>
+                <option value="musandam" data-i18n="common.governorates.musandam">مسندم</option>
+                <option value="buraimi" data-i18n="common.governorates.buraimi">البريمي</option>
+                <option value="dakhiliyah" data-i18n="common.governorates.dakhiliyah">الداخلية</option>
+                <option value="north_batinah" data-i18n="common.governorates.north_batinah">شمال الباطنة</option>
+                <option value="south_batinah" data-i18n="common.governorates.south_batinah">جنوب الباطنة</option>
+                <option value="south_sharqiyah" data-i18n="common.governorates.south_sharqiyah">جنوب الشرقية</option>
+                <option value="north_sharqiyah" data-i18n="common.governorates.north_sharqiyah">شمال الشرقية</option>
+                <option value="dhahirah" data-i18n="common.governorates.dhahirah">الظاهرة</option>
+                <option value="wusta" data-i18n="common.governorates.wusta">الوسطى</option>
               </select>
             </label>
 
             <textarea
               id="f-description"
+              data-i18n-placeholder="ownerDashboard.form.descriptionPlaceholder"
               placeholder="وصف المعدة..."
               maxlength="5000"
             ></textarea>
@@ -844,59 +854,59 @@
           <!-- Technical specs accordion -->
           <details class="specs-acc" id="tech-specs-acc">
             <summary>
-              <i class="fas fa-cogs"></i> المواصفات الفنية التفصيلية
-              <small style="color:var(--color-text-soft);font-weight:400;margin-inline-start:4px">(اختياري — لتوليد الملف الفني PDF)</small>
+              <i class="fas fa-cogs"></i> <span data-i18n="ownerDashboard.form.specsAcc.summary">المواصفات الفنية التفصيلية</span>
+              <small style="color:var(--color-text-soft);font-weight:400;margin-inline-start:4px" data-i18n="ownerDashboard.form.specsAcc.optionalHint">(اختياري — لتوليد الملف الفني PDF)</small>
               <span class="acc-arrow">▼</span>
             </summary>
             <div class="acc-body">
 
-              <p class="specs-sub"><i class="fas fa-id-card"></i> بيانات التعريف</p>
+              <p class="specs-sub"><i class="fas fa-id-card"></i> <span data-i18n="ownerDashboard.form.specsAcc.idSection">بيانات التعريف</span></p>
               <div class="form-grid">
-                <label>الشركة المصنعة <input type="text" id="f-manufacturer" maxlength="100" placeholder="مثال: John Deere، كوبوتا"></label>
-                <label>الموديل <input type="text" id="f-model" maxlength="100" placeholder="مثال: 6120M"></label>
-                <label>سنة الصنع <input type="number" id="f-model-year" min="1950" max="2035" placeholder="مثال: 2022"></label>
-                <label>الرقم التسلسلي <input type="text" id="f-serial-number" maxlength="100" placeholder="اختياري"></label>
-                <label>بلد المنشأ <input type="text" id="f-origin-country" maxlength="100" placeholder="مثال: USA، Japan، Germany"></label>
-                <label>ساعات التشغيل <input type="number" id="f-operating-hours" min="0" step="1" placeholder="عدد الساعات الكلية"></label>
-                <label>نوع الوقود / مصدر الطاقة
+                <label><span data-i18n="ownerDashboard.form.specsAcc.manufacturerLabel">الشركة المصنعة</span> <input type="text" id="f-manufacturer" maxlength="100" data-i18n-placeholder="ownerDashboard.form.specsAcc.manufacturerPlaceholder" placeholder="مثال: John Deere، كوبوتا"></label>
+                <label><span data-i18n="ownerDashboard.form.specsAcc.modelLabel">الموديل</span> <input type="text" id="f-model" maxlength="100" data-i18n-placeholder="ownerDashboard.form.specsAcc.modelPlaceholder" placeholder="مثال: 6120M"></label>
+                <label><span data-i18n="ownerDashboard.form.specsAcc.modelYearLabel">سنة الصنع</span> <input type="number" id="f-model-year" min="1950" max="2035" data-i18n-placeholder="ownerDashboard.form.specsAcc.modelYearPlaceholder" placeholder="مثال: 2022"></label>
+                <label><span data-i18n="ownerDashboard.form.specsAcc.serialNumberLabel">الرقم التسلسلي</span> <input type="text" id="f-serial-number" maxlength="100" data-i18n-placeholder="ownerDashboard.form.specsAcc.serialNumberPlaceholder" placeholder="اختياري"></label>
+                <label><span data-i18n="ownerDashboard.form.specsAcc.originCountryLabel">بلد المنشأ</span> <input type="text" id="f-origin-country" maxlength="100" data-i18n-placeholder="ownerDashboard.form.specsAcc.originCountryPlaceholder" placeholder="مثال: USA، Japan، Germany"></label>
+                <label><span data-i18n="ownerDashboard.form.specsAcc.operatingHoursLabel">ساعات التشغيل</span> <input type="number" id="f-operating-hours" min="0" step="1" data-i18n-placeholder="ownerDashboard.form.specsAcc.operatingHoursPlaceholder" placeholder="عدد الساعات الكلية"></label>
+                <label><span data-i18n="ownerDashboard.form.specsAcc.fuelTypeLabel">نوع الوقود / مصدر الطاقة</span>
                   <select id="f-fuel-type">
-                    <option value="">-- اختر --</option>
-                    <option value="diesel">ديزل</option>
-                    <option value="gasoline">بنزين</option>
-                    <option value="electric">كهرباء</option>
-                    <option value="hybrid">هجين</option>
-                    <option value="gas">غاز طبيعي</option>
+                    <option value="" data-i18n="ownerDashboard.form.specsAcc.fuelTypeOptions.empty">-- اختر --</option>
+                    <option value="diesel" data-i18n="ownerDashboard.form.specsAcc.fuelTypeOptions.diesel">ديزل</option>
+                    <option value="gasoline" data-i18n="ownerDashboard.form.specsAcc.fuelTypeOptions.gasoline">بنزين</option>
+                    <option value="electric" data-i18n="ownerDashboard.form.specsAcc.fuelTypeOptions.electric">كهرباء</option>
+                    <option value="hybrid" data-i18n="ownerDashboard.form.specsAcc.fuelTypeOptions.hybrid">هجين</option>
+                    <option value="gas" data-i18n="ownerDashboard.form.specsAcc.fuelTypeOptions.gas">غاز طبيعي</option>
                   </select>
                 </label>
               </div>
 
-              <p class="specs-sub"><i class="fas fa-ruler-combined"></i> المواصفات الفنية</p>
+              <p class="specs-sub"><i class="fas fa-ruler-combined"></i> <span data-i18n="ownerDashboard.form.specsAcc.techSection">المواصفات الفنية</span></p>
               <div class="form-grid">
-                <label>القدرة المحركية (HP) <input type="number" id="f-engine-power" min="0" step="0.1" placeholder="مثال: 120"></label>
-                <label>الوزن الإجمالي (كجم) <input type="number" id="f-weight" min="0" step="1" placeholder="مثال: 4200"></label>
-                <label>الحمولة القصوى (كجم) <input type="number" id="f-load-capacity" min="0" step="1" placeholder="مثال: 2000"></label>
-                <label>الطول (سم) <input type="number" id="f-dim-length" min="0" step="1" placeholder="سم"></label>
-                <label>العرض (سم) <input type="number" id="f-dim-width" min="0" step="1" placeholder="سم"></label>
-                <label>الارتفاع (سم) <input type="number" id="f-dim-height" min="0" step="1" placeholder="سم"></label>
+                <label><span data-i18n="ownerDashboard.form.specsAcc.enginePowerLabel">القدرة المحركية (HP)</span> <input type="number" id="f-engine-power" min="0" step="0.1" data-i18n-placeholder="ownerDashboard.form.specsAcc.enginePowerPlaceholder" placeholder="مثال: 120"></label>
+                <label><span data-i18n="ownerDashboard.form.specsAcc.weightLabel">الوزن الإجمالي (كجم)</span> <input type="number" id="f-weight" min="0" step="1" data-i18n-placeholder="ownerDashboard.form.specsAcc.weightPlaceholder" placeholder="مثال: 4200"></label>
+                <label><span data-i18n="ownerDashboard.form.specsAcc.loadCapacityLabel">الحمولة القصوى (كجم)</span> <input type="number" id="f-load-capacity" min="0" step="1" data-i18n-placeholder="ownerDashboard.form.specsAcc.loadCapacityPlaceholder" placeholder="مثال: 2000"></label>
+                <label><span data-i18n="ownerDashboard.form.specsAcc.dimLengthLabel">الطول (سم)</span> <input type="number" id="f-dim-length" min="0" step="1" data-i18n-placeholder="ownerDashboard.form.specsAcc.dimPlaceholder" placeholder="سم"></label>
+                <label><span data-i18n="ownerDashboard.form.specsAcc.dimWidthLabel">العرض (سم)</span> <input type="number" id="f-dim-width" min="0" step="1" data-i18n-placeholder="ownerDashboard.form.specsAcc.dimPlaceholder" placeholder="سم"></label>
+                <label><span data-i18n="ownerDashboard.form.specsAcc.dimHeightLabel">الارتفاع (سم)</span> <input type="number" id="f-dim-height" min="0" step="1" data-i18n-placeholder="ownerDashboard.form.specsAcc.dimPlaceholder" placeholder="سم"></label>
               </div>
 
-              <p class="specs-sub"><i class="fas fa-wrench"></i> سجل الصيانة</p>
+              <p class="specs-sub"><i class="fas fa-wrench"></i> <span data-i18n="ownerDashboard.form.specsAcc.maintSection">سجل الصيانة</span></p>
               <div class="form-grid">
-                <label>تاريخ آخر صيانة <input type="date" id="f-last-maint-date"></label>
-                <label>نوع الصيانة <input type="text" id="f-maint-type" maxlength="200" placeholder="مثال: دورية شاملة، تغيير زيت"></label>
-                <label>الجهة المنفذة <input type="text" id="f-maint-by" maxlength="200" placeholder="مثال: وكالة الشركة، ورشة معتمدة"></label>
-                <label>موعد الصيانة القادمة <input type="date" id="f-next-maint-date"></label>
+                <label><span data-i18n="ownerDashboard.form.specsAcc.lastMaintDateLabel">تاريخ آخر صيانة</span> <input type="date" id="f-last-maint-date"></label>
+                <label><span data-i18n="ownerDashboard.form.specsAcc.maintTypeLabel">نوع الصيانة</span> <input type="text" id="f-maint-type" maxlength="200" data-i18n-placeholder="ownerDashboard.form.specsAcc.maintTypePlaceholder" placeholder="مثال: دورية شاملة، تغيير زيت"></label>
+                <label><span data-i18n="ownerDashboard.form.specsAcc.maintByLabel">الجهة المنفذة</span> <input type="text" id="f-maint-by" maxlength="200" data-i18n-placeholder="ownerDashboard.form.specsAcc.maintByPlaceholder" placeholder="مثال: وكالة الشركة، ورشة معتمدة"></label>
+                <label><span data-i18n="ownerDashboard.form.specsAcc.nextMaintDateLabel">موعد الصيانة القادمة</span> <input type="date" id="f-next-maint-date"></label>
               </div>
 
-              <p class="specs-sub"><i class="fas fa-shield-alt"></i> الضمان والشهادات</p>
+              <p class="specs-sub"><i class="fas fa-shield-alt"></i> <span data-i18n="ownerDashboard.form.specsAcc.warrantySection">الضمان والشهادات</span></p>
               <div class="form-grid">
-                <label>معلومات الضمان <input type="text" id="f-warranty-info" maxlength="300" placeholder="مثال: ضمان سنة من الشركة"></label>
-                <label>شهادة الفحص الفني <input type="text" id="f-inspection-cert" maxlength="300" placeholder="مثال: موثق — رقم الشهادة 12345"></label>
+                <label><span data-i18n="ownerDashboard.form.specsAcc.warrantyInfoLabel">معلومات الضمان</span> <input type="text" id="f-warranty-info" maxlength="300" data-i18n-placeholder="ownerDashboard.form.specsAcc.warrantyInfoPlaceholder" placeholder="مثال: ضمان سنة من الشركة"></label>
+                <label><span data-i18n="ownerDashboard.form.specsAcc.inspectionCertLabel">شهادة الفحص الفني</span> <input type="text" id="f-inspection-cert" maxlength="300" data-i18n-placeholder="ownerDashboard.form.specsAcc.inspectionCertPlaceholder" placeholder="مثال: موثق — رقم الشهادة 12345"></label>
               </div>
 
-              <p class="specs-sub"><i class="fas fa-file-pdf"></i> ملف PDF الرسمي (اختياري)</p>
+              <p class="specs-sub"><i class="fas fa-file-pdf"></i> <span data-i18n="ownerDashboard.form.specsAcc.pdfSection">ملف PDF الرسمي (اختياري)</span></p>
               <div class="pdf-drop">
-                <small style="color:var(--color-text-muted);display:block;margin-bottom:8px">ارفع كتالوج الشركة أو دليل التشغيل أو الملف التقني الرسمي (PDF حتى 20 ميجابايت)</small>
+                <small style="color:var(--color-text-muted);display:block;margin-bottom:8px" data-i18n="ownerDashboard.form.specsAcc.pdfHint">ارفع كتالوج الشركة أو دليل التشغيل أو الملف التقني الرسمي (PDF حتى 20 ميجابايت)</small>
                 <input type="file" id="f-datasheet-pdf" accept="application/pdf">
                 <div id="pdf-upload-info" style="display:none" class="pdf-file-info">
                   <i class="fas fa-file-pdf"></i>
@@ -912,7 +922,7 @@
 
           <!-- Image upload -->
           <div style="margin-top: 12px">
-            <label style="display: block; margin-bottom: 6px; color: var(--color-text-muted)">
+            <label style="display: block; margin-bottom: 6px; color: var(--color-text-muted)" data-i18n="ownerDashboard.form.imagesLabel">
               الصور (يمكن إضافة حتى 10 صور)
             </label>
             <input
@@ -922,19 +932,20 @@
               multiple
             />
             <div id="image-preview" class="image-preview"></div>
-            <small style="color: var(--color-text-muted)"
+            <small style="color: var(--color-text-muted)" data-i18n="ownerDashboard.form.imagesHint"
               >اضغط على صورة لجعلها الصورة الرئيسية</small
             >
           </div>
 
           <div class="form-actions">
             <button type="submit" class="btn-save" id="btn-save">
-              <i class="fas fa-save"></i> حفظ
+              <i class="fas fa-save"></i> <span data-i18n="ownerDashboard.form.saveBtn">حفظ</span>
             </button>
             <button
               type="button"
               class="btn-cancel hidden"
               id="btn-cancel-edit"
+              data-i18n="ownerDashboard.form.cancelEditBtn"
             >
               إلغاء التعديل
             </button>
@@ -945,27 +956,28 @@
       <!-- My equipment list -->
 
       <div class="dash-card">
-        <h2><i class="fas fa-list"></i> معدّاتي</h2>
+        <h2><i class="fas fa-list"></i> <span data-i18n="ownerDashboard.list.heading">معدّاتي</span></h2>
         <div class="filter-bar">
           <input
             type="search"
             id="filter-search"
+            data-i18n-placeholder="ownerDashboard.list.searchPlaceholder"
             placeholder="بحث بالاسم..."
             style="min-width: 200px; flex: 1"
           />
           <select id="filter-status">
-            <option value="">كل الحالات</option>
-            <option value="available">متاح</option>
-            <option value="rented">مؤجر</option>
-            <option value="maintenance">صيانة</option>
-            <option value="sold">مباع</option>
-            <option value="hidden">مخفي</option>
+            <option value="" data-i18n="ownerDashboard.list.statusFilterAll">كل الحالات</option>
+            <option value="available" data-i18n="ownerDashboard.statusOptions.available">متاح</option>
+            <option value="rented" data-i18n="ownerDashboard.statusOptions.rented">مؤجر</option>
+            <option value="maintenance" data-i18n="ownerDashboard.statusOptions.maintenance">صيانة</option>
+            <option value="sold" data-i18n="ownerDashboard.statusOptions.sold">مباع</option>
+            <option value="hidden" data-i18n="ownerDashboard.statusOptions.hidden">مخفي</option>
           </select>
           <button
             id="filter-refresh"
             class="hs-btn hs-btn--secondary hs-btn--sm"
           >
-            <i class="fas fa-sync"></i> تحديث
+            <i class="fas fa-sync"></i> <span data-i18n="ownerDashboard.list.refreshBtn">تحديث</span>
           </button>
         </div>
         <div id="equip-list" class="dash-grid"></div>
@@ -977,8 +989,8 @@
               <path d="M20 24H30M20 24L18 16H10M30 28L34 24H42" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
             </svg>
           </div>
-          <h3 class="hs-empty__title">لا توجد معدات بعد</h3>
-          <p class="hs-empty__desc">أضف أول معدة لك من النموذج أعلاه لتظهر للمشترين والمستأجرين على المنصة.</p>
+          <h3 class="hs-empty__title" data-i18n="ownerDashboard.list.emptyTitle">لا توجد معدات بعد</h3>
+          <p class="hs-empty__desc" data-i18n="ownerDashboard.list.emptyDesc">أضف أول معدة لك من النموذج أعلاه لتظهر للمشترين والمستأجرين على المنصة.</p>
         </div>
         <div id="pagination" class="pagination"></div>
       </div>
@@ -986,6 +998,8 @@
 
     <div id="toast"></div>
 
+    <script src="i18n.js"></script>
+    <script src="lang-switcher.js"></script>
     <script src="equipment-pdf.js"></script>
     <script src="unified-nav.js"></script>
     <script src="design-system.js"></script>
@@ -1003,18 +1017,22 @@
         const TOKEN_KEY = "token";
         const USER_KEY = "user";
 
+        function t(key, vars) {
+          return window.HarthI18n ? window.HarthI18n.t(key, vars) : key;
+        }
+        function localeTag() {
+          return window.HarthI18n ? window.HarthI18n.localeTag() : "ar";
+        }
+
         // Local in-memory state for the form
         let currentImages = []; // [{ url, filename }]
         let primaryImageUrl = null;
         let editingId = null;
 
-        const GOV_LABELS = {
-          muscat: "مسقط", dhofar: "ظفار", musandam: "مسندم",
-          buraimi: "البريمي", dakhiliyah: "الداخلية",
-          north_batinah: "شمال الباطنة", south_batinah: "جنوب الباطنة",
-          south_sharqiyah: "جنوب الشرقية", north_sharqiyah: "شمال الشرقية",
-          dhahirah: "الظاهرة", wusta: "الوسطى",
-        };
+        function govLabel(g) {
+          const label = t(`common.governorates.${g}`);
+          return label.startsWith("common.governorates.") ? g : label;
+        }
 
         // Pagination state
         const PAGE_SIZE = 12;
@@ -1025,11 +1043,11 @@
         const $$ = (sel) => document.querySelectorAll(sel);
 
         function showToast(msg, isError = false) {
-          const t = $("#toast");
-          t.textContent = msg;
-          t.classList.toggle("error", isError);
-          t.classList.add("show");
-          setTimeout(() => t.classList.remove("show"), 3200);
+          const toastEl = $("#toast");
+          toastEl.textContent = msg;
+          toastEl.classList.toggle("error", isError);
+          toastEl.classList.add("show");
+          setTimeout(() => toastEl.classList.remove("show"), 3200);
         }
 
         function getToken() {
@@ -1100,7 +1118,7 @@
         function showDashboard(user) {
           $("#login-section").classList.add("hidden");
           $("#dashboard-section").classList.remove("hidden");
-          $("#welcome-text").textContent = `مرحباً، ${user.name || user.email}`;
+          $("#welcome-text").textContent = t("ownerDashboard.welcomeTemplate", { name: user.name || user.email });
           renderStatusBanner(user);
           renderTrustBanner(user);
         }
@@ -1139,19 +1157,16 @@
           // Compose a single coherent message from the todos.
           const msgParts = [];
           if (todo.includes("kyc_submit")) {
-            msgParts.push("لم تُقدّم وثائق التحقّق من الهوية.");
+            msgParts.push(t("ownerDashboard.trustBanner.kycSubmitMsg"));
           }
           if (todo.includes("kyc_resubmit")) {
-            msgParts.push(
-              "تم رفض وثائق التحقّق السابقة — يمكنك إعادة الإرسال بصور أوضح.",
-            );
+            msgParts.push(t("ownerDashboard.trustBanner.kycResubmitMsg"));
           }
           if (todo.includes("kyc_pending")) {
-            msgParts.push("وثائق التحقّق قيد المراجعة من قِبل الإدارة.");
+            msgParts.push(t("ownerDashboard.trustBanner.kycPendingMsg"));
           }
           $("#trust-banner-msg").textContent =
-            "إكمال هذه الخطوات يضيف علامة ✓ موثَّق على ملفك ومعداتك. " +
-            msgParts.join(" ");
+            t("ownerDashboard.trustBanner.msgPrefix") + " " + msgParts.join(" ");
 
           // Render action buttons.
           const actions = $("#trust-banner-actions");
@@ -1163,7 +1178,7 @@
             link.style.cssText = "padding:8px 14px;border-radius:6px;text-decoration:none";
             link.innerHTML =
               '<i class="fas fa-id-card"></i> ' +
-              (todo.includes("kyc_resubmit") ? "إعادة إرسال الوثائق" : "تقديم وثائق التحقّق");
+              (todo.includes("kyc_resubmit") ? t("ownerDashboard.trustBanner.resubmitKycBtn") : t("ownerDashboard.trustBanner.submitKycBtn"));
             actions.appendChild(link);
           }
           banner.classList.remove("hidden");
@@ -1209,19 +1224,19 @@
           let title, msg, color;
           if (user.account_status === "pending") {
             color = "#f1c40f"; // amber
-            title = "حسابك قيد المراجعة";
-            msg = "حسابك كمزارع قيد المراجعة من قِبل الإدارة. ستُفعَّل صلاحية إضافة المعدات للبيع/الإيجار بعد الموافقة. يمكنك في هذه الأثناء تصفّح وشراء المنتجات من المتجر.";
+            title = t("ownerDashboard.statusBanner.pendingTitle");
+            msg = t("ownerDashboard.statusBanner.pendingMsg");
           } else if (user.account_status === "rejected") {
             color = "#e74c3c";
-            title = "تم رفض تفعيل صلاحيات حسابك";
-            msg = (user.status_reason ? `السبب: ${user.status_reason}. ` : "") +
-              "لا يمكنك حالياً إضافة معدات للبيع أو الإيجار. للتواصل مع الإدارة لإعادة المراجعة، يُرجى التواصل مع الدعم.";
+            title = t("ownerDashboard.statusBanner.rejectedTitle");
+            msg = (user.status_reason ? `${t("ownerDashboard.statusBanner.rejectedReasonPrefix")} ${user.status_reason}. ` : "") +
+              t("ownerDashboard.statusBanner.rejectedMsg");
           } else {
             // blocked/deleted users wouldn't reach here (auth blocks them),
             // but render a generic message just in case.
             color = "#e74c3c";
-            title = "حسابك غير مفعّل";
-            msg = "تواصل مع الإدارة لمزيد من المعلومات.";
+            title = t("ownerDashboard.statusBanner.inactiveTitle");
+            msg = t("ownerDashboard.statusBanner.inactiveMsg");
           }
 
           banner.style.borderColor = color;
@@ -1241,7 +1256,7 @@
           const email = $("#login-email").value.trim();
           const password = $("#login-password").value;
           if (!email || !password) {
-            showToast("أدخل البريد وكلمة المرور", true);
+            showToast(t("ownerDashboard.toasts.enterEmailPassword"), true);
             return;
           }
           try {
@@ -1251,7 +1266,7 @@
             });
             if (!["owner", "admin"].includes(res.user.role)) {
               showToast(
-                "هذا الحساب ليس مالكاً — استخدم صفحة التسجيل لإنشاء حساب مالك",
+                t("ownerDashboard.toasts.notOwnerAccount"),
                 true,
               );
               return;
@@ -1260,19 +1275,20 @@
             showDashboard(res.user);
             await refreshEquipment();
           } catch (err) {
-            showToast(err.message || "فشل تسجيل الدخول", true);
+            showToast(err.message || t("ownerDashboard.toasts.loginFailed"), true);
           }
         }
 
         // ---------- init / session check ----------
         async function init() {
+          if (window.HarthI18n) await window.HarthI18n.ready();
           if (!getToken()) return showLogin();
           try {
             const res = await api("/auth/me");
             if (!["owner", "admin"].includes(res.user.role)) {
               clearAuth();
               showLogin();
-              showToast("هذه اللوحة للمالكين فقط", true);
+              showToast(t("ownerDashboard.toasts.ownersOnly"), true);
               return;
             }
             setAuth(getToken(), res.user); // refresh cached user
@@ -1295,7 +1311,7 @@
             });
             for (const f of res.files) {
               if (currentImages.length >= 10) {
-                showToast("الحد الأقصى 10 صور", true);
+                showToast(t("ownerDashboard.toasts.maxImages"), true);
                 break;
               }
               currentImages.push({ url: f.url, filename: f.filename });
@@ -1305,7 +1321,7 @@
             }
             renderImagePreview();
           } catch (err) {
-            showToast(err.message || "فشل رفع الصورة", true);
+            showToast(err.message || t("ownerDashboard.toasts.imageUploadFailed"), true);
           }
         }
 
@@ -1316,10 +1332,10 @@
             const div = document.createElement("div");
             div.className =
               "thumb" + (img.url === primaryImageUrl ? " primary" : "");
-            div.title = "اضغط لجعلها الصورة الرئيسية";
+            div.title = t("ownerDashboard.form.primaryTitleHint");
             div.innerHTML = `
               <img src="${img.url}" alt="" />
-              ${img.url === primaryImageUrl ? '<div class="primary-badge">رئيسية</div>' : ""}
+              ${img.url === primaryImageUrl ? `<div class="primary-badge">${t("ownerDashboard.form.primaryBadge")}</div>` : ""}
               <div class="x" data-url="${img.url}">×</div>
             `;
             div.addEventListener("click", (ev) => {
@@ -1369,11 +1385,11 @@
         function updateFormMode() {
           if (editingId) {
             $("#form-title").innerHTML =
-              '<i class="fas fa-edit"></i> تعديل معدة';
+              `<i class="fas fa-edit"></i> ${t("ownerDashboard.form.editTitle")}`;
             $("#btn-cancel-edit").classList.remove("hidden");
           } else {
             $("#form-title").innerHTML =
-              '<i class="fas fa-plus-circle"></i> إضافة معدة جديدة';
+              `<i class="fas fa-plus-circle"></i> ${t("ownerDashboard.form.addTitle")}`;
             $("#btn-cancel-edit").classList.add("hidden");
           }
         }
@@ -1386,22 +1402,23 @@
 
         function updateCommissionPreview(kind) {
           const input = $(`#f-${kind}-price`);
-          const pctEl = $(`#f-${kind}-commission-pct`);
-          const amountEl = $(`#f-${kind}-commission-amount`);
-          const finalEl = $(`#f-${kind}-final-price`);
+          const hintEl = $(`#f-${kind}-commission-hint`);
           const farmerPrice = Number(input.value) || 0;
           const commission = Math.round((farmerPrice * commissionPct / 100 + Number.EPSILON) * 100) / 100;
           const final = Math.round((farmerPrice + commission + Number.EPSILON) * 100) / 100;
-          pctEl.textContent = commissionPct;
-          amountEl.textContent = commission.toFixed(2);
-          finalEl.textContent = final.toFixed(2);
+          hintEl.innerHTML = t("ownerDashboard.form.commissionHintTemplate", {
+            pct: commissionPct,
+            amount: commission.toFixed(2),
+            final: final.toFixed(2),
+            currency: t("common.currency"),
+          });
         }
 
         $("#f-daily-price").addEventListener("input", () => updateCommissionPreview("daily"));
         $("#f-sale-price").addEventListener("input", () => updateCommissionPreview("sale"));
 
         function toggleListingPriceFields() {
-          const t = $("#f-listing-type").value;
+          const listingType = $("#f-listing-type").value;
           const daily = $("#f-daily-price");
           const sale = $("#f-sale-price");
           const saleWrap = $("#f-sale-wrap");
@@ -1409,11 +1426,11 @@
           const stockWrap = $("#f-stock-wrap");
           const depositWrap = $("#f-deposit-wrap");
           const depositInput = $("#f-deposit-amount");
-          if (t === "rent") {
+          if (listingType === "rent") {
             daily.required = true;
             sale.required = false;
             sale.value = "";
-          } else if (t === "sale") {
+          } else if (listingType === "sale") {
             daily.required = false;
             sale.required = true;
             daily.value = "";
@@ -1423,7 +1440,7 @@
           }
           // For rent-only listings, sale price and stock quantity don't
           // apply — hide them entirely instead of just making them optional.
-          if (t === "rent") {
+          if (listingType === "rent") {
             saleWrap.style.display = "none";
             stockWrap.style.display = "none";
             stock.value = "1";
@@ -1434,7 +1451,7 @@
           // Deposits only make sense for rentals (or 'both' which can be
           // rented). Hide it on sale-only and clear the field so the value
           // doesn't carry over silently.
-          if (t === "sale") {
+          if (listingType === "sale") {
             depositWrap.style.display = "none";
             depositInput.value = "";
           } else {
@@ -1514,10 +1531,10 @@
                 method: "PATCH",
                 body: payload,
               });
-              showToast("تم تحديث المعدة بنجاح");
+              showToast(t("ownerDashboard.toasts.equipmentUpdated"));
             } else {
               await api("/equipment", { method: "POST", body: payload });
-              showToast("تمت إضافة المعدة بنجاح");
+              showToast(t("ownerDashboard.toasts.equipmentAdded"));
             }
             resetForm();
             await refreshEquipment();
@@ -1564,23 +1581,16 @@
         }
 
         function badgeFor(status) {
-          const labels = {
-            available: "متاح",
-            rented: "مؤجر",
-            sold: "مباع",
-            maintenance: "صيانة",
-            hidden: "مخفي",
-          };
-          return `<span class="badge badge-${status}">${labels[status] || status}</span>`;
+          return `<span class="badge badge-${status}">${statusLabel(status)}</span>`;
         }
 
         function priceLabel(eq) {
           const parts = [];
           if (eq.daily_price != null && eq.daily_price !== "")
-            parts.push(`${eq.daily_price} ر.ع / يوم`);
+            parts.push(`${eq.daily_price} ${t("common.currency")} / ${t("common.perDay")}`);
           if (eq.sale_price != null && eq.sale_price !== "")
-            parts.push(`بيع: ${eq.sale_price} ر.ع`);
-          return parts.join(" · ") || "بدون سعر";
+            parts.push(`${t("ownerDashboard.saleLabelPrefix")} ${eq.sale_price} ${t("common.currency")}`);
+          return parts.join(" · ") || t("ownerDashboard.noPriceLabel");
         }
 
         function escapeHtml(s) {
@@ -1598,15 +1608,14 @@
           );
         }
 
-        const CAT_LABELS = {
-          tractor:"جرارات", sprayer:"مرشات", harvester:"حصادات",
-          tools:"أدوات", seeds:"بذور", fertilizer:"أسمدة",
-          pesticide:"مبيدات", other:"أخرى",
-        };
-        const STATUS_LABELS = {
-          available:"متاح", rented:"مؤجر", maintenance:"صيانة",
-          sold:"مباع", hidden:"مخفي",
-        };
+        function catLabel(cat) {
+          const label = t(`ownerDashboard.categories.${cat}`);
+          return label.startsWith("ownerDashboard.categories.") ? cat : label;
+        }
+        function statusLabel(status) {
+          const label = t(`ownerDashboard.statusOptions.${status}`);
+          return label.startsWith("ownerDashboard.statusOptions.") ? status : label;
+        }
         const STATUS_ICONS = {
           available:"fa-check-circle", rented:"fa-key",
           maintenance:"fa-tools", sold:"fa-handshake", hidden:"fa-eye-slash",
@@ -1633,20 +1642,20 @@
             const isHidden = eq.status === "hidden";
 
             const typeBadge = eq.listing_type === "sale"
-              ? `<span class="eq-badge eq-badge--sale"><i class="fas fa-tag"></i> للبيع</span>`
+              ? `<span class="eq-badge eq-badge--sale"><i class="fas fa-tag"></i> ${t("ownerDashboard.badges.forSale")}</span>`
               : eq.listing_type === "both"
-              ? `<span class="eq-badge eq-badge--both"><i class="fas fa-exchange-alt"></i> بيع وإيجار</span>`
-              : `<span class="eq-badge eq-badge--rent"><i class="fas fa-key"></i> للإيجار</span>`;
+              ? `<span class="eq-badge eq-badge--both"><i class="fas fa-exchange-alt"></i> ${t("ownerDashboard.badges.bothSaleRent")}</span>`
+              : `<span class="eq-badge eq-badge--rent"><i class="fas fa-key"></i> ${t("ownerDashboard.badges.forRent")}</span>`;
 
             // Price row
             let priceHtml = "";
             if (eq.daily_price != null && eq.daily_price !== "") {
-              priceHtml += `<span class="eq-price-main">${Number(eq.daily_price).toFixed(2)}</span><span class="eq-price-unit">ر.ع / يوم</span>`;
+              priceHtml += `<span class="eq-price-main">${Number(eq.daily_price).toFixed(2)}</span><span class="eq-price-unit">${t("common.currency")} / ${t("common.perDay")}</span>`;
             }
             if (eq.sale_price != null && eq.sale_price !== "") {
-              priceHtml += `<span class="eq-price-extra">${eq.daily_price ? " · " : ""}بيع: ${Number(eq.sale_price).toFixed(2)} ر.ع</span>`;
+              priceHtml += `<span class="eq-price-extra">${eq.daily_price ? " · " : ""}${t("ownerDashboard.saleLabelPrefix")} ${Number(eq.sale_price).toFixed(2)} ${t("common.currency")}</span>`;
             }
-            if (!priceHtml) priceHtml = `<span class="eq-price-unit" style="color:var(--color-text-soft)">بدون سعر</span>`;
+            if (!priceHtml) priceHtml = `<span class="eq-price-unit" style="color:var(--color-text-soft)">${t("ownerDashboard.noPriceLabel")}</span>`;
 
             const card = document.createElement("div");
             card.className = "equip-card";
@@ -1659,36 +1668,36 @@
                   : `<div class="eq-placeholder"><i class="fas fa-tractor"></i></div>`
                 }
                 <div class="eq-badges">
-                  ${isNew ? `<span class="eq-badge eq-badge--new"><i class="fas fa-star"></i> جديد</span>` : ""}
+                  ${isNew ? `<span class="eq-badge eq-badge--new"><i class="fas fa-star"></i> ${t("ownerDashboard.badges.new")}</span>` : ""}
                   ${typeBadge}
                 </div>
                 <span class="eq-status-pill eq-s-${eq.status}">
                   <i class="fas ${STATUS_ICONS[eq.status] || "fa-circle"}"></i>
-                  ${STATUS_LABELS[eq.status] || eq.status}
+                  ${statusLabel(eq.status)}
                 </span>
               </div>
               <div class="eq-body">
-                <div class="eq-cat"><i class="fas fa-tag"></i> ${escapeHtml(CAT_LABELS[eq.category] || eq.category)}</div>
+                <div class="eq-cat"><i class="fas fa-tag"></i> ${escapeHtml(catLabel(eq.category))}</div>
                 <h3 class="eq-name">${escapeHtml(eq.name)}</h3>
                 <div class="eq-price-row">${priceHtml}</div>
                 <div class="eq-meta-row">
-                  ${eq.governorate ? `<span><i class="fas fa-map-marker-alt"></i> ${escapeHtml(GOV_LABELS[eq.governorate] || eq.governorate)}</span>` : ""}
-                  ${eq.stock != null ? `<span><i class="fas fa-cubes"></i> الكمية: ${eq.stock}</span>` : ""}
-                  ${eq.deposit_amount ? `<span><i class="fas fa-shield-alt"></i> تأمين: ${Number(eq.deposit_amount).toFixed(0)} ر.ع</span>` : ""}
+                  ${eq.governorate ? `<span><i class="fas fa-map-marker-alt"></i> ${escapeHtml(govLabel(eq.governorate))}</span>` : ""}
+                  ${eq.stock != null ? `<span><i class="fas fa-cubes"></i> ${t("ownerDashboard.quantityLabelPrefix")} ${eq.stock}</span>` : ""}
+                  ${eq.deposit_amount ? `<span><i class="fas fa-shield-alt"></i> ${t("ownerDashboard.depositLabelPrefix")} ${Number(eq.deposit_amount).toFixed(0)} ${t("common.currency")}</span>` : ""}
                 </div>
                 <div class="eq-actions">
                   <button class="eq-btn eq-btn--edit" data-id="${eq.id}">
-                    <i class="fas fa-edit"></i> تعديل
+                    <i class="fas fa-edit"></i> ${t("ownerDashboard.editBtn")}
                   </button>
                   <button class="eq-btn ${isHidden ? "eq-btn--show" : "eq-btn--hide"}"
                           data-id="${eq.id}" data-cur="${eq.status}">
                     <i class="fas ${isHidden ? "fa-eye" : "fa-eye-slash"}"></i>
-                    ${isHidden ? "تفعيل" : "إيقاف"}
+                    ${isHidden ? t("ownerDashboard.activateBtn") : t("ownerDashboard.deactivateBtn")}
                   </button>
-                  <button class="eq-btn eq-btn--pdf" data-id="${eq.id}" title="عرض الملف الفني PDF">
+                  <button class="eq-btn eq-btn--pdf" data-id="${eq.id}" title="${t("ownerDashboard.pdfBtnTitle")}">
                     <i class="fas fa-file-pdf"></i>
                   </button>
-                  <button class="eq-btn eq-btn--del" data-id="${eq.id}" title="حذف">
+                  <button class="eq-btn eq-btn--del" data-id="${eq.id}" title="${t("ownerDashboard.deleteBtnTitle")}">
                     <i class="fas fa-trash"></i>
                   </button>
                 </div>
@@ -1710,7 +1719,7 @@
             b.addEventListener("click", () => {
               const cached = ownerEquipCache[b.dataset.id];
               if (cached && window.generateEquipmentPDF) generateEquipmentPDF(cached);
-              else showToast("بيانات المعدة غير متاحة", true);
+              else showToast(t("ownerDashboard.toasts.equipmentDataUnavailable"), true);
             })
           );
         }
@@ -1733,13 +1742,13 @@
           };
 
           wrap.appendChild(
-            mk("السابق", Math.max(1, p.page - 1), { disabled: p.page === 1 }),
+            mk(t("ownerDashboard.pagination.prev"), Math.max(1, p.page - 1), { disabled: p.page === 1 }),
           );
           for (let i = 1; i <= p.pages; i++) {
             wrap.appendChild(mk(String(i), i, { active: i === p.page }));
           }
           wrap.appendChild(
-            mk("التالي", Math.min(p.pages, p.page + 1), {
+            mk(t("ownerDashboard.pagination.next"), Math.min(p.pages, p.page + 1), {
               disabled: p.page === p.pages,
             }),
           );
@@ -1813,7 +1822,7 @@
             const pdfLinkEl = $("#pdf-current-link");
             if (pdfUrlEl) pdfUrlEl.value = specs.datasheet_pdf_url || "";
             if (pdfLinkEl && specs.datasheet_pdf_url) {
-              pdfLinkEl.innerHTML = `<a href="${escapeHtml(specs.datasheet_pdf_url)}" target="_blank"><i class="fas fa-file-pdf"></i> عرض الملف المرفوع الحالي</a>`;
+              pdfLinkEl.innerHTML = `<a href="${escapeHtml(specs.datasheet_pdf_url)}" target="_blank"><i class="fas fa-file-pdf"></i> ${t("ownerDashboard.form.specsAcc.pdfCurrentLinkText")}</a>`;
             } else if (pdfLinkEl) {
               pdfLinkEl.innerHTML = "";
             }
@@ -1830,10 +1839,10 @@
         }
 
         async function deleteEquipment(id) {
-          if (!confirm("هل تريد حذف هذه المعدة نهائياً؟")) return;
+          if (!confirm(t("ownerDashboard.toasts.confirmDelete"))) return;
           try {
             await api(`/equipment/${id}`, { method: "DELETE" });
-            showToast("تم الحذف");
+            showToast(t("ownerDashboard.toasts.deleted"));
             await refreshEquipment();
           } catch (err) {
             showToast(err.message, true);
@@ -1844,7 +1853,7 @@
           const newStatus = currentStatus === "hidden" ? "available" : "hidden";
           try {
             await api(`/equipment/${id}`, { method: "PATCH", body: { status: newStatus } });
-            showToast(newStatus === "hidden" ? "تم الإيقاف المؤقت" : "تم تفعيل المعدة");
+            showToast(newStatus === "hidden" ? t("ownerDashboard.toasts.deactivated") : t("ownerDashboard.toasts.activated"));
             await refreshEquipment();
           } catch (err) {
             showToast(err.message, true);
@@ -1903,12 +1912,29 @@
                   body: form,
                 });
                 const data = await res.json();
-                if (!data.success) throw new Error(data.error?.message || "فشل الرفع");
+                if (!data.success) throw new Error(data.error?.message || t("ownerDashboard.toasts.pdfUploadFailed"));
                 if (urlEl) urlEl.value = data.url;
-                if (linkEl) linkEl.innerHTML = `<a href="${escapeHtml(data.url)}" target="_blank"><i class="fas fa-file-pdf"></i> عرض الملف المرفوع</a>`;
-                showToast("تم رفع ملف PDF بنجاح");
+                if (linkEl) linkEl.innerHTML = `<a href="${escapeHtml(data.url)}" target="_blank"><i class="fas fa-file-pdf"></i> ${t("ownerDashboard.form.specsAcc.pdfUploadedLinkText")}</a>`;
+                showToast(t("ownerDashboard.toasts.pdfUploaded"));
               } catch (err) {
-                showToast(err.message || "فشل رفع الملف", true);
+                showToast(err.message || t("ownerDashboard.toasts.pdfUploadGenericFailed"), true);
+              }
+            });
+          }
+
+          if (window.HarthI18n) {
+            document.addEventListener("harth:langchange", () => {
+              updateCommissionPreview("daily");
+              updateCommissionPreview("sale");
+              updateFormMode();
+              if ($("#dashboard-section") && !$("#dashboard-section").classList.contains("hidden")) {
+                const user = getUser();
+                if (user) {
+                  renderStatusBanner(user);
+                  renderTrustBanner(user);
+                  $("#welcome-text").textContent = t("ownerDashboard.welcomeTemplate", { name: user.name || user.email });
+                }
+                refreshEquipment();
               }
             });
           }

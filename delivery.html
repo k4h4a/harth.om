@@ -3,7 +3,25 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>لوحة المندوب - حرث</title>
+    <script>
+      // Apply the saved language/direction before first paint so there's no
+      // flash of Arabic/RTL when the visitor's saved language is English.
+      (function () {
+        try {
+          if (localStorage.getItem("harth_lang") === "en") {
+            document.documentElement.lang = "en";
+            document.documentElement.dir = "ltr";
+          }
+        } catch (e) {}
+        document.documentElement.classList.add("i18n-loading");
+      })();
+    </script>
+    <style>
+      html.i18n-loading body {
+        visibility: hidden;
+      }
+    </style>
+    <title data-i18n="delivery.title">لوحة المندوب - حرث</title>
     <link
       href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700&display=swap"
       rel="stylesheet"
@@ -176,7 +194,7 @@
           <ul class="nav-links"></ul>
         </nav>
         <div class="section left" id="auth-header">
-          <a href="register.html" class="hs-btn hs-btn--ghost hs-btn--sm" id="login-link">تسجيل دخول</a>
+          <a href="register.html" class="hs-btn hs-btn--ghost hs-btn--sm" id="login-link" data-i18n="common.buttons.login">تسجيل دخول</a>
         </div>
       </div>
     </header>
@@ -187,8 +205,8 @@
         <div style="display:flex;gap:12px;align-items:flex-start">
           <i class="fas fa-info-circle" id="status-banner-icon" style="font-size:24px;color:#f1c40f;margin-top:2px"></i>
           <div style="flex:1">
-            <div id="status-banner-title" style="font-weight:700;font-size:16px">حسابك قيد المراجعة</div>
-            <div id="status-banner-msg" style="font-size:14px;color:#ddd;margin-top:6px">
+            <div id="status-banner-title" style="font-weight:700;font-size:16px" data-i18n="delivery.statusBanner.defaultTitle">حسابك قيد المراجعة</div>
+            <div id="status-banner-msg" style="font-size:14px;color:#ddd;margin-top:6px" data-i18n="delivery.statusBanner.defaultMsg">
               حسابك كمندوب توصيل قيد المراجعة من قِبل الإدارة. لا يمكنك قبول طلبات التوصيل حتى الموافقة على حسابك.
             </div>
           </div>
@@ -197,15 +215,15 @@
 
       <div class="tabs">
         <button class="tab active" data-tab="available">
-          <i class="fas fa-inbox"></i> طلبات متاحة
+          <i class="fas fa-inbox"></i> <span data-i18n="delivery.tabs.available">طلبات متاحة</span>
           <span id="available-count" style="margin-inline-start:6px"></span>
         </button>
         <button class="tab" data-tab="mine">
-          <i class="fas fa-user-check"></i> طلباتي النشطة
+          <i class="fas fa-user-check"></i> <span data-i18n="delivery.tabs.mine">طلباتي النشطة</span>
           <span id="mine-count" style="margin-inline-start:6px"></span>
         </button>
         <button class="tab" data-tab="history">
-          <i class="fas fa-history"></i> السجل
+          <i class="fas fa-history"></i> <span data-i18n="delivery.tabs.history">السجل</span>
         </button>
       </div>
 
@@ -222,6 +240,8 @@
 
     <div id="toast"></div>
 
+    <script src="i18n.js"></script>
+    <script src="lang-switcher.js"></script>
     <script src="design-system.js"></script>
     <script src="unified-nav.js"></script>
     <script src="script.js"></script>
@@ -235,6 +255,13 @@
 
         const $ = (s) => document.querySelector(s);
         const $$ = (s) => Array.from(document.querySelectorAll(s));
+
+        function t(key, vars) {
+          return window.HarthI18n ? window.HarthI18n.t(key, vars) : key;
+        }
+        function localeTag() {
+          return window.HarthI18n ? window.HarthI18n.localeTag() : "ar";
+        }
 
         function showToast(msg, isError = false) {
           const t = $("#toast");
@@ -276,44 +303,28 @@
         // markup serve "no jobs available", "no active jobs", and the
         // "history is empty" cases without code duplication.
         function deliveryEmptyState(variant) {
-          const variants = {
-            available: {
-              title: "لا توجد طلبات متاحة الآن",
-              desc: "اطمئن، الطلبات الجديدة تظهر هنا فور وصولها. تُحدَّث القائمة تلقائياً كل ١٥ ثانية.",
-              icon: '<path d="M16 24L22 30L34 18" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><circle cx="24" cy="24" r="20" stroke="currentColor" stroke-width="2"/>',
-            },
-            mine: {
-              title: "لا توجد طلبات نشطة لديك",
-              desc: "عندما تقبل طلباً جديداً من تبويب «طلبات متاحة» سيظهر هنا حتى يكتمل التسليم.",
-              icon: '<path d="M14 24V36C14 37.1046 14.8954 38 16 38H32C33.1046 38 34 37.1046 34 36V24" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><path d="M10 16H38L34 24H14L10 16Z" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/><path d="M20 28H28" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>',
-            },
-            history: {
-              title: "السجل فارغ",
-              desc: "ستظهر هنا جميع الطلبات التي أكملتها أو ألغيتها للرجوع إليها لاحقاً.",
-              icon: '<circle cx="24" cy="24" r="18" stroke="currentColor" stroke-width="2"/><path d="M24 14V24L30 28" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>',
-            },
+          const icons = {
+            available: '<path d="M16 24L22 30L34 18" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><circle cx="24" cy="24" r="20" stroke="currentColor" stroke-width="2"/>',
+            mine: '<path d="M14 24V36C14 37.1046 14.8954 38 16 38H32C33.1046 38 34 37.1046 34 36V24" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><path d="M10 16H38L34 24H14L10 16Z" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/><path d="M20 28H28" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>',
+            history: '<circle cx="24" cy="24" r="18" stroke="currentColor" stroke-width="2"/><path d="M24 14V24L30 28" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>',
           };
-          const v = variants[variant] || variants.available;
+          const icon = icons[variant] || icons.available;
+          const title = t(`delivery.emptyStates.${variant}.title`);
+          const desc = t(`delivery.emptyStates.${variant}.desc`);
           return `
             <div class="hs-empty">
               <div class="hs-empty__art">
-                <svg width="48" height="48" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">${v.icon}</svg>
+                <svg width="48" height="48" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">${icon}</svg>
               </div>
-              <h3 class="hs-empty__title">${v.title}</h3>
-              <p class="hs-empty__desc">${v.desc}</p>
+              <h3 class="hs-empty__title">${title}</h3>
+              <p class="hs-empty__desc">${desc}</p>
             </div>
           `;
         }
 
         function statusLabel(s) {
-          return ({
-            pending: "بانتظار مندوب",
-            accepted: "مقبولة",
-            picked_up: "تم الاستلام",
-            in_transit: "في الطريق",
-            delivered: "تم التسليم",
-            cancelled: "مُلغى",
-          })[s] || s;
+          const label = t(`delivery.statusLabels.${s}`);
+          return label.startsWith("delivery.statusLabels.") ? s : label;
         }
         function statusColor(s) {
           return ({
@@ -329,7 +340,7 @@
             return null;
           }
           if (user.role !== "delivery" && user.role !== "admin") {
-            alert("هذه الصفحة لمندوبي التوصيل فقط.");
+            alert(t("delivery.alerts.deliveryOnly"));
             window.location.href = "index.html";
             return null;
           }
@@ -349,12 +360,12 @@
         // ---------- Fetch helpers ----------
         async function fetchAvailable() {
           const res = await apiFetch("/deliveries?scope=available&limit=50");
-          if (!res?.success) throw new Error(res?.error?.message || "فشل التحميل");
+          if (!res?.success) throw new Error(res?.error?.message || t("delivery.toasts.loadFailed"));
           return res.items || [];
         }
         async function fetchMine(historyOnly = false) {
           const res = await apiFetch("/deliveries?scope=mine&limit=100");
-          if (!res?.success) throw new Error(res?.error?.message || "فشل التحميل");
+          if (!res?.success) throw new Error(res?.error?.message || t("delivery.toasts.loadFailed"));
           const items = res.items || [];
           return historyOnly
             ? items.filter((d) => ["delivered", "cancelled"].includes(d.status))
@@ -385,6 +396,7 @@
             ? safeJson(d.dropoff_address) : d.dropoff_address;
 
           // Build extra info from order or rental if linked
+          const dirArrow = document.documentElement.getAttribute("dir") === "rtl" ? "←" : "→";
           let orderInfoHtml = "";
           if (d.rental_meta) {
             const r = d.rental_meta;
@@ -394,35 +406,35 @@
             orderInfoHtml = `
               <div style="background:rgba(241,196,15,0.08);border:1px solid rgba(241,196,15,0.25);border-radius:8px;padding:10px;margin:10px 0;font-size:13px">
                 <div style="display:flex;justify-content:space-between;margin-bottom:4px">
-                  <span style="color:#f1c40f;font-weight:700"><i class="fas fa-key"></i> إيجار — ${escapeHtml(r.tracking_number || "")}</span>
-                  <span style="color:#fff;font-weight:700">${rTotal} ر.ع</span>
+                  <span style="color:#f1c40f;font-weight:700"><i class="fas fa-key"></i> ${t("delivery.job.rentalPrefix")} — ${escapeHtml(r.tracking_number || "")}</span>
+                  <span style="color:#fff;font-weight:700">${rTotal} ${t("common.currency")}</span>
                 </div>
-                <div style="color:#bbb;margin-bottom:4px">${escapeHtml(r.equipment_name || "معدة")}</div>
-                <div style="color:#888"><i class="fas fa-calendar-alt"></i> ${startD} ← ${endD}</div>
+                <div style="color:#bbb;margin-bottom:4px">${escapeHtml(r.equipment_name || t("delivery.job.equipmentFallback"))}</div>
+                <div style="color:#888"><i class="fas fa-calendar-alt"></i> ${startD} ${dirArrow} ${endD}</div>
               </div>
             `;
           } else if (d.order_meta) {
             const o = d.order_meta;
             const itemsSummary = (o.items || []).slice(0, 3)
-              .map(it => `${escapeHtml(it.equipment_name_snapshot || "منتج")} × ${it.quantity}`)
-              .join("، ");
+              .map(it => `${escapeHtml(it.equipment_name_snapshot || t("delivery.job.productFallback"))} × ${it.quantity}`)
+              .join(t("delivery.job.listSeparator"));
             const more = (o.items || []).length > 3 ? ` (+${o.items.length - 3})` : "";
             orderInfoHtml = `
               <div style="background:rgba(106,176,76,0.08);border:1px solid rgba(106,176,76,0.2);border-radius:8px;padding:10px;margin:10px 0;font-size:13px">
                 <div style="display:flex;justify-content:space-between;margin-bottom:4px">
                   <span style="color:#6ab04c;font-weight:700"><i class="fas fa-receipt"></i> ${escapeHtml(o.tracking_number || "")}</span>
-                  <span style="color:#fff;font-weight:700">${Number(o.total || 0).toFixed(2)} ر.ع</span>
+                  <span style="color:#fff;font-weight:700">${Number(o.total || 0).toFixed(2)} ${t("common.currency")}</span>
                 </div>
                 ${itemsSummary ? `<div style="color:#bbb">${itemsSummary}${more}</div>` : ""}
                 <div style="color:#888;margin-top:4px">
-                  <i class="fas fa-credit-card"></i> ${o.payment_method === "cash_on_delivery" ? "عند الاستلام" : "بطاقة"}
+                  <i class="fas fa-credit-card"></i> ${o.payment_method === "cash_on_delivery" ? t("delivery.job.paymentCod") : t("delivery.job.paymentCard")}
                 </div>
               </div>
             `;
           }
 
           const feeHtml = d.fee && Number(d.fee) > 0
-            ? `<span style="background:rgba(241,196,15,0.15);border:1px solid rgba(241,196,15,0.3);padding:3px 10px;border-radius:999px;font-size:12px;color:#f1c40f"><i class="fas fa-coins"></i> عمولة: ${Number(d.fee).toFixed(2)} ر.ع</span>`
+            ? `<span style="background:rgba(241,196,15,0.15);border:1px solid rgba(241,196,15,0.3);padding:3px 10px;border-radius:999px;font-size:12px;color:#f1c40f"><i class="fas fa-coins"></i> ${t("delivery.job.feeLabel", { amount: Number(d.fee).toFixed(2), currency: t("common.currency") })}</span>`
             : "";
 
           return `
@@ -434,18 +446,18 @@
               ${orderInfoHtml}
               <div class="job-info">
                 <div class="job-info-item">
-                  <div class="label"><i class="fas fa-map-marker-alt" style="color:#e74c3c"></i> نقطة الاستلام</div>
+                  <div class="label"><i class="fas fa-map-marker-alt" style="color:#e74c3c"></i> ${t("delivery.job.pickupLabel")}</div>
                   <div class="value">${escapeHtml(formatAddress(pickup))}</div>
                 </div>
                 <div class="job-info-item">
-                  <div class="label"><i class="fas fa-flag-checkered" style="color:#6ab04c"></i> عنوان التسليم</div>
+                  <div class="label"><i class="fas fa-flag-checkered" style="color:#6ab04c"></i> ${t("delivery.job.dropoffLabel")}</div>
                   <div class="value">${escapeHtml(formatAddress(dropoff))}</div>
                 </div>
               </div>
               ${feeHtml ? `<div style="margin:8px 0">${feeHtml}</div>` : ""}
               ${d.notes ? `<div style="background:rgba(0,0,0,0.2);padding:8px;border-radius:6px;font-size:13px;color:#ccc;margin-bottom:10px"><i class="fas fa-sticky-note"></i> ${escapeHtml(d.notes)}</div>` : ""}
               <div style="font-size:12px;color:#666;margin-bottom:8px">
-                <i class="fas fa-clock"></i> ${new Date(d.created_at).toLocaleString("ar")}
+                <i class="fas fa-clock"></i> ${new Date(d.created_at).toLocaleString(localeTag())}
               </div>
               <div class="job-actions">${actions}</div>
             </div>
@@ -481,11 +493,11 @@
         function nextActions(d) {
           switch (d.status) {
             case "accepted":
-              return `<button class="btn btn-blue" data-pickup="${d.id}"><i class="fas fa-dolly"></i> تم الاستلام</button>`;
+              return `<button class="btn btn-blue" data-pickup="${d.id}"><i class="fas fa-dolly"></i> ${t("delivery.jobActions.pickup")}</button>`;
             case "picked_up":
-              return `<button class="btn btn-orange" data-transit="${d.id}"><i class="fas fa-route"></i> بدأت التوصيل</button>`;
+              return `<button class="btn btn-orange" data-transit="${d.id}"><i class="fas fa-route"></i> ${t("delivery.jobActions.startTransit")}</button>`;
             case "in_transit":
-              return `<button class="btn btn-green" data-delivered="${d.id}"><i class="fas fa-check-circle"></i> تم التسليم</button>`;
+              return `<button class="btn btn-green" data-delivered="${d.id}"><i class="fas fa-check-circle"></i> ${t("delivery.jobActions.delivered")}</button>`;
             default:
               return "";
           }
@@ -507,24 +519,25 @@
         const ACTIONS_NEEDING_PROOF = new Set(["pickup", "delivered"]);
 
         async function actOn(action, deliveryId) {
-          const labels = {
-            accept: "قبول الطلب",
-            pickup: "تأكيد الاستلام",
-            "in-transit": "بدء التوصيل",
-            delivered: "تأكيد التسليم",
+          const labelKeys = {
+            accept: "accept",
+            pickup: "pickup",
+            "in-transit": "inTransit",
+            delivered: "delivered",
           };
+          const label = t(`delivery.actionLabels.${labelKeys[action]}`);
 
           // For pickup & delivered, open the proof-upload modal first.
           // For accept & in-transit, a simple confirm is enough.
           let proofUrls = [];
           let proofLocation = null;
           if (ACTIONS_NEEDING_PROOF.has(action)) {
-            const result = await askForProofPhoto(labels[action]);
+            const result = await askForProofPhoto(label);
             if (!result) return; // user cancelled
             proofUrls = result.urls || [];
             proofLocation = result.location || null;
           } else {
-            if (!confirm(`${labels[action]}؟`)) return;
+            if (!confirm(t("delivery.confirmAction", { label }))) return;
           }
 
           try {
@@ -535,8 +548,8 @@
               method: "POST",
               body: JSON.stringify(body),
             });
-            if (!res?.success) throw new Error(res?.error?.message || "فشل");
-            showToast("✓ تم بنجاح");
+            if (!res?.success) throw new Error(res?.error?.message || t("delivery.toasts.genericFailed"));
+            showToast(t("delivery.toasts.actionSuccess"));
             loadAvailable();
             loadMine();
           } catch (err) {
@@ -575,19 +588,19 @@
                   <i class="fas fa-camera"></i> ${escapeHtml(actionLabel)}
                 </h3>
                 <p style="color:#bbb;font-size:13px;margin-bottom:10px">
-                  التقط صورة مباشرة من الكاميرا لتأكيد العملية — لن تُقبل الصور من المعرض على الأجهزة المحمولة.
+                  ${t("delivery.proofModal.instructions")}
                 </p>
 
                 <!-- GPS status bar -->
                 <div id="gps-bar" style="background:rgba(241,196,15,0.12);border:1px solid rgba(241,196,15,0.3);border-radius:8px;padding:8px 12px;font-size:12px;margin-bottom:12px;display:flex;align-items:center;gap:8px">
                   <i class="fas fa-location-dot" style="color:#f1c40f"></i>
-                  <span id="gps-text" style="color:#f1c40f">جارٍ تحديد موقعك...</span>
+                  <span id="gps-text" style="color:#f1c40f">${t("delivery.proofModal.gpsDetecting")}</span>
                 </div>
 
                 <!-- Camera-only file input: capture="environment" on mobile blocks gallery -->
                 <label style="display:block;background:rgba(106,176,76,0.15);border:2px dashed rgba(106,176,76,0.5);border-radius:10px;padding:16px;text-align:center;cursor:pointer;margin-bottom:12px">
                   <i class="fas fa-camera" style="font-size:28px;color:#6ab04c;display:block;margin-bottom:6px"></i>
-                  <span style="font-size:13px;color:#bbb">اضغط هنا لفتح الكاميرا</span>
+                  <span style="font-size:13px;color:#bbb">${t("delivery.proofModal.tapToOpenCamera")}</span>
                   <input type="file" id="proof-input" accept="image/*" capture="environment"
                     style="display:none" />
                 </label>
@@ -597,13 +610,13 @@
 
                 <div style="display:flex;gap:8px">
                   <button id="proof-submit" class="btn btn-green" disabled style="flex:1;opacity:0.5">
-                    <i class="fas fa-check"></i> تأكيد الإرسال
+                    <i class="fas fa-check"></i> ${t("delivery.proofModal.confirmSubmitBtn")}
                   </button>
                   <button id="proof-retake" class="btn btn-blue" style="flex:1;display:none">
-                    <i class="fas fa-redo"></i> إعادة الالتقاط
+                    <i class="fas fa-redo"></i> ${t("delivery.proofModal.retakeBtn")}
                   </button>
                   <button id="proof-cancel" class="btn btn-red" style="flex:0 0 auto;padding:8px 14px">
-                    إلغاء
+                    ${t("delivery.proofModal.cancelBtn")}
                   </button>
                 </div>
               </div>
@@ -624,12 +637,12 @@
             captureGps().then((loc) => {
               capturedGps = loc;
               if (loc) {
-                gpsText.textContent = `✓ تم تحديد الموقع (دقة ±${loc.accuracy}م)`;
+                gpsText.textContent = t("delivery.proofModal.gpsSuccess", { accuracy: loc.accuracy });
                 gpsText.style.color = "#a9dc98";
                 overlay.querySelector("#gps-bar").style.borderColor = "rgba(106,176,76,0.4)";
                 overlay.querySelector("#gps-bar").style.background = "rgba(106,176,76,0.08)";
               } else {
-                gpsText.textContent = "تعذّر تحديد الموقع (تأكد من إذن الموقع)";
+                gpsText.textContent = t("delivery.proofModal.gpsFailed");
                 gpsText.style.color = "#ffb3b3";
               }
             });
@@ -658,7 +671,7 @@
                 ? { ...capturedGps, client_ts: new Date().toISOString() }
                 : { client_ts: new Date().toISOString() };
 
-              status.textContent = "جارٍ الرفع...";
+              status.textContent = t("delivery.proofModal.uploading");
               status.style.color = "#aaa";
               submitBtn.disabled = true;
               submitBtn.style.opacity = "0.5";
@@ -677,10 +690,10 @@
                   body: fd,
                 });
                 const data = await r.json();
-                if (!r.ok || !data?.success) throw new Error(data?.error?.message || "فشل الرفع");
+                if (!r.ok || !data?.success) throw new Error(data?.error?.message || t("delivery.proofModal.uploadFailed"));
                 uploadedUrls = [data.url];
                 preview.innerHTML = `<img src="${escapeHtml(data.url)}" style="max-width:100%;max-height:200px;border-radius:8px;border:2px solid #6ab04c" />`;
-                status.textContent = "✓ تم الرفع — اضغط تأكيد الإرسال";
+                status.textContent = t("delivery.proofModal.uploadSuccess");
                 status.style.color = "#a9dc98";
                 submitBtn.disabled = false;
                 submitBtn.style.opacity = "1";
@@ -721,7 +734,7 @@
               return;
             }
             renderList(items, "available-list", (d) =>
-              `<button class="btn btn-green" data-accept="${d.id}"><i class="fas fa-check"></i> قبول الطلب</button>`
+              `<button class="btn btn-green" data-accept="${d.id}"><i class="fas fa-check"></i> ${t("delivery.jobActions.accept")}</button>`
             );
           } catch (err) {
             $("#available-list").innerHTML = `<div class="empty" style="color:#ffb3b3">${escapeHtml(err.message)}</div>`;
@@ -789,17 +802,17 @@
           let title, msg, color;
           if (user.account_status === "pending") {
             color = "#f1c40f";
-            title = "حسابك قيد المراجعة";
-            msg = "حسابك كمندوب توصيل قيد المراجعة من قِبل الإدارة. لا يمكنك قبول طلبات التوصيل حتى يتم اعتماد حسابك. سيصلك إشعار فور المراجعة.";
+            title = t("delivery.statusBanner.pendingTitle");
+            msg = t("delivery.statusBanner.pendingMsg");
           } else if (user.account_status === "rejected") {
             color = "#e74c3c";
-            title = "تم رفض تفعيل صلاحيات حسابك";
-            msg = (user.status_reason ? `السبب: ${user.status_reason}. ` : "") +
-              "لا يمكنك حالياً قبول طلبات التوصيل. للتواصل مع الإدارة لإعادة المراجعة، يُرجى التواصل مع الدعم.";
+            title = t("delivery.statusBanner.rejectedTitle");
+            msg = (user.status_reason ? `${t("delivery.statusBanner.rejectedReasonPrefix")} ${user.status_reason}. ` : "") +
+              t("delivery.statusBanner.rejectedMsg");
           } else {
             color = "#e74c3c";
-            title = "حسابك غير مفعّل";
-            msg = "تواصل مع الإدارة لمزيد من المعلومات.";
+            title = t("delivery.statusBanner.inactiveTitle");
+            msg = t("delivery.statusBanner.inactiveMsg");
           }
 
           banner.style.background = `${color}1f`;
@@ -829,6 +842,8 @@
         }
 
         document.addEventListener("DOMContentLoaded", async () => {
+          if (window.HarthI18n) await window.HarthI18n.ready();
+
           const user = enforceAuth();
           if (!user) return;
 
@@ -837,6 +852,16 @@
           // the cached user.
           const fresh = (await refreshUserFromServer()) || user;
           renderStatusBanner(fresh);
+
+          if (window.HarthI18n) {
+            document.addEventListener("harth:langchange", () => {
+              renderStatusBanner(fresh);
+              const activeTab = document.querySelector(".tab.active")?.dataset.tab;
+              if (activeTab === "available") loadAvailable();
+              else if (activeTab === "mine") loadMine();
+              else if (activeTab === "history") loadHistory();
+            });
+          }
 
           // Pending/rejected couriers don't get the auto-refreshing job
           // board — the banner replaces it.

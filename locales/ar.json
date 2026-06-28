@@ -158,6 +158,1554 @@
       "skipTitle": "يمكنك إكمال التحقّق لاحقاً من إعدادات الحساب"
     }
   },
+  "myOrders": {
+    "title": "سجل طلباتي - حرث",
+    "pageTitlePart1": "سجل",
+    "pageTitlePart2": "طلباتي",
+    "pageSubtitle": "جميع طلباتك مرتبة من الأحدث إلى الأقدم",
+    "filters": {
+      "searchPlaceholder": "ابحث برقم الطلب أو رقم التتبع...",
+      "statusAll": "كل الحالات",
+      "statusOptions": {
+        "pending": "قيد الانتظار",
+        "confirmed": "مؤكد",
+        "approvedRental": "موافق عليه (إيجار)",
+        "shipped": "قيد التوصيل",
+        "activeRental": "فعّال (إيجار)",
+        "delivered": "تم التوصيل",
+        "completedRental": "مكتمل (إيجار)",
+        "cancelled": "ملغي",
+        "refunded": "مسترد"
+      },
+      "typeAll": "شراء وإيجار",
+      "typeSale": "شراء فقط",
+      "typeRental": "إيجار فقط",
+      "dateFromTitle": "من تاريخ",
+      "dateToTitle": "إلى تاريخ",
+      "clearBtn": "مسح"
+    },
+    "stats": {
+      "total": "إجمالي الطلبات",
+      "delivered": "تم تسليمها",
+      "active": "نشطة",
+      "spent": "إجمالي الإنفاق ({{currency}})"
+    },
+    "loadingOrders": "جارٍ تحميل طلباتك...",
+    "emptyState": {
+      "title": "لا توجد طلبات",
+      "desc": "لم تضع أي طلبات بعد، أو لا توجد طلبات تطابق الفلاتر المحددة.",
+      "shopNowBtn": "تسوق الآن"
+    },
+    "statusLabels": {
+      "pending": "جديد",
+      "confirmed": "مؤكد",
+      "shipped": "قيد التوصيل",
+      "delivered": "تم التوصيل",
+      "cancelled": "ملغي",
+      "refunded": "مسترد",
+      "approved": "موافق عليه",
+      "rejected": "مرفوض",
+      "active": "فعّال",
+      "completed": "مكتمل"
+    },
+    "paymentStatusLabels": {
+      "pending": "انتظار الدفع",
+      "paid": "مدفوع",
+      "failed": "فشل الدفع",
+      "refunded": "مسترد"
+    },
+    "paymentMethodLabels": {
+      "card": "بطاقة ائتمان",
+      "cash_on_delivery": "عند الاستلام",
+      "cod": "عند الاستلام"
+    },
+    "typeBadges": {
+      "rental": "إيجار",
+      "sale": "شراء"
+    },
+    "detailsLoading": "جارٍ تحميل التفاصيل...",
+    "toasts": {
+      "loadFailed": "فشل التحميل",
+      "detailsLoadFailed": "فشل تحميل التفاصيل",
+      "errorPrefix": "خطأ:",
+      "noItemsToReorder": "لا يوجد منتجات لإعادة طلبها",
+      "addingToCart": "جارٍ الإضافة...",
+      "reorderAdded": "✓ تمت إضافة {{n}} منتج للسلة",
+      "reorderFailed": "فشلت إعادة الطلب:",
+      "productFallback": "منتج",
+      "confirmCancelOrder": "هل أنت متأكد من إلغاء هذا الطلب؟",
+      "cancellingOrder": "جارٍ الإلغاء...",
+      "cancelOrderFailed": "فشل الإلغاء",
+      "orderCancelled": "تم إلغاء الطلب بنجاح",
+      "confirmCancelRental": "هل أنت متأكد من إلغاء هذا الإيجار؟",
+      "rentalCancelled": "تم إلغاء الإيجار بنجاح",
+      "loginRequired": "يجب تسجيل الدخول أولاً"
+    },
+    "rentalDetails": {
+      "equipmentFallback": "معدة",
+      "labels": {
+        "rentalNumber": "رقم الإيجار:",
+        "status": "الحالة:",
+        "startDate": "تاريخ البدء:",
+        "endDate": "تاريخ الانتهاء:",
+        "paymentMethod": "طريقة الدفع:",
+        "orderDate": "تاريخ الطلب:",
+        "deliveryAddress": "عنوان التسليم:",
+        "notes": "ملاحظات:"
+      },
+      "totals": { "rental": "الإيجار:", "deposit": "التأمين:", "grand": "الإجمالي:" },
+      "cancelBtn": "إلغاء الإيجار"
+    },
+    "orderDetails": {
+      "table": { "product": "المنتج", "quantity": "الكمية", "unitPrice": "سعر الوحدة", "total": "الإجمالي" },
+      "noItems": "لا تفاصيل منتجات متوفرة",
+      "labels": {
+        "trackingNumber": "رقم التتبع:",
+        "orderStatus": "حالة الطلب:",
+        "paymentMethod": "طريقة الدفع:",
+        "paymentStatus": "حالة الدفع:",
+        "deliveryAddress": "عنوان التوصيل:",
+        "orderDate": "تاريخ الطلب:",
+        "paymentDate": "تاريخ الدفع:",
+        "notes": "ملاحظات:"
+      },
+      "totals": {
+        "subtotal": "مجموع فرعي:",
+        "discount": "خصم:",
+        "loyaltyUsed": "نقاط مستخدمة:",
+        "shipping": "رسوم التوصيل:",
+        "tax": "الضريبة:",
+        "grand": "الإجمالي:"
+      },
+      "loyaltyUsedValue": "-{{n}} نقطة",
+      "reorderBtn": "إعادة الطلب",
+      "trackBtn": "تتبع الطلب",
+      "cancelBtn": "إلغاء الطلب"
+    }
+  },
+  "support": {
+    "title": "مركز الدعم الفني — حرث",
+    "hero": {
+      "headingPart1": "كيف يمكننا",
+      "headingPart2": "مساعدتك؟",
+      "subtitle": "مركز الدعم الفني لمنصة حرث — إجابات فورية وتذاكر دعم احترافية",
+      "searchPlaceholder": "ابحث عن مشكلتك مثلاً: كيف أستأجر معدة؟",
+      "chips": {
+        "rentEquipment": "كيف أستأجر معدة؟",
+        "paymentIssue": "مشكلة في الدفع",
+        "trackOrder": "تتبع الطلب",
+        "forgotPassword": "نسيت كلمة المرور",
+        "loyaltyPoints": "نقاط الولاء"
+      }
+    },
+    "tabs": { "home": "الرئيسية", "help": "مركز المساعدة", "tickets": "تذاكري", "newTicket": "تذكرة جديدة" },
+    "home": {
+      "quickActionsTitle": "إجراءات سريعة",
+      "qa": {
+        "openTicket": { "title": "فتح تذكرة دعم", "desc": "لم تجد حلاً؟ تواصل معنا مباشرة" },
+        "helpCenter": { "title": "مركز المساعدة", "desc": "مقالات وحلول لأكثر المشاكل شيوعاً" },
+        "whatsapp": { "title": "واتساب", "desc": "رد فوري خلال دقائق" },
+        "aiAssistant": { "title": "المساعد الذكي", "desc": "بوت يجيب على أسئلتك فوراً" }
+      },
+      "popularQuestionsTitle": "الأسئلة الأكثر شيوعاً",
+      "channelsTitle": "قنوات التواصل",
+      "channels": {
+        "whatsapp": { "label": "واتساب", "sub": "+968 1234 5678" },
+        "phone": { "label": "اتصال هاتفي", "sub": "الأحد–الخميس 8ص–5م" },
+        "email": { "label": "البريد الإلكتروني", "sub": "support@harth.om" },
+        "twitter": { "label": "تويتر / X", "sub": "@HarthOman" }
+      }
+    },
+    "help": {
+      "searchPlaceholder": "ابحث في مركز المساعدة...",
+      "searchResultsTitle": "نتائج البحث",
+      "noResultsText": "لا توجد نتائج. جرب كلمات مختلفة أو",
+      "noResultsLinkText": "افتح تذكرة دعم",
+      "categoriesTitle": "تصفح حسب التصنيف",
+      "allCategoriesLink": "جميع التصنيفات",
+      "backLink": "الرجوع",
+      "articleCountSuffix": "مقالة",
+      "helpfulQuestion": "هل أفادك هذا المقال؟",
+      "helpfulYes": "👍 نعم",
+      "helpfulNo": "👎 لا",
+      "openTicketFromArticle": "فتح تذكرة دعم",
+      "feedbackThanksPositive": "شكراً! سعيد أنه أفادك 🎉",
+      "feedbackThanksNegative": "شكراً لملاحظتك. سنحسّن المقال."
+    },
+    "categories": {
+      "technical": { "label": "تقنية" },
+      "financial": { "label": "مالية ودفع" },
+      "account": { "label": "الحساب" },
+      "orders": { "label": "الطلبات" },
+      "suggestion": { "label": "اقتراح" },
+      "complaint": { "label": "شكوى" }
+    },
+    "articles": {
+      "t1": {
+        "title": "تطبيق المنصة لا يفتح أو يتجمد",
+        "body": "إذا لم تفتح المنصة أو تجمدت، جرّب الخطوات التالية:\n\n1. امسح ذاكرة التخزين المؤقتة للمتصفح (Ctrl+Shift+Delete)\n2. تأكد من سرعة الإنترنت وأنها لا تقل عن 1Mbps\n3. جرّب متصفحاً مختلفاً (Chrome/Edge/Firefox)\n4. أوقف تشغيل VPN إن كنت تستخدمه\n5. تأكد من تحديث المتصفح لأحدث إصدار\n\nإذا استمرت المشكلة افتح تذكرة دعم مع لقطة شاشة.",
+        "tags": ["تقني", "بطيء", "لا يعمل", "تجمد"]
+      },
+      "t2": {
+        "title": "الصور لا تُحمَّل أو تظهر",
+        "body": "إذا لم تُحمَّل الصور:\n\n1. تحقق من اتصال الإنترنت\n2. امسح كاش المتصفح\n3. تأكد من أن الصورة بصيغة JPG/PNG/WEBP\n4. تأكد أن حجم الصورة لا يتجاوز 10 ميجابايت\n5. جرب تحديث الصفحة (F5)\n\nإذا لم تنجح الصور في الرفع، تأكد من صلاحيات الكاميرا/الوصول للملفات في المتصفح.",
+        "tags": ["صور", "تحميل", "لا تظهر"]
+      },
+      "t3": {
+        "title": "مشكلة في الإشعارات",
+        "body": "لتفعيل الإشعارات:\n\n1. اسمح للموقع بالإشعارات عند طلبها\n2. تأكد أن الجهاز غير على وضع \"صامت\" أو \"لا تزعج\"\n3. افتح إعدادات المتصفح ← الإشعارات ← اسمح لموقع حرث\n\nلاستقبال إشعارات البريد الإلكتروني، تأكد من صحة إيميلك في إعدادات الحساب.",
+        "tags": ["إشعارات", "تنبيهات", "لا تصل"]
+      },
+      "f1": {
+        "title": "كيف أدفع؟ طرق الدفع المتاحة",
+        "body": "طرق الدفع المتاحة في منصة حرث:\n\n✅ بطاقة ائتمانية (Visa / Mastercard)\n✅ الدفع عند الاستلام (COD) — متاح لبعض المناطق\n\nعند الدفع بالبطاقة:\n- أدخل بيانات البطاقة في الصفحة الآمنة\n- قد يُطلب منك رمز OTP من البنك\n- المبلغ يُخصم فوراً عند تأكيد الطلب",
+        "tags": ["دفع", "بطاقة", "استلام", "كاش"]
+      },
+      "f2": {
+        "title": "فشل عملية الدفع",
+        "body": "إذا فشلت عملية الدفع:\n\n1. تأكد من صحة بيانات البطاقة (رقم، تاريخ، CVV)\n2. تأكد أن الرصيد كافٍ\n3. تأكد أن البطاقة مفعَّلة للمدفوعات الإلكترونية\n4. اتصل بالبنك لرفع قيود الدفع عبر الإنترنت\n5. جرب بطاقة أخرى\n\nإذا خُصم المبلغ ولم يُكمل الطلب، يُرجع المبلغ خلال 3–5 أيام عمل تلقائياً.",
+        "tags": ["فشل", "رفض", "دفع", "خطأ بطاقة"]
+      },
+      "f3": {
+        "title": "استرداد المبلغ — متى يصل؟",
+        "body": "سياسة الاسترداد:\n\n• الإلغاء قبل 24 ساعة من موعد التسليم: استرداد كامل\n• الإلغاء بعد 24 ساعة: قد يُطبَّق رسم إلغاء\n• وقت الاسترداد: 3–7 أيام عمل لبطاقات الائتمان\n\nإذا مرت 7 أيام ولم يصل المبلغ، تواصل معنا بتذكرة دعم.",
+        "tags": ["استرداد", "استرجاع", "مبلغ", "رجوع"]
+      },
+      "a1": {
+        "title": "كيف أستعيد كلمة المرور؟",
+        "body": "لاستعادة كلمة المرور:\n\n1. اضغط \"نسيت كلمة المرور\" في صفحة تسجيل الدخول\n2. أدخل بريدك الإلكتروني المسجل\n3. افتح رسالة الاسترداد في بريدك (تحقق من مجلد الرسائل غير المرغوب فيها)\n4. اضغط الرابط وأدخل كلمة مرور جديدة\n\nالرابط صالح لمدة 24 ساعة فقط.",
+        "tags": ["كلمة مرور", "نسيت", "تسجيل دخول"]
+      },
+      "a2": {
+        "title": "كيف أغير معلومات حسابي؟",
+        "body": "لتعديل بيانات حسابك:\n\n1. اضغط على اسمك في الزاوية العلوية\n2. اختر \"إعدادات الحساب\"\n3. عدّل الاسم أو رقم الهاتف أو الصورة الشخصية\n4. احفظ التغييرات\n\nملاحظة: تغيير البريد الإلكتروني يتطلب تحقق إضافي.",
+        "tags": ["تعديل", "حساب", "اسم", "إيميل"]
+      },
+      "a3": {
+        "title": "كيف أصبح مالك معدات؟",
+        "body": "لبدء البيع أو التأجير كمالك معدات:\n\n1. سجّل حساباً جديداً أو ادخل لحسابك الحالي\n2. اختر دور \"مالك\" عند التسجيل أو من إعدادات الحساب\n3. أكمل التحقق من الهوية (KYC)\n4. انتقل لصفحة \"لوحة الملاك\"\n5. اضغط \"إضافة معدة\" وأدخل تفاصيل معدتك",
+        "tags": ["مالك", "بائع", "رفع معدة"]
+      },
+      "o1": {
+        "title": "كيف أستأجر معدة؟",
+        "body": "لاستئجار معدة في منصة حرث:\n\n1. تصفح المعدات في صفحة \"المعدات\"\n2. اختر المعدة المناسبة واضغط \"حجز\"\n3. حدد تاريخ البداية والنهاية\n4. راجع الأسعار وأكمل عملية الدفع\n5. ستصلك رسالة تأكيد فور إتمام الحجز\n6. سيتواصل معك المالك لتنسيق التسليم",
+        "tags": ["استئجار", "إيجار", "حجز"]
+      },
+      "o2": {
+        "title": "كيف أتبع طلبي؟",
+        "body": "لتتبع طلبك:\n\n1. اذهب لصفحة \"طلباتي\" من القائمة\n2. ابحث عن طلبك أو اختره من القائمة\n3. اضغط \"تتبع الطلب\" لعرض الموقع الحالي للمندوب\n4. يمكنك الاتصال بالمندوب مباشرة من صفحة التتبع\n\nإذا تأخر الطلب عن الوقت المحدد، يُرجى فتح تذكرة دعم.",
+        "tags": ["تتبع", "طلب", "مندوب", "توصيل"]
+      },
+      "o3": {
+        "title": "كيف أُلغي طلباً؟",
+        "body": "لإلغاء طلب:\n\n1. اذهب لصفحة \"طلباتي\"\n2. اختر الطلب المراد إلغاؤه\n3. اضغط \"إلغاء الطلب\" (متاح فقط للطلبات بحالة \"جديد\" أو \"مؤكد\")\n4. حدد سبب الإلغاء\n\nبعد الإلغاء يُعاد المبلغ وفق سياسة الاسترداد.",
+        "tags": ["إلغاء", "ألغي", "إلغاء طلب"]
+      },
+      "l1": {
+        "title": "كيف تعمل نقاط الولاء؟",
+        "body": "برنامج الولاء في حرث:\n\n🌟 تكسب نقاطاً مع كل طلب مكتمل\n💎 100 نقطة = 1 ر.ع خصم على طلباتك القادمة\n🏆 كلما زادت نقاطك ارتفعت درجتك (برونزي ← فضي ← ذهبي ← بلاتيني)\n\nلعرض رصيدك: اذهب لصفحة \"برنامج الولاء\" من القائمة.",
+        "tags": ["نقاط", "ولاء", "مكافأة", "خصم"]
+      }
+    },
+    "tickets": {
+      "filters": { "all": "الكل", "open": "مفتوحة", "inProgress": "قيد المعالجة", "resolved": "تم الحل", "closed": "مغلقة" },
+      "loading": "جارٍ التحميل",
+      "authGate": { "title": "يرجى تسجيل الدخول", "desc": "لعرض تذاكر الدعم الخاصة بك يجب", "loginLink": "تسجيل الدخول", "descSuffix": "أولاً." },
+      "emptyState": { "text": "لا توجد تذاكر.", "linkText": "افتح تذكرة جديدة" },
+      "statusLabels": { "open": "مفتوحة", "in_progress": "قيد المعالجة", "resolved": "تم الحل", "closed": "مغلقة" },
+      "priorityLabels": { "low": "منخفضة", "medium": "متوسطة", "high": "⚡ عالية", "urgent": "🚨 عاجلة" },
+      "senderLabels": { "system": "النظام", "agent": "فريق الدعم", "you": "أنت" },
+      "csat": { "question": "كيف كانت تجربتك معنا؟", "hint": "قيّمنا لمساعدتنا على التحسين", "thanks": "✓ شكراً على تقييمك! تقييمك:" },
+      "reply": { "placeholder": "اكتب ردك هنا...", "sendBtn": "إرسال" },
+      "reopenBtn": "إعادة فتح التذكرة",
+      "loadFailed": "فشل التحميل"
+    },
+    "newTicket": {
+      "step1": {
+        "title": "نوع المشكلة والأولوية",
+        "priorityLabel": "الأولوية",
+        "priorityOptions": { "low": "منخفضة", "medium": "متوسطة", "high": "⚡ عالية", "urgent": "🚨 عاجلة" }
+      },
+      "step2": {
+        "title": "تفاصيل المشكلة",
+        "subjectLabel": "عنوان الطلب *",
+        "subjectPlaceholder": "اشرح مشكلتك في جملة واحدة...",
+        "suggestBoxTitle": "هل تقصد أحد هذه المواضيع؟",
+        "detailsLabel": "تفاصيل إضافية *",
+        "detailsPlaceholder": "اشرح مشكلتك بالتفصيل لنتمكن من مساعدتك بشكل أسرع...",
+        "guestFieldsLabel": "معلومات التواصل",
+        "guestNamePlaceholder": "اسمك الكريم",
+        "guestEmailPlaceholder": "بريدك الإلكتروني"
+      },
+      "step3": {
+        "title": "المرفقات",
+        "optionalHint": "(اختياري)",
+        "attachLabel": "ارفع صورة أو ملف يوضح المشكلة",
+        "attachHint": "الصيغ المدعومة: صور، PDF، فيديو — الحجم الأقصى: 10MB"
+      },
+      "submitBtn": "إرسال الطلب",
+      "sendingBtn": "جارٍ الإرسال...",
+      "success": {
+        "title": "تم إرسال تذكرتك بنجاح!",
+        "messageTemplate": "رقم تذكرتك: {{number}} — سيتواصل معك فريق الدعم خلال {{hours}} ساعة.",
+        "continueBtn": "متابعة التذكرة",
+        "newTicketBtn": "تذكرة جديدة"
+      }
+    },
+    "toasts": {
+      "selectCategoryFirst": "اختر تصنيف المشكلة أولاً",
+      "enterSubject": "أدخل عنوان الطلب",
+      "enterMoreDetails": "يرجى كتابة تفاصيل أكثر (20 حرف على الأقل)",
+      "enterValidEmail": "أدخل بريد إلكتروني صحيح",
+      "submitFailed": "فشل الإرسال",
+      "ticketLoadFailed": "فشل التحميل",
+      "writeReplyFirst": "اكتب ردك أولاً",
+      "replySent": "تم إرسال ردك بنجاح",
+      "sendFailed": "فشل",
+      "reopenSuccess": "تم إعادة فتح التذكرة",
+      "rateThanks": "شكراً على تقييمك!",
+      "genericFailed": "فشل"
+    },
+    "chat": {
+      "title": "المساعد الذكي",
+      "botName": "مساعد حرث الذكي",
+      "botStatus": "متصل الآن",
+      "inputPlaceholder": "اكتب سؤالك...",
+      "welcomeText": "مرحباً! 👋 أنا مساعد حرث الذكي. كيف يمكنني مساعدتك اليوم؟",
+      "employeeTransferText": "سأحيلك لفريق الدعم الآن. يمكنك فتح تذكرة دعم أو التواصل عبر واتساب.",
+      "openTicketFormText": "سأفتح لك نموذج التذكرة...",
+      "articleFoundTemplate": "وجدت مقالاً يتعلق بسؤالك:\n\n📄 {{title}}",
+      "notUnderstoodText": "لم أفهم سؤالك تماماً. يمكنك تجربة البحث في مركز المساعدة أو التحدث مع أحد موظفينا.",
+      "optLabels": {
+        "rentEquipment": "كيف أستأجر معدة؟",
+        "paymentIssue": "مشكلة في الدفع",
+        "trackOrder": "تتبع طلب",
+        "talkToAgent": "تحدث مع موظف",
+        "openTicket": "فتح تذكرة دعم",
+        "whatsapp": "واتساب",
+        "readArticle": "اقرأ المقال",
+        "anotherQuestion": "سؤال آخر",
+        "helpCenter": "مركز المساعدة"
+      }
+    }
+  },
+  "ownerDashboard": {
+    "title": "لوحة المالك - حرث",
+    "loginGate": {
+      "heading": "تسجيل دخول المالك",
+      "desc": "هذه اللوحة مخصّصة لأصحاب المعدات. سجّل دخولك بحساب مالك.",
+      "emailPlaceholder": "البريد الإلكتروني",
+      "passwordPlaceholder": "كلمة المرور",
+      "submitBtn": "دخول",
+      "noAccountText": "ليس لديك حساب؟",
+      "registerLink": "سجّل كمالك"
+    },
+    "statusBanner": {
+      "defaultTitle": "حسابك قيد المراجعة",
+      "defaultMsg": "حسابك كمزارع قيد المراجعة من قِبل الإدارة. ستُفعَّل صلاحية إضافة المعدات للبيع/الإيجار بعد الموافقة. يمكنك في هذه الأثناء تصفّح وشراء المنتجات من المتجر.",
+      "pendingTitle": "حسابك قيد المراجعة",
+      "pendingMsg": "حسابك كمزارع قيد المراجعة من قِبل الإدارة. ستُفعَّل صلاحية إضافة المعدات للبيع/الإيجار بعد الموافقة. يمكنك في هذه الأثناء تصفّح وشراء المنتجات من المتجر.",
+      "rejectedTitle": "تم رفض تفعيل صلاحيات حسابك",
+      "rejectedReasonPrefix": "السبب:",
+      "rejectedMsg": "لا يمكنك حالياً إضافة معدات للبيع أو الإيجار. للتواصل مع الإدارة لإعادة المراجعة، يُرجى التواصل مع الدعم.",
+      "inactiveTitle": "حسابك غير مفعّل",
+      "inactiveMsg": "تواصل مع الإدارة لمزيد من المعلومات."
+    },
+    "trustBanner": {
+      "heading": "عزّز ثقة المشترين بحسابك",
+      "msgPrefix": "إكمال هذه الخطوات يضيف علامة ✓ موثَّق على ملفك ومعداتك.",
+      "kycSubmitMsg": "لم تُقدّم وثائق التحقّق من الهوية.",
+      "kycResubmitMsg": "تم رفض وثائق التحقّق السابقة — يمكنك إعادة الإرسال بصور أوضح.",
+      "kycPendingMsg": "وثائق التحقّق قيد المراجعة من قِبل الإدارة.",
+      "submitKycBtn": "تقديم وثائق التحقّق",
+      "resubmitKycBtn": "إعادة إرسال الوثائق"
+    },
+    "welcomeDefault": "مرحباً",
+    "welcomeTemplate": "مرحباً، {{name}}",
+    "stats": {
+      "total": "إجمالي المعدات",
+      "available": "متاحة",
+      "rented": "مؤجرة",
+      "hidden": "مخفية"
+    },
+    "form": {
+      "addTitle": "إضافة معدة جديدة",
+      "editTitle": "تعديل معدة",
+      "nameLabel": "الاسم *",
+      "categoryLabel": "التصنيف *",
+      "listingTypeLabel": "نوع الإدراج *",
+      "listingTypeOptions": { "rent": "للإيجار", "sale": "للبيع", "both": "بيع وإيجار" },
+      "statusLabel": "الحالة",
+      "dailyPriceLabel": "سعر اليوم (ريال) *",
+      "salePriceLabel": "سعر البيع (ريال)",
+      "commissionHintTemplate": "عمولة المنصة ({{pct}}%): {{amount}} {{currency}} — السعر النهائي المعروض للمستخدم: <strong>{{final}}</strong> {{currency}}",
+      "depositLabel": "تأمين قابل للاسترداد (ريال)",
+      "depositOptionalHint": "— اختياري",
+      "depositPlaceholder": "مثال: 50.00",
+      "depositHint": "يُحجز من المستأجر عند الحجز ويُعاد عند إرجاع المعدة سليمة. ينطبق فقط على المعدات للإيجار.",
+      "stockLabel": "الكمية المتاحة",
+      "governorateLabel": "المحافظة",
+      "noGovernorateOption": "بدون تحديد",
+      "descriptionPlaceholder": "وصف المعدة...",
+      "specsAcc": {
+        "summary": "المواصفات الفنية التفصيلية",
+        "optionalHint": "(اختياري — لتوليد الملف الفني PDF)",
+        "idSection": "بيانات التعريف",
+        "manufacturerLabel": "الشركة المصنعة",
+        "manufacturerPlaceholder": "مثال: John Deere، كوبوتا",
+        "modelLabel": "الموديل",
+        "modelPlaceholder": "مثال: 6120M",
+        "modelYearLabel": "سنة الصنع",
+        "modelYearPlaceholder": "مثال: 2022",
+        "serialNumberLabel": "الرقم التسلسلي",
+        "serialNumberPlaceholder": "اختياري",
+        "originCountryLabel": "بلد المنشأ",
+        "originCountryPlaceholder": "مثال: USA، Japan، Germany",
+        "operatingHoursLabel": "ساعات التشغيل",
+        "operatingHoursPlaceholder": "عدد الساعات الكلية",
+        "fuelTypeLabel": "نوع الوقود / مصدر الطاقة",
+        "fuelTypeOptions": { "empty": "-- اختر --", "diesel": "ديزل", "gasoline": "بنزين", "electric": "كهرباء", "hybrid": "هجين", "gas": "غاز طبيعي" },
+        "techSection": "المواصفات الفنية",
+        "enginePowerLabel": "القدرة المحركية (HP)",
+        "enginePowerPlaceholder": "مثال: 120",
+        "weightLabel": "الوزن الإجمالي (كجم)",
+        "weightPlaceholder": "مثال: 4200",
+        "loadCapacityLabel": "الحمولة القصوى (كجم)",
+        "loadCapacityPlaceholder": "مثال: 2000",
+        "dimLengthLabel": "الطول (سم)",
+        "dimWidthLabel": "العرض (سم)",
+        "dimHeightLabel": "الارتفاع (سم)",
+        "dimPlaceholder": "سم",
+        "maintSection": "سجل الصيانة",
+        "lastMaintDateLabel": "تاريخ آخر صيانة",
+        "maintTypeLabel": "نوع الصيانة",
+        "maintTypePlaceholder": "مثال: دورية شاملة، تغيير زيت",
+        "maintByLabel": "الجهة المنفذة",
+        "maintByPlaceholder": "مثال: وكالة الشركة، ورشة معتمدة",
+        "nextMaintDateLabel": "موعد الصيانة القادمة",
+        "warrantySection": "الضمان والشهادات",
+        "warrantyInfoLabel": "معلومات الضمان",
+        "warrantyInfoPlaceholder": "مثال: ضمان سنة من الشركة",
+        "inspectionCertLabel": "شهادة الفحص الفني",
+        "inspectionCertPlaceholder": "مثال: موثق — رقم الشهادة 12345",
+        "pdfSection": "ملف PDF الرسمي (اختياري)",
+        "pdfHint": "ارفع كتالوج الشركة أو دليل التشغيل أو الملف التقني الرسمي (PDF حتى 20 ميجابايت)",
+        "pdfCurrentLinkText": "عرض الملف المرفوع الحالي",
+        "pdfUploadedLinkText": "عرض الملف المرفوع"
+      },
+      "imagesLabel": "الصور (يمكن إضافة حتى 10 صور)",
+      "imagesHint": "اضغط على صورة لجعلها الصورة الرئيسية",
+      "primaryBadge": "رئيسية",
+      "primaryTitleHint": "اضغط لجعلها الصورة الرئيسية",
+      "saveBtn": "حفظ",
+      "cancelEditBtn": "إلغاء التعديل"
+    },
+    "categories": {
+      "tractor": "جرارات", "sprayer": "مرشات", "harvester": "حصادات",
+      "tools": "أدوات", "seeds": "بذور", "fertilizer": "أسمدة",
+      "pesticide": "مبيدات", "other": "أخرى"
+    },
+    "statusOptions": {
+      "available": "متاح", "rented": "مؤجر", "maintenance": "صيانة",
+      "sold": "مباع", "hidden": "مخفي"
+    },
+    "list": {
+      "heading": "معدّاتي",
+      "searchPlaceholder": "بحث بالاسم...",
+      "statusFilterAll": "كل الحالات",
+      "refreshBtn": "تحديث",
+      "emptyTitle": "لا توجد معدات بعد",
+      "emptyDesc": "أضف أول معدة لك من النموذج أعلاه لتظهر للمشترين والمستأجرين على المنصة."
+    },
+    "badges": {
+      "forSale": "للبيع",
+      "bothSaleRent": "بيع وإيجار",
+      "forRent": "للإيجار",
+      "new": "جديد"
+    },
+    "noPriceLabel": "بدون سعر",
+    "saleLabelPrefix": "بيع:",
+    "quantityLabelPrefix": "الكمية:",
+    "depositLabelPrefix": "تأمين:",
+    "editBtn": "تعديل",
+    "activateBtn": "تفعيل",
+    "deactivateBtn": "إيقاف",
+    "pdfBtnTitle": "عرض الملف الفني PDF",
+    "deleteBtnTitle": "حذف",
+    "pagination": { "prev": "السابق", "next": "التالي" },
+    "toasts": {
+      "enterEmailPassword": "أدخل البريد وكلمة المرور",
+      "notOwnerAccount": "هذا الحساب ليس مالكاً — استخدم صفحة التسجيل لإنشاء حساب مالك",
+      "loginFailed": "فشل تسجيل الدخول",
+      "ownersOnly": "هذه اللوحة للمالكين فقط",
+      "maxImages": "الحد الأقصى 10 صور",
+      "imageUploadFailed": "فشل رفع الصورة",
+      "equipmentUpdated": "تم تحديث المعدة بنجاح",
+      "equipmentAdded": "تمت إضافة المعدة بنجاح",
+      "equipmentDataUnavailable": "بيانات المعدة غير متاحة",
+      "confirmDelete": "هل تريد حذف هذه المعدة نهائياً؟",
+      "deleted": "تم الحذف",
+      "deactivated": "تم الإيقاف المؤقت",
+      "activated": "تم تفعيل المعدة",
+      "pdfUploadFailed": "فشل الرفع",
+      "pdfUploaded": "تم رفع ملف PDF بنجاح",
+      "pdfUploadGenericFailed": "فشل رفع الملف"
+    }
+  },
+  "adminDashboard": {
+    "adminOnlyAlert": "هذه الصفحة للأدمن فقط.",
+    "errorPrefix": "خطأ",
+    "topbar": {
+      "title": "لوحة الأدمن — حرث",
+      "logoutBtn": "خروج"
+    },
+    "tabs": {
+      "overview": "الرئيسية",
+      "forSale": "للبيع",
+      "forRent": "للإيجار",
+      "approvals": "موافقات المعدات",
+      "accountApprovals": "موافقات الحسابات",
+      "kyc": "توثيق الهوية",
+      "deliveries": "التوصيلات",
+      "users": "المستخدمون",
+      "orders": "الطلبات",
+      "promos": "أكواد الخصم",
+      "commissions": "العمولات",
+      "payouts": "صرف المستحقات",
+      "audit": "سجل الإجراءات",
+      "banners": "الإعلانات",
+      "support": "الدعم الفني"
+    },
+    "overview": {
+      "analyticsHeading": "تحليلات تفاعلية",
+      "chartSales": { "label": "المبيعات الشهرية", "range6": "آخر 6 أشهر", "range12": "آخر 12 شهراً", "range24": "آخر 24 شهراً" },
+      "chartCategories": { "label": "أعلى الفئات", "range7": "آخر أسبوع", "range30": "آخر 30 يوم", "range90": "آخر 90 يوم" },
+      "chartGrowth": { "label": "نمو المستخدمين", "range14": "آخر أسبوعين", "range30": "آخر 30 يوم", "range90": "آخر 90 يوم" },
+      "chartGov": { "label": "توزيع الطلبات على المحافظات", "range30": "آخر 30 يوم", "range90": "آخر 90 يوم", "range365": "آخر سنة" },
+      "recentActivityHeading": "آخر 7 أيام",
+      "topOwnersHeading": "أكثر الملّاك مبيعاً (30 يوم)",
+      "errorLoadFailed": "فشل التحميل",
+      "noActivity": "لا يوجد نشاط",
+      "noDataYet": "لا يوجد بيانات بعد",
+      "dayActivityLine": "مستخدمون: {{users}} · طلبات: {{orders}} · إيجارات: {{rentals}}",
+      "transactionsCount": "{{count}} صفقة",
+      "statCards": {
+        "totalUsers": { "label": "إجمالي المستخدمين", "sub": "{{active}} نشط · {{pro}} PRO" },
+        "forSale": { "label": "معدات للبيع", "sub": "معتمدة ومعروضة للشراء" },
+        "forRent": { "label": "معدات للإيجار", "sub": "معتمدة ومعروضة للإيجار" },
+        "pendingEquip": { "label": "معدات بانتظار الموافقة", "subHasPending": "راجعها من تبويب موافقات المعدات", "subNone": "لا يوجد معلّق" },
+        "pendingAccounts": { "label": "حسابات بانتظار الموافقة", "subHasPending": "مزارعون / مندوبون بانتظار التفعيل", "subNone": "لا يوجد معلّق" },
+        "orders": { "label": "الطلبات", "sub": "{{paid}} مدفوع · {{revenue}}" },
+        "rentals": { "label": "الإيجارات", "sub": "{{active}} فعّال · {{revenue}}" },
+        "commissions": { "label": "عمولات المنصة", "sub": "{{pending}} معلّقة" },
+        "userDistribution": { "label": "توزيع المستخدمين", "owner": "مزارع", "renter": "مستهلك", "courier": "مندوب" }
+      },
+      "chartLabels": {
+        "purchaseSales": "مبيعات الشراء",
+        "rentalSales": "مبيعات الإيجار",
+        "renters": "مستهلكون",
+        "owners": "مزارعون",
+        "couriers": "مندوبون",
+        "orderCount": "عدد الطلبات",
+        "ordersTooltip": "طلبات: {{count}}",
+        "revenueTooltip": "إيرادات: {{amount}}",
+        "noSalesInPeriod": "لا توجد مبيعات في الفترة المحددة",
+        "noOrdersInPeriod": "لا توجد طلبات في الفترة المحددة"
+      },
+      "chartCategoryLabels": {
+        "tractor": "جرارات", "harvester": "حصّادات", "plow": "محاريث", "irrigation": "أنظمة ريّ",
+        "seeder": "بذّارات", "sprayer": "رشّاشات", "tools": "أدوات", "seeds": "بذور",
+        "fertilizer": "أسمدة", "crops": "محاصيل", "livestock": "ماشية", "other": "أخرى"
+      }
+    },
+    "forSale": {
+      "heading": "معدات للبيع",
+      "desc": "كل المعدات المعتمدة والمعروضة حالياً للبيع.",
+      "noneFound": "لا يوجد معدات للبيع حالياً"
+    },
+    "forRent": {
+      "heading": "معدات للإيجار",
+      "desc": "كل المعدات المعتمدة والمعروضة حالياً للإيجار.",
+      "noneFound": "لا يوجد معدات للإيجار حالياً"
+    },
+    "equipmentList": {
+      "colName": "الاسم",
+      "colPrice": "السعر",
+      "colQty": "الكمية",
+      "colGov": "المحافظة",
+      "colStatus": "الحالة",
+      "perPiece": "/ للقطعة",
+      "perDayShort": "/ يوم",
+      "viewBtn": "عرض",
+      "deleteBtn": "حذف",
+      "confirmDelete": "هل تريد حذف \"{{name}}\" نهائياً؟ لا يمكن التراجع.",
+      "deleteFailed": "فشل الحذف",
+      "deletedSuccess": "تم حذف \"{{name}}\" بنجاح",
+      "pdfDataFailed": "فشل تحميل بيانات المعدة",
+      "pdfNotLoaded": "خطأ: ملف PDF غير محمّل",
+      "genericFailed": "فشل"
+    },
+    "approvals": {
+      "heading": "معدات بانتظار الموافقة",
+      "desc": "عند إضافة مزارع لمعدة جديدة، تظهر هنا للمراجعة قبل عرضها للعموم.",
+      "bulkSelectedCount": "{{count}} عنصر محدّد",
+      "bulkApproveAll": "موافقة على الكل",
+      "bulkRejectAll": "رفض الكل",
+      "bulkHide": "إخفاء",
+      "bulkClear": "إلغاء التحديد",
+      "selectAllOnPage": "تحديد الكل في الصفحة",
+      "noneFound": "لا يوجد معدات بانتظار الموافقة ✓",
+      "listingTypes": { "sale": "للبيع", "rent": "للإيجار", "both": "للبيع والإيجار" },
+      "saleLabel": "بيع: {{price}}",
+      "rentLabel": "إيجار: {{price}}/يوم",
+      "ownerUnknown": "غير معروف",
+      "approveBtn": "موافقة",
+      "rejectBtn": "رفض",
+      "confirmApprove": "تأكيد الموافقة على هذه المعدة؟",
+      "approvedToast": "✓ تمت الموافقة",
+      "rejectReasonPrompt": "سبب رفض المعدة \"{{name}}\":",
+      "rejectedToast": "تم الرفض",
+      "reasonNotSpecified": "غير مذكور",
+      "genericFailed": "فشل"
+    },
+    "accountApprovals": {
+      "heading": "حسابات بانتظار الموافقة",
+      "desc": "عند تسجيل مزارع أو مندوب توصيل جديد، يظهر هنا للمراجعة. حسابات المستهلكين تُفعَّل تلقائياً ولا تحتاج موافقة.",
+      "noneFound": "لا يوجد حسابات بانتظار الموافقة ✓",
+      "registeredOn": "سُجِّل {{date}}",
+      "blockBtn": "حظر",
+      "reasonLabels": { "reject": "رفض", "block": "حظر" },
+      "statusReasonPrompt": "سبب {{label}} الحساب{{name}} (اختياري):",
+      "confirmApproveAccount": "تأكيد الموافقة على الحساب{{name}}؟",
+      "confirmReactivate": "إعادة تفعيل الحساب{{name}}؟",
+      "confirmRepending": "إعادة الحساب{{name}} لقائمة المراجعة؟",
+      "confirmDeleteAccount": "حذف الحساب{{name}} نهائياً؟ لا يمكن للمستخدم الدخول بعد ذلك.",
+      "updatedToast": "تم التحديث ✓",
+      "genericFailed": "فشل"
+    },
+    "kyc": {
+      "heading": "طلبات توثيق الهوية",
+      "desc": "مستخدمون قدّموا وثائق التحقّق من الهوية وينتظرون مراجعتك. اضغط على صورة لتكبيرها قبل اتخاذ القرار.",
+      "loadingText": "جارٍ التحميل...",
+      "noneFound": "لا توجد طلبات توثيق هوية معلَّقة ✓",
+      "imgUnavailable": "{{label}}: غير متاح",
+      "idFrontImgLabel": "وجه البطاقة",
+      "idBackImgLabel": "ظهر البطاقة",
+      "selfieImgLabel": "صورة شخصية",
+      "identityNumberLabel": "رقم الهوية:",
+      "submittedAt": "· قُدِّم في {{date}}",
+      "approveBtn": "موافقة",
+      "rejectBtn": "رفض",
+      "confirmApproveIdentity": "تأكيد الموافقة على هوية \"{{name}}\"؟",
+      "approvedIdentityToast": "تمت الموافقة على الهوية ✓",
+      "rejectIdentityPrompt": "سبب رفض هوية \"{{name}}\" (اختياري):",
+      "rejectedRequestToast": "تم رفض الطلب",
+      "genericFailed": "فشل"
+    },
+    "deliveries": {
+      "heading": "طلبات التوصيل",
+      "statusAll": "كل الحالات",
+      "statusOptions": {
+        "pending": "بانتظار مندوب",
+        "accepted": "قَبلها مندوب",
+        "picked_up": "تم الاستلام",
+        "in_transit": "في الطريق",
+        "delivered": "تم التسليم",
+        "cancelled": "مُلغى"
+      },
+      "noneFound": "لا يوجد طلبات توصيل",
+      "colId": "الرقم",
+      "colOrder": "الطلب",
+      "colCustomer": "العميل",
+      "colCourier": "المندوب",
+      "colStatus": "الحالة",
+      "colDate": "التاريخ",
+      "rentalLabel": "إيجار",
+      "noCourierYet": "لم يُقبل بعد",
+      "genericFailed": "فشل"
+    },
+    "users": {
+      "searchPlaceholder": "بحث بالاسم أو البريد...",
+      "roleAll": "كل الأنواع",
+      "roleOptions": {
+        "renter": "مستهلك",
+        "owner": "مزارع",
+        "delivery": "مندوب توصيل",
+        "admin": "أدمن"
+      },
+      "statusAll": "كل الحالات",
+      "statusOptions": {
+        "pending": "قيد المراجعة",
+        "approved": "موافق عليه",
+        "rejected": "مرفوض",
+        "blocked": "محظور",
+        "deleted": "محذوف"
+      },
+      "bulkSelectedCount": "{{count}} عنصر محدّد",
+      "bulkApprove": "موافقة",
+      "bulkPending": "إعادة للمراجعة",
+      "bulkBlock": "حظر",
+      "bulkClear": "إلغاء التحديد",
+      "noneFound": "لا يوجد مستخدمون",
+      "colName": "الاسم",
+      "colEmail": "البريد",
+      "colRole": "النوع",
+      "colAccountStatus": "حالة الحساب",
+      "colPro": "PRO",
+      "colPoints": "نقاط",
+      "colActions": "الإجراءات",
+      "cannotBulkAdminTitle": "لا يمكن التحديد الجماعي للأدمن",
+      "actions": {
+        "approve": "موافقة",
+        "reject": "رفض",
+        "block": "حظر",
+        "reactivate": "إعادة تفعيل",
+        "repending": "إعادة للمراجعة",
+        "restore": "استعادة",
+        "delete": "حذف",
+        "removePro": "إزالة PRO",
+        "grantPro": "منح PRO"
+      },
+      "updatedToast": "تم التحديث ✓",
+      "genericFailed": "فشل"
+    },
+    "orders": {
+      "statusAll": "كل الحالات",
+      "statusOptions": {
+        "pending": "قيد الانتظار",
+        "confirmed": "مُؤكّد",
+        "shipped": "مُرسَل",
+        "delivered": "مُسلَّم",
+        "cancelled": "مُلغى"
+      },
+      "paymentAll": "كل حالات الدفع",
+      "paymentOptions": {
+        "pending": "قيد الانتظار",
+        "paid": "مدفوع",
+        "failed": "فاشل"
+      },
+      "saleLabel": "شراء",
+      "rentalLabel": "إيجار",
+      "viewBtn": "عرض",
+      "loadFailed": "فشل تحميل الطلبات",
+      "noneFound": "لا يوجد طلبات أو إيجارات",
+      "colTypeRef": "النوع / المرجع",
+      "colTotal": "الإجمالي",
+      "colStatus": "الحالة",
+      "colPayment": "الدفع",
+      "colDate": "التاريخ",
+      "colDetails": "تفاصيل",
+      "rentalStatusOptions": {
+        "pending": "قيد الانتظار",
+        "approved": "موافق عليه",
+        "rejected": "مرفوض",
+        "active": "فعّال",
+        "completed": "مكتمل",
+        "cancelled": "ملغى"
+      }
+    },
+    "promos": {
+      "addBtn": "إضافة كود جديد",
+      "genericFailed": "فشل",
+      "noneFound": "لا يوجد أكواد",
+      "colCode": "الكود",
+      "colValue": "القيمة",
+      "colUsage": "الاستخدام",
+      "colExpiry": "الانتهاء",
+      "colStatus": "الحالة",
+      "colActions": "الإجراءات",
+      "neverExpires": "لا ينتهي",
+      "activeLabel": "فعّال",
+      "disabledLabel": "مُعطَّل",
+      "editBtn": "تعديل",
+      "deleteBtn": "حذف"
+    },
+    "commissions": {
+      "heading": "إعدادات العمولة",
+      "pctLabel": "نسبة عمولة المنصة (%)",
+      "savePctBtn": "حفظ النسبة",
+      "statusAll": "الكل",
+      "statusOptions": {
+        "pending": "قيد الانتظار",
+        "paid": "مدفوع",
+        "cancelled": "ملغى"
+      },
+      "ownerSearchPlaceholder": "بحث باسم/بريد المزارع",
+      "fromDateTitle": "من تاريخ",
+      "toDateTitle": "إلى تاريخ",
+      "exportBtn": "تصدير التقرير",
+      "genericFailed": "فشل",
+      "noneFound": "لا يوجد عمولات",
+      "colOwner": "المالك",
+      "colEquipment": "المعدة",
+      "colAmount": "المبلغ",
+      "colRate": "النسبة",
+      "colCommission": "العمولة",
+      "colNet": "الصافي",
+      "colStatus": "الحالة",
+      "payBtn": "تأكيد دفع",
+      "confirmPay": "تأكيد صرف هذه العمولة للمالك؟",
+      "paidToast": "تم الصرف ✓",
+      "exportFailed": "فشل التصدير",
+      "lastUpdated": "آخر تحديث: {{date}}{{by}}",
+      "lastUpdatedBySuffix": " — {{name}}",
+      "pctRangeError": "نسبة العمولة يجب أن تكون بين 0 و 100",
+      "saveFailed": "فشل الحفظ",
+      "savedPctToast": "تم حفظ نسبة العمولة ✓"
+    },
+    "payouts": {
+      "heading": "صرف المستحقات للمزارعين",
+      "subBalances": "أرصدة المزارعين",
+      "subHistory": "تاريخ المدفوعات",
+      "searchPlaceholder": "ابحث باسم أو بريد المزارع",
+      "onlyPendingLabel": "إظهار الذين لديهم رصيد فقط",
+      "loadingText": "جارٍ التحميل...",
+      "loadFailed": "فشل التحميل",
+      "noneFound": "لا يوجد مزارعون يطابقون الفلاتر.",
+      "totalPaidLifetime": "إجمالي مدفوع سابقاً: {{amount}}",
+      "transactionCount": "عدد المعاملات: {{count}}",
+      "lastPaidLabel": "آخر دفع: {{date}}",
+      "pendingBalanceLabel": "الرصيد المعلَّق",
+      "pendingOpsCount": "{{count}} عملية",
+      "payNowBtn": "صرف الآن",
+      "noBalanceBtn": "لا يوجد رصيد",
+      "orderRefLabel": "طلب {{ref}}",
+      "rentalRefLabel": "إيجار {{ref}}",
+      "moreOpsLabel": "+ {{count}} عملية أخرى",
+      "totalPayoutLabel": "إجمالي الصرف: {{amount}}",
+      "opsCountSuffix": " ({{count}} عملية)",
+      "payingInProgress": "جارٍ الصرف...",
+      "payFailed": "فشل الصرف",
+      "paidToast": "✓ تم صرف {{amount}} لـ {{name}}",
+      "genericError": "خطأ",
+      "noHistoryYet": "لا يوجد سجل صرف بعد.",
+      "methodLabels": { "bank_transfer": "تحويل بنكي", "cash": "نقد", "wallet": "محفظة", "other": "أخرى" },
+      "cancelledBadge": "ملغي",
+      "referenceLabel": "مرجع: {{ref}}",
+      "paidByLabel": "صرفه: {{name}}",
+      "cancelBtn": "إلغاء وعكس",
+      "cancelReasonPrompt": "سبب الإلغاء (يُسجَّل في ملاحظات الدفعة وفي سجل الإجراءات):",
+      "cancelFailed": "فشل الإلغاء",
+      "cancelledToast": "تم إلغاء الدفعة وعكس العمولات إلى 'معلَّقة'"
+    },
+    "audit": {
+      "heading": "سجل الإجراءات",
+      "subHeading": "— كل عملية يقوم بها الأدمن تُسجَّل هنا",
+      "actionsAll": "كل الإجراءات",
+      "searchPlaceholder": "ابحث في الأسماء، الأسباب، أو target_id",
+      "fromDateTitle": "من تاريخ",
+      "toDateTitle": "إلى تاريخ",
+      "refreshBtn": "تحديث",
+      "loadingText": "جارٍ التحميل...",
+      "loadFailed": "فشل التحميل",
+      "noneFound": "لا توجد سجلات تطابق الفلاتر الحالية.",
+      "viewDetailsBtn": "عرض التفاصيل",
+      "noteLabel": "// ملاحظة: {{note}}",
+      "beforeLabel": "// قبل",
+      "afterLabel": "// بعد"
+    },
+    "bulk": {
+      "noUserSelected": "لم تُحدّد أي مستخدم",
+      "noEquipSelected": "لم تُحدّد أي معدة",
+      "userActionLabels": { "approved": "الموافقة على", "pending": "إعادة للمراجعة", "blocked": "حظر" },
+      "confirmUserAction": "تأكيد {{action}} {{count}} مستخدم؟",
+      "blockReasonPrompt": "سبب الحظر (اختياري):",
+      "genericFailed": "فشل",
+      "updatedUsersToast": "✓ تم تحديث {{count}} مستخدم{{skipped}}",
+      "skippedAdminSuffix": " (تم تخطّي {{count}} أدمن)",
+      "equipActionLabels": { "approve": "الموافقة على", "reject": "رفض", "hide": "إخفاء", "show": "إظهار" },
+      "confirmEquipAction": "تأكيد {{action}} {{count}} معدة؟",
+      "rejectReasonPrompt": "سبب الرفض (سيظهر للمالك):",
+      "rejectReasonRequired": "الرفض الجماعي يحتاج سبباً",
+      "updatedEquipToast": "✓ تم تحديث {{count}} معدة"
+    },
+    "banners": {
+      "heading": "مدير الإعلانات",
+      "desc": "أنشئ إعلاناتك، جدول وقت ظهورها، وتابع وقتها المتبقي ونشاطها.",
+      "addBtn": "إعلان جديد",
+      "statTotal": "إجمالي الإعلانات",
+      "statLive": "يعمل الآن",
+      "statScheduled": "مُجدولة",
+      "statExpired": "منتهية / معطلة",
+      "searchPlaceholder": "ابحث عن إعلان بالعنوان…",
+      "statusAll": "كل الحالات",
+      "statusOptions": {
+        "live": "يعمل الآن",
+        "scheduled": "مُجدول",
+        "expired": "منتهي",
+        "disabled": "معطل"
+      },
+      "placementAll": "كل المواضع",
+      "placementOptions": {
+        "home_hero": "الرئيسية — لافتة كبيرة",
+        "home_secondary": "الرئيسية — بطاقة فرعية",
+        "tools_top": "صفحة المعدات — أعلى",
+        "global_top_strip": "شريط أعلى الموقع"
+      },
+      "loadingText": "جارٍ التحميل...",
+      "loadFailedFallback": "فشل التحميل — تحقق من الاتصال بالسيرفر",
+      "retryBtn": "إعادة المحاولة",
+      "noneYet": "لا توجد إعلانات بعد",
+      "noMatchingResults": "لا توجد نتائج مطابقة",
+      "createFirstHint": "اضغط \"إعلان جديد\" لإنشاء أول إعلان.",
+      "tryDifferentFilter": "جرّب تغيير كلمة البحث أو فلتر الحالة.",
+      "sortOrderPill": "ترتيب: {{order}}",
+      "detailsBtn": "تفاصيل",
+      "deactivateBtn": "إيقاف",
+      "deactivateBtnAlt": "تعطيل",
+      "activateBtn": "تفعيل",
+      "editBtn": "تعديل",
+      "countdown": {
+        "endsIn": "ينتهي خلال",
+        "startsIn": "يبدأ خلال",
+        "endedAgo": "انتهى منذ",
+        "statusLabel": "الحالة",
+        "liveNoEnd": "يعمل الآن — بدون تاريخ انتهاء",
+        "disabledMsg": "معطل — لن يظهر للمستخدمين",
+        "dayUnit": "يوم",
+        "hourUnit": "ساعة",
+        "minuteUnit": "دقيقة",
+        "secondUnit": "ثانية"
+      },
+      "detail": {
+        "loadFailed": "فشل تحميل الإعلان",
+        "infoHeading": "معلومات الإعلان",
+        "totalDuration": "المدة الكلية",
+        "timeRemaining": "الوقت المتبقي",
+        "timeElapsed": "الوقت المنقضي",
+        "startsAt": "يبدأ في",
+        "endsAt": "ينتهي في",
+        "sortOrder": "ترتيب العرض",
+        "ctaButton": "زرّ الإجراء",
+        "ctaLink": "رابط الإجراء",
+        "promoCode": "كود الخصم",
+        "createdAt": "أنشئ في",
+        "updatedAt": "آخر تحديث",
+        "none": "بدون",
+        "activityHeading": "سجل النشاط",
+        "noActivityYet": "لا يوجد سجل نشاط بعد",
+        "notStartedYet": "لم يبدأ بعد",
+        "startsInPrefix": "يبدأ خلال ",
+        "completed": "اكتمل",
+        "endedAgoPrefix": "انتهى منذ ",
+        "noTimeWindow": "بدون نافذة زمنية",
+        "deleteBtn": "حذف"
+      },
+      "timelineActions": {
+        "banner_created": "تم إنشاء الإعلان",
+        "banner_updated": "تم تعديل الإعلان",
+        "banner_deleted": "تم حذف الإعلان"
+      },
+      "timelineSystemActor": "النظام",
+      "timelineActivated": "تم التفعيل",
+      "timelineDeactivated": "تم التعطيل",
+      "timelineTitleChanged": "تغيّر العنوان",
+      "timelinePlacementChanged": "تغيّر الموضع → {{placement}}",
+      "editor": {
+        "loadFailed": "فشل التحميل",
+        "loadBannerFailed": "فشل تحميل الإعلان",
+        "titleRequired": "العنوان مطلوب",
+        "dateRangeError": "تاريخ البدء يجب أن يكون قبل تاريخ الانتهاء",
+        "savingText": "جارٍ الحفظ...",
+        "saveFailed": "فشل الحفظ",
+        "updatedToast": "تم التحديث ✓",
+        "createdToast": "تم الإنشاء ✓",
+        "genericError": "خطأ",
+        "imageUploadFailed": "فشل الرفع",
+        "imageUploadedToast": "تم رفع الصورة ✓"
+      },
+      "toggleDeactivatedToast": "تم التعطيل",
+      "toggleActivatedToast": "تم التفعيل",
+      "deleteConfirm": "حذف الإعلان \"{{name}}\"؟ هذا الإجراء لا يمكن التراجع عنه.",
+      "deletedToast": "تم الحذف",
+      "genericFailed": "فشل"
+    },
+    "support": {
+      "heading": "تذاكر الدعم الفني",
+      "desc": "إدارة شكاوى وطلبات المستخدمين والرد عليها",
+      "refreshBtn": "تحديث",
+      "catAll": "كل التصنيفات",
+      "priAll": "كل الأولويات",
+      "priorityOptions": {
+        "low": "منخفضة",
+        "medium": "متوسطة",
+        "high": "عالية",
+        "urgent": "عاجلة"
+      },
+      "filterBtn": "فلتر"
+    },
+    "orderModal": {
+      "detailsTitle": "تفاصيل الطلب",
+      "loadingText": "جاري التحميل…",
+      "detailsTitleWithRef": "تفاصيل الطلب — {{ref}}",
+      "rentalDetailsTitleWithRef": "تفاصيل الإيجار — {{ref}}",
+      "loadFailed": "فشل التحميل",
+      "deliveryStatusLabels": {
+        "pending": "قيد الانتظار",
+        "accepted": "مقبول من السائق",
+        "picked_up": "تم الاستلام",
+        "in_transit": "في الطريق",
+        "delivered": "تم التسليم",
+        "cancelled": "ملغى"
+      },
+      "orderStatusLabels": {
+        "pending": "قيد الانتظار",
+        "confirmed": "مؤكد",
+        "shipped": "تم الشحن",
+        "delivered": "مُسلَّم",
+        "cancelled": "ملغى",
+        "refunded": "مسترجع"
+      },
+      "paymentLabels": {
+        "paid": "مدفوع",
+        "pending": "قيد الانتظار",
+        "failed": "فشل",
+        "refunded": "مسترجع"
+      },
+      "deliveryBadgePrefix": "التوصيل: {{status}}",
+      "fields": {
+        "customer": "العميل",
+        "email": "البريد",
+        "mobile": "الجوال",
+        "address": "العنوان",
+        "paymentMethod": "طريقة الدفع",
+        "orderDate": "تاريخ الطلب",
+        "notes": "ملاحظات",
+        "renter": "المستأجر",
+        "renterEmail": "بريد المستأجر",
+        "owner": "المالك",
+        "startDate": "تاريخ البدء",
+        "endDate": "تاريخ الانتهاء",
+        "deliveryAddress": "عنوان التسليم",
+        "rentalPrice": "سعر الإيجار",
+        "deposit": "التأمين"
+      },
+      "addressSeparator": "، ",
+      "productsHeading": "المنتجات",
+      "noProducts": "لا توجد منتجات",
+      "equipmentFallbackName": "معدة",
+      "qtyTimesPrice": "الكمية: {{qty}} × {{price}} {{currency}}",
+      "subtotal": "المجموع الفرعي",
+      "discount": "الخصم",
+      "shippingFee": "رسوم التوصيل",
+      "total": "الإجمالي",
+      "sendToDeliveryBtn": "إرسال للتوصيل",
+      "sendingInProgress": "جاري الإرسال…",
+      "dispatchFailed": "فشل الإرسال",
+      "dispatchedFallback": "تم الإرسال للمندوبين",
+      "dispatchErrorAlert": "خطأ: {{message}}"
+    },
+    "supportTickets": {
+      "overdueLabel": "متأخرة",
+      "loadingText": "جارٍ التحميل…",
+      "loadTicketsFailedFallback": "فشل تحميل التذاكر",
+      "noneFound": "لا توجد تذاكر",
+      "colTicketNumber": "رقم التذكرة",
+      "colSubject": "الموضوع",
+      "colUser": "المستخدم",
+      "colCategory": "التصنيف",
+      "colPriority": "الأولوية",
+      "colStatus": "الحالة",
+      "colDate": "التاريخ",
+      "guestFallback": "زائر",
+      "replyViewBtn": "رد / عرض",
+      "priorityUrgentIcon": "عاجلة 🚨",
+      "errorPrefix": "خطأ",
+      "detail": {
+        "loadingTitle": "جارٍ التحميل…",
+        "loadTicketFailedAlert": "فشل تحميل التذكرة",
+        "ticketNumberPrefix": "تذكرة {{number}}",
+        "subjectLabel": "الموضوع: ",
+        "userLabel": "المستخدم: ",
+        "emailLabel": "البريد: ",
+        "categoryLabel": "التصنيف: ",
+        "priorityLabel": "الأولوية: ",
+        "statusLabel": "الحالة: ",
+        "slaLabel": "SLA: ",
+        "noMessages": "لا توجد رسائل",
+        "agentFallback": "الدعم",
+        "userFallback": "المستخدم",
+        "agentIconName": "👨‍💼 {{name}}",
+        "userIconName": "👤 {{name}}",
+        "replyEmptyAlert": "اكتب الرد أولاً",
+        "replyFailed": "فشل",
+        "replySentToast": "تم إرسال الرد",
+        "replyErrorPrefix": "خطأ: ",
+        "selectStatusFirstAlert": "اختر الحالة أولاً",
+        "statusUpdateFailed": "فشل تحديث الحالة",
+        "statusUpdatedToast": "تم تحديث الحالة"
+      }
+    },
+    "labels": {
+      "roles": { "admin": "أدمن", "owner": "مزارع", "renter": "مستهلك", "delivery": "مندوب توصيل" },
+      "accountStatus": { "pending": "قيد المراجعة", "approved": "موافق عليه", "rejected": "مرفوض", "blocked": "محظور", "deleted": "محذوف" },
+      "orderStatus": { "pending": "قيد الانتظار", "confirmed": "مؤكّد", "shipped": "مُرسَل", "delivered": "مُسلَّم", "cancelled": "مُلغى", "paid": "مدفوع", "failed": "فاشل", "active": "فعّال", "completed": "مكتمل" },
+      "available": "متاح"
+    },
+    "farmerModal": {
+      "heading": "بيانات المزارع",
+      "fields": {
+        "name": "الاسم",
+        "email": "البريد",
+        "phone": "الهاتف",
+        "role": "الدور",
+        "identityNumber": "رقم الهوية",
+        "account": "الحساب"
+      },
+      "roleMap": { "owner": "مالك معدات", "renter": "مستأجر", "admin": "أدمن", "delivery": "مندوب" },
+      "identityStatus": { "none": "لم يُقدَّم", "pending": "قيد المراجعة", "approved": "موافق عليه ✓", "rejected": "مرفوض ✗" },
+      "identityStatusLabel": "حالة التوثيق",
+      "identityDocsLabel": "وثائق الهوية:",
+      "idFrontLabel": "الوجه الأمامي",
+      "idBackLabel": "الوجه الخلفي",
+      "selfieLabel": "صورة سيلفي",
+      "imageUnavailable": "غير متاح",
+      "registeredAt": "تاريخ التسجيل: {{date}}",
+      "loadFailed": "فشل التحميل"
+    },
+    "supportModal": {
+      "conversationLabel": "المحادثة:",
+      "replyPlaceholder": "اكتب ردك هنا...",
+      "sendReplyBtn": "إرسال الرد",
+      "changeStatusOption": "تغيير الحالة...",
+      "statusResolvedOption": "تم الحل ✓",
+      "applyBtn": "تطبيق"
+    },
+    "bannerModal": {
+      "titleNew": "إعلان جديد",
+      "titleEdit": "تعديل إعلان",
+      "placementLabel": "الموضع",
+      "placementOptions": {
+        "home_hero": "الرئيسية — لافتة كبيرة (Hero)",
+        "home_secondary": "الرئيسية — بطاقة فرعية",
+        "tools_top": "صفحة المعدات — أعلى",
+        "global_top_strip": "شريط أعلى الموقع (announcement)"
+      },
+      "titleLabel": "العنوان",
+      "titlePlaceholder": "عرض رمضان",
+      "subtitleLabel": "وصف فرعي (اختياري)",
+      "subtitlePlaceholder": "خصومات على معدات الحصاد طوال شهر رمضان",
+      "bgImageLabel": "صورة الخلفية (URL — اختياري)",
+      "bgImagePlaceholder": "https://… أو ارفع من جهازك ←",
+      "ctaLabelLabel": "نص زرّ الإجراء (اختياري)",
+      "ctaLabelPlaceholder": "تصفّح العروض",
+      "ctaUrlLabel": "رابط زرّ الإجراء (اختياري)",
+      "ctaUrlPlaceholder": "tools.html?cat=tractor — أو https://…",
+      "promoCodeLabel": "كود خصم مرتبط (اختياري)",
+      "promoCodePlaceholder": "HARTH10",
+      "startsAtLabel": "يبدأ من",
+      "endsAtLabel": "ينتهي في",
+      "bgColorLabel": "لون الخلفية (Hex)",
+      "textColorLabel": "لون النص (Hex)",
+      "sortOrderLabel": "ترتيب العرض",
+      "activeLabel": "مُفعَّلة"
+    },
+    "bannerDetailModal": {
+      "heading": "تفاصيل الإعلان",
+      "closeLabel": "إغلاق"
+    },
+    "payoutModal": {
+      "heading": "صرف مستحقّات",
+      "loadingDetails": "جارٍ تحميل التفاصيل...",
+      "methodLabel": "طريقة الدفع",
+      "methodOptions": {
+        "bank_transfer": "تحويل بنكي",
+        "cash": "نقد",
+        "wallet": "محفظة إلكترونية",
+        "other": "أخرى"
+      },
+      "referenceLabel": "رقم المرجع (اختياري)",
+      "referencePlaceholder": "مثال: TRX-2024-0123",
+      "notesLabel": "ملاحظات (اختياري)",
+      "notesPlaceholder": "ملاحظات داخلية (لا تظهر للمزارع)",
+      "confirmBtn": "تأكيد الصرف"
+    },
+    "promoModal": {
+      "titleNew": "إضافة كود خصم",
+      "codeLabel": "الكود",
+      "codePlaceholder": "مثال: HARTH10",
+      "typeLabel": "النوع",
+      "typeOptions": {
+        "percentage": "نسبة مئوية",
+        "fixed": "مبلغ ثابت"
+      },
+      "valueLabel": "القيمة (نسبة % أو ر.ع)",
+      "minLabel": "الحد الأدنى للطلب (اختياري)",
+      "maxUsesLabel": "الحد الأقصى للاستخدامات (اختياري)",
+      "expiryLabel": "تاريخ الانتهاء (اختياري)",
+      "shortTitleNew": "إضافة كود",
+      "shortTitleEdit": "تعديل كود",
+      "deleteConfirm": "حذف الكود \"{{code}}\"؟",
+      "deletedToast": "تم الحذف ✓",
+      "savedToast": "تم الحفظ ✓",
+      "genericFailed": "فشل"
+    }
+  },
+  "delivery": {
+    "title": "لوحة المندوب - حرث",
+    "statusBanner": {
+      "defaultTitle": "حسابك قيد المراجعة",
+      "defaultMsg": "حسابك كمندوب توصيل قيد المراجعة من قِبل الإدارة. لا يمكنك قبول طلبات التوصيل حتى الموافقة على حسابك.",
+      "pendingTitle": "حسابك قيد المراجعة",
+      "pendingMsg": "حسابك كمندوب توصيل قيد المراجعة من قِبل الإدارة. لا يمكنك قبول طلبات التوصيل حتى يتم اعتماد حسابك. سيصلك إشعار فور المراجعة.",
+      "rejectedTitle": "تم رفض تفعيل صلاحيات حسابك",
+      "rejectedReasonPrefix": "السبب:",
+      "rejectedMsg": "لا يمكنك حالياً قبول طلبات التوصيل. للتواصل مع الإدارة لإعادة المراجعة، يُرجى التواصل مع الدعم.",
+      "inactiveTitle": "حسابك غير مفعّل",
+      "inactiveMsg": "تواصل مع الإدارة لمزيد من المعلومات."
+    },
+    "tabs": {
+      "available": "طلبات متاحة",
+      "mine": "طلباتي النشطة",
+      "history": "السجل"
+    },
+    "emptyStates": {
+      "available": { "title": "لا توجد طلبات متاحة الآن", "desc": "اطمئن، الطلبات الجديدة تظهر هنا فور وصولها. تُحدَّث القائمة تلقائياً كل ١٥ ثانية." },
+      "mine": { "title": "لا توجد طلبات نشطة لديك", "desc": "عندما تقبل طلباً جديداً من تبويب «طلبات متاحة» سيظهر هنا حتى يكتمل التسليم." },
+      "history": { "title": "السجل فارغ", "desc": "ستظهر هنا جميع الطلبات التي أكملتها أو ألغيتها للرجوع إليها لاحقاً." }
+    },
+    "statusLabels": {
+      "pending": "بانتظار مندوب",
+      "accepted": "مقبولة",
+      "picked_up": "تم الاستلام",
+      "in_transit": "في الطريق",
+      "delivered": "تم التسليم",
+      "cancelled": "مُلغى"
+    },
+    "alerts": {
+      "deliveryOnly": "هذه الصفحة لمندوبي التوصيل فقط."
+    },
+    "toasts": {
+      "loadFailed": "فشل التحميل",
+      "genericFailed": "فشل",
+      "actionSuccess": "✓ تم بنجاح"
+    },
+    "job": {
+      "rentalPrefix": "إيجار",
+      "equipmentFallback": "معدة",
+      "productFallback": "منتج",
+      "paymentCod": "عند الاستلام",
+      "paymentCard": "بطاقة",
+      "pickupLabel": "نقطة الاستلام",
+      "dropoffLabel": "عنوان التسليم",
+      "feeLabel": "عمولة: {{amount}} {{currency}}",
+      "listSeparator": "، "
+    },
+    "actionLabels": {
+      "accept": "قبول الطلب",
+      "pickup": "تأكيد الاستلام",
+      "inTransit": "بدء التوصيل",
+      "delivered": "تأكيد التسليم"
+    },
+    "confirmAction": "{{label}}؟",
+    "jobActions": {
+      "accept": "قبول الطلب",
+      "pickup": "تم الاستلام",
+      "startTransit": "بدأت التوصيل",
+      "delivered": "تم التسليم"
+    },
+    "proofModal": {
+      "instructions": "التقط صورة مباشرة من الكاميرا لتأكيد العملية — لن تُقبل الصور من المعرض على الأجهزة المحمولة.",
+      "gpsDetecting": "جارٍ تحديد موقعك...",
+      "gpsSuccess": "✓ تم تحديد الموقع (دقة ±{{accuracy}}م)",
+      "gpsFailed": "تعذّر تحديد الموقع (تأكد من إذن الموقع)",
+      "tapToOpenCamera": "اضغط هنا لفتح الكاميرا",
+      "confirmSubmitBtn": "تأكيد الإرسال",
+      "retakeBtn": "إعادة الالتقاط",
+      "cancelBtn": "إلغاء",
+      "uploading": "جارٍ الرفع...",
+      "uploadSuccess": "✓ تم الرفع — اضغط تأكيد الإرسال",
+      "uploadFailed": "فشل الرفع"
+    }
+  },
+  "checkout": {
+    "title": "سلة المبيعات - حرث",
+    "backToStore": "العودة للمتجر",
+    "headingPart1": "سلة",
+    "headingPart2": "الطلبات",
+    "loadingCart": "جارٍ تحميل سلتك...",
+    "table": {
+      "product": "المنتج",
+      "price": "السعر",
+      "quantity": "الكمية",
+      "total": "الإجمالي"
+    },
+    "purchaseBadge": "شراء",
+    "rentalBadge": "إيجار",
+    "depositLabel": "تأمين: {{amount}} {{currency}}",
+    "daysSuffix": "{{n}} يوم",
+    "daysParenSuffix": "({{n}} يوم)",
+    "emptyCart": {
+      "title": "سلتك فارغة",
+      "desc": "تصفّح المنتجات وأضف ما يعجبك.",
+      "browseBtn": "تصفح المنتجات"
+    },
+    "summary": {
+      "heading": "ملخص الطلب",
+      "promoLabel": "كود الخصم",
+      "promoPlaceholder": "مثال: HARTH10",
+      "applyBtn": "تطبيق",
+      "loyaltyLabel": "نقاط الولاء (اختياري)",
+      "loyaltyPlaceholder": "أدخل عدد النقاط",
+      "loyaltyBalanceHint": "رصيدك: {{balance}} نقطة (حد أقصى 50% من الطلب)"
+    },
+    "totals": {
+      "subtotal": "المشتريات",
+      "rentalLabel": "الإيجار",
+      "discount": "الخصم",
+      "tax": "الضريبة (10%)",
+      "loyaltyLabel": "نقاط الولاء",
+      "loyaltyValue": "-{{n}} نقطة",
+      "grand": "الإجمالي"
+    },
+    "deliveryForm": {
+      "heading": "بيانات التوصيل والدفع",
+      "nameLabel": "الاسم الكامل",
+      "phoneLabel": "رقم الهاتف",
+      "phonePlaceholder": "+968...",
+      "cityLabel": "المحافظة / الولاية",
+      "streetLabel": "العنوان التفصيلي",
+      "paymentMethodLabel": "طريقة الدفع",
+      "paymentCard": "بطاقة",
+      "paymentCod": "عند الاستلام",
+      "submitBtn": "تأكيد وإرسال الطلب",
+      "submitBtnLoading": "جارٍ المعالجة..."
+    },
+    "toasts": {
+      "loginRequired": "يجب تسجيل الدخول أولاً",
+      "loadCartFailed": "فشل تحميل السلة",
+      "updateFailed": "فشل التحديث",
+      "deleteFailed": "فشل الحذف",
+      "enterCodeFirst": "أدخل كوداً أولاً",
+      "invalidCode": "الكود غير صالح",
+      "codeNotEligible": "الكود غير مؤهّل لهذا الطلب",
+      "promoApplied": "✓ تم تطبيق الخصم — وفّرت {{amount}} {{currency}}",
+      "missingFields": "أكمل البيانات المطلوبة (الاسم والهاتف والمحافظة)",
+      "cartEmpty": "السلة فارغة",
+      "saleOrderFailed": "فشل إنشاء طلب الشراء",
+      "genericFailed": "فشل",
+      "rentalErrorsPrefix": "بعض طلبات الإيجار فشلت:",
+      "saleOrderCreated": "تم إنشاء طلب الشراء",
+      "rentalOrdersSent": "تم إرسال {{n}} طلب إيجار"
+    }
+  },
+  "kyc": {
+    "title": "تحقّق الهوية | منصة حرث",
+    "heading": "تحقّق الهوية",
+    "lede": "نطلب توثيق الهوية لزيادة ثقة المشترين وحماية الجميع من الاحتيال. بعد التحقّق ستظهر علامة <strong style=\"color:#2d5016\">✓ موثَّق</strong> على ملفك ومعداتك.",
+    "steps": {
+      "front": "وجه البطاقة",
+      "back": "ظهر البطاقة",
+      "selfie": "صورة شخصية",
+      "review": "مراجعة وإرسال"
+    },
+    "returnBtn": "العودة",
+    "panels": {
+      "front": {
+        "title": "وجه البطاقة الشخصية",
+        "desc": "صورة واضحة للوجه الأمامي للبطاقة أو السجل التجاري",
+        "tip": "تأكد من وضوح الاسم ورقم الهوية — تجنب الوميض والظلال",
+        "captureBtn": "فتح الكاميرا والتقاط صورة",
+        "imgAlt": "وجه البطاقة"
+      },
+      "back": {
+        "title": "ظهر البطاقة الشخصية",
+        "desc": "صورة واضحة للوجه الخلفي للبطاقة",
+        "tip": "تأكد أن جميع الأرقام والبيانات ظاهرة بوضوح",
+        "imgAlt": "ظهر البطاقة"
+      },
+      "selfie": {
+        "title": "صورة شخصية مع البطاقة",
+        "desc": "صورتك وأنت تحمل البطاقة — يجب أن يظهر وجهك ورقم البطاقة بوضوح",
+        "tip": "اجلس في مكان مضاء واحمل البطاقة بجانب وجهك",
+        "captureBtn": "فتح الكاميرا الأمامية",
+        "imgAlt": "صورة شخصية"
+      },
+      "review": {
+        "heading": "مراجعة وإرسال",
+        "identityLabel": "رقم الهوية / السجل التجاري (اختياري)",
+        "identityPlaceholder": "أدخل رقم البطاقة كما هو مكتوب",
+        "gpsDetecting": "جارٍ تحديد موقعك تلقائياً...",
+        "gpsNoSupport": "الجهاز لا يدعم تحديد الموقع",
+        "gpsSuccess": "✓ تم تحديد الموقع (دقة ±{{accuracy}}م)",
+        "gpsFailed": "تعذّر تحديد الموقع — تأكد من منح الإذن",
+        "reviewNotice": "سيتم مراجعة وثائقك من قِبل فريق حرث خلال 24–48 ساعة. ستصلك إشعار فور صدور القرار.",
+        "submitBtn": "إرسال للمراجعة",
+        "submitBtnLoading": "جارٍ الإرسال..."
+      }
+    },
+    "captureBtnGeneric": "فتح الكاميرا والتقاط صورة",
+    "retakeBtn": "إعادة الالتقاط",
+    "uploading": "جارٍ الرفع...",
+    "uploadSuccess": "✓ تم الرفع بنجاح",
+    "uploadFailed": "فشل الرفع",
+    "toasts": {
+      "missingImages": "خطأ — بعض الصور غير مرفوعة",
+      "submitFailed": "فشل الإرسال",
+      "submitSuccess": "✓ تم الإرسال — سيتم مراجعة وثائقك قريباً"
+    },
+    "banners": {
+      "pendingSubmitted": "طلبك قيد المراجعة. سنُخطرك فور صدور القرار — لا حاجة لإعادة الإرسال.",
+      "pendingExisting": "طلبك قيد المراجعة من قِبل الإدارة. سنُخطرك فور صدور القرار.",
+      "approvedHtml": "هويتك موثَّقة ✓ — علامة <strong>موثَّق</strong> ظاهرة على ملفك ومعداتك.",
+      "rejectedText": "لم تتم الموافقة على الوثائق المُقدَّمة. يمكنك إعادة الإرسال.",
+      "rejectedReasonLabel": "السبب:"
+    }
+  },
+  "track": {
+    "title": "تتبع الطلب - حرث",
+    "pageHeading": "تتبع طلبك",
+    "pageSubheading": "أدخل رقم التتبع (الرقم التسلسلي الذي وصلك مع تأكيد الطلب)",
+    "searchPlaceholder": "مثال: HRT-XXXXXXXX",
+    "searchBtn": "بحث",
+    "emptyHintTitle": "أدخل رقم التتبع أعلاه للاطلاع على حالة طلبك.",
+    "emptyHintFormat": "رقم التتبع يبدأ بـ HRT- ويتكوّن من 8 أحرف وأرقام",
+    "notFound": "لم يُعثر على الطلب",
+    "statusLabels": {
+      "pending": "قيد المعالجة",
+      "confirmed": "مؤكّد",
+      "shipped": "في الطريق إليك",
+      "delivered": "تم التسليم",
+      "cancelled": "مُلغى",
+      "refunded": "مُستردّ"
+    },
+    "rental": {
+      "trackingNumberLabel": "رقم الإيجار",
+      "startDateLabel": "تاريخ البدء",
+      "endDateLabel": "تاريخ الانتهاء",
+      "totalLabel": "الإجمالي",
+      "orderDateLabel": "تاريخ الطلب",
+      "statusLabels": {
+        "pending": "قيد الانتظار",
+        "approved": "موافق عليه",
+        "rejected": "مرفوض",
+        "active": "فعّال",
+        "completed": "مكتمل",
+        "cancelled": "ملغى"
+      },
+      "steps": {
+        "ordered": "تم الطلب",
+        "approved": "موافقة المالك",
+        "started": "بدأ الإيجار",
+        "completed": "اكتمل الإيجار"
+      }
+    },
+    "info": {
+      "trackingNumberLabel": "رقم التتبع",
+      "totalLabel": "الإجمالي",
+      "orderStatusLabel": "حالة الطلب",
+      "orderDateLabel": "تاريخ الطلب"
+    },
+    "proof": {
+      "title": "صور المندوب",
+      "pickupTitle": "صورة عند الاستلام من البائع",
+      "deliveryTitle": "صورة عند التسليم إليك"
+    },
+    "banner": {
+      "deliveredText": "تم تسليم طلبك بنجاح ✓",
+      "courierInTransit": "المندوب في الطريق إليك",
+      "courierAssigned": "تم تعيين مندوب لطلبك",
+      "pendingTitle": "لم يُقبَل الطلب من مندوب بعد",
+      "pendingHint": "سنخبرك فور قبوله."
+    },
+    "courier": {
+      "assignedTitle": "تم تعيين مندوب",
+      "loginToSeeHint": "سجّل الدخول لرؤية اسم المندوب ورقم هاتفه.",
+      "infoTitle": "معلومات المندوب",
+      "nameLabel": "الاسم",
+      "phoneLabel": "الهاتف"
+    },
+    "timeline": {
+      "orderCreated": "تم إنشاء الطلب",
+      "acceptedByCourier": "قَبلها مندوب",
+      "inTransit": "في الطريق",
+      "delivered": "تم التسليم"
+    }
+  },
+  "postStory": {
+    "title": "نشر قصة | منصة حرث",
+    "heading": "انشر قصة من مزرعتك",
+    "lede": "شارك متابعيك ما يحدث في مزرعتك اليوم — حصاد، شتلات جديدة، معدات تعمل، أو أي لحظة. القصة تختفي تلقائياً بعد 24 ساعة.",
+    "imageFieldLabel": "صورة القصة",
+    "uploadHint": "ارفع صورة عمودية (9:16 موصى بها) لتجربة عرض أفضل.",
+    "previewEmpty": "لم تُرفع صورة بعد",
+    "captionFieldLabel": "تعليق (اختياري)",
+    "captionPlaceholder": "اكتب وصفاً قصيراً (≤ 280 حرفاً)",
+    "equipmentFieldLabel": "ربط بمعدة (اختياري)",
+    "equipmentNoneOption": "— لا تربط —",
+    "equipmentHint": "يظهر زرّ \"اعرض المعدة\" داخل القصة ويفتحها للمشاهد.",
+    "submitBtn": "نشر القصة",
+    "submitBtnLoading": "جارٍ النشر...",
+    "cancelBtn": "إلغاء",
+    "myStoriesTitle": "قصصي النشطة",
+    "noActiveStories": "لا توجد قصص نشطة. انشر أوّل قصة من النموذج بالأعلى.",
+    "deleteTitle": "حذف",
+    "hoursLeftSuffix": "{{n}}س متبقية",
+    "confirmDeleteStory": "حذف القصة؟",
+    "alerts": {
+      "ownersOnly": "نشر القصص متاح للمزارعين فقط.",
+      "pendingApproval": "حسابك بانتظار الموافقة. سيتم تفعيل النشر بعد الاعتماد."
+    },
+    "toasts": {
+      "uploadFailed": "فشل الرفع",
+      "imageUploaded": "تم رفع الصورة ✓",
+      "uploadFirst": "الرجاء رفع الصورة أولاً",
+      "postFailed": "فشل النشر",
+      "posted": "تم نشر القصة ✓ ستختفي بعد 24 ساعة",
+      "loadFailed": "فشل التحميل",
+      "deleted": "تم الحذف",
+      "deleteFailed": "فشل الحذف"
+    }
+  },
+  "loyalty": {
+    "title": "برنامج الولاء | منصة حرث",
+    "heroTitle": "برنامج ولاء حرث",
+    "pointsLabel": "نقطة قابلة للاستخدام",
+    "lifetimePointsLabel": "مجموع النقاط المكتسبة",
+    "progressLoadingTitle": "جارٍ تحميل التقدّم...",
+    "recentActivityTitle": "آخر العمليات",
+    "loadFailedTierName": "تعذّر تحميل البيانات",
+    "progressToNextPrefix": "طريقك إلى المستوى",
+    "progressToNextSuffix": "",
+    "maxTierReachedPrefix": "🎉 وصلت لأعلى مستوى!",
+    "maxTierProgressTarget": "أعلى مستوى — استمتع بالامتيازات الكاملة",
+    "progressNowPoints": "{{n}} نقطة",
+    "progressTargetNext": "{{min}} نقطة (متبقّي {{remaining}})",
+    "tierMinFrom": "يبدأ من {{min}} نقطة",
+    "currentTierPill": "مستواك الحالي",
+    "noLedgerItems": "لا توجد عمليات بعد. ابدأ بالتسوّق لتجمع نقاطك الأولى!",
+    "ledgerAmountPoints": "{{amount}} نقطة",
+    "kindLabels": {
+      "earn": "ربح من طلب",
+      "referral_bonus": "مكافأة إحالة",
+      "admin_adjust": "تعديل من الإدارة",
+      "spend": "استخدام",
+      "expire": "انتهاء صلاحية"
+    }
+  },
+  "check": {
+    "title": "دليل فحص المحاصيل - حرث",
+    "pageHeading": "دليل فحص المحاصيل",
+    "pageSubheading": "تعرف على الآفات الشائعة وكيفية معالجتها بطرق فعالة وآمنة",
+    "treatmentLabel": "طريقة المعالجة:",
+    "pests": {
+      "palmWeevil": {
+        "name": "سوسة النخيل الحمراء",
+        "desc": "تعتبر من أخطر الآفات التي تصيب أشجار النخيل، حيث تتغذى اليرقات على الأنسجة الحية داخل الجذع مما يؤدي لموت النخلة.",
+        "treatment": "الحقن المباشر للمبيدات الجهازية داخل الجذع، مع ضرورة إزالة الأجزاء المصابة وحرقها فوراً لمنع الانتشار."
+      },
+      "fruitFly": {
+        "name": "ذبابة الفاكهة",
+        "desc": "تعد ذبابة الفاكهة من أخطر الآفات التي تصيب الثمار الناضجة وتتسبب في خسائر فادحة للمحاصيل الزراعية، حيث تضع الأنثى بيضها داخل الثمرة، مما يؤدي إلى تعفن الثمار المصابة وسقوطها على الأرض، وبالتالي فقدان المحصول بالكامل.",
+        "treatment": "الرش الجزئي للطعوم السامة أو استخدام المصائد الفيرومونية الجاذبة، مع ضرورة جمع الثمار المصابة والمتساقطة والتخلص منها فوراً لمنع انتشار الآفة."
+      },
+      "aphids": {
+        "name": "حشرة المن (Aphids)",
+        "desc": "حشرات صغيرة تتجمع على الأوراق الحديثة والبراعم، تمتص العصارة وتسبب تجعد الأوراق وظهور العفن الأسود.",
+        "treatment": "يمكن استخدام محلول صابوني طبيعي أو زيت النيم، وفي الإصابات الشديدة يُنصح باستخدام مبيدات حشرية متخصصة."
+      }
+    }
+  },
   "basket": {
     "addedToCartAlert": "{{name}} مضاف للسلة ({{count}} عناصر)",
     "cartEmpty": "السلة فارغة",

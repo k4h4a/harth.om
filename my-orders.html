@@ -3,7 +3,25 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>سجل طلباتي - حرث</title>
+    <script>
+      // Apply the saved language/direction before first paint so there's no
+      // flash of Arabic/RTL when the visitor's saved language is English.
+      (function () {
+        try {
+          if (localStorage.getItem("harth_lang") === "en") {
+            document.documentElement.lang = "en";
+            document.documentElement.dir = "ltr";
+          }
+        } catch (e) {}
+        document.documentElement.classList.add("i18n-loading");
+      })();
+    </script>
+    <style>
+      html.i18n-loading body {
+        visibility: hidden;
+      }
+    </style>
+    <title data-i18n="myOrders.title">سجل طلباتي - حرث</title>
     <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700&display=swap" rel="stylesheet" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
     <link rel="stylesheet" href="style.css" />
@@ -211,7 +229,7 @@
       .items-table th {
         background: rgba(255,255,255,0.06);
         padding: 8px 10px;
-        text-align: right;
+        text-align: start;
         color: rgba(255,255,255,0.6);
         font-weight: 600;
         font-size: 12px;
@@ -322,6 +340,14 @@
       .pagination button.active { background: #6ab04c; border-color: #5a9a3c; color: #fff; }
       .pagination button:disabled { opacity: 0.4; cursor: not-allowed; }
 
+      /* These chevrons point toward "previous"/"next" in reading order —
+         flip them in LTR so they still point the right way. */
+      [dir="ltr"] .pagination .fa-angle-right,
+      [dir="ltr"] .pagination .fa-angle-left {
+        transform: scaleX(-1);
+        display: inline-block;
+      }
+
       /* ── Empty / Loading ── */
       .page-loading, .empty-state {
         text-align: center;
@@ -394,7 +420,7 @@
           <ul class="nav-links"></ul>
         </nav>
         <div class="section left" id="auth-header">
-          <a href="register.html" class="hs-btn hs-btn--ghost hs-btn--sm" id="login-link">
+          <a href="register.html" class="hs-btn hs-btn--ghost hs-btn--sm" id="login-link" data-i18n="common.buttons.login">
             تسجيل دخول
           </a>
         </div>
@@ -402,48 +428,48 @@
     </header>
 
     <div class="container">
-      <h1 class="page-title">سجل <span>طلباتي</span></h1>
-      <p class="page-subtitle">جميع طلباتك مرتبة من الأحدث إلى الأقدم</p>
+      <h1 class="page-title"><span data-i18n="myOrders.pageTitlePart1">سجل</span> <span data-i18n="myOrders.pageTitlePart2">طلباتي</span></h1>
+      <p class="page-subtitle" data-i18n="myOrders.pageSubtitle">جميع طلباتك مرتبة من الأحدث إلى الأقدم</p>
 
       <!-- Filter bar -->
       <div class="filter-bar">
-        <input type="search" id="f-search" placeholder="ابحث برقم الطلب أو رقم التتبع..." />
+        <input type="search" id="f-search" data-i18n-placeholder="myOrders.filters.searchPlaceholder" placeholder="ابحث برقم الطلب أو رقم التتبع..." />
         <select id="f-status">
-          <option value="">كل الحالات</option>
-          <option value="pending">قيد الانتظار</option>
-          <option value="confirmed">مؤكد</option>
-          <option value="approved">موافق عليه (إيجار)</option>
-          <option value="shipped">قيد التوصيل</option>
-          <option value="active">فعّال (إيجار)</option>
-          <option value="delivered">تم التوصيل</option>
-          <option value="completed">مكتمل (إيجار)</option>
-          <option value="cancelled">ملغي</option>
-          <option value="refunded">مسترد</option>
+          <option value="" data-i18n="myOrders.filters.statusAll">كل الحالات</option>
+          <option value="pending" data-i18n="myOrders.filters.statusOptions.pending">قيد الانتظار</option>
+          <option value="confirmed" data-i18n="myOrders.filters.statusOptions.confirmed">مؤكد</option>
+          <option value="approved" data-i18n="myOrders.filters.statusOptions.approvedRental">موافق عليه (إيجار)</option>
+          <option value="shipped" data-i18n="myOrders.filters.statusOptions.shipped">قيد التوصيل</option>
+          <option value="active" data-i18n="myOrders.filters.statusOptions.activeRental">فعّال (إيجار)</option>
+          <option value="delivered" data-i18n="myOrders.filters.statusOptions.delivered">تم التوصيل</option>
+          <option value="completed" data-i18n="myOrders.filters.statusOptions.completedRental">مكتمل (إيجار)</option>
+          <option value="cancelled" data-i18n="myOrders.filters.statusOptions.cancelled">ملغي</option>
+          <option value="refunded" data-i18n="myOrders.filters.statusOptions.refunded">مسترد</option>
         </select>
         <select id="f-type">
-          <option value="">شراء وإيجار</option>
-          <option value="sale">شراء فقط</option>
-          <option value="rental">إيجار فقط</option>
+          <option value="" data-i18n="myOrders.filters.typeAll">شراء وإيجار</option>
+          <option value="sale" data-i18n="myOrders.filters.typeSale">شراء فقط</option>
+          <option value="rental" data-i18n="myOrders.filters.typeRental">إيجار فقط</option>
         </select>
-        <input type="date" id="f-date-from" title="من تاريخ" />
-        <input type="date" id="f-date-to" title="إلى تاريخ" />
+        <input type="date" id="f-date-from" data-i18n-title="myOrders.filters.dateFromTitle" title="من تاريخ" />
+        <input type="date" id="f-date-to" data-i18n-title="myOrders.filters.dateToTitle" title="إلى تاريخ" />
         <button class="btn-clear" id="btn-clear-filters">
-          <i class="fas fa-times"></i> مسح
+          <i class="fas fa-times"></i> <span data-i18n="myOrders.filters.clearBtn">مسح</span>
         </button>
       </div>
 
       <!-- Stats -->
       <div class="stats-row" id="stats-row" style="display:none">
-        <div class="stat-card"><div class="stat-num" id="stat-total">0</div><div class="stat-label">إجمالي الطلبات</div></div>
-        <div class="stat-card"><div class="stat-num" id="stat-delivered">0</div><div class="stat-label">تم تسليمها</div></div>
-        <div class="stat-card"><div class="stat-num" id="stat-active">0</div><div class="stat-label">نشطة</div></div>
-        <div class="stat-card"><div class="stat-num" id="stat-spent">0</div><div class="stat-label">إجمالي الإنفاق (ر.ع)</div></div>
+        <div class="stat-card"><div class="stat-num" id="stat-total">0</div><div class="stat-label" data-i18n="myOrders.stats.total">إجمالي الطلبات</div></div>
+        <div class="stat-card"><div class="stat-num" id="stat-delivered">0</div><div class="stat-label" data-i18n="myOrders.stats.delivered">تم تسليمها</div></div>
+        <div class="stat-card"><div class="stat-num" id="stat-active">0</div><div class="stat-label" data-i18n="myOrders.stats.active">نشطة</div></div>
+        <div class="stat-card"><div class="stat-num" id="stat-spent">0</div><div class="stat-label" id="stat-spent-label">إجمالي الإنفاق (ر.ع)</div></div>
       </div>
 
       <!-- Loading state -->
       <div class="page-loading" id="page-loading">
         <div class="spin-lg"></div>
-        <div style="color:rgba(255,255,255,0.5)">جارٍ تحميل طلباتك...</div>
+        <div style="color:rgba(255,255,255,0.5)" data-i18n="myOrders.loadingOrders">جارٍ تحميل طلباتك...</div>
       </div>
 
       <!-- Orders list -->
@@ -452,9 +478,9 @@
       <!-- Empty state -->
       <div class="empty-state" id="empty-state" style="display:none">
         <i class="fas fa-shopping-basket"></i>
-        <h3>لا توجد طلبات</h3>
-        <p>لم تضع أي طلبات بعد، أو لا توجد طلبات تطابق الفلاتر المحددة.</p>
-        <a href="tools.html">تسوق الآن</a>
+        <h3 data-i18n="myOrders.emptyState.title">لا توجد طلبات</h3>
+        <p data-i18n="myOrders.emptyState.desc">لم تضع أي طلبات بعد، أو لا توجد طلبات تطابق الفلاتر المحددة.</p>
+        <a href="tools.html" data-i18n="myOrders.emptyState.shopNowBtn">تسوق الآن</a>
       </div>
 
       <!-- Pagination -->
@@ -463,6 +489,8 @@
 
     <div id="toast"></div>
 
+    <script src="i18n.js"></script>
+    <script src="lang-switcher.js"></script>
     <script src="design-system.js"></script>
     <script src="unified-nav.js"></script>
     <script src="script.js"></script>
@@ -477,12 +505,19 @@
       const PAGE_SIZE = 10;
       const detailsCache = {}; // orderId → { items, ... }
 
+      function t(key, vars) {
+        return window.HarthI18n ? window.HarthI18n.t(key, vars) : key;
+      }
+      function localeTag() {
+        return window.HarthI18n ? window.HarthI18n.localeTag() : "ar";
+      }
+
       function showToast(msg, isError = false) {
-        const t = $("#toast");
-        t.textContent = msg;
-        t.classList.toggle("error", isError);
-        t.classList.add("show");
-        setTimeout(() => t.classList.remove("show"), 3200);
+        const el = $("#toast");
+        el.textContent = msg;
+        el.classList.toggle("error", isError);
+        el.classList.add("show");
+        setTimeout(() => el.classList.remove("show"), 3200);
       }
 
       function escapeHtml(s) {
@@ -490,40 +525,48 @@
         return String(s).replace(/[&<>"']/g, (c) => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"})[c]);
       }
 
-      function money(n) { return Number(n || 0).toFixed(2) + " ر.ع"; }
+      function money(n) { return Number(n || 0).toFixed(2) + " " + t("common.currency"); }
 
       function fmtDate(d) {
         if (!d) return "—";
         const dt = new Date(d);
-        return dt.toLocaleDateString("ar-SA", { year: "numeric", month: "short", day: "numeric" });
+        return dt.toLocaleDateString(localeTag() === "ar" ? "ar-SA" : "en-US", { year: "numeric", month: "short", day: "numeric" });
       }
 
       // ── Status helpers ──
-      const STATUS_LABELS = {
-        pending:   { ar: "جديد",          icon: "clock",           cls: "pending" },
-        confirmed: { ar: "مؤكد",          icon: "check-circle",    cls: "confirmed" },
-        shipped:   { ar: "قيد التوصيل",   icon: "truck",           cls: "shipped" },
-        delivered: { ar: "تم التوصيل",    icon: "check-double",    cls: "delivered" },
-        cancelled: { ar: "ملغي",          icon: "times-circle",    cls: "cancelled" },
-        refunded:  { ar: "مسترد",         icon: "undo",            cls: "refunded" },
+      const STATUS_META = {
+        pending:   { icon: "clock",           cls: "pending" },
+        confirmed: { icon: "check-circle",    cls: "confirmed" },
+        shipped:   { icon: "truck",           cls: "shipped" },
+        delivered: { icon: "check-double",    cls: "delivered" },
+        cancelled: { icon: "times-circle",    cls: "cancelled" },
+        refunded:  { icon: "undo",            cls: "refunded" },
         // Rental-specific
-        approved:  { ar: "موافق عليه",    icon: "check-circle",    cls: "confirmed" },
-        rejected:  { ar: "مرفوض",         icon: "times-circle",    cls: "cancelled" },
-        active:    { ar: "فعّال",          icon: "play-circle",     cls: "shipped" },
-        completed: { ar: "مكتمل",         icon: "check-double",    cls: "delivered" },
+        approved:  { icon: "check-circle",    cls: "confirmed" },
+        rejected:  { icon: "times-circle",    cls: "cancelled" },
+        active:    { icon: "play-circle",     cls: "shipped" },
+        completed: { icon: "check-double",    cls: "delivered" },
       };
 
+      function statusLabel(status) {
+        const label = t(`myOrders.statusLabels.${status}`);
+        return label.startsWith("myOrders.statusLabels.") ? status : label;
+      }
+
       function statusBadgeHtml(status) {
-        const s = STATUS_LABELS[status] || { ar: status, icon: "circle", cls: "pending" };
-        return `<span class="status-badge ${s.cls}"><i class="fas fa-${s.icon}"></i>${s.ar}</span>`;
+        const m = STATUS_META[status] || { icon: "circle", cls: "pending" };
+        return `<span class="status-badge ${m.cls}"><i class="fas fa-${m.icon}"></i>${statusLabel(status)}</span>`;
       }
 
-      function paymentStatusAr(ps) {
-        return ({ pending: "انتظار الدفع", paid: "مدفوع", failed: "فشل الدفع", refunded: "مسترد" })[ps] || ps;
+      function paymentStatusLabel(ps) {
+        const label = t(`myOrders.paymentStatusLabels.${ps}`);
+        return label.startsWith("myOrders.paymentStatusLabels.") ? ps : label;
       }
 
-      function paymentMethodAr(pm) {
-        return ({ card: "بطاقة ائتمان", cash_on_delivery: "عند الاستلام", cod: "عند الاستلام" })[pm] || pm || "—";
+      function paymentMethodLabel(pm) {
+        if (!pm) return "—";
+        const label = t(`myOrders.paymentMethodLabels.${pm}`);
+        return label.startsWith("myOrders.paymentMethodLabels.") ? pm : label;
       }
 
       // ── Load all orders + rentals ──
@@ -540,7 +583,7 @@
             apiFetch(`/orders/mine?page=${page}&limit=100`),
             apiFetch(`/rentals?scope=renter&limit=100`),
           ]);
-          if (!ordersRes || !ordersRes.success) throw new Error((ordersRes && ordersRes.error && ordersRes.error.message) || "فشل التحميل");
+          if (!ordersRes || !ordersRes.success) throw new Error((ordersRes && ordersRes.error && ordersRes.error.message) || t("myOrders.toasts.loadFailed"));
 
           const saleItems = (ordersRes.items || []).map(o => ({ ...o, _type: "sale" }));
           const rentalItems = (rentalsRes?.items || []).map(r => ({
@@ -557,7 +600,7 @@
           updateStats(allOrders);
           applyFilters();
         } catch (err) {
-          $("#page-loading").innerHTML = `<p style="color:#ffb3b3">خطأ: ${escapeHtml(err.message)}</p>`;
+          $("#page-loading").innerHTML = `<p style="color:#ffb3b3">${t("myOrders.toasts.errorPrefix")} ${escapeHtml(err.message)}</p>`;
           showToast(err.message, true);
         }
       }
@@ -572,6 +615,7 @@
         const spent = orders.filter(o => !["cancelled","refunded","rejected"].includes(o.status))
                              .reduce((s, o) => s + Number(o.total || 0), 0);
         $("#stat-spent").textContent = spent.toFixed(2);
+        $("#stat-spent-label").textContent = t("myOrders.stats.spent", { currency: t("common.currency") });
       }
 
       // ── Client-side filter ──
@@ -634,8 +678,8 @@
 
           const isRental = o._type === "rental";
           const typeBadge = isRental
-            ? `<span style="background:rgba(241,196,15,0.15);color:#f1c40f;font-size:11px;padding:2px 8px;border-radius:20px;margin-inline-start:6px;font-weight:700">إيجار</span>`
-            : `<span style="background:rgba(106,176,76,0.15);color:#6ab04c;font-size:11px;padding:2px 8px;border-radius:20px;margin-inline-start:6px;font-weight:700">شراء</span>`;
+            ? `<span style="background:rgba(241,196,15,0.15);color:#f1c40f;font-size:11px;padding:2px 8px;border-radius:20px;margin-inline-start:6px;font-weight:700">${t("myOrders.typeBadges.rental")}</span>`
+            : `<span style="background:rgba(106,176,76,0.15);color:#6ab04c;font-size:11px;padding:2px 8px;border-radius:20px;margin-inline-start:6px;font-weight:700">${t("myOrders.typeBadges.sale")}</span>`;
 
           const addr = (() => {
             try {
@@ -645,11 +689,12 @@
             } catch (_e) { return ""; }
           })();
 
+          const dirArrow = document.documentElement.getAttribute("dir") === "rtl" ? "←" : "→";
           const subtitle = isRental
-            ? (o.start_date ? `${o.start_date.slice(0,10)} ← ${(o.end_date||"").slice(0,10)}` : "")
+            ? (o.start_date ? `${o.start_date.slice(0,10)} ${dirArrow} ${(o.end_date||"").slice(0,10)}` : "")
             : addr;
 
-          const borderStyle = isRental ? "border-right:3px solid rgba(241,196,15,0.4);" : "";
+          const borderStyle = isRental ? "border-inline-start:3px solid rgba(241,196,15,0.4);" : "";
 
           card.innerHTML = `
             <div class="order-header" style="${borderStyle}">
@@ -667,7 +712,7 @@
               <i class="fas fa-chevron-down expand-icon"></i>
             </div>
             <div class="order-details" id="details-${escapeHtml(o.id)}">
-              <div class="details-loading"><span class="spin-sm"></span> جارٍ تحميل التفاصيل...</div>
+              <div class="details-loading"><span class="spin-sm"></span> ${t("myOrders.detailsLoading")}</div>
             </div>
           `;
 
@@ -694,26 +739,25 @@
         try {
           if (order._type === "rental") {
             const res = await apiFetch(`/rentals/${order.id}`);
-            if (!res || !res.success) throw new Error("فشل تحميل التفاصيل");
+            if (!res || !res.success) throw new Error(t("myOrders.toasts.detailsLoadFailed"));
             detailsCache[order.id] = res.rental;
             renderRentalDetails(detailEl, res.rental);
           } else {
             const res = await apiFetch(`/orders/${order.id}`);
-            if (!res || !res.success) throw new Error("فشل تحميل التفاصيل");
+            if (!res || !res.success) throw new Error(t("myOrders.toasts.detailsLoadFailed"));
             detailsCache[order.id] = res.order;
             renderDetails(detailEl, order, res.order);
           }
         } catch (err) {
-          detailEl.innerHTML = `<p style="color:#ffb3b3;padding:14px">خطأ: ${escapeHtml(err.message)}</p>`;
+          detailEl.innerHTML = `<p style="color:#ffb3b3;padding:14px">${t("myOrders.toasts.errorPrefix")} ${escapeHtml(err.message)}</p>`;
         }
       }
 
       function renderRentalDetails(el, r) {
-        const stMap = { pending:"قيد الانتظار", approved:"موافق عليه", rejected:"مرفوض", active:"فعّال", completed:"مكتمل", cancelled:"ملغى" };
         const addr = (() => {
           try {
             const a = typeof r.delivery_address === "string" ? JSON.parse(r.delivery_address) : (r.delivery_address || {});
-            return [a.street, a.city].filter(Boolean).join("، ");
+            return [a.street, a.city].filter(Boolean).join(t("delivery.job.listSeparator"));
           } catch (_e) { return "—"; }
         })();
 
@@ -723,29 +767,29 @@
           <div style="display:flex;align-items:center;gap:14px;padding:12px;background:rgba(241,196,15,.06);border-radius:10px;margin-bottom:14px">
             ${r.equipment_image ? `<img src="${escapeHtml(r.equipment_image)}" style="width:56px;height:56px;object-fit:cover;border-radius:8px">` : `<div style="width:56px;height:56px;background:rgba(255,255,255,.07);border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:22px">🚜</div>`}
             <div>
-              <div style="font-size:15px;font-weight:700">${escapeHtml(r.equipment_name || "معدة")}</div>
+              <div style="font-size:15px;font-weight:700">${escapeHtml(r.equipment_name || t("myOrders.rentalDetails.equipmentFallback"))}</div>
               ${r.equipment_category ? `<div style="font-size:12px;color:rgba(255,255,255,0.5)">${escapeHtml(r.equipment_category)}</div>` : ""}
             </div>
           </div>
           <div class="order-info-grid">
-            <div class="info-row"><span class="info-label">رقم الإيجار:</span><span class="info-val">${escapeHtml(r.tracking_number || "—")}</span></div>
-            <div class="info-row"><span class="info-label">الحالة:</span><span class="info-val">${stMap[r.status] || r.status}</span></div>
-            <div class="info-row"><span class="info-label">تاريخ البدء:</span><span class="info-val">${(r.start_date||"—").slice(0,10)}</span></div>
-            <div class="info-row"><span class="info-label">تاريخ الانتهاء:</span><span class="info-val">${(r.end_date||"—").slice(0,10)}</span></div>
-            <div class="info-row"><span class="info-label">طريقة الدفع:</span><span class="info-val">${paymentMethodAr(r.payment_method)}</span></div>
-            <div class="info-row"><span class="info-label">تاريخ الطلب:</span><span class="info-val">${fmtDate(r.created_at)}</span></div>
-            ${addr && addr !== "—" ? `<div class="info-row" style="grid-column:1/-1"><span class="info-label">عنوان التسليم:</span><span class="info-val">${escapeHtml(addr)}</span></div>` : ""}
-            ${r.renter_notes ? `<div class="info-row" style="grid-column:1/-1"><span class="info-label">ملاحظات:</span><span class="info-val">${escapeHtml(r.renter_notes)}</span></div>` : ""}
+            <div class="info-row"><span class="info-label">${t("myOrders.rentalDetails.labels.rentalNumber")}</span><span class="info-val">${escapeHtml(r.tracking_number || "—")}</span></div>
+            <div class="info-row"><span class="info-label">${t("myOrders.rentalDetails.labels.status")}</span><span class="info-val">${statusLabel(r.status)}</span></div>
+            <div class="info-row"><span class="info-label">${t("myOrders.rentalDetails.labels.startDate")}</span><span class="info-val">${(r.start_date||"—").slice(0,10)}</span></div>
+            <div class="info-row"><span class="info-label">${t("myOrders.rentalDetails.labels.endDate")}</span><span class="info-val">${(r.end_date||"—").slice(0,10)}</span></div>
+            <div class="info-row"><span class="info-label">${t("myOrders.rentalDetails.labels.paymentMethod")}</span><span class="info-val">${paymentMethodLabel(r.payment_method)}</span></div>
+            <div class="info-row"><span class="info-label">${t("myOrders.rentalDetails.labels.orderDate")}</span><span class="info-val">${fmtDate(r.created_at)}</span></div>
+            ${addr && addr !== "—" ? `<div class="info-row" style="grid-column:1/-1"><span class="info-label">${t("myOrders.rentalDetails.labels.deliveryAddress")}</span><span class="info-val">${escapeHtml(addr)}</span></div>` : ""}
+            ${r.renter_notes ? `<div class="info-row" style="grid-column:1/-1"><span class="info-label">${t("myOrders.rentalDetails.labels.notes")}</span><span class="info-val">${escapeHtml(r.renter_notes)}</span></div>` : ""}
           </div>
           <div class="order-totals-mini">
-            <span>الإيجار: <strong>${money(r.total_price)}</strong></span>
-            ${Number(r.deposit_amount||0)>0 ? `<span>التأمين: <strong>${money(r.deposit_amount)}</strong></span>` : ""}
-            <span>الإجمالي: <strong class="grand-val">${money(rTotal)}</strong></span>
+            <span>${t("myOrders.rentalDetails.totals.rental")} <strong>${money(r.total_price)}</strong></span>
+            ${Number(r.deposit_amount||0)>0 ? `<span>${t("myOrders.rentalDetails.totals.deposit")} <strong>${money(r.deposit_amount)}</strong></span>` : ""}
+            <span>${t("myOrders.rentalDetails.totals.grand")} <strong class="grand-val">${money(rTotal)}</strong></span>
           </div>
           ${["pending","approved"].includes(r.status) ? `
           <div class="actions-row">
             <button class="btn-action btn-cancel" onclick="cancelRental('${escapeHtml(r.id)}', this)">
-              <i class="fas fa-times-circle"></i> إلغاء الإيجار
+              <i class="fas fa-times-circle"></i> ${t("myOrders.rentalDetails.cancelBtn")}
             </button>
           </div>` : ""}
         `;
@@ -757,14 +801,14 @@
         const addr = (() => {
           try {
             const a = typeof detail.shipping_address === "string" ? JSON.parse(detail.shipping_address) : (detail.shipping_address || {});
-            return [a.street, a.city].filter(Boolean).join("، ");
+            return [a.street, a.city].filter(Boolean).join(t("delivery.job.listSeparator"));
           } catch (_e) { return "—"; }
         })();
 
         const itemsHtml = items.length
           ? `<table class="items-table">
               <thead><tr>
-                <th></th><th>المنتج</th><th>الكمية</th><th>سعر الوحدة</th><th>الإجمالي</th>
+                <th></th><th>${t("myOrders.orderDetails.table.product")}</th><th>${t("myOrders.orderDetails.table.quantity")}</th><th>${t("myOrders.orderDetails.table.unitPrice")}</th><th>${t("myOrders.orderDetails.table.total")}</th>
               </tr></thead>
               <tbody>
                 ${items.map(it => `
@@ -781,45 +825,45 @@
                 `).join("")}
               </tbody>
             </table>`
-          : `<p style="color:rgba(255,255,255,0.45);font-size:13px;margin-bottom:12px">لا تفاصيل منتجات متوفرة</p>`;
+          : `<p style="color:rgba(255,255,255,0.45);font-size:13px;margin-bottom:12px">${t("myOrders.orderDetails.noItems")}</p>`;
 
         const discountRow = Number(detail.discount) > 0
-          ? `<span>خصم: <strong style="color:#f1c40f">-${money(detail.discount)}</strong></span>` : "";
+          ? `<span>${t("myOrders.orderDetails.totals.discount")} <strong style="color:#f1c40f">-${money(detail.discount)}</strong></span>` : "";
         const loyaltyRow = Number(detail.loyalty_points_used) > 0
-          ? `<span>نقاط مستخدمة: <strong style="color:#f1c40f">-${detail.loyalty_points_used} نقطة</strong></span>` : "";
+          ? `<span>${t("myOrders.orderDetails.totals.loyaltyUsed")} <strong style="color:#f1c40f">${t("myOrders.orderDetails.loyaltyUsedValue", { n: detail.loyalty_points_used })}</strong></span>` : "";
 
         el.innerHTML = `
           ${itemsHtml}
           <div class="order-info-grid">
-            <div class="info-row"><span class="info-label">رقم التتبع:</span><span class="info-val">${escapeHtml(detail.tracking_number || "—")}</span></div>
-            <div class="info-row"><span class="info-label">حالة الطلب:</span><span class="info-val">${(STATUS_LABELS[detail.status] || {}).ar || detail.status}</span></div>
-            <div class="info-row"><span class="info-label">طريقة الدفع:</span><span class="info-val">${paymentMethodAr(detail.payment_method)}</span></div>
-            <div class="info-row"><span class="info-label">حالة الدفع:</span><span class="info-val">${paymentStatusAr(detail.payment_status)}</span></div>
-            <div class="info-row"><span class="info-label">عنوان التوصيل:</span><span class="info-val">${escapeHtml(addr)}</span></div>
-            <div class="info-row"><span class="info-label">تاريخ الطلب:</span><span class="info-val">${fmtDate(detail.created_at)}</span></div>
-            ${detail.paid_at ? `<div class="info-row"><span class="info-label">تاريخ الدفع:</span><span class="info-val">${fmtDate(detail.paid_at)}</span></div>` : ""}
-            ${detail.notes ? `<div class="info-row" style="grid-column:1/-1"><span class="info-label">ملاحظات:</span><span class="info-val">${escapeHtml(detail.notes)}</span></div>` : ""}
+            <div class="info-row"><span class="info-label">${t("myOrders.orderDetails.labels.trackingNumber")}</span><span class="info-val">${escapeHtml(detail.tracking_number || "—")}</span></div>
+            <div class="info-row"><span class="info-label">${t("myOrders.orderDetails.labels.orderStatus")}</span><span class="info-val">${statusLabel(detail.status)}</span></div>
+            <div class="info-row"><span class="info-label">${t("myOrders.orderDetails.labels.paymentMethod")}</span><span class="info-val">${paymentMethodLabel(detail.payment_method)}</span></div>
+            <div class="info-row"><span class="info-label">${t("myOrders.orderDetails.labels.paymentStatus")}</span><span class="info-val">${paymentStatusLabel(detail.payment_status)}</span></div>
+            <div class="info-row"><span class="info-label">${t("myOrders.orderDetails.labels.deliveryAddress")}</span><span class="info-val">${escapeHtml(addr)}</span></div>
+            <div class="info-row"><span class="info-label">${t("myOrders.orderDetails.labels.orderDate")}</span><span class="info-val">${fmtDate(detail.created_at)}</span></div>
+            ${detail.paid_at ? `<div class="info-row"><span class="info-label">${t("myOrders.orderDetails.labels.paymentDate")}</span><span class="info-val">${fmtDate(detail.paid_at)}</span></div>` : ""}
+            ${detail.notes ? `<div class="info-row" style="grid-column:1/-1"><span class="info-label">${t("myOrders.orderDetails.labels.notes")}</span><span class="info-val">${escapeHtml(detail.notes)}</span></div>` : ""}
           </div>
           <div class="order-totals-mini">
-            <span>مجموع فرعي: <strong>${money(detail.subtotal)}</strong></span>
+            <span>${t("myOrders.orderDetails.totals.subtotal")} <strong>${money(detail.subtotal)}</strong></span>
             ${discountRow}
             ${loyaltyRow}
-            <span>رسوم التوصيل: <strong>${money(detail.shipping_fee)}</strong></span>
-            <span>الضريبة: <strong>${money(detail.tax)}</strong></span>
-            <span>الإجمالي: <strong class="grand-val">${money(detail.total)}</strong></span>
+            <span>${t("myOrders.orderDetails.totals.shipping")} <strong>${money(detail.shipping_fee)}</strong></span>
+            <span>${t("myOrders.orderDetails.totals.tax")} <strong>${money(detail.tax)}</strong></span>
+            <span>${t("myOrders.orderDetails.totals.grand")} <strong class="grand-val">${money(detail.total)}</strong></span>
           </div>
           <div class="actions-row">
             ${items.length
               ? `<button class="btn-action btn-reorder" data-order-id="${escapeHtml(detail.id)}">
-                   <i class="fas fa-redo"></i> إعادة الطلب
+                   <i class="fas fa-redo"></i> ${t("myOrders.orderDetails.reorderBtn")}
                  </button>`
               : ""}
             <a href="track.html?t=${escapeHtml(detail.tracking_number || "")}" class="btn-action btn-track" style="text-decoration:none">
-              <i class="fas fa-search-location"></i> تتبع الطلب
+              <i class="fas fa-search-location"></i> ${t("myOrders.orderDetails.trackBtn")}
             </a>
             ${["pending", "confirmed"].includes(detail.status)
               ? `<button class="btn-action btn-cancel" data-cancel-id="${escapeHtml(detail.id)}">
-                   <i class="fas fa-times-circle"></i> إلغاء الطلب
+                   <i class="fas fa-times-circle"></i> ${t("myOrders.orderDetails.cancelBtn")}
                  </button>`
               : ""}
           </div>
@@ -841,11 +885,11 @@
       // ── Reorder: adds all items back to the cart ──
       async function reorder(order, btn) {
         const items = order.items || [];
-        if (!items.length) { showToast("لا يوجد منتجات لإعادة طلبها", true); return; }
+        if (!items.length) { showToast(t("myOrders.toasts.noItemsToReorder"), true); return; }
 
         btn.disabled = true;
         const origText = btn.innerHTML;
-        btn.innerHTML = '<span class="spin-sm"></span> جارٍ الإضافة...';
+        btn.innerHTML = `<span class="spin-sm"></span> ${t("myOrders.toasts.addingToCart")}`;
 
         let added = 0;
         const errors = [];
@@ -856,10 +900,10 @@
               method: "POST",
               body: JSON.stringify({ equipment_id: it.equipment_id, quantity: it.quantity }),
             });
-            if (!res || !res.success) throw new Error((res && res.error && res.error.message) || "فشل");
+            if (!res || !res.success) throw new Error((res && res.error && res.error.message) || t("delivery.toasts.genericFailed"));
             added++;
           } catch (err) {
-            errors.push(escapeHtml(it.equipment_name_snapshot || "منتج"));
+            errors.push(escapeHtml(it.equipment_name_snapshot || t("myOrders.toasts.productFallback")));
           }
         }
 
@@ -867,23 +911,23 @@
         btn.innerHTML = origText;
 
         if (added) {
-          showToast(`✓ تمت إضافة ${added} منتج للسلة`);
+          showToast(t("myOrders.toasts.reorderAdded", { n: added }));
           setTimeout(() => { window.location.href = "checkout.html"; }, 1400);
         } else {
-          showToast("فشلت إعادة الطلب: " + errors.join(", "), true);
+          showToast(t("myOrders.toasts.reorderFailed") + " " + errors.join(", "), true);
         }
       }
 
       // ── Cancel order ──
       async function cancelOrder(orderId, btn) {
-        if (!confirm("هل أنت متأكد من إلغاء هذا الطلب؟")) return;
+        if (!confirm(t("myOrders.toasts.confirmCancelOrder"))) return;
         btn.disabled = true;
         const orig = btn.innerHTML;
-        btn.innerHTML = '<span class="spin-sm"></span> جارٍ الإلغاء...';
+        btn.innerHTML = `<span class="spin-sm"></span> ${t("myOrders.toasts.cancellingOrder")}`;
         try {
           const res = await apiFetch(`/orders/${orderId}/cancel`, { method: "POST" });
-          if (!res || !res.success) throw new Error((res && res.error && res.error.message) || "فشل الإلغاء");
-          showToast("تم إلغاء الطلب بنجاح");
+          if (!res || !res.success) throw new Error((res && res.error && res.error.message) || t("myOrders.toasts.cancelOrderFailed"));
+          showToast(t("myOrders.toasts.orderCancelled"));
           delete detailsCache[orderId];
           await loadOrders(currentPage);
         } catch (err) {
@@ -895,14 +939,14 @@
 
       // ── Cancel rental ──
       async function cancelRental(rentalId, btn) {
-        if (!confirm("هل أنت متأكد من إلغاء هذا الإيجار؟")) return;
+        if (!confirm(t("myOrders.toasts.confirmCancelRental"))) return;
         btn.disabled = true;
         const orig = btn.innerHTML;
-        btn.innerHTML = '<span class="spin-sm"></span> جارٍ الإلغاء...';
+        btn.innerHTML = `<span class="spin-sm"></span> ${t("myOrders.toasts.cancellingOrder")}`;
         try {
           const res = await apiFetch(`/rentals/${rentalId}/cancel`, { method: "POST" });
-          if (!res || !res.success) throw new Error((res && res.error && res.error.message) || "فشل الإلغاء");
-          showToast("تم إلغاء الإيجار بنجاح");
+          if (!res || !res.success) throw new Error((res && res.error && res.error.message) || t("myOrders.toasts.cancelOrderFailed"));
+          showToast(t("myOrders.toasts.rentalCancelled"));
           delete detailsCache[rentalId];
           await loadOrders(currentPage);
         } catch (err) {
@@ -938,14 +982,20 @@
 
       // ── Init ──
       document.addEventListener("DOMContentLoaded", async () => {
+        if (window.HarthI18n) await window.HarthI18n.ready();
+
         // Auth guard
         if (!getToken || !getToken()) {
-          showToast("يجب تسجيل الدخول أولاً", true);
+          showToast(t("myOrders.toasts.loginRequired"), true);
           setTimeout(() => { window.location.href = "register.html"; }, 1200);
           return;
         }
 
         await loadOrders(1);
+
+        if (window.HarthI18n) {
+          document.addEventListener("harth:langchange", () => loadOrders(currentPage));
+        }
 
         // Filter wire-up
         let searchDebounce;

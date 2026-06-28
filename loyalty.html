@@ -3,7 +3,25 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>برنامج الولاء | منصة حرث</title>
+    <script>
+      // Apply the saved language/direction before first paint so there's no
+      // flash of Arabic/RTL when the visitor's saved language is English.
+      (function () {
+        try {
+          if (localStorage.getItem("harth_lang") === "en") {
+            document.documentElement.lang = "en";
+            document.documentElement.dir = "ltr";
+          }
+        } catch (e) {}
+        document.documentElement.classList.add("i18n-loading");
+      })();
+    </script>
+    <style>
+      html.i18n-loading body {
+        visibility: hidden;
+      }
+    </style>
+    <title data-i18n="loyalty.title">برنامج الولاء | منصة حرث</title>
     <link
       href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800&display=swap"
       rel="stylesheet"
@@ -221,7 +239,7 @@
           <ul class="nav-links"></ul>
         </nav>
         <div class="section left" id="auth-header">
-          <a href="register.html" class="hs-btn hs-btn--ghost hs-btn--sm" id="login-link">
+          <a href="register.html" class="hs-btn hs-btn--ghost hs-btn--sm" id="login-link" data-i18n="common.buttons.login">
             تسجيل دخول
           </a>
         </div>
@@ -231,26 +249,26 @@
     <main class="loyalty-shell">
       <!-- Hero summary card -->
       <div class="tier-hero" id="tier-hero" style="--tier-color:#6ab04c">
-        <h1>برنامج ولاء حرث</h1>
+        <h1 data-i18n="loyalty.heroTitle">برنامج ولاء حرث</h1>
         <div class="tier-name">
           <i class="fas fa-medal tier-icon" id="hero-icon"></i>
-          <span id="hero-tier-name">جارٍ التحميل...</span>
+          <span id="hero-tier-name" data-i18n="common.loading">جارٍ التحميل…</span>
         </div>
         <div class="balance-line">
           <div>
             <span class="balance-amount" id="hero-balance">—</span>
-            نقطة قابلة للاستخدام
+            <span data-i18n="loyalty.pointsLabel">نقطة قابلة للاستخدام</span>
           </div>
           <div>
             <span class="balance-amount" id="hero-lifetime">—</span>
-            مجموع النقاط المكتسبة
+            <span data-i18n="loyalty.lifetimePointsLabel">مجموع النقاط المكتسبة</span>
           </div>
         </div>
       </div>
 
       <!-- Progress bar -->
       <div class="progress-card">
-        <h2 id="progress-title">جارٍ تحميل التقدّم...</h2>
+        <h2 id="progress-title" data-i18n="loyalty.progressLoadingTitle">جارٍ تحميل التقدّم...</h2>
         <div class="progress-bar">
           <div class="progress-fill" id="progress-fill" style="width: 0%"></div>
         </div>
@@ -265,15 +283,17 @@
 
       <!-- Recent ledger -->
       <div class="ledger-card">
-        <h2><i class="fas fa-history" style="color: #6ab04c"></i> آخر العمليات</h2>
+        <h2><i class="fas fa-history" style="color: #6ab04c"></i> <span data-i18n="loyalty.recentActivityTitle">آخر العمليات</span></h2>
         <div id="ledger-list">
           <div style="padding: 14px; color: #888; text-align: center">
-            <i class="fas fa-spinner fa-spin"></i> جارٍ التحميل...
+            <i class="fas fa-spinner fa-spin"></i> <span data-i18n="common.loading">جارٍ التحميل…</span>
           </div>
         </div>
       </div>
     </main>
 
+    <script src="i18n.js"></script>
+    <script src="lang-switcher.js"></script>
     <script src="design-system.js"></script>
     <script src="unified-nav.js"></script>
     <script src="script.js"></script>
@@ -285,23 +305,35 @@
         "use strict";
         const $ = (s) => document.querySelector(s);
 
+        function t(key, vars) {
+          return window.HarthI18n ? window.HarthI18n.t(key, vars) : key;
+        }
+        function localeTag() {
+          return window.HarthI18n ? window.HarthI18n.localeTag() : "ar";
+        }
+
         if (!localStorage.getItem("token")) {
           // Anonymous → bounce to login. Loyalty data is per-user.
           window.location.href = "register.html";
           return;
         }
 
-        const KIND_LABELS = {
-          earn: { ar: "ربح من طلب", positive: true },
-          referral_bonus: { ar: "مكافأة إحالة", positive: true },
-          admin_adjust: { ar: "تعديل من الإدارة", positive: null }, // depends on amount sign
-          spend: { ar: "استخدام", positive: false },
-          expire: { ar: "انتهاء صلاحية", positive: false },
+        const KIND_POSITIVE = {
+          earn: true,
+          referral_bonus: true,
+          admin_adjust: null, // depends on amount sign
+          spend: false,
+          expire: false,
         };
+
+        function kindLabel(kind) {
+          const label = t(`loyalty.kindLabels.${kind}`);
+          return label.startsWith("loyalty.kindLabels.") ? kind : label;
+        }
 
         function fmt(n) {
           // The number itself; styling decides + or −.
-          return Math.abs(parseInt(n, 10) || 0).toLocaleString("ar");
+          return Math.abs(parseInt(n, 10) || 0).toLocaleString(localeTag());
         }
 
         async function load() {
@@ -310,38 +342,40 @@
               apiFetch("/loyalty/me/tier"),
               apiFetch("/loyalty?limit=10"),
             ]);
-            if (!tier?.success) throw new Error(tier?.error?.message || "خطأ");
+            if (!tier?.success) throw new Error(tier?.error?.message || t("common.errorGeneric"));
             renderTier(tier);
             renderLedger(ledger);
           } catch (e) {
-            $("#hero-tier-name").textContent = "تعذّر تحميل البيانات";
-            $("#progress-title").textContent = e.message || "خطأ";
+            $("#hero-tier-name").textContent = t("loyalty.loadFailedTierName");
+            $("#progress-title").textContent = e.message || t("common.errorGeneric");
           }
         }
 
-        function renderTier(t) {
+        function renderTier(data) {
           // Hero
-          const cur = t.current_tier;
+          const cur = data.current_tier;
           $("#tier-hero").style.setProperty("--tier-color", cur.color);
           $("#hero-icon").className = `fas ${cur.icon} tier-icon`;
           $("#hero-tier-name").textContent = cur.name;
-          $("#hero-balance").textContent = fmt(t.balance);
-          $("#hero-lifetime").textContent = fmt(t.lifetime_earned);
+          $("#hero-balance").textContent = fmt(data.balance);
+          $("#hero-lifetime").textContent = fmt(data.lifetime_earned);
 
           // Progress bar
-          const pct = Math.round(t.progress_to_next * 100);
+          const pct = Math.round(data.progress_to_next * 100);
           $("#progress-fill").style.width = pct + "%";
-          if (t.next_tier) {
+          if (data.next_tier) {
             $("#progress-title").innerHTML =
-              `طريقك إلى المستوى <strong style="color:${t.next_tier.color}">${t.next_tier.name}</strong>`;
-            $("#progress-now").textContent = `${fmt(t.lifetime_earned)} نقطة`;
-            $("#progress-target").textContent =
-              `${fmt(t.next_tier.min)} نقطة (متبقّي ${fmt(t.points_to_next)})`;
+              `${t("loyalty.progressToNextPrefix")} <strong style="color:${data.next_tier.color}">${data.next_tier.name}</strong> ${t("loyalty.progressToNextSuffix")}`;
+            $("#progress-now").textContent = t("loyalty.progressNowPoints", { n: fmt(data.lifetime_earned) });
+            $("#progress-target").textContent = t("loyalty.progressTargetNext", {
+              min: fmt(data.next_tier.min),
+              remaining: fmt(data.points_to_next),
+            });
           } else {
             $("#progress-title").innerHTML =
-              `🎉 وصلت لأعلى مستوى! <strong style="color:${cur.color}">${cur.name}</strong>`;
-            $("#progress-now").textContent = `${fmt(t.lifetime_earned)} نقطة`;
-            $("#progress-target").textContent = "أعلى مستوى — استمتع بالامتيازات الكاملة";
+              `${t("loyalty.maxTierReachedPrefix")} <strong style="color:${cur.color}">${cur.name}</strong>`;
+            $("#progress-now").textContent = t("loyalty.progressNowPoints", { n: fmt(data.lifetime_earned) });
+            $("#progress-target").textContent = t("loyalty.maxTierProgressTarget");
             $("#progress-fill").style.width = "100%";
           }
 
@@ -366,11 +400,11 @@
                         </div>
                         <div>
                           <h3>${escapeHtml(tier.name)}</h3>
-                          <div class="tier-min">يبدأ من ${tier.min.toLocaleString("ar")} نقطة</div>
+                          <div class="tier-min">${t("loyalty.tierMinFrom", { min: tier.min.toLocaleString(localeTag()) })}</div>
                         </div>
                       </div>
                       <ul>${perks}</ul>
-                      ${isCurrent ? '<div class="current-pill">مستواك الحالي</div>' : ""}
+                      ${isCurrent ? `<div class="current-pill">${t("loyalty.currentTierPill")}</div>` : ""}
                     </div>
                   `;
                 })
@@ -383,24 +417,23 @@
           const items = (res && res.items) || [];
           if (!items.length) {
             $("#ledger-list").innerHTML =
-              '<div style="padding:18px;text-align:center;color:#888">لا توجد عمليات بعد. ابدأ بالتسوّق لتجمع نقاطك الأولى!</div>';
+              `<div style="padding:18px;text-align:center;color:#888">${t("loyalty.noLedgerItems")}</div>`;
             return;
           }
           $("#ledger-list").innerHTML = items
             .map((it) => {
-              const meta = KIND_LABELS[it.kind] || { ar: it.kind, positive: it.amount > 0 };
-              const positive = meta.positive == null ? it.amount > 0 : meta.positive;
+              const positive = KIND_POSITIVE[it.kind] == null ? it.amount > 0 : KIND_POSITIVE[it.kind];
               const cls = positive ? "positive" : "negative";
               const sign = positive ? "+" : "−";
-              const when = new Date(it.created_at).toLocaleDateString("ar");
+              const when = new Date(it.created_at).toLocaleDateString(localeTag());
               return `
                 <div class="ledger-row">
                   <div>
-                    <div>${escapeHtml(meta.ar)}</div>
+                    <div>${escapeHtml(kindLabel(it.kind))}</div>
                     ${it.notes ? `<div class="ledger-when">${escapeHtml(it.notes)}</div>` : ""}
                     <div class="ledger-when">${when}</div>
                   </div>
-                  <div class="ledger-amount ${cls}">${sign}${fmt(it.amount)} نقطة</div>
+                  <div class="ledger-amount ${cls}">${sign}${t("loyalty.ledgerAmountPoints", { amount: fmt(it.amount) })}</div>
                 </div>
               `;
             })
@@ -414,7 +447,12 @@
           );
         }
 
-        load();
+        if (window.HarthI18n) {
+          window.HarthI18n.ready().then(load);
+          document.addEventListener("harth:langchange", load);
+        } else {
+          load();
+        }
       })();
     </script>
   

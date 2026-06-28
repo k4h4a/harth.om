@@ -3,7 +3,25 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>نشر قصة | منصة حرث</title>
+    <script>
+      // Apply the saved language/direction before first paint so there's no
+      // flash of Arabic/RTL when the visitor's saved language is English.
+      (function () {
+        try {
+          if (localStorage.getItem("harth_lang") === "en") {
+            document.documentElement.lang = "en";
+            document.documentElement.dir = "ltr";
+          }
+        } catch (e) {}
+        document.documentElement.classList.add("i18n-loading");
+      })();
+    </script>
+    <style>
+      html.i18n-loading body {
+        visibility: hidden;
+      }
+    </style>
+    <title data-i18n="postStory.title">نشر قصة | منصة حرث</title>
     <link
       href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700&display=swap"
       rel="stylesheet"
@@ -187,24 +205,24 @@
           <ul class="nav-links"></ul>
         </nav>
         <div class="section left" id="auth-header">
-          <a href="register.html" class="login-nav-button" id="login-link">تسجيل دخول</a>
+          <a href="register.html" class="login-nav-button" id="login-link" data-i18n="common.buttons.login">تسجيل دخول</a>
         </div>
       </div>
     </header>
 
     <div class="compose-shell">
       <div class="compose-card">
-        <h1><i class="fas fa-camera" style="color: #6ab04c"></i> انشر قصة من مزرعتك</h1>
-        <p class="lede">
+        <h1><i class="fas fa-camera" style="color: #6ab04c"></i> <span data-i18n="postStory.heading">انشر قصة من مزرعتك</span></h1>
+        <p class="lede" data-i18n="postStory.lede">
           شارك متابعيك ما يحدث في مزرعتك اليوم — حصاد، شتلات جديدة، معدات
           تعمل، أو أي لحظة. القصة تختفي تلقائياً بعد 24 ساعة.
         </p>
 
         <form id="story-form">
-          <label class="field">صورة القصة <span style="color:#c0392b">*</span></label>
+          <label class="field"><span data-i18n="postStory.imageFieldLabel">صورة القصة</span> <span style="color:#c0392b">*</span></label>
           <div class="upload-tile" id="upload-tile">
             <i class="fas fa-cloud-upload-alt" style="font-size: 22px; color: #6ab04c"></i>
-            <div style="font-size: 13px; color: #666; margin-top: 6px">
+            <div style="font-size: 13px; color: #666; margin-top: 6px" data-i18n="postStory.uploadHint">
               ارفع صورة عمودية (9:16 موصى بها) لتجربة عرض أفضل.
             </div>
             <input
@@ -214,40 +232,41 @@
               style="margin-top: 10px"
               required
             />
-            <div class="preview" id="preview">لم تُرفع صورة بعد</div>
+            <div class="preview" id="preview" data-i18n="postStory.previewEmpty">لم تُرفع صورة بعد</div>
           </div>
 
-          <label class="field" for="caption">تعليق (اختياري)</label>
+          <label class="field" for="caption" data-i18n="postStory.captionFieldLabel">تعليق (اختياري)</label>
           <textarea
             id="caption"
             rows="3"
             maxlength="280"
+            data-i18n-placeholder="postStory.captionPlaceholder"
             placeholder="اكتب وصفاً قصيراً (≤ 280 حرفاً)"
           ></textarea>
           <div class="char-counter"><span id="cap-count">0</span> / 280</div>
 
-          <label class="field" for="equipment-id">ربط بمعدة (اختياري)</label>
+          <label class="field" for="equipment-id" data-i18n="postStory.equipmentFieldLabel">ربط بمعدة (اختياري)</label>
           <select id="equipment-id">
-            <option value="">— لا تربط —</option>
+            <option value="" data-i18n="postStory.equipmentNoneOption">— لا تربط —</option>
           </select>
-          <small style="color: #888; font-size: 12px">
+          <small style="color: #888; font-size: 12px" data-i18n="postStory.equipmentHint">
             يظهر زرّ "اعرض المعدة" داخل القصة ويفتحها للمشاهد.
           </small>
 
           <div class="actions">
             <button type="submit" class="btn btn-primary" id="submit-btn">
-              <i class="fas fa-paper-plane"></i> نشر القصة
+              <i class="fas fa-paper-plane"></i> <span data-i18n="postStory.submitBtn">نشر القصة</span>
             </button>
-            <a href="index.html" class="btn btn-secondary">إلغاء</a>
+            <a href="index.html" class="btn btn-secondary" data-i18n="postStory.cancelBtn">إلغاء</a>
           </div>
         </form>
       </div>
 
       <div class="my-stories">
-        <h2><i class="fas fa-history" style="color: #6ab04c"></i> قصصي النشطة</h2>
+        <h2><i class="fas fa-history" style="color: #6ab04c"></i> <span data-i18n="postStory.myStoriesTitle">قصصي النشطة</span></h2>
         <div id="my-stories-list">
           <div style="text-align: center; padding: 14px; color: #888">
-            <i class="fas fa-spinner fa-spin"></i> جارٍ التحميل...
+            <i class="fas fa-spinner fa-spin"></i> <span data-i18n="common.loading">جارٍ التحميل…</span>
           </div>
         </div>
       </div>
@@ -255,11 +274,13 @@
 
     <div id="toast"></div>
 
+    <script src="i18n.js"></script>
+    <script src="lang-switcher.js"></script>
     <script src="design-system.js"></script>
     <script src="unified-nav.js"></script>
     <script src="script.js"></script>
     <script>
-      (function () {
+      (async function () {
         "use strict";
         const $ = (s) => document.querySelector(s);
         const $$ = (s) => Array.from(document.querySelectorAll(s));
@@ -271,13 +292,22 @@
 
         // Gate: only logged-in approved owners (or admin) can post.
         if (!TOKEN || !me) { window.location.href = "register.html"; return; }
+
+        // Wait for translations before showing any gate alerts so they're
+        // never flashed in the wrong (default) language.
+        if (window.HarthI18n) await window.HarthI18n.ready();
+
+        function t(key, vars) {
+          return window.HarthI18n ? window.HarthI18n.t(key, vars) : key;
+        }
+
         if (!["owner", "admin"].includes(me.role)) {
-          alert("نشر القصص متاح للمزارعين فقط.");
+          alert(t("postStory.alerts.ownersOnly"));
           window.location.href = "index.html";
           return;
         }
         if (me.role === "owner" && me.account_status !== "approved") {
-          alert("حسابك بانتظار الموافقة. سيتم تفعيل النشر بعد الاعتماد.");
+          alert(t("postStory.alerts.pendingApproval"));
           window.location.href = "owner-dashboard.html";
           return;
         }
@@ -318,15 +348,15 @@
             );
             const data = await r.json();
             if (!r.ok || !data.success) {
-              throw new Error((data.error && data.error.message) || "فشل الرفع");
+              throw new Error((data.error && data.error.message) || t("postStory.toasts.uploadFailed"));
             }
             uploadedUrl = data.url;
             tile.classList.add("done");
-            showToast("تم رفع الصورة ✓");
+            showToast(t("postStory.toasts.imageUploaded"));
           } catch (err) {
             uploadedUrl = null;
             tile.classList.remove("done");
-            showToast(err.message || "فشل الرفع", true);
+            showToast(err.message || t("postStory.toasts.uploadFailed"), true);
           }
         });
 
@@ -357,12 +387,12 @@
         $("#story-form").addEventListener("submit", async (e) => {
           e.preventDefault();
           if (!uploadedUrl) {
-            showToast("الرجاء رفع الصورة أولاً", true);
+            showToast(t("postStory.toasts.uploadFirst"), true);
             return;
           }
           const btn = $("#submit-btn");
           btn.disabled = true;
-          btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> جارٍ النشر...';
+          btn.innerHTML = `<i class="fas fa-spinner fa-spin"></i> ${t("postStory.submitBtnLoading")}`;
           try {
             const body = {
               image_url: uploadedUrl,
@@ -374,35 +404,35 @@
               body: JSON.stringify(body),
             });
             if (!res || !res.success) {
-              throw new Error((res && res.error && res.error.message) || "فشل النشر");
+              throw new Error((res && res.error && res.error.message) || t("postStory.toasts.postFailed"));
             }
-            showToast("تم نشر القصة ✓ ستختفي بعد 24 ساعة");
+            showToast(t("postStory.toasts.posted"));
             // Reset the form, refresh the "my stories" list.
             $("#story-form").reset();
             $("#preview").style.backgroundImage = "";
-            $("#preview").textContent = "لم تُرفع صورة بعد";
+            $("#preview").textContent = t("postStory.previewEmpty");
             $("#upload-tile").classList.remove("done");
             uploadedUrl = null;
             $("#cap-count").textContent = "0";
             loadMyStories();
           } catch (err) {
-            showToast(err.message || "خطأ", true);
+            showToast(err.message || t("common.errorGeneric"), true);
           } finally {
             btn.disabled = false;
-            btn.innerHTML = '<i class="fas fa-paper-plane"></i> نشر القصة';
+            btn.innerHTML = `<i class="fas fa-paper-plane"></i> ${t("postStory.submitBtn")}`;
           }
         });
 
         // List my live stories.
         async function loadMyStories() {
           $("#my-stories-list").innerHTML =
-            '<div style="text-align:center;padding:14px;color:#888"><i class="fas fa-spinner fa-spin"></i> جارٍ التحميل...</div>';
+            `<div style="text-align:center;padding:14px;color:#888"><i class="fas fa-spinner fa-spin"></i> ${t("common.loading")}</div>`;
           try {
             const res = await apiFetch(`/stories/by-author/${me.id}`);
-            if (!res || !res.success) throw new Error("فشل التحميل");
+            if (!res || !res.success) throw new Error(t("postStory.toasts.loadFailed"));
             if (!res.items.length) {
               $("#my-stories-list").innerHTML =
-                '<div style="text-align:center;padding:14px;color:#888">لا توجد قصص نشطة. انشر أوّل قصة من النموذج بالأعلى.</div>';
+                `<div style="text-align:center;padding:14px;color:#888">${t("postStory.noActiveStories")}</div>`;
               return;
             }
             $("#my-stories-list").innerHTML = `
@@ -415,7 +445,7 @@
             );
           } catch (e) {
             $("#my-stories-list").innerHTML =
-              `<div style="color:#c0392b;padding:14px">${e.message || "خطأ"}</div>`;
+              `<div style="color:#c0392b;padding:14px">${e.message || t("common.errorGeneric")}</div>`;
           }
         }
 
@@ -426,26 +456,26 @@
           const hoursLeft = Math.max(0, Math.round((expiresAt - Date.now()) / 3600000));
           return `
             <div class="my-story-tile" style="background-image:url('${escapeAttr(s.image_url)}')">
-              <button class="my-story-delete" data-delete-story="${s.id}" title="حذف">
+              <button class="my-story-delete" data-delete-story="${s.id}" title="${t("postStory.deleteTitle")}">
                 <i class="fas fa-trash"></i>
               </button>
               <div class="my-story-views">
                 <i class="fas fa-eye"></i> ${s.view_count || 0}
-                · ${hoursLeft}س متبقية
+                · ${t("postStory.hoursLeftSuffix", { n: hoursLeft })}
               </div>
             </div>
           `;
         }
 
         async function deleteStory(id) {
-          if (!confirm("حذف القصة؟")) return;
+          if (!confirm(t("postStory.confirmDeleteStory"))) return;
           try {
             const res = await apiFetch(`/stories/${id}`, { method: "DELETE" });
-            if (!res || !res.success) throw new Error("فشل الحذف");
-            showToast("تم الحذف");
+            if (!res || !res.success) throw new Error(t("postStory.toasts.deleteFailed"));
+            showToast(t("postStory.toasts.deleted"));
             loadMyStories();
           } catch (e) {
-            showToast(e.message || "خطأ", true);
+            showToast(e.message || t("common.errorGeneric"), true);
           }
         }
 
@@ -454,6 +484,9 @@
           return String(s).replace(/"/g, "&quot;");
         }
 
+        if (window.HarthI18n) {
+          document.addEventListener("harth:langchange", loadMyStories);
+        }
         loadMyStories();
       })();
     </script>

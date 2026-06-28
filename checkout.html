@@ -3,7 +3,25 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>سلة المبيعات - حرث</title>
+    <script>
+      // Apply the saved language/direction before first paint so there's no
+      // flash of Arabic/RTL when the visitor's saved language is English.
+      (function () {
+        try {
+          if (localStorage.getItem("harth_lang") === "en") {
+            document.documentElement.lang = "en";
+            document.documentElement.dir = "ltr";
+          }
+        } catch (e) {}
+        document.documentElement.classList.add("i18n-loading");
+      })();
+    </script>
+    <style>
+      html.i18n-loading body {
+        visibility: hidden;
+      }
+    </style>
+    <title data-i18n="checkout.title">سلة المبيعات - حرث</title>
 
     <link
       href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700&display=swap"
@@ -51,6 +69,10 @@
         text-decoration: none;
         font-weight: 600;
       }
+      /* This arrow points toward "back" in reading order — flip it in LTR. */
+      [dir="ltr"] .back-btn .fa-arrow-right {
+        transform: scaleX(-1);
+      }
 
       .cart-container {
         max-width: 1000px;
@@ -85,7 +107,7 @@
       .cart-table th,
       .cart-table td {
         padding: 12px;
-        text-align: right;
+        text-align: start;
       }
       .cart-table tbody tr {
         border-bottom: 1px solid rgba(255, 255, 255, 0.1);
@@ -164,7 +186,7 @@
           border-radius: 8px;
           padding: 10px;
         }
-        .cart-table td { text-align: right; padding: 6px 0; }
+        .cart-table td { text-align: start; padding: 6px 0; }
         .rental-checkout-form > div[style*="grid-template-columns"] {
           grid-template-columns: 1fr !important;
         }
@@ -414,16 +436,16 @@
     <header class="header">
       <div class="logo">🌿 حرث</div>
       <a href="basket.html" class="back-btn">
-        <i class="fas fa-arrow-right"></i> العودة للمتجر
+        <i class="fas fa-arrow-right"></i> <span data-i18n="checkout.backToStore">العودة للمتجر</span>
       </a>
     </header>
 
     <div class="cart-container">
-      <h1 class="cart-title">سلة <span>الطلبات</span></h1>
+      <h1 class="cart-title"><span data-i18n="checkout.headingPart1">سلة</span> <span data-i18n="checkout.headingPart2">الطلبات</span></h1>
 
       <div id="loading">
         <div class="spin"></div>
-        <div style="margin-top: 12px">جارٍ تحميل سلتك...</div>
+        <div style="margin-top: 12px" data-i18n="checkout.loadingCart">جارٍ تحميل سلتك...</div>
       </div>
 
       <div id="content" style="display: none">
@@ -432,10 +454,10 @@
           <table class="cart-table">
             <thead>
               <tr>
-                <th>المنتج</th>
-                <th>السعر</th>
-                <th>الكمية</th>
-                <th>الإجمالي</th>
+                <th data-i18n="checkout.table.product">المنتج</th>
+                <th data-i18n="checkout.table.price">السعر</th>
+                <th data-i18n="checkout.table.quantity">الكمية</th>
+                <th data-i18n="checkout.table.total">الإجمالي</th>
                 <th></th>
               </tr>
             </thead>
@@ -446,32 +468,33 @@
         <!-- Empty state -->
         <div id="empty-cart" class="empty-cart" style="display: none">
           <i class="fas fa-shopping-basket"></i>
-          <h2>سلتك فارغة</h2>
-          <p>تصفّح المنتجات وأضف ما يعجبك.</p>
-          <a href="basket.html">تصفح المنتجات</a>
+          <h2 data-i18n="checkout.emptyCart.title">سلتك فارغة</h2>
+          <p data-i18n="checkout.emptyCart.desc">تصفّح المنتجات وأضف ما يعجبك.</p>
+          <a href="basket.html" data-i18n="checkout.emptyCart.browseBtn">تصفح المنتجات</a>
         </div>
 
         <!-- Summary + checkout -->
         <div class="summary-grid" id="checkout-section" style="display: none">
           <div class="cart-card">
-            <h3 style="margin-bottom: 14px">ملخص الطلب</h3>
+            <h3 style="margin-bottom: 14px" data-i18n="checkout.summary.heading">ملخص الطلب</h3>
 
             <div class="form-group">
-              <label for="promo-code">كود الخصم</label>
+              <label for="promo-code" data-i18n="checkout.summary.promoLabel">كود الخصم</label>
               <div class="promo-row">
                 <input
                   type="text"
                   class="form-control"
                   id="promo-code"
+                  data-i18n-placeholder="checkout.summary.promoPlaceholder"
                   placeholder="مثال: HARTH10"
                 />
-                <button class="btn-promo" id="apply-promo">تطبيق</button>
+                <button class="btn-promo" id="apply-promo" data-i18n="checkout.summary.applyBtn">تطبيق</button>
               </div>
               <div id="promo-feedback" class="promo-feedback"></div>
             </div>
 
             <div class="form-group">
-              <label for="loyalty-points">نقاط الولاء (اختياري)</label>
+              <label for="loyalty-points" data-i18n="checkout.summary.loyaltyLabel">نقاط الولاء (اختياري)</label>
               <input
                 type="number"
                 class="form-control"
@@ -479,85 +502,87 @@
                 min="0"
                 step="1"
                 value="0"
+                data-i18n-placeholder="checkout.summary.loyaltyPlaceholder"
                 placeholder="أدخل عدد النقاط"
               />
-              <small style="color: rgba(255, 255, 255, 0.6)">
+              <small style="color: rgba(255, 255, 255, 0.6)" id="loyalty-balance-hint">
                 رصيدك: <span id="loyalty-balance">0</span> نقطة (حد أقصى 50% من الطلب)
               </small>
             </div>
 
             <div id="totals">
               <div class="totals-row">
-                <span>المشتريات</span>
+                <span data-i18n="checkout.totals.subtotal">المشتريات</span>
                 <span id="tot-subtotal">0.00 ر.ع</span>
               </div>
               <div class="totals-row" id="tot-rental-row" style="display:none">
-                <span>الإيجار <span id="tot-rental-days" style="font-size:12px;color:rgba(255,255,255,0.6)"></span></span>
+                <span><span data-i18n="checkout.totals.rentalLabel">الإيجار</span> <span id="tot-rental-days" style="font-size:12px;color:rgba(255,255,255,0.6)"></span></span>
                 <span id="tot-rental" style="color:#f1c40f">0.00 ر.ع</span>
               </div>
               <div class="totals-row" id="tot-discount-row" style="display: none">
-                <span>الخصم</span>
+                <span data-i18n="checkout.totals.discount">الخصم</span>
                 <span id="tot-discount" style="color: #f1c40f">-0.00 ر.ع</span>
               </div>
               <div class="totals-row">
-                <span>الضريبة (10%)</span>
+                <span data-i18n="checkout.totals.tax">الضريبة (10%)</span>
                 <span id="tot-tax">0.00 ر.ع</span>
               </div>
               <div class="totals-row" id="tot-loyalty-row" style="display: none">
-                <span>نقاط الولاء</span>
+                <span data-i18n="checkout.totals.loyaltyLabel">نقاط الولاء</span>
                 <span id="tot-loyalty" style="color: #f1c40f">-0 نقطة</span>
               </div>
               <div class="totals-row grand">
-                <span>الإجمالي</span>
+                <span data-i18n="checkout.totals.grand">الإجمالي</span>
                 <span id="tot-grand">0.00 ر.ع</span>
               </div>
             </div>
           </div>
 
           <div class="cart-card">
-            <h3 style="margin-bottom: 14px">بيانات التوصيل والدفع</h3>
+            <h3 style="margin-bottom: 14px" data-i18n="checkout.deliveryForm.heading">بيانات التوصيل والدفع</h3>
             <form id="checkout-form">
               <div class="form-group">
-                <label for="f-name">الاسم الكامل</label>
+                <label for="f-name" data-i18n="checkout.deliveryForm.nameLabel">الاسم الكامل</label>
                 <input type="text" class="form-control" id="f-name" required />
               </div>
               <div class="form-group">
-                <label for="f-phone">رقم الهاتف</label>
+                <label for="f-phone" data-i18n="checkout.deliveryForm.phoneLabel">رقم الهاتف</label>
                 <input
                   type="tel"
                   class="form-control"
                   id="f-phone"
+                  data-i18n-placeholder="checkout.deliveryForm.phonePlaceholder"
                   placeholder="+968..."
                   required
                 />
               </div>
               <div class="form-group">
-                <label for="f-city">المحافظة / الولاية</label>
+                <label for="f-city" data-i18n="checkout.deliveryForm.cityLabel">المحافظة / الولاية</label>
                 <input type="text" class="form-control" id="f-city" required />
               </div>
               <div class="form-group">
-                <label for="f-street">العنوان التفصيلي</label>
+                <label for="f-street" data-i18n="checkout.deliveryForm.streetLabel">العنوان التفصيلي</label>
                 <input type="text" class="form-control" id="f-street" />
               </div>
 
               <div class="form-group">
-                <label>طريقة الدفع</label>
+                <label data-i18n="checkout.deliveryForm.paymentMethodLabel">طريقة الدفع</label>
                 <div class="payment-radio">
                   <label data-method="card" class="selected">
                     <input type="radio" name="pm" value="card" checked />
                     <i class="fas fa-credit-card"></i>
-                    <div>بطاقة</div>
+                    <div data-i18n="checkout.deliveryForm.paymentCard">بطاقة</div>
                   </label>
                   <label data-method="cash_on_delivery">
                     <input type="radio" name="pm" value="cash_on_delivery" />
                     <i class="fas fa-money-bill-wave"></i>
-                    <div>عند الاستلام</div>
+                    <div data-i18n="checkout.deliveryForm.paymentCod">عند الاستلام</div>
                   </label>
                 </div>
               </div>
 
               <button type="submit" class="btn-primary" id="submit-btn">
-                <i class="fas fa-check-circle"></i> تأكيد وإرسال الطلب
+                <i class="fas fa-check-circle"></i> <span data-i18n="checkout.deliveryForm.submitBtn">تأكيد وإرسال الطلب</span>
               </button>
             </form>
           </div>
@@ -567,6 +592,8 @@
 
     <div id="toast"></div>
 
+    <script src="i18n.js"></script>
+    <script src="lang-switcher.js"></script>
     <script src="design-system.js"></script>
     <script src="script.js"></script>
     <script>
@@ -576,6 +603,10 @@
       // =================================================================
       (function () {
         "use strict";
+
+        function t(key, vars) {
+          return window.HarthI18n ? window.HarthI18n.t(key, vars) : key;
+        }
 
         const RENTAL_KEY = "harth_rental_cart";
         function getRentalCart() {
@@ -615,12 +646,12 @@
         }
 
         function money(n) {
-          return Number(n || 0).toFixed(2) + " ر.ع";
+          return Number(n || 0).toFixed(2) + " " + t("common.currency");
         }
 
         async function requireAuthOrRedirect() {
           if (!getToken || !getToken()) {
-            showToast("يجب تسجيل الدخول أولاً", true);
+            showToast(t("checkout.toasts.loginRequired"), true);
             setTimeout(() => (window.location.href = "register.html"), 1200);
             return false;
           }
@@ -632,10 +663,14 @@
           $("#loading").style.display = "block";
           $("#content").style.display = "none";
 
+          // Set a translated baseline immediately — keeps the hint correct
+          // in the active language even if the cart/loyalty fetches fail.
+          $("#loyalty-balance-hint").textContent = t("checkout.summary.loyaltyBalanceHint", { balance: loyaltyBalance });
+
           try {
             const res = await apiFetch("/cart");
             if (!res || !res.success) {
-              throw new Error((res && res.error && res.error.message) || "فشل تحميل السلة");
+              throw new Error((res && res.error && res.error.message) || t("checkout.toasts.loadCartFailed"));
             }
             currentCart = res;
             renderCart(res);
@@ -645,7 +680,7 @@
               const l = await apiFetch("/loyalty?limit=1");
               if (l && l.success) {
                 loyaltyBalance = Number(l.balance || 0);
-                $("#loyalty-balance").textContent = loyaltyBalance;
+                $("#loyalty-balance-hint").textContent = t("checkout.summary.loyaltyBalanceHint", { balance: loyaltyBalance });
                 $("#loyalty-points").max = loyaltyBalance;
               }
             } catch (_e) {
@@ -684,6 +719,12 @@
           $("#checkout-section").style.display = "grid";
           document.querySelector(".cart-table").parentElement.style.display = "block";
 
+          const dirArrow = document.documentElement.getAttribute("dir") === "rtl" ? "←" : "→";
+          const productLabel = t("checkout.table.product");
+          const priceLabel = t("checkout.table.price");
+          const qtyLabel = t("checkout.table.quantity");
+          const totalLabel = t("checkout.table.total");
+
           // ─── Sale items (from DB cart) ───
           for (const it of res.items) {
             const tr = document.createElement("tr");
@@ -692,25 +733,25 @@
               ? `<div class="warnings">${it.warnings.map(escapeHtml).join(" · ")}</div>`
               : "";
             tr.innerHTML = `
-              <td data-label="المنتج">
+              <td data-label="${productLabel}">
                 ${img
                   ? `<img src="${escapeHtml(img)}" class="cart-img" alt="" />`
                   : `<div class="cart-img" style="background:#333"></div>`}
                 <div style="display:inline-block;margin-inline-start:10px;vertical-align:middle">
                   <div>${escapeHtml(it.name)}</div>
-                  <span style="font-size:11px;background:rgba(106,176,76,0.3);padding:2px 6px;border-radius:4px">شراء</span>
+                  <span style="font-size:11px;background:rgba(106,176,76,0.3);padding:2px 6px;border-radius:4px">${t("checkout.purchaseBadge")}</span>
                   ${warningsHtml}
                 </div>
               </td>
-              <td data-label="السعر">${money(it.unit_price)}</td>
-              <td data-label="الكمية">
+              <td data-label="${priceLabel}">${money(it.unit_price)}</td>
+              <td data-label="${qtyLabel}">
                 <div class="qty-ctl">
                   <button type="button" class="qty-dec" data-id="${it.cart_item_id}">−</button>
                   <span>${it.quantity}</span>
                   <button type="button" class="qty-inc" data-id="${it.cart_item_id}">+</button>
                 </div>
               </td>
-              <td data-label="الإجمالي">${money(it.line_total)}</td>
+              <td data-label="${totalLabel}">${money(it.line_total)}</td>
               <td><button class="remove-btn" data-id="${it.cart_item_id}"><i class="fas fa-trash"></i></button></td>
             `;
             tbody.appendChild(tr);
@@ -724,26 +765,26 @@
             const tr = document.createElement("tr");
             const img = r.primary_image_url || "";
             const depNote = r.deposit_amount > 0
-              ? `<div style="font-size:11px;color:#f1c40f;margin-top:2px">تأمين: ${Number(r.deposit_amount).toFixed(2)} ر.ع</div>`
+              ? `<div style="font-size:11px;color:#f1c40f;margin-top:2px">${t("checkout.depositLabel", { amount: Number(r.deposit_amount).toFixed(2), currency: t("common.currency") })}</div>`
               : "";
-            tr.style.borderRight = "3px solid rgba(241,196,15,0.6)";
+            tr.style.borderInlineStart = "3px solid rgba(241,196,15,0.6)";
             tr.innerHTML = `
-              <td data-label="المنتج">
+              <td data-label="${productLabel}">
                 ${img
                   ? `<img src="${escapeHtml(img)}" class="cart-img" alt="" />`
                   : `<div class="cart-img" style="background:#333;display:inline-flex;align-items:center;justify-content:center"><i class="fas fa-tractor" style="color:#555"></i></div>`}
                 <div style="display:inline-block;margin-inline-start:10px;vertical-align:middle">
                   <div>${escapeHtml(r.name)}</div>
-                  <span style="font-size:11px;background:rgba(241,196,15,0.2);color:#f1c40f;padding:2px 6px;border-radius:4px">إيجار</span>
+                  <span style="font-size:11px;background:rgba(241,196,15,0.2);color:#f1c40f;padding:2px 6px;border-radius:4px">${t("checkout.rentalBadge")}</span>
                   <div style="font-size:11px;color:rgba(255,255,255,0.6);margin-top:2px">
-                    ${fmtDate(r.start_date)} ← ${fmtDate(r.end_date)}
+                    ${fmtDate(r.start_date)} ${dirArrow} ${fmtDate(r.end_date)}
                   </div>
                   ${depNote}
                 </div>
               </td>
-              <td data-label="السعر">${Number(r.daily_price).toFixed(2)} ر.ع/يوم</td>
-              <td data-label="الكمية">${r.days} يوم</td>
-              <td data-label="الإجمالي">${Number(r.grand_total || r.rental_cost).toFixed(2)} ر.ع</td>
+              <td data-label="${priceLabel}">${Number(r.daily_price).toFixed(2)} ${t("common.currency")}/${t("common.perDay")}</td>
+              <td data-label="${qtyLabel}">${t("checkout.daysSuffix", { n: r.days })}</td>
+              <td data-label="${totalLabel}">${Number(r.grand_total || r.rental_cost).toFixed(2)} ${t("common.currency")}</td>
               <td><button class="remove-btn" data-rental-id="${escapeHtml(r.equipment_id)}"><i class="fas fa-trash"></i></button></td>
             `;
             tbody.appendChild(tr);
@@ -763,38 +804,38 @@
           renderTotals(res.totals);
         }
 
-        function renderTotals(t) {
+        function renderTotals(totals) {
           const rentals = getRentalCart();
           const rentalTotal = rentals.reduce((s, r) => s + Number(r.grand_total || r.rental_cost || 0), 0);
           const totalDays = rentals.reduce((s, r) => s + Number(r.days || 0), 0);
 
-          $("#tot-subtotal").textContent = money(t.subtotal);
-          $("#tot-tax").textContent = money(t.tax);
+          $("#tot-subtotal").textContent = money(totals.subtotal);
+          $("#tot-tax").textContent = money(totals.tax);
 
           if (rentalTotal > 0) {
             $("#tot-rental-row").style.display = "flex";
-            $("#tot-rental").textContent = rentalTotal.toFixed(2) + " ر.ع";
-            $("#tot-rental-days").textContent = `(${totalDays} يوم)`;
+            $("#tot-rental").textContent = rentalTotal.toFixed(2) + " " + t("common.currency");
+            $("#tot-rental-days").textContent = t("checkout.daysParenSuffix", { n: totalDays });
           } else {
             $("#tot-rental-row").style.display = "none";
           }
 
-          if (t.discount > 0) {
+          if (totals.discount > 0) {
             $("#tot-discount-row").style.display = "flex";
-            $("#tot-discount").textContent = "-" + money(t.discount);
+            $("#tot-discount").textContent = "-" + money(totals.discount);
           } else {
             $("#tot-discount-row").style.display = "none";
           }
-          if (t.loyalty_points_used > 0) {
+          if (totals.loyalty_points_used > 0) {
             $("#tot-loyalty-row").style.display = "flex";
-            $("#tot-loyalty").textContent = `-${t.loyalty_points_used} نقطة`;
+            $("#tot-loyalty").textContent = t("checkout.totals.loyaltyValue", { n: totals.loyalty_points_used });
           } else {
             $("#tot-loyalty-row").style.display = "none";
           }
 
           // Grand total = sale total (server) + rental total (localStorage)
-          const serverGrand = Number(t.total || 0);
-          $("#tot-grand").textContent = (serverGrand + rentalTotal).toFixed(2) + " ر.ع";
+          const serverGrand = Number(totals.total || 0);
+          $("#tot-grand").textContent = (serverGrand + rentalTotal).toFixed(2) + " " + t("common.currency");
         }
 
         async function updateQty(cartItemId, newQty) {
@@ -805,7 +846,7 @@
               body: JSON.stringify({ quantity: newQty }),
             });
             if (!res || !res.success) {
-              throw new Error((res && res.error && res.error.message) || "فشل التحديث");
+              throw new Error((res && res.error && res.error.message) || t("checkout.toasts.updateFailed"));
             }
             await loadCart();
           } catch (err) {
@@ -817,7 +858,7 @@
           try {
             const res = await apiFetch(`/cart/items/${cartItemId}`, { method: "DELETE" });
             if (!res || !res.success) {
-              throw new Error((res && res.error && res.error.message) || "فشل الحذف");
+              throw new Error((res && res.error && res.error.message) || t("checkout.toasts.deleteFailed"));
             }
             await loadCart();
           } catch (err) {
@@ -830,7 +871,7 @@
           const code = $("#promo-code").value.trim();
           const fb = $("#promo-feedback");
           if (!code) {
-            fb.textContent = "أدخل كوداً أولاً";
+            fb.textContent = t("checkout.toasts.enterCodeFirst");
             fb.className = "promo-feedback bad";
             return;
           }
@@ -840,17 +881,17 @@
               body: JSON.stringify({ code }),
             });
             if (!res || !res.success) {
-              throw new Error((res && res.error && res.error.message) || "الكود غير صالح");
+              throw new Error((res && res.error && res.error.message) || t("checkout.toasts.invalidCode"));
             }
             if (!res.valid) {
-              fb.textContent = res.reason || "الكود غير مؤهّل لهذا الطلب";
+              fb.textContent = res.reason || t("checkout.toasts.codeNotEligible");
               fb.className = "promo-feedback bad";
               validatedPromo = null;
               renderTotals(currentCart.totals);
               return;
             }
             validatedPromo = { code };
-            fb.textContent = `✓ تم تطبيق الخصم — وفّرت ${res.totals.discount} ر.ع`;
+            fb.textContent = t("checkout.toasts.promoApplied", { amount: res.totals.discount, currency: t("common.currency") });
             fb.className = "promo-feedback ok";
             renderTotals(res.totals);
           } catch (err) {
@@ -871,20 +912,20 @@
           const paymentMethod = document.querySelector('input[name="pm"]:checked').value;
 
           if (!name || !phone || !city) {
-            showToast("أكمل البيانات المطلوبة (الاسم والهاتف والمحافظة)", true);
+            showToast(t("checkout.toasts.missingFields"), true);
             return;
           }
 
           const rentals = getRentalCart();
           const hasSale = currentCart && currentCart.items.length;
           if (!hasSale && !rentals.length) {
-            showToast("السلة فارغة", true);
+            showToast(t("checkout.toasts.cartEmpty"), true);
             return;
           }
 
           const btn = $("#submit-btn");
           btn.disabled = true;
-          btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> جارٍ المعالجة...';
+          btn.innerHTML = `<i class="fas fa-spinner fa-spin"></i> ${t("checkout.deliveryForm.submitBtnLoading")}`;
 
           const shippingAddress = { name, city, street: street || null, phone };
           let trackingNumber = null;
@@ -904,7 +945,7 @@
                 body: JSON.stringify(payload),
               });
               if (!res || !res.success) {
-                throw new Error((res && res.error && res.error.message) || "فشل إنشاء طلب الشراء");
+                throw new Error((res && res.error && res.error.message) || t("checkout.toasts.saleOrderFailed"));
               }
               trackingNumber = res.order.tracking_number;
 
@@ -936,24 +977,24 @@
                     payment_method: paymentMethod,
                   }),
                 });
-                if (!res || !res.success) throw new Error(res?.error?.message || "فشل");
+                if (!res || !res.success) throw new Error(res?.error?.message || t("checkout.toasts.genericFailed"));
               } catch (err) {
                 rentalErrors.push(`${r.name}: ${err.message}`);
               }
             }
 
             if (rentalErrors.length) {
-              showToast("بعض طلبات الإيجار فشلت: " + rentalErrors.join(" | "), true);
+              showToast(t("checkout.toasts.rentalErrorsPrefix") + " " + rentalErrors.join(" | "), true);
               btn.disabled = false;
-              btn.innerHTML = '<i class="fas fa-check-circle"></i> تأكيد وإرسال الطلب';
+              btn.innerHTML = `<i class="fas fa-check-circle"></i> ${t("checkout.deliveryForm.submitBtn")}`;
               return;
             }
 
             // ─── 3. Clear rental cart & redirect ───
             clearRentalCart();
             const successMsg = [
-              hasSale ? `تم إنشاء طلب الشراء` : "",
-              rentals.length ? `تم إرسال ${rentals.length} طلب إيجار` : "",
+              hasSale ? t("checkout.toasts.saleOrderCreated") : "",
+              rentals.length ? t("checkout.toasts.rentalOrdersSent", { n: rentals.length }) : "",
             ].filter(Boolean).join(" + ");
             showToast(`✓ ${successMsg}`);
 
@@ -966,7 +1007,7 @@
           } catch (err) {
             showToast(err.message, true);
             btn.disabled = false;
-            btn.innerHTML = '<i class="fas fa-check-circle"></i> تأكيد وإرسال الطلب';
+            btn.innerHTML = `<i class="fas fa-check-circle"></i> ${t("checkout.deliveryForm.submitBtn")}`;
           }
         }
 
@@ -975,7 +1016,14 @@
           const ok = await requireAuthOrRedirect();
           if (!ok) return;
 
-          await loadCart();
+          async function loadTranslatedCart() {
+            await loadCart();
+          }
+          if (window.HarthI18n) {
+            await window.HarthI18n.ready();
+            document.addEventListener("harth:langchange", loadTranslatedCart);
+          }
+          await loadTranslatedCart();
 
           $("#apply-promo").addEventListener("click", applyPromo);
           $("#checkout-form").addEventListener("submit", submitOrder);

@@ -3,7 +3,25 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>تتبع الطلب - حرث</title>
+    <script>
+      // Apply the saved language/direction before first paint so there's no
+      // flash of Arabic/RTL when the visitor's saved language is English.
+      (function () {
+        try {
+          if (localStorage.getItem("harth_lang") === "en") {
+            document.documentElement.lang = "en";
+            document.documentElement.dir = "ltr";
+          }
+        } catch (e) {}
+        document.documentElement.classList.add("i18n-loading");
+      })();
+    </script>
+    <style>
+      html.i18n-loading body {
+        visibility: hidden;
+      }
+    </style>
+    <title data-i18n="track.title">تتبع الطلب - حرث</title>
     <link
       href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700&display=swap"
       rel="stylesheet"
@@ -178,15 +196,15 @@
         </div>
         <nav class="section center">
           <ul class="nav-links">
-            <li><a href="track.html" class="nav-item">تتبع الطلبات</a></li>
-            <li><a href="delivery.html" class="nav-item">توصيل</a></li>
-            <li><a href="basket.html" class="nav-item">بيع معدات</a></li>
-            <li><a href="tools.html" class="nav-item">تأجير معدات</a></li>
-            <li><a href="index.html" class="nav-item">الرئيسية</a></li>
+            <li><a href="track.html" class="nav-item" data-i18n="nav.trackOrders">تتبع الطلبات</a></li>
+            <li><a href="delivery.html" class="nav-item" data-i18n="nav.delivery">التوصيل</a></li>
+            <li><a href="basket.html" class="nav-item" data-i18n="nav.sellEquipment">بيع المعدات</a></li>
+            <li><a href="tools.html" class="nav-item" data-i18n="nav.rentEquipment">تأجير المعدات</a></li>
+            <li><a href="index.html" class="nav-item" data-i18n="nav.home">الرئيسية</a></li>
           </ul>
         </nav>
         <div class="section left" id="auth-header">
-          <a href="register.html" class="hs-btn hs-btn--ghost hs-btn--sm" id="login-link">تسجيل دخول</a>
+          <a href="register.html" class="hs-btn hs-btn--ghost hs-btn--sm" id="login-link" data-i18n="common.buttons.login">تسجيل دخول</a>
         </div>
       </div>
     </header>
@@ -195,9 +213,9 @@
       <div class="track-wrap">
         <div class="track-card">
           <h2 class="track-title">
-            <i class="fas fa-search-location"></i> تتبع طلبك
+            <i class="fas fa-search-location"></i> <span data-i18n="track.pageHeading">تتبع طلبك</span>
           </h2>
-          <p class="track-subtitle">
+          <p class="track-subtitle" data-i18n="track.pageSubheading">
             أدخل رقم التتبع (الرقم التسلسلي الذي وصلك مع تأكيد الطلب)
           </p>
 
@@ -205,19 +223,20 @@
             <input
               type="text"
               id="tracking-input"
+              data-i18n-placeholder="track.searchPlaceholder"
               placeholder="مثال: HRT-XXXXXXXX"
               autocomplete="off"
             />
             <button type="button" id="search-btn">
-              <i class="fas fa-search"></i> بحث
+              <i class="fas fa-search"></i> <span data-i18n="track.searchBtn">بحث</span>
             </button>
           </div>
 
           <div id="result">
             <div class="empty-hint">
               <i class="fas fa-box"></i>
-              <p>أدخل رقم التتبع أعلاه للاطلاع على حالة طلبك.</p>
-              <p style="font-size: 13px; margin-top: 10px; color: #888">
+              <p data-i18n="track.emptyHintTitle">أدخل رقم التتبع أعلاه للاطلاع على حالة طلبك.</p>
+              <p style="font-size: 13px; margin-top: 10px; color: #888" data-i18n="track.emptyHintFormat">
                 رقم التتبع يبدأ بـ HRT- ويتكوّن من 8 أحرف وأرقام
               </p>
             </div>
@@ -231,10 +250,12 @@
         <img src="شعار حرث.jpeg" class="team-img" />
       </div>
       <div class="footer-bottom">
-        <p>&copy; 2026 جميع الحقوق محفوظة لفريق حرث</p>
+        <p data-i18n="home.footer.rights">&copy; 2026 جميع الحقوق محفوظة لفريق حرث</p>
       </div>
     </footer>
 
+    <script src="i18n.js"></script>
+    <script src="lang-switcher.js"></script>
     <script src="design-system.js"></script>
     <script src="unified-nav.js"></script>
     <script src="script.js"></script>
@@ -248,6 +269,13 @@
 
         const $ = (s) => document.querySelector(s);
 
+        function t(key, vars) {
+          return window.HarthI18n ? window.HarthI18n.t(key, vars) : key;
+        }
+        function localeTag() {
+          return window.HarthI18n ? window.HarthI18n.localeTag() : "ar";
+        }
+
         function escapeHtml(s) {
           if (s == null) return "";
           return String(s).replace(/[&<>"']/g, (c) =>
@@ -255,17 +283,11 @@
           );
         }
 
-        function money(n) { return Number(n || 0).toFixed(2) + " ر.ع"; }
+        function money(n) { return Number(n || 0).toFixed(2) + " " + t("common.currency"); }
 
         function statusLabel(s) {
-          return ({
-            pending: "قيد المعالجة",
-            confirmed: "مؤكّد",
-            shipped: "في الطريق إليك",
-            delivered: "تم التسليم",
-            cancelled: "مُلغى",
-            refunded: "مُستردّ",
-          })[s] || s;
+          const label = t(`track.statusLabels.${s}`);
+          return label.startsWith("track.statusLabels.") ? s : label;
         }
 
         async function track(trackingNumber) {
@@ -291,7 +313,7 @@
           try {
             const trackRes = await apiFetch(`/orders/track/${encodeURIComponent(trackingNumber)}`);
             if (!trackRes?.success) {
-              throw new Error(trackRes?.error?.message || "لم يُعثر على الطلب");
+              throw new Error(trackRes?.error?.message || t("track.notFound"));
             }
 
             if (trackRes.type === "rental") {
@@ -319,26 +341,26 @@
         }
 
         function renderRentalResult(r) {
-          const stMap = { pending:"قيد الانتظار", approved:"موافق عليه", rejected:"مرفوض", active:"فعّال", completed:"مكتمل", cancelled:"ملغى" };
-          const stColor = { pending:"#f1c40f", approved:"#6ab04c", rejected:"#e74c3c", active:"#3498db", completed:"#6ab04c", cancelled:"#e74c3c" };
           const rTotal = (Number(r.total_price||0) + Number(r.deposit_amount||0)).toFixed(2);
           const startD = (r.start_date||"—").slice(0,10);
           const endD   = (r.end_date||"—").slice(0,10);
-          const st = stMap[r.status] || r.status;
+          const stColor = { pending:"#f1c40f", approved:"#6ab04c", rejected:"#e74c3c", active:"#3498db", completed:"#6ab04c", cancelled:"#e74c3c" };
+          const st = t(`track.rental.statusLabels.${r.status}`);
+          const stLabel = st.startsWith("track.rental.statusLabels.") ? r.status : st;
           const color = stColor[r.status] || "#aaa";
 
           const steps = [
-            { key:"pending",   label:"تم الطلب",       icon:"fa-clock" },
-            { key:"approved",  label:"موافقة المالك",  icon:"fa-check-circle" },
-            { key:"active",    label:"بدأ الإيجار",    icon:"fa-play-circle" },
-            { key:"completed", label:"اكتمل الإيجار",  icon:"fa-flag-checkered" },
+            { key:"pending",   label: t("track.rental.steps.ordered"),   icon:"fa-clock" },
+            { key:"approved",  label: t("track.rental.steps.approved"),  icon:"fa-check-circle" },
+            { key:"active",    label: t("track.rental.steps.started"),   icon:"fa-play-circle" },
+            { key:"completed", label: t("track.rental.steps.completed"), icon:"fa-flag-checkered" },
           ];
           const order = ["pending","approved","active","completed","cancelled"];
           const currentIdx = order.indexOf(r.status);
           const timelineHtml = steps.map((s, i) => {
             const done = order.indexOf(s.key) <= currentIdx && r.status !== "cancelled";
             return `<div style="display:flex;flex-direction:column;align-items:center;gap:4px;flex:1;position:relative">
-              ${i < steps.length-1 ? `<div style="position:absolute;top:19px;right:50%;width:100%;height:2px;background:${done ? "#6ab04c" : "rgba(255,255,255,0.15)"}"></div>` : ""}
+              ${i < steps.length-1 ? `<div style="position:absolute;top:19px;inset-inline-start:50%;width:100%;height:2px;background:${done ? "#6ab04c" : "rgba(255,255,255,0.15)"}"></div>` : ""}
               <div style="width:38px;height:38px;border-radius:50%;background:${done ? "#6ab04c" : "rgba(255,255,255,0.1)"};display:flex;align-items:center;justify-content:center;position:relative;z-index:1;color:${done ? "#fff" : "rgba(255,255,255,0.4)"}">
                 <i class="fas ${s.icon}"></i>
               </div>
@@ -350,10 +372,10 @@
             <div class="hs-card" style="padding:24px;background:rgba(255,255,255,0.08);border:1px solid rgba(255,255,255,0.12);border-radius:16px;margin-bottom:16px">
               <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:18px">
                 <div>
-                  <div style="font-size:13px;color:rgba(255,255,255,0.5)">رقم الإيجار</div>
+                  <div style="font-size:13px;color:rgba(255,255,255,0.5)">${t("track.rental.trackingNumberLabel")}</div>
                   <code style="font-size:16px;font-weight:700;color:#f1c40f">${escapeHtml(r.tracking_number)}</code>
                 </div>
-                <span style="background:${color}22;color:${color};padding:6px 14px;border-radius:20px;font-weight:700;font-size:13px">${escapeHtml(st)}</span>
+                <span style="background:${color}22;color:${color};padding:6px 14px;border-radius:20px;font-weight:700;font-size:13px">${escapeHtml(stLabel)}</span>
               </div>
               ${r.equipment_name ? `<div style="display:flex;align-items:center;gap:12px;padding:12px;background:rgba(241,196,15,0.06);border-radius:10px;margin-bottom:18px">
                 ${r.equipment_image ? `<img src="${escapeHtml(r.equipment_image)}" style="width:52px;height:52px;object-fit:cover;border-radius:8px">` : `<div style="width:52px;height:52px;background:rgba(255,255,255,0.07);border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:20px">🚜</div>`}
@@ -363,10 +385,10 @@
                 </div>
               </div>` : ""}
               <div class="info-grid" style="margin-bottom:18px">
-                <div class="info-item"><div class="label">تاريخ البدء</div><div class="value">${startD}</div></div>
-                <div class="info-item"><div class="label">تاريخ الانتهاء</div><div class="value">${endD}</div></div>
-                <div class="info-item"><div class="label">الإجمالي</div><div class="value">${rTotal} ر.ع</div></div>
-                <div class="info-item"><div class="label">تاريخ الطلب</div><div class="value">${new Date(r.created_at).toLocaleDateString("ar")}</div></div>
+                <div class="info-item"><div class="label">${t("track.rental.startDateLabel")}</div><div class="value">${startD}</div></div>
+                <div class="info-item"><div class="label">${t("track.rental.endDateLabel")}</div><div class="value">${endD}</div></div>
+                <div class="info-item"><div class="label">${t("track.rental.totalLabel")}</div><div class="value">${rTotal} ${t("common.currency")}</div></div>
+                <div class="info-item"><div class="label">${t("track.rental.orderDateLabel")}</div><div class="value">${new Date(r.created_at).toLocaleDateString(localeTag())}</div></div>
               </div>
               <div style="display:flex;gap:8px;justify-content:space-between;margin-top:8px">
                 ${timelineHtml}
@@ -385,20 +407,20 @@
             ${banner}
             <div class="info-grid">
               <div class="info-item">
-                <div class="label">رقم التتبع</div>
+                <div class="label">${t("track.info.trackingNumberLabel")}</div>
                 <div class="value"><code>${escapeHtml(order.tracking_number)}</code></div>
               </div>
               <div class="info-item">
-                <div class="label">الإجمالي</div>
+                <div class="label">${t("track.info.totalLabel")}</div>
                 <div class="value">${money(order.total)}</div>
               </div>
               <div class="info-item">
-                <div class="label">حالة الطلب</div>
+                <div class="label">${t("track.info.orderStatusLabel")}</div>
                 <div class="value">${escapeHtml(statusLabel(order.status))}</div>
               </div>
               <div class="info-item">
-                <div class="label">تاريخ الطلب</div>
-                <div class="value">${new Date(order.created_at).toLocaleDateString("ar")}</div>
+                <div class="label">${t("track.info.orderDateLabel")}</div>
+                <div class="value">${new Date(order.created_at).toLocaleDateString(localeTag())}</div>
               </div>
             </div>
             ${courierBlock}
@@ -445,10 +467,10 @@
           return `
             <div style="margin-top:20px;padding:16px;background:rgba(0,0,0,0.2);border-radius:10px">
               <h3 style="color:#fff;font-size:16px;margin-bottom:10px">
-                <i class="fas fa-camera"></i> صور المندوب
+                <i class="fas fa-camera"></i> ${t("track.proof.title")}
               </h3>
-              ${gallery("صورة عند الاستلام من البائع", "fa-dolly", pickupImgs)}
-              ${gallery("صورة عند التسليم إليك", "fa-check-circle", deliveryImgs)}
+              ${gallery(t("track.proof.pickupTitle"), "fa-dolly", pickupImgs)}
+              ${gallery(t("track.proof.deliveryTitle"), "fa-check-circle", deliveryImgs)}
             </div>
           `;
         }
@@ -465,21 +487,21 @@
             return `
               <div class="status-banner delivered">
                 <div class="icon"><i class="fas fa-check-circle"></i></div>
-                <div class="status-text">تم تسليم طلبك بنجاح ✓</div>
+                <div class="status-text">${t("track.banner.deliveredText")}</div>
               </div>`;
           }
           if (delivery && delivery.courier_id) {
             return `
               <div class="status-banner assigned">
                 <div class="icon"><i class="fas fa-truck"></i></div>
-                <div class="status-text">${delivery.status === "in_transit" ? "المندوب في الطريق إليك" : "تم تعيين مندوب لطلبك"}</div>
+                <div class="status-text">${delivery.status === "in_transit" ? t("track.banner.courierInTransit") : t("track.banner.courierAssigned")}</div>
               </div>`;
           }
           return `
             <div class="status-banner pending">
               <div class="icon"><i class="fas fa-hourglass-half"></i></div>
-              <div class="status-text">لم يُقبَل الطلب من مندوب بعد</div>
-              <p style="font-size:14px;color:#ddd;margin-top:8px">سنخبرك فور قبوله.</p>
+              <div class="status-text">${t("track.banner.pendingTitle")}</div>
+              <p style="font-size:14px;color:#ddd;margin-top:8px">${t("track.banner.pendingHint")}</p>
             </div>`;
         }
 
@@ -488,19 +510,19 @@
           if (!delivery.courier_name && !delivery.courier_phone) {
             return `
               <div class="courier-card">
-                <h4><i class="fas fa-user-tie"></i> تم تعيين مندوب</h4>
+                <h4><i class="fas fa-user-tie"></i> ${t("track.courier.assignedTitle")}</h4>
                 <p style="font-size:13px;color:#ccc">
-                  سجّل الدخول لرؤية اسم المندوب ورقم هاتفه.
+                  ${t("track.courier.loginToSeeHint")}
                 </p>
               </div>`;
           }
           return `
             <div class="courier-card">
-              <h4><i class="fas fa-user-tie"></i> معلومات المندوب</h4>
+              <h4><i class="fas fa-user-tie"></i> ${t("track.courier.infoTitle")}</h4>
               <div class="courier-row">
                 <i class="fas fa-user"></i>
                 <div>
-                  <div style="font-size:12px;color:#aaa">الاسم</div>
+                  <div style="font-size:12px;color:#aaa">${t("track.courier.nameLabel")}</div>
                   <div style="font-size:16px;font-weight:700">${escapeHtml(delivery.courier_name || "—")}</div>
                 </div>
               </div>
@@ -508,7 +530,7 @@
                 <div class="courier-row">
                   <i class="fas fa-phone"></i>
                   <div>
-                    <div style="font-size:12px;color:#aaa">الهاتف</div>
+                    <div style="font-size:12px;color:#aaa">${t("track.courier.phoneLabel")}</div>
                     <div style="font-size:16px;font-weight:700">
                       <a href="tel:${escapeHtml(delivery.courier_phone)}" style="color:#a3d5ff;text-decoration:none">
                         ${escapeHtml(delivery.courier_phone)}
@@ -521,10 +543,10 @@
 
         function renderTimeline(order, delivery) {
           const steps = [
-            { label: "تم إنشاء الطلب", icon: "shopping-cart" },
-            { label: "قَبلها مندوب", icon: "user-check" },
-            { label: "في الطريق", icon: "truck" },
-            { label: "تم التسليم", icon: "flag-checkered" },
+            { label: t("track.timeline.orderCreated"), icon: "shopping-cart" },
+            { label: t("track.timeline.acceptedByCourier"), icon: "user-check" },
+            { label: t("track.timeline.inTransit"), icon: "truck" },
+            { label: t("track.timeline.delivered"), icon: "flag-checkered" },
           ];
 
           let currentIdx = 0;
@@ -550,21 +572,29 @@
         }
 
         $("#search-btn").addEventListener("click", () => {
-          const t = $("#tracking-input").value.trim();
-          if (!t) return;
-          track(t);
+          const trackingNo = $("#tracking-input").value.trim();
+          if (!trackingNo) return;
+          track(trackingNo);
         });
         $("#tracking-input").addEventListener("keypress", (e) => {
           if (e.key === "Enter") $("#search-btn").click();
         });
 
-        // Auto-search from ?t= (checkout redirects here after success)
-        document.addEventListener("DOMContentLoaded", () => {
+        // Auto-search from ?t= (checkout redirects here after success).
+        // Waits for translations first so the result renders in the right language.
+        function autoSearchFromQuery() {
           const url = new URL(window.location.href);
-          const t = url.searchParams.get("t");
-          if (t) {
-            $("#tracking-input").value = t;
-            track(t);
+          const trackingNo = url.searchParams.get("t");
+          if (trackingNo) {
+            $("#tracking-input").value = trackingNo;
+            track(trackingNo);
+          }
+        }
+        document.addEventListener("DOMContentLoaded", () => {
+          if (window.HarthI18n) {
+            window.HarthI18n.ready().then(autoSearchFromQuery);
+          } else {
+            autoSearchFromQuery();
           }
         });
       })();

@@ -158,6 +158,1554 @@
       "skipTitle": "You can complete verification later from account settings"
     }
   },
+  "myOrders": {
+    "title": "My Orders - Harth",
+    "pageTitlePart1": "My",
+    "pageTitlePart2": "Orders",
+    "pageSubtitle": "All your orders, sorted from newest to oldest",
+    "filters": {
+      "searchPlaceholder": "Search by order or tracking number...",
+      "statusAll": "All statuses",
+      "statusOptions": {
+        "pending": "Pending",
+        "confirmed": "Confirmed",
+        "approvedRental": "Approved (rental)",
+        "shipped": "Out for delivery",
+        "activeRental": "Active (rental)",
+        "delivered": "Delivered",
+        "completedRental": "Completed (rental)",
+        "cancelled": "Cancelled",
+        "refunded": "Refunded"
+      },
+      "typeAll": "Purchases & rentals",
+      "typeSale": "Purchases only",
+      "typeRental": "Rentals only",
+      "dateFromTitle": "From date",
+      "dateToTitle": "To date",
+      "clearBtn": "Clear"
+    },
+    "stats": {
+      "total": "Total orders",
+      "delivered": "Delivered",
+      "active": "Active",
+      "spent": "Total spent ({{currency}})"
+    },
+    "loadingOrders": "Loading your orders...",
+    "emptyState": {
+      "title": "No orders found",
+      "desc": "You haven't placed any orders yet, or none match the selected filters.",
+      "shopNowBtn": "Shop Now"
+    },
+    "statusLabels": {
+      "pending": "New",
+      "confirmed": "Confirmed",
+      "shipped": "Out for delivery",
+      "delivered": "Delivered",
+      "cancelled": "Cancelled",
+      "refunded": "Refunded",
+      "approved": "Approved",
+      "rejected": "Rejected",
+      "active": "Active",
+      "completed": "Completed"
+    },
+    "paymentStatusLabels": {
+      "pending": "Awaiting payment",
+      "paid": "Paid",
+      "failed": "Payment failed",
+      "refunded": "Refunded"
+    },
+    "paymentMethodLabels": {
+      "card": "Credit card",
+      "cash_on_delivery": "Cash on delivery",
+      "cod": "Cash on delivery"
+    },
+    "typeBadges": {
+      "rental": "Rental",
+      "sale": "Purchase"
+    },
+    "detailsLoading": "Loading details...",
+    "toasts": {
+      "loadFailed": "Failed to load",
+      "detailsLoadFailed": "Failed to load details",
+      "errorPrefix": "Error:",
+      "noItemsToReorder": "No products to reorder",
+      "addingToCart": "Adding...",
+      "reorderAdded": "✓ Added {{n}} product(s) to cart",
+      "reorderFailed": "Reorder failed:",
+      "productFallback": "Product",
+      "confirmCancelOrder": "Are you sure you want to cancel this order?",
+      "cancellingOrder": "Cancelling...",
+      "cancelOrderFailed": "Cancellation failed",
+      "orderCancelled": "Order cancelled successfully",
+      "confirmCancelRental": "Are you sure you want to cancel this rental?",
+      "rentalCancelled": "Rental cancelled successfully",
+      "loginRequired": "You must log in first"
+    },
+    "rentalDetails": {
+      "equipmentFallback": "Equipment",
+      "labels": {
+        "rentalNumber": "Rental number:",
+        "status": "Status:",
+        "startDate": "Start date:",
+        "endDate": "End date:",
+        "paymentMethod": "Payment method:",
+        "orderDate": "Order date:",
+        "deliveryAddress": "Delivery address:",
+        "notes": "Notes:"
+      },
+      "totals": { "rental": "Rental:", "deposit": "Deposit:", "grand": "Total:" },
+      "cancelBtn": "Cancel Rental"
+    },
+    "orderDetails": {
+      "table": { "product": "Product", "quantity": "Qty", "unitPrice": "Unit Price", "total": "Total" },
+      "noItems": "No product details available",
+      "labels": {
+        "trackingNumber": "Tracking number:",
+        "orderStatus": "Order status:",
+        "paymentMethod": "Payment method:",
+        "paymentStatus": "Payment status:",
+        "deliveryAddress": "Delivery address:",
+        "orderDate": "Order date:",
+        "paymentDate": "Payment date:",
+        "notes": "Notes:"
+      },
+      "totals": {
+        "subtotal": "Subtotal:",
+        "discount": "Discount:",
+        "loyaltyUsed": "Points used:",
+        "shipping": "Shipping fee:",
+        "tax": "Tax:",
+        "grand": "Total:"
+      },
+      "loyaltyUsedValue": "-{{n}} pts",
+      "reorderBtn": "Reorder",
+      "trackBtn": "Track Order",
+      "cancelBtn": "Cancel Order"
+    }
+  },
+  "support": {
+    "title": "Support Center — Harth",
+    "hero": {
+      "headingPart1": "How can we",
+      "headingPart2": "help you?",
+      "subtitle": "Harth's support center — instant answers and professional support tickets",
+      "searchPlaceholder": "Search for your issue, e.g.: How do I rent equipment?",
+      "chips": {
+        "rentEquipment": "How do I rent equipment?",
+        "paymentIssue": "Payment issue",
+        "trackOrder": "Track order",
+        "forgotPassword": "Forgot password",
+        "loyaltyPoints": "Loyalty points"
+      }
+    },
+    "tabs": { "home": "Home", "help": "Help Center", "tickets": "My Tickets", "newTicket": "New Ticket" },
+    "home": {
+      "quickActionsTitle": "Quick Actions",
+      "qa": {
+        "openTicket": { "title": "Open a Ticket", "desc": "Couldn't find a solution? Contact us directly" },
+        "helpCenter": { "title": "Help Center", "desc": "Articles and solutions for the most common issues" },
+        "whatsapp": { "title": "WhatsApp", "desc": "Instant reply within minutes" },
+        "aiAssistant": { "title": "AI Assistant", "desc": "A bot that answers your questions instantly" }
+      },
+      "popularQuestionsTitle": "Most Popular Questions",
+      "channelsTitle": "Contact Channels",
+      "channels": {
+        "whatsapp": { "label": "WhatsApp", "sub": "+968 1234 5678" },
+        "phone": { "label": "Phone Call", "sub": "Sun–Thu 8am–5pm" },
+        "email": { "label": "Email", "sub": "support@harth.om" },
+        "twitter": { "label": "Twitter / X", "sub": "@HarthOman" }
+      }
+    },
+    "help": {
+      "searchPlaceholder": "Search the help center...",
+      "searchResultsTitle": "Search Results",
+      "noResultsText": "No results found. Try different keywords or",
+      "noResultsLinkText": "open a support ticket",
+      "categoriesTitle": "Browse by Category",
+      "allCategoriesLink": "All Categories",
+      "backLink": "Back",
+      "articleCountSuffix": "articles",
+      "helpfulQuestion": "Was this article helpful?",
+      "helpfulYes": "👍 Yes",
+      "helpfulNo": "👎 No",
+      "openTicketFromArticle": "Open a Support Ticket",
+      "feedbackThanksPositive": "Thanks! Glad it helped 🎉",
+      "feedbackThanksNegative": "Thanks for the feedback. We'll improve this article."
+    },
+    "categories": {
+      "technical": { "label": "Technical" },
+      "financial": { "label": "Financial & Payment" },
+      "account": { "label": "Account" },
+      "orders": { "label": "Orders" },
+      "suggestion": { "label": "Suggestion" },
+      "complaint": { "label": "Complaint" }
+    },
+    "articles": {
+      "t1": {
+        "title": "The platform won't open or keeps freezing",
+        "body": "If the platform won't open or keeps freezing, try the following steps:\n\n1. Clear your browser cache (Ctrl+Shift+Delete)\n2. Make sure your internet speed is at least 1Mbps\n3. Try a different browser (Chrome/Edge/Firefox)\n4. Turn off your VPN if you're using one\n5. Make sure your browser is updated to the latest version\n\nIf the problem persists, open a support ticket with a screenshot.",
+        "tags": ["technical", "slow", "not working", "freeze", "frozen"]
+      },
+      "t2": {
+        "title": "Images won't upload or display",
+        "body": "If images won't upload:\n\n1. Check your internet connection\n2. Clear your browser cache\n3. Make sure the image is in JPG/PNG/WEBP format\n4. Make sure the image size doesn't exceed 10MB\n5. Try refreshing the page (F5)\n\nIf images still won't upload, check your browser's camera/file access permissions.",
+        "tags": ["images", "upload", "not showing"]
+      },
+      "t3": {
+        "title": "Notification issues",
+        "body": "To enable notifications:\n\n1. Allow the site to send notifications when prompted\n2. Make sure your device isn't in \"Silent\" or \"Do Not Disturb\" mode\n3. Open your browser settings → Notifications → Allow Harth\n\nTo receive email notifications, make sure your email is correct in your account settings.",
+        "tags": ["notifications", "alerts", "not received"]
+      },
+      "f1": {
+        "title": "How do I pay? Available payment methods",
+        "body": "Available payment methods on the Harth platform:\n\n✅ Credit card (Visa / Mastercard)\n✅ Cash on delivery (COD) — available in some areas\n\nWhen paying by card:\n- Enter your card details on the secure page\n- Your bank may ask for an OTP code\n- The amount is charged immediately when the order is confirmed",
+        "tags": ["payment", "card", "cash on delivery", "cash"]
+      },
+      "f2": {
+        "title": "Payment failed",
+        "body": "If your payment fails:\n\n1. Make sure your card details are correct (number, expiry, CVV)\n2. Make sure you have sufficient balance\n3. Make sure your card is enabled for online payments\n4. Contact your bank to lift restrictions on online payments\n5. Try a different card\n\nIf the amount was deducted but the order wasn't completed, it will be refunded automatically within 3–5 business days.",
+        "tags": ["failed", "declined", "payment", "card error"]
+      },
+      "f3": {
+        "title": "Refunds — when will it arrive?",
+        "body": "Refund policy:\n\n• Cancelling more than 24 hours before delivery: full refund\n• Cancelling within 24 hours: a cancellation fee may apply\n• Refund time: 3–7 business days for credit cards\n\nIf 7 days have passed and the refund hasn't arrived, contact us via a support ticket.",
+        "tags": ["refund", "return", "amount", "money back"]
+      },
+      "a1": {
+        "title": "How do I reset my password?",
+        "body": "To reset your password:\n\n1. Click \"Forgot password\" on the login page\n2. Enter your registered email address\n3. Open the reset email in your inbox (check your spam folder too)\n4. Click the link and enter a new password\n\nThe link is valid for 24 hours only.",
+        "tags": ["password", "forgot", "login"]
+      },
+      "a2": {
+        "title": "How do I change my account information?",
+        "body": "To edit your account details:\n\n1. Click your name in the top corner\n2. Select \"Account Settings\"\n3. Edit your name, phone number, or profile photo\n4. Save the changes\n\nNote: changing your email requires additional verification.",
+        "tags": ["edit", "account", "name", "email"]
+      },
+      "a3": {
+        "title": "How do I become an equipment owner?",
+        "body": "To start selling or renting out as an equipment owner:\n\n1. Register a new account or log into your existing one\n2. Choose the \"Owner\" role when registering, or from account settings\n3. Complete identity verification (KYC)\n4. Go to the \"Owner Dashboard\" page\n5. Click \"Add Equipment\" and enter your equipment details",
+        "tags": ["owner", "seller", "list equipment"]
+      },
+      "o1": {
+        "title": "How do I rent equipment?",
+        "body": "To rent equipment on the Harth platform:\n\n1. Browse equipment on the \"Equipment\" page\n2. Choose the equipment you need and click \"Book\"\n3. Select the start and end dates\n4. Review the price and complete the payment\n5. You'll receive a confirmation message as soon as the booking is complete\n6. The owner will contact you to arrange delivery",
+        "tags": ["rent", "rental", "booking"]
+      },
+      "o2": {
+        "title": "How do I track my order?",
+        "body": "To track your order:\n\n1. Go to the \"My Orders\" page from the menu\n2. Find your order or select it from the list\n3. Click \"Track Order\" to see the courier's current location\n4. You can call the courier directly from the tracking page\n\nIf your order is delayed beyond the expected time, please open a support ticket.",
+        "tags": ["track", "order", "courier", "delivery"]
+      },
+      "o3": {
+        "title": "How do I cancel an order?",
+        "body": "To cancel an order:\n\n1. Go to the \"My Orders\" page\n2. Select the order you want to cancel\n3. Click \"Cancel Order\" (only available for orders with \"New\" or \"Confirmed\" status)\n4. Select a cancellation reason\n\nAfter cancellation, the amount is refunded according to the refund policy.",
+        "tags": ["cancel", "cancellation", "cancel order"]
+      },
+      "l1": {
+        "title": "How do loyalty points work?",
+        "body": "The Harth loyalty program:\n\n🌟 Earn points with every completed order\n💎 100 points = 1 OMR discount on your next orders\n🏆 The more points you earn, the higher your tier (Bronze → Silver → Gold → Platinum)\n\nTo view your balance: go to the \"Loyalty Program\" page from the menu.",
+        "tags": ["points", "loyalty", "reward", "discount"]
+      }
+    },
+    "tickets": {
+      "filters": { "all": "All", "open": "Open", "inProgress": "In Progress", "resolved": "Resolved", "closed": "Closed" },
+      "loading": "Loading",
+      "authGate": { "title": "Please log in", "desc": "To view your support tickets you must", "loginLink": "log in", "descSuffix": "first." },
+      "emptyState": { "text": "No tickets found.", "linkText": "Open a new ticket" },
+      "statusLabels": { "open": "Open", "in_progress": "In Progress", "resolved": "Resolved", "closed": "Closed" },
+      "priorityLabels": { "low": "Low", "medium": "Medium", "high": "⚡ High", "urgent": "🚨 Urgent" },
+      "senderLabels": { "system": "System", "agent": "Support Team", "you": "You" },
+      "csat": { "question": "How was your experience with us?", "hint": "Rate us to help us improve", "thanks": "✓ Thanks for your rating! Your rating:" },
+      "reply": { "placeholder": "Type your reply here...", "sendBtn": "Send" },
+      "reopenBtn": "Reopen Ticket",
+      "loadFailed": "Failed to load"
+    },
+    "newTicket": {
+      "step1": {
+        "title": "Issue Type & Priority",
+        "priorityLabel": "Priority",
+        "priorityOptions": { "low": "Low", "medium": "Medium", "high": "⚡ High", "urgent": "🚨 Urgent" }
+      },
+      "step2": {
+        "title": "Issue Details",
+        "subjectLabel": "Subject *",
+        "subjectPlaceholder": "Describe your issue in one sentence...",
+        "suggestBoxTitle": "Did you mean one of these topics?",
+        "detailsLabel": "Additional Details *",
+        "detailsPlaceholder": "Explain your issue in detail so we can help you faster...",
+        "guestFieldsLabel": "Contact Information",
+        "guestNamePlaceholder": "Your full name",
+        "guestEmailPlaceholder": "Your email address"
+      },
+      "step3": {
+        "title": "Attachments",
+        "optionalHint": "(optional)",
+        "attachLabel": "Upload an image or file showing the issue",
+        "attachHint": "Supported formats: images, PDF, video — max size: 10MB"
+      },
+      "submitBtn": "Submit Request",
+      "sendingBtn": "Sending...",
+      "success": {
+        "title": "Your ticket was submitted successfully!",
+        "messageTemplate": "Your ticket number: {{number}} — our support team will contact you within {{hours}} hours.",
+        "continueBtn": "View Ticket",
+        "newTicketBtn": "New Ticket"
+      }
+    },
+    "toasts": {
+      "selectCategoryFirst": "Select an issue category first",
+      "enterSubject": "Enter a subject",
+      "enterMoreDetails": "Please write more details (at least 20 characters)",
+      "enterValidEmail": "Enter a valid email address",
+      "submitFailed": "Submission failed",
+      "ticketLoadFailed": "Failed to load",
+      "writeReplyFirst": "Write your reply first",
+      "replySent": "Your reply was sent successfully",
+      "sendFailed": "Failed",
+      "reopenSuccess": "Ticket reopened",
+      "rateThanks": "Thanks for your rating!",
+      "genericFailed": "Failed"
+    },
+    "chat": {
+      "title": "AI Assistant",
+      "botName": "Harth AI Assistant",
+      "botStatus": "Online now",
+      "inputPlaceholder": "Type your question...",
+      "welcomeText": "Hi! 👋 I'm the Harth AI assistant. How can I help you today?",
+      "employeeTransferText": "I'll connect you with our support team now. You can open a support ticket or reach us via WhatsApp.",
+      "openTicketFormText": "I'll open the ticket form for you...",
+      "articleFoundTemplate": "I found an article related to your question:\n\n📄 {{title}}",
+      "notUnderstoodText": "I didn't quite understand your question. You can try searching the help center or talking to one of our agents.",
+      "optLabels": {
+        "rentEquipment": "How do I rent equipment?",
+        "paymentIssue": "Payment issue",
+        "trackOrder": "Track an order",
+        "talkToAgent": "Talk to an agent",
+        "openTicket": "Open a support ticket",
+        "whatsapp": "WhatsApp",
+        "readArticle": "Read the article",
+        "anotherQuestion": "Another question",
+        "helpCenter": "Help Center"
+      }
+    }
+  },
+  "ownerDashboard": {
+    "title": "Owner Dashboard - Harth",
+    "loginGate": {
+      "heading": "Owner Login",
+      "desc": "This dashboard is for equipment owners. Log in with an owner account.",
+      "emailPlaceholder": "Email address",
+      "passwordPlaceholder": "Password",
+      "submitBtn": "Log In",
+      "noAccountText": "Don't have an account?",
+      "registerLink": "Register as an owner"
+    },
+    "statusBanner": {
+      "defaultTitle": "Your account is under review",
+      "defaultMsg": "Your farmer account is under review by the admin team. The ability to list equipment for sale/rent will be enabled once approved. In the meantime, you can browse and buy products from the store.",
+      "pendingTitle": "Your account is under review",
+      "pendingMsg": "Your farmer account is under review by the admin team. The ability to list equipment for sale/rent will be enabled once approved. In the meantime, you can browse and buy products from the store.",
+      "rejectedTitle": "Your account activation was rejected",
+      "rejectedReasonPrefix": "Reason:",
+      "rejectedMsg": "You currently can't list equipment for sale or rent. To request a re-review, please contact support.",
+      "inactiveTitle": "Your account is inactive",
+      "inactiveMsg": "Contact the admin team for more information."
+    },
+    "trustBanner": {
+      "heading": "Boost buyer trust in your account",
+      "msgPrefix": "Completing these steps adds a ✓ Verified badge to your profile and equipment.",
+      "kycSubmitMsg": "You haven't submitted identity verification documents.",
+      "kycResubmitMsg": "Your previous verification documents were rejected — you can resubmit with clearer photos.",
+      "kycPendingMsg": "Your verification documents are under review by the admin team.",
+      "submitKycBtn": "Submit Verification Documents",
+      "resubmitKycBtn": "Resubmit Documents"
+    },
+    "welcomeDefault": "Welcome",
+    "welcomeTemplate": "Welcome, {{name}}",
+    "stats": {
+      "total": "Total Equipment",
+      "available": "Available",
+      "rented": "Rented",
+      "hidden": "Hidden"
+    },
+    "form": {
+      "addTitle": "Add New Equipment",
+      "editTitle": "Edit Equipment",
+      "nameLabel": "Name *",
+      "categoryLabel": "Category *",
+      "listingTypeLabel": "Listing Type *",
+      "listingTypeOptions": { "rent": "For Rent", "sale": "For Sale", "both": "Sale & Rent" },
+      "statusLabel": "Status",
+      "dailyPriceLabel": "Daily Price (OMR) *",
+      "salePriceLabel": "Sale Price (OMR)",
+      "commissionHintTemplate": "Platform commission ({{pct}}%): {{amount}} {{currency}} — Final price shown to the buyer: <strong>{{final}}</strong> {{currency}}",
+      "depositLabel": "Refundable Deposit (OMR)",
+      "depositOptionalHint": "— optional",
+      "depositPlaceholder": "e.g. 50.00",
+      "depositHint": "Held from the renter at booking and refunded when the equipment is returned undamaged. Only applies to rented equipment.",
+      "stockLabel": "Available Quantity",
+      "governorateLabel": "Governorate",
+      "noGovernorateOption": "Not specified",
+      "descriptionPlaceholder": "Equipment description...",
+      "specsAcc": {
+        "summary": "Detailed Technical Specifications",
+        "optionalHint": "(optional — for generating the technical PDF)",
+        "idSection": "Identification",
+        "manufacturerLabel": "Manufacturer",
+        "manufacturerPlaceholder": "e.g. John Deere, Kubota",
+        "modelLabel": "Model",
+        "modelPlaceholder": "e.g. 6120M",
+        "modelYearLabel": "Year of Manufacture",
+        "modelYearPlaceholder": "e.g. 2022",
+        "serialNumberLabel": "Serial Number",
+        "serialNumberPlaceholder": "Optional",
+        "originCountryLabel": "Country of Origin",
+        "originCountryPlaceholder": "e.g. USA, Japan, Germany",
+        "operatingHoursLabel": "Operating Hours",
+        "operatingHoursPlaceholder": "Total number of hours",
+        "fuelTypeLabel": "Fuel Type / Power Source",
+        "fuelTypeOptions": { "empty": "-- Select --", "diesel": "Diesel", "gasoline": "Gasoline", "electric": "Electric", "hybrid": "Hybrid", "gas": "Natural Gas" },
+        "techSection": "Technical Specifications",
+        "enginePowerLabel": "Engine Power (HP)",
+        "enginePowerPlaceholder": "e.g. 120",
+        "weightLabel": "Total Weight (kg)",
+        "weightPlaceholder": "e.g. 4200",
+        "loadCapacityLabel": "Max Load Capacity (kg)",
+        "loadCapacityPlaceholder": "e.g. 2000",
+        "dimLengthLabel": "Length (cm)",
+        "dimWidthLabel": "Width (cm)",
+        "dimHeightLabel": "Height (cm)",
+        "dimPlaceholder": "cm",
+        "maintSection": "Maintenance Record",
+        "lastMaintDateLabel": "Last Maintenance Date",
+        "maintTypeLabel": "Maintenance Type",
+        "maintTypePlaceholder": "e.g. Full service, oil change",
+        "maintByLabel": "Performed By",
+        "maintByPlaceholder": "e.g. Manufacturer agency, certified workshop",
+        "nextMaintDateLabel": "Next Maintenance Date",
+        "warrantySection": "Warranty & Certifications",
+        "warrantyInfoLabel": "Warranty Information",
+        "warrantyInfoPlaceholder": "e.g. 1-year manufacturer warranty",
+        "inspectionCertLabel": "Technical Inspection Certificate",
+        "inspectionCertPlaceholder": "e.g. Certified — certificate #12345",
+        "pdfSection": "Official PDF File (optional)",
+        "pdfHint": "Upload the manufacturer catalog, operating manual, or official technical file (PDF, up to 20MB)",
+        "pdfCurrentLinkText": "View current uploaded file",
+        "pdfUploadedLinkText": "View uploaded file"
+      },
+      "imagesLabel": "Images (up to 10 images)",
+      "imagesHint": "Click an image to set it as the primary image",
+      "primaryBadge": "Primary",
+      "primaryTitleHint": "Click to set as the primary image",
+      "saveBtn": "Save",
+      "cancelEditBtn": "Cancel Edit"
+    },
+    "categories": {
+      "tractor": "Tractors", "sprayer": "Sprayers", "harvester": "Harvesters",
+      "tools": "Tools", "seeds": "Seeds", "fertilizer": "Fertilizers",
+      "pesticide": "Pesticides", "other": "Other"
+    },
+    "statusOptions": {
+      "available": "Available", "rented": "Rented", "maintenance": "Maintenance",
+      "sold": "Sold", "hidden": "Hidden"
+    },
+    "list": {
+      "heading": "My Equipment",
+      "searchPlaceholder": "Search by name...",
+      "statusFilterAll": "All Statuses",
+      "refreshBtn": "Refresh",
+      "emptyTitle": "No equipment yet",
+      "emptyDesc": "Add your first equipment from the form above to show it to buyers and renters on the platform."
+    },
+    "badges": {
+      "forSale": "For Sale",
+      "bothSaleRent": "Sale & Rent",
+      "forRent": "For Rent",
+      "new": "New"
+    },
+    "noPriceLabel": "No price",
+    "saleLabelPrefix": "Sale:",
+    "quantityLabelPrefix": "Qty:",
+    "depositLabelPrefix": "Deposit:",
+    "editBtn": "Edit",
+    "activateBtn": "Activate",
+    "deactivateBtn": "Deactivate",
+    "pdfBtnTitle": "View technical PDF",
+    "deleteBtnTitle": "Delete",
+    "pagination": { "prev": "Previous", "next": "Next" },
+    "toasts": {
+      "enterEmailPassword": "Enter your email and password",
+      "notOwnerAccount": "This account isn't an owner account — use the registration page to create an owner account",
+      "loginFailed": "Login failed",
+      "ownersOnly": "This dashboard is for owners only",
+      "maxImages": "Maximum 10 images",
+      "imageUploadFailed": "Failed to upload image",
+      "equipmentUpdated": "Equipment updated successfully",
+      "equipmentAdded": "Equipment added successfully",
+      "equipmentDataUnavailable": "Equipment data unavailable",
+      "confirmDelete": "Are you sure you want to permanently delete this equipment?",
+      "deleted": "Deleted",
+      "deactivated": "Deactivated",
+      "activated": "Equipment activated",
+      "pdfUploadFailed": "Upload failed",
+      "pdfUploaded": "PDF uploaded successfully",
+      "pdfUploadGenericFailed": "Failed to upload file"
+    }
+  },
+  "adminDashboard": {
+    "adminOnlyAlert": "This page is for admins only.",
+    "errorPrefix": "Error",
+    "topbar": {
+      "title": "Admin Dashboard — Harth",
+      "logoutBtn": "Logout"
+    },
+    "tabs": {
+      "overview": "Overview",
+      "forSale": "For Sale",
+      "forRent": "For Rent",
+      "approvals": "Equipment Approvals",
+      "accountApprovals": "Account Approvals",
+      "kyc": "Identity Verification",
+      "deliveries": "Deliveries",
+      "users": "Users",
+      "orders": "Orders",
+      "promos": "Promo Codes",
+      "commissions": "Commissions",
+      "payouts": "Payouts",
+      "audit": "Audit Log",
+      "banners": "Ads",
+      "support": "Support"
+    },
+    "overview": {
+      "analyticsHeading": "Interactive Analytics",
+      "chartSales": { "label": "Monthly Sales", "range6": "Last 6 months", "range12": "Last 12 months", "range24": "Last 24 months" },
+      "chartCategories": { "label": "Top Categories", "range7": "Last week", "range30": "Last 30 days", "range90": "Last 90 days" },
+      "chartGrowth": { "label": "User Growth", "range14": "Last 2 weeks", "range30": "Last 30 days", "range90": "Last 90 days" },
+      "chartGov": { "label": "Orders by Governorate", "range30": "Last 30 days", "range90": "Last 90 days", "range365": "Last year" },
+      "recentActivityHeading": "Last 7 Days",
+      "topOwnersHeading": "Top Sellers (30 days)",
+      "errorLoadFailed": "Failed to load",
+      "noActivity": "No activity",
+      "noDataYet": "No data yet",
+      "dayActivityLine": "Users: {{users}} · Orders: {{orders}} · Rentals: {{rentals}}",
+      "transactionsCount": "{{count}} transaction(s)",
+      "statCards": {
+        "totalUsers": { "label": "Total Users", "sub": "{{active}} active · {{pro}} PRO" },
+        "forSale": { "label": "Equipment for Sale", "sub": "Approved and listed for purchase" },
+        "forRent": { "label": "Equipment for Rent", "sub": "Approved and listed for rent" },
+        "pendingEquip": { "label": "Equipment Pending Approval", "subHasPending": "Review it under the Equipment Approvals tab", "subNone": "Nothing pending" },
+        "pendingAccounts": { "label": "Accounts Pending Approval", "subHasPending": "Owners / couriers awaiting activation", "subNone": "Nothing pending" },
+        "orders": { "label": "Orders", "sub": "{{paid}} paid · {{revenue}}" },
+        "rentals": { "label": "Rentals", "sub": "{{active}} active · {{revenue}}" },
+        "commissions": { "label": "Platform Commissions", "sub": "{{pending}} pending" },
+        "userDistribution": { "label": "User Distribution", "owner": "Farmers", "renter": "Consumers", "courier": "Couriers" }
+      },
+      "chartLabels": {
+        "purchaseSales": "Purchase Sales",
+        "rentalSales": "Rental Sales",
+        "renters": "Consumers",
+        "owners": "Farmers",
+        "couriers": "Couriers",
+        "orderCount": "Order Count",
+        "ordersTooltip": "Orders: {{count}}",
+        "revenueTooltip": "Revenue: {{amount}}",
+        "noSalesInPeriod": "No sales in the selected period",
+        "noOrdersInPeriod": "No orders in the selected period"
+      },
+      "chartCategoryLabels": {
+        "tractor": "Tractors", "harvester": "Harvesters", "plow": "Plows", "irrigation": "Irrigation Systems",
+        "seeder": "Seeders", "sprayer": "Sprayers", "tools": "Tools", "seeds": "Seeds",
+        "fertilizer": "Fertilizer", "crops": "Crops", "livestock": "Livestock", "other": "Other"
+      }
+    },
+    "forSale": {
+      "heading": "Equipment for Sale",
+      "desc": "All approved equipment currently listed for sale.",
+      "noneFound": "No equipment for sale right now"
+    },
+    "forRent": {
+      "heading": "Equipment for Rent",
+      "desc": "All approved equipment currently listed for rent.",
+      "noneFound": "No equipment for rent right now"
+    },
+    "equipmentList": {
+      "colName": "Name",
+      "colPrice": "Price",
+      "colQty": "Qty",
+      "colGov": "Governorate",
+      "colStatus": "Status",
+      "perPiece": "/ piece",
+      "perDayShort": "/ day",
+      "viewBtn": "View",
+      "deleteBtn": "Delete",
+      "confirmDelete": "Delete \"{{name}}\" permanently? This cannot be undone.",
+      "deleteFailed": "Delete failed",
+      "deletedSuccess": "\"{{name}}\" deleted successfully",
+      "pdfDataFailed": "Failed to load equipment data",
+      "pdfNotLoaded": "Error: PDF module not loaded",
+      "genericFailed": "Failed"
+    },
+    "approvals": {
+      "heading": "Equipment Pending Approval",
+      "desc": "When an owner adds new equipment, it appears here for review before going public.",
+      "bulkSelectedCount": "{{count}} item(s) selected",
+      "bulkApproveAll": "Approve All",
+      "bulkRejectAll": "Reject All",
+      "bulkHide": "Hide",
+      "bulkClear": "Clear Selection",
+      "selectAllOnPage": "Select all on this page",
+      "noneFound": "No equipment pending approval ✓",
+      "listingTypes": { "sale": "For Sale", "rent": "For Rent", "both": "For Sale & Rent" },
+      "saleLabel": "Sale: {{price}}",
+      "rentLabel": "Rent: {{price}}/day",
+      "ownerUnknown": "Unknown",
+      "approveBtn": "Approve",
+      "rejectBtn": "Reject",
+      "confirmApprove": "Confirm approval of this equipment?",
+      "approvedToast": "✓ Approved",
+      "rejectReasonPrompt": "Reason for rejecting \"{{name}}\":",
+      "rejectedToast": "Rejected",
+      "reasonNotSpecified": "Not specified",
+      "genericFailed": "Failed"
+    },
+    "accountApprovals": {
+      "heading": "Accounts Pending Approval",
+      "desc": "When a new owner or delivery agent registers, they appear here for review. Consumer accounts are activated automatically and need no approval.",
+      "noneFound": "No accounts pending approval ✓",
+      "registeredOn": "Registered {{date}}",
+      "blockBtn": "Block",
+      "reasonLabels": { "reject": "rejecting", "block": "blocking" },
+      "statusReasonPrompt": "Reason for {{label}} the account{{name}} (optional):",
+      "confirmApproveAccount": "Confirm approval of the account{{name}}?",
+      "confirmReactivate": "Reactivate the account{{name}}?",
+      "confirmRepending": "Send the account{{name}} back to the review queue?",
+      "confirmDeleteAccount": "Permanently delete the account{{name}}? The user will no longer be able to sign in.",
+      "updatedToast": "Updated ✓",
+      "genericFailed": "Failed"
+    },
+    "kyc": {
+      "heading": "Identity Verification Requests",
+      "desc": "Users who submitted identity verification documents and are awaiting your review. Click an image to enlarge it before deciding.",
+      "loadingText": "Loading...",
+      "noneFound": "No pending identity verification requests ✓",
+      "imgUnavailable": "{{label}}: unavailable",
+      "idFrontImgLabel": "ID front",
+      "idBackImgLabel": "ID back",
+      "selfieImgLabel": "Selfie",
+      "identityNumberLabel": "ID number:",
+      "submittedAt": "· submitted on {{date}}",
+      "approveBtn": "Approve",
+      "rejectBtn": "Reject",
+      "confirmApproveIdentity": "Confirm approval of identity for \"{{name}}\"?",
+      "approvedIdentityToast": "Identity approved ✓",
+      "rejectIdentityPrompt": "Reason for rejecting identity for \"{{name}}\" (optional):",
+      "rejectedRequestToast": "Request rejected",
+      "genericFailed": "Failed"
+    },
+    "deliveries": {
+      "heading": "Delivery Requests",
+      "statusAll": "All Statuses",
+      "statusOptions": {
+        "pending": "Awaiting Courier",
+        "accepted": "Accepted by Courier",
+        "picked_up": "Picked Up",
+        "in_transit": "In Transit",
+        "delivered": "Delivered",
+        "cancelled": "Cancelled"
+      },
+      "noneFound": "No delivery requests",
+      "colId": "ID",
+      "colOrder": "Order",
+      "colCustomer": "Customer",
+      "colCourier": "Courier",
+      "colStatus": "Status",
+      "colDate": "Date",
+      "rentalLabel": "Rental",
+      "noCourierYet": "Not yet accepted",
+      "genericFailed": "Failed"
+    },
+    "users": {
+      "searchPlaceholder": "Search by name or email...",
+      "roleAll": "All Types",
+      "roleOptions": {
+        "renter": "Consumer",
+        "owner": "Farmer",
+        "delivery": "Delivery Agent",
+        "admin": "Admin"
+      },
+      "statusAll": "All Statuses",
+      "statusOptions": {
+        "pending": "Under Review",
+        "approved": "Approved",
+        "rejected": "Rejected",
+        "blocked": "Blocked",
+        "deleted": "Deleted"
+      },
+      "bulkSelectedCount": "{{count}} item(s) selected",
+      "bulkApprove": "Approve",
+      "bulkPending": "Send Back to Review",
+      "bulkBlock": "Block",
+      "bulkClear": "Clear Selection",
+      "noneFound": "No users found",
+      "colName": "Name",
+      "colEmail": "Email",
+      "colRole": "Type",
+      "colAccountStatus": "Account Status",
+      "colPro": "PRO",
+      "colPoints": "Points",
+      "colActions": "Actions",
+      "cannotBulkAdminTitle": "Admin accounts can't be bulk-selected",
+      "actions": {
+        "approve": "Approve",
+        "reject": "Reject",
+        "block": "Block",
+        "reactivate": "Reactivate",
+        "repending": "Send Back to Review",
+        "restore": "Restore",
+        "delete": "Delete",
+        "removePro": "Remove PRO",
+        "grantPro": "Grant PRO"
+      },
+      "updatedToast": "Updated ✓",
+      "genericFailed": "Failed"
+    },
+    "orders": {
+      "statusAll": "All Statuses",
+      "statusOptions": {
+        "pending": "Pending",
+        "confirmed": "Confirmed",
+        "shipped": "Shipped",
+        "delivered": "Delivered",
+        "cancelled": "Cancelled"
+      },
+      "paymentAll": "All Payment Statuses",
+      "paymentOptions": {
+        "pending": "Pending",
+        "paid": "Paid",
+        "failed": "Failed"
+      },
+      "saleLabel": "Sale",
+      "rentalLabel": "Rental",
+      "viewBtn": "View",
+      "loadFailed": "Failed to load orders",
+      "noneFound": "No orders or rentals found",
+      "colTypeRef": "Type / Reference",
+      "colTotal": "Total",
+      "colStatus": "Status",
+      "colPayment": "Payment",
+      "colDate": "Date",
+      "colDetails": "Details",
+      "rentalStatusOptions": {
+        "pending": "Pending",
+        "approved": "Approved",
+        "rejected": "Rejected",
+        "active": "Active",
+        "completed": "Completed",
+        "cancelled": "Cancelled"
+      }
+    },
+    "promos": {
+      "addBtn": "Add New Code",
+      "genericFailed": "Failed",
+      "noneFound": "No codes found",
+      "colCode": "Code",
+      "colValue": "Value",
+      "colUsage": "Usage",
+      "colExpiry": "Expiry",
+      "colStatus": "Status",
+      "colActions": "Actions",
+      "neverExpires": "Never expires",
+      "activeLabel": "Active",
+      "disabledLabel": "Disabled",
+      "editBtn": "Edit",
+      "deleteBtn": "Delete"
+    },
+    "commissions": {
+      "heading": "Commission Settings",
+      "pctLabel": "Platform Commission Rate (%)",
+      "savePctBtn": "Save Rate",
+      "statusAll": "All",
+      "statusOptions": {
+        "pending": "Pending",
+        "paid": "Paid",
+        "cancelled": "Cancelled"
+      },
+      "ownerSearchPlaceholder": "Search by owner name/email",
+      "fromDateTitle": "From date",
+      "toDateTitle": "To date",
+      "exportBtn": "Export Report",
+      "genericFailed": "Failed",
+      "noneFound": "No commissions found",
+      "colOwner": "Owner",
+      "colEquipment": "Equipment",
+      "colAmount": "Amount",
+      "colRate": "Rate",
+      "colCommission": "Commission",
+      "colNet": "Net",
+      "colStatus": "Status",
+      "payBtn": "Confirm Payment",
+      "confirmPay": "Confirm payout of this commission to the owner?",
+      "paidToast": "Paid out ✓",
+      "exportFailed": "Export failed",
+      "lastUpdated": "Last updated: {{date}}{{by}}",
+      "lastUpdatedBySuffix": " — {{name}}",
+      "pctRangeError": "Commission rate must be between 0 and 100",
+      "saveFailed": "Save failed",
+      "savedPctToast": "Commission rate saved ✓"
+    },
+    "payouts": {
+      "heading": "Owner Payouts",
+      "subBalances": "Owner Balances",
+      "subHistory": "Payout History",
+      "searchPlaceholder": "Search by owner name or email",
+      "onlyPendingLabel": "Show only those with a balance",
+      "loadingText": "Loading...",
+      "loadFailed": "Failed to load",
+      "noneFound": "No owners match the filters.",
+      "totalPaidLifetime": "Total paid to date: {{amount}}",
+      "transactionCount": "Transactions: {{count}}",
+      "lastPaidLabel": "Last paid: {{date}}",
+      "pendingBalanceLabel": "Pending Balance",
+      "pendingOpsCount": "{{count}} transaction(s)",
+      "payNowBtn": "Pay Now",
+      "noBalanceBtn": "No Balance",
+      "orderRefLabel": "Order {{ref}}",
+      "rentalRefLabel": "Rental {{ref}}",
+      "moreOpsLabel": "+ {{count}} more transaction(s)",
+      "totalPayoutLabel": "Total Payout: {{amount}}",
+      "opsCountSuffix": " ({{count}} transaction(s))",
+      "payingInProgress": "Processing payout...",
+      "payFailed": "Payout failed",
+      "paidToast": "✓ Paid {{amount}} to {{name}}",
+      "genericError": "Error",
+      "noHistoryYet": "No payout history yet.",
+      "methodLabels": { "bank_transfer": "Bank Transfer", "cash": "Cash", "wallet": "Wallet", "other": "Other" },
+      "cancelledBadge": "Cancelled",
+      "referenceLabel": "Reference: {{ref}}",
+      "paidByLabel": "Paid by: {{name}}",
+      "cancelBtn": "Cancel & Reverse",
+      "cancelReasonPrompt": "Reason for cancellation (logged in the batch notes and audit log):",
+      "cancelFailed": "Cancellation failed",
+      "cancelledToast": "Batch cancelled and commissions reversed to 'pending'"
+    },
+    "audit": {
+      "heading": "Audit Log",
+      "subHeading": "— Every action taken by an admin is logged here",
+      "actionsAll": "All Actions",
+      "searchPlaceholder": "Search names, reasons, or target_id",
+      "fromDateTitle": "From date",
+      "toDateTitle": "To date",
+      "refreshBtn": "Refresh",
+      "loadingText": "Loading...",
+      "loadFailed": "Failed to load",
+      "noneFound": "No records match the current filters.",
+      "viewDetailsBtn": "View Details",
+      "noteLabel": "// Note: {{note}}",
+      "beforeLabel": "// Before",
+      "afterLabel": "// After"
+    },
+    "bulk": {
+      "noUserSelected": "No user selected",
+      "noEquipSelected": "No equipment selected",
+      "userActionLabels": { "approved": "approving", "pending": "sending back to review", "blocked": "blocking" },
+      "confirmUserAction": "Confirm {{action}} {{count}} user(s)?",
+      "blockReasonPrompt": "Reason for blocking (optional):",
+      "genericFailed": "Failed",
+      "updatedUsersToast": "✓ Updated {{count}} user(s){{skipped}}",
+      "skippedAdminSuffix": " ({{count}} admin(s) skipped)",
+      "equipActionLabels": { "approve": "approving", "reject": "rejecting", "hide": "hiding", "show": "showing" },
+      "confirmEquipAction": "Confirm {{action}} {{count}} equipment item(s)?",
+      "rejectReasonPrompt": "Reason for rejection (shown to the owner):",
+      "rejectReasonRequired": "Bulk rejection requires a reason",
+      "updatedEquipToast": "✓ Updated {{count}} equipment item(s)"
+    },
+    "banners": {
+      "heading": "Ads Manager",
+      "desc": "Create your ads, schedule when they appear, and track their remaining time and activity.",
+      "addBtn": "New Ad",
+      "statTotal": "Total Ads",
+      "statLive": "Live Now",
+      "statScheduled": "Scheduled",
+      "statExpired": "Expired / Disabled",
+      "searchPlaceholder": "Search ads by title…",
+      "statusAll": "All Statuses",
+      "statusOptions": {
+        "live": "Live Now",
+        "scheduled": "Scheduled",
+        "expired": "Expired",
+        "disabled": "Disabled"
+      },
+      "placementAll": "All Placements",
+      "placementOptions": {
+        "home_hero": "Home — Main Banner",
+        "home_secondary": "Home — Secondary Card",
+        "tools_top": "Equipment Page — Top",
+        "global_top_strip": "Site-wide Top Strip"
+      },
+      "loadingText": "Loading...",
+      "loadFailedFallback": "Failed to load — check the server connection",
+      "retryBtn": "Retry",
+      "noneYet": "No ads yet",
+      "noMatchingResults": "No matching results",
+      "createFirstHint": "Click \"New Ad\" to create your first ad.",
+      "tryDifferentFilter": "Try changing the search term or status filter.",
+      "sortOrderPill": "Order: {{order}}",
+      "detailsBtn": "Details",
+      "deactivateBtn": "Pause",
+      "deactivateBtnAlt": "Disable",
+      "activateBtn": "Activate",
+      "editBtn": "Edit",
+      "countdown": {
+        "endsIn": "Ends in",
+        "startsIn": "Starts in",
+        "endedAgo": "Ended",
+        "statusLabel": "Status",
+        "liveNoEnd": "Live now — no end date",
+        "disabledMsg": "Disabled — won't be shown to users",
+        "dayUnit": "d",
+        "hourUnit": "h",
+        "minuteUnit": "m",
+        "secondUnit": "s"
+      },
+      "detail": {
+        "loadFailed": "Failed to load the ad",
+        "infoHeading": "Ad Information",
+        "totalDuration": "Total Duration",
+        "timeRemaining": "Time Remaining",
+        "timeElapsed": "Time Elapsed",
+        "startsAt": "Starts At",
+        "endsAt": "Ends At",
+        "sortOrder": "Display Order",
+        "ctaButton": "Action Button",
+        "ctaLink": "Action Link",
+        "promoCode": "Promo Code",
+        "createdAt": "Created At",
+        "updatedAt": "Last Updated",
+        "none": "None",
+        "activityHeading": "Activity Log",
+        "noActivityYet": "No activity logged yet",
+        "notStartedYet": "Not started yet",
+        "startsInPrefix": "Starts in ",
+        "completed": "Completed",
+        "endedAgoPrefix": "Ended ",
+        "noTimeWindow": "No time window",
+        "deleteBtn": "Delete"
+      },
+      "timelineActions": {
+        "banner_created": "Ad created",
+        "banner_updated": "Ad updated",
+        "banner_deleted": "Ad deleted"
+      },
+      "timelineSystemActor": "System",
+      "timelineActivated": "Activated",
+      "timelineDeactivated": "Deactivated",
+      "timelineTitleChanged": "Title changed",
+      "timelinePlacementChanged": "Placement changed → {{placement}}",
+      "editor": {
+        "loadFailed": "Failed to load",
+        "loadBannerFailed": "Failed to load the ad",
+        "titleRequired": "Title is required",
+        "dateRangeError": "The start date must be before the end date",
+        "savingText": "Saving...",
+        "saveFailed": "Save failed",
+        "updatedToast": "Updated ✓",
+        "createdToast": "Created ✓",
+        "genericError": "Error",
+        "imageUploadFailed": "Upload failed",
+        "imageUploadedToast": "Image uploaded ✓"
+      },
+      "toggleDeactivatedToast": "Deactivated",
+      "toggleActivatedToast": "Activated",
+      "deleteConfirm": "Delete the ad \"{{name}}\"? This action cannot be undone.",
+      "deletedToast": "Deleted",
+      "genericFailed": "Failed"
+    },
+    "support": {
+      "heading": "Support Tickets",
+      "desc": "Manage and respond to user complaints and requests",
+      "refreshBtn": "Refresh",
+      "catAll": "All Categories",
+      "priAll": "All Priorities",
+      "priorityOptions": {
+        "low": "Low",
+        "medium": "Medium",
+        "high": "High",
+        "urgent": "Urgent"
+      },
+      "filterBtn": "Filter"
+    },
+    "orderModal": {
+      "detailsTitle": "Order Details",
+      "loadingText": "Loading…",
+      "detailsTitleWithRef": "Order Details — {{ref}}",
+      "rentalDetailsTitleWithRef": "Rental Details — {{ref}}",
+      "loadFailed": "Failed to load",
+      "deliveryStatusLabels": {
+        "pending": "Pending",
+        "accepted": "Accepted by Courier",
+        "picked_up": "Picked Up",
+        "in_transit": "In Transit",
+        "delivered": "Delivered",
+        "cancelled": "Cancelled"
+      },
+      "orderStatusLabels": {
+        "pending": "Pending",
+        "confirmed": "Confirmed",
+        "shipped": "Shipped",
+        "delivered": "Delivered",
+        "cancelled": "Cancelled",
+        "refunded": "Refunded"
+      },
+      "paymentLabels": {
+        "paid": "Paid",
+        "pending": "Pending",
+        "failed": "Failed",
+        "refunded": "Refunded"
+      },
+      "deliveryBadgePrefix": "Delivery: {{status}}",
+      "fields": {
+        "customer": "Customer",
+        "email": "Email",
+        "mobile": "Mobile",
+        "address": "Address",
+        "paymentMethod": "Payment Method",
+        "orderDate": "Order Date",
+        "notes": "Notes",
+        "renter": "Renter",
+        "renterEmail": "Renter Email",
+        "owner": "Owner",
+        "startDate": "Start Date",
+        "endDate": "End Date",
+        "deliveryAddress": "Delivery Address",
+        "rentalPrice": "Rental Price",
+        "deposit": "Deposit"
+      },
+      "addressSeparator": ", ",
+      "productsHeading": "Products",
+      "noProducts": "No products",
+      "equipmentFallbackName": "Equipment",
+      "qtyTimesPrice": "Qty: {{qty}} × {{price}} {{currency}}",
+      "subtotal": "Subtotal",
+      "discount": "Discount",
+      "shippingFee": "Shipping Fee",
+      "total": "Total",
+      "sendToDeliveryBtn": "Send to Delivery",
+      "sendingInProgress": "Sending…",
+      "dispatchFailed": "Dispatch failed",
+      "dispatchedFallback": "Sent to couriers",
+      "dispatchErrorAlert": "Error: {{message}}"
+    },
+    "supportTickets": {
+      "overdueLabel": "Overdue",
+      "loadingText": "Loading…",
+      "loadTicketsFailedFallback": "Failed to load tickets",
+      "noneFound": "No tickets found",
+      "colTicketNumber": "Ticket #",
+      "colSubject": "Subject",
+      "colUser": "User",
+      "colCategory": "Category",
+      "colPriority": "Priority",
+      "colStatus": "Status",
+      "colDate": "Date",
+      "guestFallback": "Guest",
+      "replyViewBtn": "Reply / View",
+      "priorityUrgentIcon": "Urgent 🚨",
+      "errorPrefix": "Error",
+      "detail": {
+        "loadingTitle": "Loading…",
+        "loadTicketFailedAlert": "Failed to load the ticket",
+        "ticketNumberPrefix": "Ticket {{number}}",
+        "subjectLabel": "Subject: ",
+        "userLabel": "User: ",
+        "emailLabel": "Email: ",
+        "categoryLabel": "Category: ",
+        "priorityLabel": "Priority: ",
+        "statusLabel": "Status: ",
+        "slaLabel": "SLA: ",
+        "noMessages": "No messages",
+        "agentFallback": "Support",
+        "userFallback": "User",
+        "agentIconName": "👨‍💼 {{name}}",
+        "userIconName": "👤 {{name}}",
+        "replyEmptyAlert": "Write a reply first",
+        "replyFailed": "Failed",
+        "replySentToast": "Reply sent",
+        "replyErrorPrefix": "Error: ",
+        "selectStatusFirstAlert": "Select a status first",
+        "statusUpdateFailed": "Failed to update status",
+        "statusUpdatedToast": "Status updated"
+      }
+    },
+    "labels": {
+      "roles": { "admin": "Admin", "owner": "Farmer", "renter": "Consumer", "delivery": "Delivery Agent" },
+      "accountStatus": { "pending": "Under Review", "approved": "Approved", "rejected": "Rejected", "blocked": "Blocked", "deleted": "Deleted" },
+      "orderStatus": { "pending": "Pending", "confirmed": "Confirmed", "shipped": "Shipped", "delivered": "Delivered", "cancelled": "Cancelled", "paid": "Paid", "failed": "Failed", "active": "Active", "completed": "Completed" },
+      "available": "Available"
+    },
+    "farmerModal": {
+      "heading": "Owner Details",
+      "fields": {
+        "name": "Name",
+        "email": "Email",
+        "phone": "Phone",
+        "role": "Role",
+        "identityNumber": "Identity Number",
+        "account": "Account"
+      },
+      "roleMap": { "owner": "Equipment Owner", "renter": "Renter", "admin": "Admin", "delivery": "Courier" },
+      "identityStatus": { "none": "Not submitted", "pending": "Under review", "approved": "Approved ✓", "rejected": "Rejected ✗" },
+      "identityStatusLabel": "Verification Status",
+      "identityDocsLabel": "Identity documents:",
+      "idFrontLabel": "Front side",
+      "idBackLabel": "Back side",
+      "selfieLabel": "Selfie photo",
+      "imageUnavailable": "Unavailable",
+      "registeredAt": "Registered: {{date}}",
+      "loadFailed": "Failed to load"
+    },
+    "supportModal": {
+      "conversationLabel": "Conversation:",
+      "replyPlaceholder": "Write your reply here...",
+      "sendReplyBtn": "Send Reply",
+      "changeStatusOption": "Change status...",
+      "statusResolvedOption": "Resolved ✓",
+      "applyBtn": "Apply"
+    },
+    "bannerModal": {
+      "titleNew": "New Ad",
+      "titleEdit": "Edit Ad",
+      "placementLabel": "Placement",
+      "placementOptions": {
+        "home_hero": "Home — Main Banner (Hero)",
+        "home_secondary": "Home — Secondary Card",
+        "tools_top": "Equipment Page — Top",
+        "global_top_strip": "Site-wide Top Strip (announcement)"
+      },
+      "titleLabel": "Title",
+      "titlePlaceholder": "Ramadan offer",
+      "subtitleLabel": "Subtitle (optional)",
+      "subtitlePlaceholder": "Discounts on harvest equipment all through Ramadan",
+      "bgImageLabel": "Background Image (URL — optional)",
+      "bgImagePlaceholder": "https://… or upload from your device ←",
+      "ctaLabelLabel": "Action Button Text (optional)",
+      "ctaLabelPlaceholder": "Browse offers",
+      "ctaUrlLabel": "Action Button Link (optional)",
+      "ctaUrlPlaceholder": "tools.html?cat=tractor — or https://…",
+      "promoCodeLabel": "Linked Promo Code (optional)",
+      "promoCodePlaceholder": "HARTH10",
+      "startsAtLabel": "Starts At",
+      "endsAtLabel": "Ends At",
+      "bgColorLabel": "Background Color (Hex)",
+      "textColorLabel": "Text Color (Hex)",
+      "sortOrderLabel": "Display Order",
+      "activeLabel": "Active"
+    },
+    "bannerDetailModal": {
+      "heading": "Ad Details",
+      "closeLabel": "Close"
+    },
+    "payoutModal": {
+      "heading": "Pay Out Balance",
+      "loadingDetails": "Loading details...",
+      "methodLabel": "Payment Method",
+      "methodOptions": {
+        "bank_transfer": "Bank Transfer",
+        "cash": "Cash",
+        "wallet": "E-Wallet",
+        "other": "Other"
+      },
+      "referenceLabel": "Reference Number (optional)",
+      "referencePlaceholder": "e.g. TRX-2024-0123",
+      "notesLabel": "Notes (optional)",
+      "notesPlaceholder": "Internal notes (not shown to the owner)",
+      "confirmBtn": "Confirm Payout"
+    },
+    "promoModal": {
+      "titleNew": "Add Promo Code",
+      "codeLabel": "Code",
+      "codePlaceholder": "e.g. HARTH10",
+      "typeLabel": "Type",
+      "typeOptions": {
+        "percentage": "Percentage",
+        "fixed": "Fixed Amount"
+      },
+      "valueLabel": "Value (% or OMR)",
+      "minLabel": "Minimum Order (optional)",
+      "maxUsesLabel": "Maximum Uses (optional)",
+      "expiryLabel": "Expiry Date (optional)",
+      "shortTitleNew": "Add Code",
+      "shortTitleEdit": "Edit Code",
+      "deleteConfirm": "Delete code \"{{code}}\"?",
+      "deletedToast": "Deleted ✓",
+      "savedToast": "Saved ✓",
+      "genericFailed": "Failed"
+    }
+  },
+  "delivery": {
+    "title": "Courier Dashboard - Harth",
+    "statusBanner": {
+      "defaultTitle": "Your account is under review",
+      "defaultMsg": "Your courier account is under review by the admin team. You can't accept delivery jobs until your account is approved.",
+      "pendingTitle": "Your account is under review",
+      "pendingMsg": "Your courier account is under review by the admin team. You can't accept delivery jobs until your account is approved. You'll be notified as soon as it's reviewed.",
+      "rejectedTitle": "Your account activation was rejected",
+      "rejectedReasonPrefix": "Reason:",
+      "rejectedMsg": "You currently can't accept delivery jobs. To request a re-review, please contact support.",
+      "inactiveTitle": "Your account is inactive",
+      "inactiveMsg": "Contact the admin team for more information."
+    },
+    "tabs": {
+      "available": "Available Jobs",
+      "mine": "My Active Jobs",
+      "history": "History"
+    },
+    "emptyStates": {
+      "available": { "title": "No jobs available right now", "desc": "Don't worry, new jobs appear here as soon as they arrive. The list refreshes automatically every 15 seconds." },
+      "mine": { "title": "You have no active jobs", "desc": "When you accept a new job from the \"Available Jobs\" tab, it will appear here until delivery is complete." },
+      "history": { "title": "History is empty", "desc": "All jobs you've completed or cancelled will appear here for later reference." }
+    },
+    "statusLabels": {
+      "pending": "Awaiting courier",
+      "accepted": "Accepted",
+      "picked_up": "Picked up",
+      "in_transit": "In transit",
+      "delivered": "Delivered",
+      "cancelled": "Cancelled"
+    },
+    "alerts": {
+      "deliveryOnly": "This page is for delivery couriers only."
+    },
+    "toasts": {
+      "loadFailed": "Failed to load",
+      "genericFailed": "Failed",
+      "actionSuccess": "✓ Done successfully"
+    },
+    "job": {
+      "rentalPrefix": "Rental",
+      "equipmentFallback": "Equipment",
+      "productFallback": "Product",
+      "paymentCod": "Cash on delivery",
+      "paymentCard": "Card",
+      "pickupLabel": "Pickup point",
+      "dropoffLabel": "Delivery address",
+      "feeLabel": "Fee: {{amount}} {{currency}}",
+      "listSeparator": ", "
+    },
+    "actionLabels": {
+      "accept": "Accept Job",
+      "pickup": "Confirm Pickup",
+      "inTransit": "Start Delivery",
+      "delivered": "Confirm Delivery"
+    },
+    "confirmAction": "{{label}}?",
+    "jobActions": {
+      "accept": "Accept Job",
+      "pickup": "Picked Up",
+      "startTransit": "Delivery Started",
+      "delivered": "Delivered"
+    },
+    "proofModal": {
+      "instructions": "Take a photo directly from the camera to confirm the action — photos from the gallery won't be accepted on mobile devices.",
+      "gpsDetecting": "Detecting your location...",
+      "gpsSuccess": "✓ Location detected (accuracy ±{{accuracy}}m)",
+      "gpsFailed": "Couldn't detect location (make sure location permission is granted)",
+      "tapToOpenCamera": "Tap here to open the camera",
+      "confirmSubmitBtn": "Confirm Submission",
+      "retakeBtn": "Retake",
+      "cancelBtn": "Cancel",
+      "uploading": "Uploading...",
+      "uploadSuccess": "✓ Uploaded — tap Confirm Submission",
+      "uploadFailed": "Upload failed"
+    }
+  },
+  "checkout": {
+    "title": "Sales Cart - Harth",
+    "backToStore": "Back to Store",
+    "headingPart1": "Order",
+    "headingPart2": "Cart",
+    "loadingCart": "Loading your cart...",
+    "table": {
+      "product": "Product",
+      "price": "Price",
+      "quantity": "Quantity",
+      "total": "Total"
+    },
+    "purchaseBadge": "Purchase",
+    "rentalBadge": "Rental",
+    "depositLabel": "Deposit: {{amount}} {{currency}}",
+    "daysSuffix": "{{n}} days",
+    "daysParenSuffix": "({{n}} days)",
+    "emptyCart": {
+      "title": "Your cart is empty",
+      "desc": "Browse our products and add what you like.",
+      "browseBtn": "Browse Products"
+    },
+    "summary": {
+      "heading": "Order Summary",
+      "promoLabel": "Discount Code",
+      "promoPlaceholder": "e.g.: HARTH10",
+      "applyBtn": "Apply",
+      "loyaltyLabel": "Loyalty Points (optional)",
+      "loyaltyPlaceholder": "Enter number of points",
+      "loyaltyBalanceHint": "Your balance: {{balance}} points (max 50% of order)"
+    },
+    "totals": {
+      "subtotal": "Purchases",
+      "rentalLabel": "Rental",
+      "discount": "Discount",
+      "tax": "Tax (10%)",
+      "loyaltyLabel": "Loyalty Points",
+      "loyaltyValue": "-{{n}} pts",
+      "grand": "Total"
+    },
+    "deliveryForm": {
+      "heading": "Delivery & Payment Details",
+      "nameLabel": "Full Name",
+      "phoneLabel": "Phone Number",
+      "phonePlaceholder": "+968...",
+      "cityLabel": "Governorate",
+      "streetLabel": "Detailed Address",
+      "paymentMethodLabel": "Payment Method",
+      "paymentCard": "Card",
+      "paymentCod": "Cash on Delivery",
+      "submitBtn": "Confirm & Place Order",
+      "submitBtnLoading": "Processing..."
+    },
+    "toasts": {
+      "loginRequired": "You must log in first",
+      "loadCartFailed": "Failed to load cart",
+      "updateFailed": "Failed to update",
+      "deleteFailed": "Failed to delete",
+      "enterCodeFirst": "Enter a code first",
+      "invalidCode": "Invalid code",
+      "codeNotEligible": "Code is not eligible for this order",
+      "promoApplied": "✓ Discount applied — you saved {{amount}} {{currency}}",
+      "missingFields": "Complete the required fields (name, phone, and governorate)",
+      "cartEmpty": "Cart is empty",
+      "saleOrderFailed": "Failed to create purchase order",
+      "genericFailed": "Failed",
+      "rentalErrorsPrefix": "Some rental requests failed:",
+      "saleOrderCreated": "Purchase order created",
+      "rentalOrdersSent": "{{n}} rental request(s) sent"
+    }
+  },
+  "kyc": {
+    "title": "Identity Verification | Harth Platform",
+    "heading": "Identity Verification",
+    "lede": "We require identity verification to increase buyer trust and protect everyone from fraud. Once verified, a <strong style=\"color:#2d5016\">✓ Verified</strong> badge will appear on your profile and listings.",
+    "steps": {
+      "front": "ID Front",
+      "back": "ID Back",
+      "selfie": "Selfie",
+      "review": "Review & Submit"
+    },
+    "returnBtn": "Back",
+    "panels": {
+      "front": {
+        "title": "Front of ID Card",
+        "desc": "A clear photo of the front of your ID card or commercial registration",
+        "tip": "Make sure the name and ID number are clear — avoid glare and shadows",
+        "captureBtn": "Open camera and take a photo",
+        "imgAlt": "ID front"
+      },
+      "back": {
+        "title": "Back of ID Card",
+        "desc": "A clear photo of the back of your ID card",
+        "tip": "Make sure all numbers and details are clearly visible",
+        "imgAlt": "ID back"
+      },
+      "selfie": {
+        "title": "Selfie with ID",
+        "desc": "A photo of you holding your ID — your face and the ID number must be clearly visible",
+        "tip": "Sit in a well-lit place and hold the ID next to your face",
+        "captureBtn": "Open front camera",
+        "imgAlt": "Selfie"
+      },
+      "review": {
+        "heading": "Review & Submit",
+        "identityLabel": "ID / Commercial Registration Number (optional)",
+        "identityPlaceholder": "Enter the number as written on the card",
+        "gpsDetecting": "Detecting your location automatically...",
+        "gpsNoSupport": "This device doesn't support location detection",
+        "gpsSuccess": "✓ Location detected (accuracy ±{{accuracy}}m)",
+        "gpsFailed": "Couldn't detect location — make sure you granted permission",
+        "reviewNotice": "Your documents will be reviewed by the Harth team within 24–48 hours. You'll be notified as soon as a decision is made.",
+        "submitBtn": "Submit for Review",
+        "submitBtnLoading": "Submitting..."
+      }
+    },
+    "captureBtnGeneric": "Open camera and take a photo",
+    "retakeBtn": "Retake",
+    "uploading": "Uploading...",
+    "uploadSuccess": "✓ Uploaded successfully",
+    "uploadFailed": "Upload failed",
+    "toasts": {
+      "missingImages": "Error — some images are not uploaded",
+      "submitFailed": "Failed to submit",
+      "submitSuccess": "✓ Submitted — your documents will be reviewed soon"
+    },
+    "banners": {
+      "pendingSubmitted": "Your request is under review. We'll notify you as soon as a decision is made — no need to resubmit.",
+      "pendingExisting": "Your request is under review by the admin team. We'll notify you as soon as a decision is made.",
+      "approvedHtml": "Your identity is verified ✓ — a <strong>Verified</strong> badge is now shown on your profile and listings.",
+      "rejectedText": "Your submitted documents were not approved. You can resubmit.",
+      "rejectedReasonLabel": "Reason:"
+    }
+  },
+  "track": {
+    "title": "Track Order - Harth",
+    "pageHeading": "Track Your Order",
+    "pageSubheading": "Enter the tracking number (the serial number you received with your order confirmation)",
+    "searchPlaceholder": "e.g.: HRT-XXXXXXXX",
+    "searchBtn": "Search",
+    "emptyHintTitle": "Enter the tracking number above to see your order status.",
+    "emptyHintFormat": "The tracking number starts with HRT- and is 8 letters/digits long",
+    "notFound": "Order not found",
+    "statusLabels": {
+      "pending": "Processing",
+      "confirmed": "Confirmed",
+      "shipped": "On the way to you",
+      "delivered": "Delivered",
+      "cancelled": "Cancelled",
+      "refunded": "Refunded"
+    },
+    "rental": {
+      "trackingNumberLabel": "Rental Number",
+      "startDateLabel": "Start Date",
+      "endDateLabel": "End Date",
+      "totalLabel": "Total",
+      "orderDateLabel": "Order Date",
+      "statusLabels": {
+        "pending": "Pending",
+        "approved": "Approved",
+        "rejected": "Rejected",
+        "active": "Active",
+        "completed": "Completed",
+        "cancelled": "Cancelled"
+      },
+      "steps": {
+        "ordered": "Order placed",
+        "approved": "Owner approval",
+        "started": "Rental started",
+        "completed": "Rental completed"
+      }
+    },
+    "info": {
+      "trackingNumberLabel": "Tracking Number",
+      "totalLabel": "Total",
+      "orderStatusLabel": "Order Status",
+      "orderDateLabel": "Order Date"
+    },
+    "proof": {
+      "title": "Courier Photos",
+      "pickupTitle": "Photo when picked up from the seller",
+      "deliveryTitle": "Photo when delivered to you"
+    },
+    "banner": {
+      "deliveredText": "Your order was delivered successfully ✓",
+      "courierInTransit": "Courier is on the way to you",
+      "courierAssigned": "A courier has been assigned to your order",
+      "pendingTitle": "No courier has accepted the order yet",
+      "pendingHint": "We'll notify you as soon as it's accepted."
+    },
+    "courier": {
+      "assignedTitle": "Courier assigned",
+      "loginToSeeHint": "Log in to see the courier's name and phone number.",
+      "infoTitle": "Courier Information",
+      "nameLabel": "Name",
+      "phoneLabel": "Phone"
+    },
+    "timeline": {
+      "orderCreated": "Order created",
+      "acceptedByCourier": "Accepted by courier",
+      "inTransit": "In transit",
+      "delivered": "Delivered"
+    }
+  },
+  "postStory": {
+    "title": "Post a Story | Harth Platform",
+    "heading": "Post a story from your farm",
+    "lede": "Share what's happening on your farm today with your followers — harvest, new seedlings, equipment at work, or any moment. The story disappears automatically after 24 hours.",
+    "imageFieldLabel": "Story image",
+    "uploadHint": "Upload a vertical image (9:16 recommended) for the best viewing experience.",
+    "previewEmpty": "No image uploaded yet",
+    "captionFieldLabel": "Caption (optional)",
+    "captionPlaceholder": "Write a short description (≤ 280 characters)",
+    "equipmentFieldLabel": "Link to equipment (optional)",
+    "equipmentNoneOption": "— Don't link —",
+    "equipmentHint": "A \"View equipment\" button will appear inside the story and open it for the viewer.",
+    "submitBtn": "Post Story",
+    "submitBtnLoading": "Posting...",
+    "cancelBtn": "Cancel",
+    "myStoriesTitle": "My Active Stories",
+    "noActiveStories": "No active stories. Post your first story from the form above.",
+    "deleteTitle": "Delete",
+    "hoursLeftSuffix": "{{n}}h left",
+    "confirmDeleteStory": "Delete this story?",
+    "alerts": {
+      "ownersOnly": "Posting stories is available to farmers only.",
+      "pendingApproval": "Your account is awaiting approval. Posting will be enabled once approved."
+    },
+    "toasts": {
+      "uploadFailed": "Upload failed",
+      "imageUploaded": "Image uploaded ✓",
+      "uploadFirst": "Please upload the image first",
+      "postFailed": "Failed to post",
+      "posted": "Story posted ✓ It will disappear in 24 hours",
+      "loadFailed": "Failed to load",
+      "deleted": "Deleted",
+      "deleteFailed": "Failed to delete"
+    }
+  },
+  "loyalty": {
+    "title": "Loyalty Program | Harth Platform",
+    "heroTitle": "Harth Loyalty Program",
+    "pointsLabel": "Points available to use",
+    "lifetimePointsLabel": "Total points earned",
+    "progressLoadingTitle": "Loading progress...",
+    "recentActivityTitle": "Recent Activity",
+    "loadFailedTierName": "Failed to load data",
+    "progressToNextPrefix": "On your way to the",
+    "progressToNextSuffix": "tier",
+    "maxTierReachedPrefix": "🎉 You've reached the top tier!",
+    "maxTierProgressTarget": "Top tier — enjoy the full perks",
+    "progressNowPoints": "{{n}} pts",
+    "progressTargetNext": "{{min}} pts ({{remaining}} remaining)",
+    "tierMinFrom": "Starts from {{min}} pts",
+    "currentTierPill": "Your current tier",
+    "noLedgerItems": "No transactions yet. Start shopping to earn your first points!",
+    "ledgerAmountPoints": "{{amount}} pts",
+    "kindLabels": {
+      "earn": "Earned from order",
+      "referral_bonus": "Referral bonus",
+      "admin_adjust": "Admin adjustment",
+      "spend": "Redeemed",
+      "expire": "Expired"
+    }
+  },
+  "check": {
+    "title": "Crop Diagnosis Guide - Harth",
+    "pageHeading": "Crop Diagnosis Guide",
+    "pageSubheading": "Learn about common pests and how to treat them effectively and safely",
+    "treatmentLabel": "Treatment method:",
+    "pests": {
+      "palmWeevil": {
+        "name": "Red Palm Weevil",
+        "desc": "One of the most dangerous pests affecting date palm trees — the larvae feed on living tissue inside the trunk, which can kill the tree.",
+        "treatment": "Direct injection of systemic pesticides into the trunk, along with removing and burning infected parts immediately to prevent spread."
+      },
+      "fruitFly": {
+        "name": "Fruit Fly",
+        "desc": "The fruit fly is one of the most dangerous pests affecting ripe fruit, causing severe crop losses. The female lays her eggs inside the fruit, causing infected fruit to rot and fall, resulting in total crop loss.",
+        "treatment": "Spot-spraying with poison baits or using pheromone traps, along with collecting and disposing of infected and fallen fruit immediately to prevent the pest from spreading."
+      },
+      "aphids": {
+        "name": "Aphids",
+        "desc": "Small insects that cluster on new leaves and buds, sucking sap and causing leaf curling and the appearance of black mold.",
+        "treatment": "A natural soap solution or neem oil can be used; in severe infestations, specialized insecticides are recommended."
+      }
+    }
+  },
   "basket": {
     "addedToCartAlert": "{{name}} added to cart ({{count}} items)",
     "cartEmpty": "Your cart is empty",

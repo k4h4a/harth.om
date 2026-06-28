@@ -3,7 +3,25 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>مركز الدعم الفني — حرث</title>
+  <script>
+    // Apply the saved language/direction before first paint so there's no
+    // flash of Arabic/RTL when the visitor's saved language is English.
+    (function () {
+      try {
+        if (localStorage.getItem("harth_lang") === "en") {
+          document.documentElement.lang = "en";
+          document.documentElement.dir = "ltr";
+        }
+      } catch (e) {}
+      document.documentElement.classList.add("i18n-loading");
+    })();
+  </script>
+  <style>
+    html.i18n-loading body {
+      visibility: hidden;
+    }
+  </style>
+  <title data-i18n="support.title">مركز الدعم الفني — حرث</title>
   <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
   <link rel="stylesheet" href="design-system.css" />
@@ -21,10 +39,10 @@
     .sp-hero h1 span{color:#6ab04c}
     .sp-hero p{color:rgba(255,255,255,.65);font-size:15px;margin-bottom:20px}
     .hero-search-wrap{max-width:540px;margin:0 auto;position:relative}
-    .hero-search-wrap input{width:100%;padding:14px 56px 14px 20px;border-radius:14px;border:1.5px solid rgba(106,176,76,.4);background:rgba(255,255,255,.1);backdrop-filter:blur(10px);color:#fff;font-family:inherit;font-size:15px;transition:.2s}
+    .hero-search-wrap input{width:100%;padding-block:14px;padding-inline-start:56px;padding-inline-end:20px;border-radius:14px;border:1.5px solid rgba(106,176,76,.4);background:rgba(255,255,255,.1);backdrop-filter:blur(10px);color:#fff;font-family:inherit;font-size:15px;transition:.2s}
     .hero-search-wrap input::placeholder{color:rgba(255,255,255,.5)}
     .hero-search-wrap input:focus{outline:none;border-color:#6ab04c;background:rgba(255,255,255,.15)}
-    .hero-search-wrap .ico-search{position:absolute;left:16px;top:50%;transform:translateY(-50%);color:#6ab04c;font-size:18px;pointer-events:none}
+    .hero-search-wrap .ico-search{position:absolute;inset-inline-end:16px;top:50%;transform:translateY(-50%);color:#6ab04c;font-size:18px;pointer-events:none}
     .hero-chips{display:flex;gap:8px;justify-content:center;flex-wrap:wrap;margin-top:14px}
     .hero-chip{background:rgba(106,176,76,.12);border:1px solid rgba(106,176,76,.3);color:#a8e090;padding:4px 14px;border-radius:20px;font-size:12px;cursor:pointer;transition:.15s;white-space:nowrap}
     .hero-chip:hover{background:rgba(106,176,76,.25)}
@@ -190,7 +208,7 @@
     .chat-typing span:nth-child(3){animation-delay:.36s}
     @keyframes typeDot{0%,80%,100%{transform:scale(.6);opacity:.5}40%{transform:scale(1);opacity:1}}
     .chat-quick-opts{display:flex;flex-direction:column;gap:5px;margin-top:6px}
-    .chat-opt{background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.15);color:rgba(255,255,255,.85);padding:6px 12px;border-radius:8px;font-family:inherit;font-size:12px;cursor:pointer;text-align:right;transition:.15s}
+    .chat-opt{background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.15);color:rgba(255,255,255,.85);padding:6px 12px;border-radius:8px;font-family:inherit;font-size:12px;cursor:pointer;text-align:start;transition:.15s}
     .chat-opt:hover{background:rgba(106,176,76,.2);border-color:#6ab04c;color:#fff}
     .chat-footer{border-top:1px solid rgba(255,255,255,.1);padding:10px 12px;display:flex;gap:8px;background:rgba(0,0,0,.2)}
     .chat-input{flex:1;background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.18);color:#fff;padding:9px 12px;border-radius:10px;font-family:inherit;font-size:13px;transition:.2s}
@@ -238,35 +256,35 @@
       </div>
       <nav class="section center"><ul class="nav-links"></ul></nav>
       <div class="section left" id="auth-header">
-        <a href="register.html" class="hs-btn hs-btn--ghost hs-btn--sm" id="login-link">تسجيل دخول</a>
+        <a href="register.html" class="hs-btn hs-btn--ghost hs-btn--sm" id="login-link" data-i18n="common.buttons.login">تسجيل دخول</a>
       </div>
     </div>
   </header>
 
   <!-- Hero -->
   <div class="sp-hero">
-    <h1>كيف يمكننا <span>مساعدتك؟</span></h1>
-    <p>مركز الدعم الفني لمنصة حرث — إجابات فورية وتذاكر دعم احترافية</p>
+    <h1><span data-i18n="support.hero.headingPart1">كيف يمكننا</span> <span data-i18n="support.hero.headingPart2">مساعدتك؟</span></h1>
+    <p data-i18n="support.hero.subtitle">مركز الدعم الفني لمنصة حرث — إجابات فورية وتذاكر دعم احترافية</p>
     <div class="hero-search-wrap">
       <i class="fas fa-search ico-search"></i>
-      <input type="search" id="hero-search" placeholder="ابحث عن مشكلتك مثلاً: كيف أستأجر معدة؟" autocomplete="off" />
+      <input type="search" id="hero-search" data-i18n-placeholder="support.hero.searchPlaceholder" placeholder="ابحث عن مشكلتك مثلاً: كيف أستأجر معدة؟" autocomplete="off" />
     </div>
     <div class="hero-chips">
-      <span class="hero-chip" onclick="heroChip('كيف أستأجر معدة')">كيف أستأجر معدة؟</span>
-      <span class="hero-chip" onclick="heroChip('مشكلة في الدفع')">مشكلة في الدفع</span>
-      <span class="hero-chip" onclick="heroChip('تتبع الطلب')">تتبع الطلب</span>
-      <span class="hero-chip" onclick="heroChip('استعادة كلمة المرور')">نسيت كلمة المرور</span>
-      <span class="hero-chip" onclick="heroChip('نقاط الولاء')">نقاط الولاء</span>
+      <span class="hero-chip" data-chip-key="rentEquipment" data-i18n="support.hero.chips.rentEquipment">كيف أستأجر معدة؟</span>
+      <span class="hero-chip" data-chip-key="paymentIssue" data-i18n="support.hero.chips.paymentIssue">مشكلة في الدفع</span>
+      <span class="hero-chip" data-chip-key="trackOrder" data-i18n="support.hero.chips.trackOrder">تتبع الطلب</span>
+      <span class="hero-chip" data-chip-key="forgotPassword" data-i18n="support.hero.chips.forgotPassword">نسيت كلمة المرور</span>
+      <span class="hero-chip" data-chip-key="loyaltyPoints" data-i18n="support.hero.chips.loyaltyPoints">نقاط الولاء</span>
     </div>
   </div>
 
   <!-- Tab Navigation -->
   <div class="sp-tabs-wrap">
     <nav class="sp-tabs">
-      <button class="tab-btn active" data-view="home"><i class="fas fa-home"></i> الرئيسية</button>
-      <button class="tab-btn" data-view="help"><i class="fas fa-book-open"></i> مركز المساعدة</button>
-      <button class="tab-btn" data-view="tickets"><i class="fas fa-ticket-alt"></i> تذاكري</button>
-      <button class="tab-btn" data-view="new-ticket"><i class="fas fa-plus-circle"></i> تذكرة جديدة</button>
+      <button class="tab-btn active" data-view="home"><i class="fas fa-home"></i> <span data-i18n="support.tabs.home">الرئيسية</span></button>
+      <button class="tab-btn" data-view="help"><i class="fas fa-book-open"></i> <span data-i18n="support.tabs.help">مركز المساعدة</span></button>
+      <button class="tab-btn" data-view="tickets"><i class="fas fa-ticket-alt"></i> <span data-i18n="support.tabs.tickets">تذاكري</span></button>
+      <button class="tab-btn" data-view="new-ticket"><i class="fas fa-plus-circle"></i> <span data-i18n="support.tabs.newTicket">تذكرة جديدة</span></button>
     </nav>
   </div>
 
@@ -276,50 +294,50 @@
     <!-- ───────── VIEW: HOME ───────── -->
     <div id="view-home" class="sp-view active">
 
-      <div class="sec-h"><i class="fas fa-bolt" style="color:#f1c40f"></i> إجراءات سريعة</div>
+      <div class="sec-h"><i class="fas fa-bolt" style="color:#f1c40f"></i> <span data-i18n="support.home.quickActionsTitle">إجراءات سريعة</span></div>
       <div class="qa-grid">
         <div class="qa-card" onclick="switchTab('new-ticket')">
           <div class="qa-icon" style="background:rgba(106,176,76,.18)"><i class="fas fa-ticket-alt" style="color:#6ab04c"></i></div>
-          <h3>فتح تذكرة دعم</h3>
-          <p>لم تجد حلاً؟ تواصل معنا مباشرة</p>
+          <h3 data-i18n="support.home.qa.openTicket.title">فتح تذكرة دعم</h3>
+          <p data-i18n="support.home.qa.openTicket.desc">لم تجد حلاً؟ تواصل معنا مباشرة</p>
         </div>
         <div class="qa-card" onclick="switchTab('help')">
           <div class="qa-icon" style="background:rgba(52,152,219,.18)"><i class="fas fa-book-open" style="color:#74b9ff"></i></div>
-          <h3>مركز المساعدة</h3>
-          <p>مقالات وحلول لأكثر المشاكل شيوعاً</p>
+          <h3 data-i18n="support.home.qa.helpCenter.title">مركز المساعدة</h3>
+          <p data-i18n="support.home.qa.helpCenter.desc">مقالات وحلول لأكثر المشاكل شيوعاً</p>
         </div>
         <a class="qa-card" href="https://wa.me/96812345678" target="_blank" rel="noopener">
           <div class="qa-icon" style="background:rgba(37,211,102,.18)"><i class="fab fa-whatsapp" style="color:#25d366"></i></div>
-          <h3>واتساب</h3>
-          <p>رد فوري خلال دقائق</p>
+          <h3 data-i18n="support.home.qa.whatsapp.title">واتساب</h3>
+          <p data-i18n="support.home.qa.whatsapp.desc">رد فوري خلال دقائق</p>
         </a>
         <div class="qa-card" onclick="openChat()">
           <div class="qa-icon" style="background:rgba(142,68,173,.18)"><i class="fas fa-robot" style="color:#d2a5ff"></i></div>
-          <h3>المساعد الذكي</h3>
-          <p>بوت يجيب على أسئلتك فوراً</p>
+          <h3 data-i18n="support.home.qa.aiAssistant.title">المساعد الذكي</h3>
+          <p data-i18n="support.home.qa.aiAssistant.desc">بوت يجيب على أسئلتك فوراً</p>
         </div>
       </div>
 
-      <div class="sec-h"><i class="fas fa-star" style="color:#f1c40f"></i> الأسئلة الأكثر <span>شيوعاً</span></div>
+      <div class="sec-h"><i class="fas fa-star" style="color:#f1c40f"></i> <span data-i18n="support.home.popularQuestionsTitle">الأسئلة الأكثر شيوعاً</span></div>
       <div id="home-faqs"></div>
 
-      <div class="sec-h"><i class="fas fa-phone-alt" style="color:#6ab04c"></i> قنوات التواصل</div>
+      <div class="sec-h"><i class="fas fa-phone-alt" style="color:#6ab04c"></i> <span data-i18n="support.home.channelsTitle">قنوات التواصل</span></div>
       <div class="ch-grid">
         <a class="ch-card" href="https://wa.me/96812345678" target="_blank" rel="noopener" style="background:rgba(37,211,102,.1);border:1px solid rgba(37,211,102,.25)">
           <div class="ch-ico" style="background:rgba(37,211,102,.2)"><i class="fab fa-whatsapp" style="color:#25d366"></i></div>
-          <div class="ch-txt"><div class="ch-lbl">واتساب</div><div class="ch-sub">+968 1234 5678</div></div>
+          <div class="ch-txt"><div class="ch-lbl" data-i18n="support.home.channels.whatsapp.label">واتساب</div><div class="ch-sub">+968 1234 5678</div></div>
         </a>
         <a class="ch-card" href="tel:+96812345678" style="background:rgba(52,152,219,.1);border:1px solid rgba(52,152,219,.25)">
           <div class="ch-ico" style="background:rgba(52,152,219,.2)"><i class="fas fa-phone" style="color:#74b9ff"></i></div>
-          <div class="ch-txt"><div class="ch-lbl">اتصال هاتفي</div><div class="ch-sub">الأحد–الخميس 8ص–5م</div></div>
+          <div class="ch-txt"><div class="ch-lbl" data-i18n="support.home.channels.phone.label">اتصال هاتفي</div><div class="ch-sub" data-i18n="support.home.channels.phone.sub">الأحد–الخميس 8ص–5م</div></div>
         </a>
         <a class="ch-card" href="mailto:support@harth.om" style="background:rgba(231,76,60,.1);border:1px solid rgba(231,76,60,.25)">
           <div class="ch-ico" style="background:rgba(231,76,60,.2)"><i class="fas fa-envelope" style="color:#ff7675"></i></div>
-          <div class="ch-txt"><div class="ch-lbl">البريد الإلكتروني</div><div class="ch-sub">support@harth.om</div></div>
+          <div class="ch-txt"><div class="ch-lbl" data-i18n="support.home.channels.email.label">البريد الإلكتروني</div><div class="ch-sub">support@harth.om</div></div>
         </a>
         <a class="ch-card" href="#" style="background:rgba(29,161,242,.1);border:1px solid rgba(29,161,242,.25)">
           <div class="ch-ico" style="background:rgba(29,161,242,.2)"><i class="fab fa-twitter" style="color:#1da1f2"></i></div>
-          <div class="ch-txt"><div class="ch-lbl">تويتر / X</div><div class="ch-sub">@HarthOman</div></div>
+          <div class="ch-txt"><div class="ch-lbl" data-i18n="support.home.channels.twitter.label">تويتر / X</div><div class="ch-sub">@HarthOman</div></div>
         </a>
       </div>
     </div>
@@ -327,31 +345,31 @@
     <!-- ───────── VIEW: HELP CENTER ───────── -->
     <div id="view-help" class="sp-view">
       <div style="max-width:480px;margin:20px 0 18px;position:relative">
-        <i class="fas fa-search" style="position:absolute;left:14px;top:50%;transform:translateY(-50%);color:#6ab04c;pointer-events:none"></i>
-        <input type="search" id="help-search" class="ntk-input" style="padding-right:14px;padding-left:40px" placeholder="ابحث في مركز المساعدة..." autocomplete="off" />
+        <i class="fas fa-search" style="position:absolute;inset-inline-end:14px;top:50%;transform:translateY(-50%);color:#6ab04c;pointer-events:none"></i>
+        <input type="search" id="help-search" class="ntk-input" style="padding-inline-start:14px;padding-inline-end:40px" data-i18n-placeholder="support.help.searchPlaceholder" placeholder="ابحث في مركز المساعدة..." autocomplete="off" />
       </div>
 
       <div id="help-search-results" style="display:none">
-        <div class="sec-h"><i class="fas fa-search"></i> نتائج البحث</div>
+        <div class="sec-h"><i class="fas fa-search"></i> <span data-i18n="support.help.searchResultsTitle">نتائج البحث</span></div>
         <div id="search-list" class="art-list"></div>
         <div id="no-search" class="no-results" style="display:none">
           <i class="fas fa-search"></i>
-          <p>لا توجد نتائج. جرب كلمات مختلفة أو <span class="hero-chip" style="display:inline" onclick="switchTab('new-ticket')">افتح تذكرة دعم</span></p>
+          <p><span data-i18n="support.help.noResultsText">لا توجد نتائج. جرب كلمات مختلفة أو</span> <span class="hero-chip" style="display:inline" onclick="switchTab('new-ticket')" data-i18n="support.help.noResultsLinkText">افتح تذكرة دعم</span></p>
         </div>
       </div>
 
       <div id="help-categories">
-        <div class="sec-h"><i class="fas fa-th-large"></i> تصفح حسب التصنيف</div>
+        <div class="sec-h"><i class="fas fa-th-large"></i> <span data-i18n="support.help.categoriesTitle">تصفح حسب التصنيف</span></div>
         <div class="cat-grid" id="cat-grid"></div>
         <div id="cat-articles" style="display:none">
-          <span class="back-link" onclick="showAllCats()"><i class="fas fa-arrow-left"></i> جميع التصنيفات</span>
+          <span class="back-link" onclick="showAllCats()"><i class="fas fa-arrow-left"></i> <span data-i18n="support.help.allCategoriesLink">جميع التصنيفات</span></span>
           <div class="sec-h" id="cat-title"></div>
           <div class="art-list" id="articles-list"></div>
         </div>
       </div>
 
       <div id="help-article-detail" style="display:none">
-        <span class="back-link" id="art-back-link"><i class="fas fa-arrow-left"></i> الرجوع</span>
+        <span class="back-link" id="art-back-link"><i class="fas fa-arrow-left"></i> <span data-i18n="support.help.backLink">الرجوع</span></span>
         <div class="art-detail show" id="article-detail-box"></div>
       </div>
     </div>
@@ -360,16 +378,16 @@
     <div id="view-tickets" class="sp-view">
       <div id="tickets-auth-gate" class="auth-gate" style="display:none">
         <i class="fas fa-lock"></i>
-        <h3>يرجى تسجيل الدخول</h3>
-        <p>لعرض تذاكر الدعم الخاصة بك يجب <a href="register.html">تسجيل الدخول</a> أولاً.</p>
+        <h3 data-i18n="support.tickets.authGate.title">يرجى تسجيل الدخول</h3>
+        <p><span data-i18n="support.tickets.authGate.desc">لعرض تذاكر الدعم الخاصة بك يجب</span> <a href="register.html" data-i18n="support.tickets.authGate.loginLink">تسجيل الدخول</a> <span data-i18n="support.tickets.authGate.descSuffix">أولاً.</span></p>
       </div>
       <div id="tickets-content" style="display:none">
         <div class="tkts-filter">
-          <button class="f-chip active" data-status="">الكل</button>
-          <button class="f-chip" data-status="open"><i class="fas fa-circle" style="color:#74b9ff;font-size:8px"></i> مفتوحة</button>
-          <button class="f-chip" data-status="in_progress"><i class="fas fa-circle" style="color:#f1c40f;font-size:8px"></i> قيد المعالجة</button>
-          <button class="f-chip" data-status="resolved"><i class="fas fa-circle" style="color:#55efc4;font-size:8px"></i> تم الحل</button>
-          <button class="f-chip" data-status="closed"><i class="fas fa-circle" style="color:#b2bec3;font-size:8px"></i> مغلقة</button>
+          <button class="f-chip active" data-status="" data-i18n="support.tickets.filters.all">الكل</button>
+          <button class="f-chip" data-status="open"><i class="fas fa-circle" style="color:#74b9ff;font-size:8px"></i> <span data-i18n="support.tickets.filters.open">مفتوحة</span></button>
+          <button class="f-chip" data-status="in_progress"><i class="fas fa-circle" style="color:#f1c40f;font-size:8px"></i> <span data-i18n="support.tickets.filters.inProgress">قيد المعالجة</span></button>
+          <button class="f-chip" data-status="resolved"><i class="fas fa-circle" style="color:#55efc4;font-size:8px"></i> <span data-i18n="support.tickets.filters.resolved">تم الحل</span></button>
+          <button class="f-chip" data-status="closed"><i class="fas fa-circle" style="color:#b2bec3;font-size:8px"></i> <span data-i18n="support.tickets.filters.closed">مغلقة</span></button>
         </div>
         <div id="tkt-loading" style="text-align:center;padding:30px;color:rgba(255,255,255,.5)">
           <div class="spin" style="width:28px;height:28px;border-width:3px"></div>
@@ -377,7 +395,7 @@
         <div id="tkt-list"></div>
         <div id="tkt-empty" class="no-results" style="display:none">
           <i class="fas fa-ticket-alt"></i>
-          <p>لا توجد تذاكر. <span class="hero-chip" style="display:inline;cursor:pointer" onclick="switchTab('new-ticket')">افتح تذكرة جديدة</span></p>
+          <p><span data-i18n="support.tickets.emptyState.text">لا توجد تذاكر.</span> <span class="hero-chip" style="display:inline;cursor:pointer" onclick="switchTab('new-ticket')" data-i18n="support.tickets.emptyState.linkText">افتح تذكرة جديدة</span></p>
         </div>
       </div>
     </div>
@@ -388,54 +406,54 @@
 
         <!-- Step 1: Category + Priority -->
         <div class="ntk-step">
-          <h3><span class="step-num">١</span> نوع المشكلة والأولوية</h3>
+          <h3><span class="step-num">1</span> <span data-i18n="support.newTicket.step1.title">نوع المشكلة والأولوية</span></h3>
           <div class="cat-select-grid" id="ntk-cats"></div>
-          <label class="ntk-label" style="margin-top:16px">الأولوية</label>
+          <label class="ntk-label" style="margin-top:16px" data-i18n="support.newTicket.step1.priorityLabel">الأولوية</label>
           <div class="pri-row">
-            <button class="pri-btn" data-pri="low">منخفضة</button>
-            <button class="pri-btn sel" data-pri="medium">متوسطة</button>
-            <button class="pri-btn" data-pri="high">⚡ عالية</button>
-            <button class="pri-btn" data-pri="urgent">🚨 عاجلة</button>
+            <button class="pri-btn" data-pri="low" data-i18n="support.newTicket.step1.priorityOptions.low">منخفضة</button>
+            <button class="pri-btn sel" data-pri="medium" data-i18n="support.newTicket.step1.priorityOptions.medium">متوسطة</button>
+            <button class="pri-btn" data-pri="high" data-i18n="support.newTicket.step1.priorityOptions.high">⚡ عالية</button>
+            <button class="pri-btn" data-pri="urgent" data-i18n="support.newTicket.step1.priorityOptions.urgent">🚨 عاجلة</button>
           </div>
         </div>
 
         <!-- Step 2: Subject + Message -->
         <div class="ntk-step">
-          <h3><span class="step-num">٢</span> تفاصيل المشكلة</h3>
-          <label class="ntk-label">عنوان الطلب *</label>
-          <input type="text" id="ntk-subject" class="ntk-input" maxlength="200" placeholder="اشرح مشكلتك في جملة واحدة..." />
+          <h3><span class="step-num">2</span> <span data-i18n="support.newTicket.step2.title">تفاصيل المشكلة</span></h3>
+          <label class="ntk-label" data-i18n="support.newTicket.step2.subjectLabel">عنوان الطلب *</label>
+          <input type="text" id="ntk-subject" class="ntk-input" maxlength="200" data-i18n-placeholder="support.newTicket.step2.subjectPlaceholder" placeholder="اشرح مشكلتك في جملة واحدة..." />
           <div class="suggest-box" id="suggest-box">
-            <h5><i class="fas fa-lightbulb"></i> هل تقصد أحد هذه المواضيع؟</h5>
+            <h5><i class="fas fa-lightbulb"></i> <span data-i18n="support.newTicket.step2.suggestBoxTitle">هل تقصد أحد هذه المواضيع؟</span></h5>
             <div id="suggest-list"></div>
           </div>
-          <label class="ntk-label">تفاصيل إضافية *</label>
-          <textarea id="ntk-body" class="ntk-textarea" placeholder="اشرح مشكلتك بالتفصيل لنتمكن من مساعدتك بشكل أسرع..."></textarea>
-          <label class="ntk-label" style="display:none" id="guest-fields-label">معلومات التواصل</label>
+          <label class="ntk-label" data-i18n="support.newTicket.step2.detailsLabel">تفاصيل إضافية *</label>
+          <textarea id="ntk-body" class="ntk-textarea" data-i18n-placeholder="support.newTicket.step2.detailsPlaceholder" placeholder="اشرح مشكلتك بالتفصيل لنتمكن من مساعدتك بشكل أسرع..."></textarea>
+          <label class="ntk-label" style="display:none" id="guest-fields-label" data-i18n="support.newTicket.step2.guestFieldsLabel">معلومات التواصل</label>
           <div id="guest-fields" style="display:none;gap:10px;margin-top:6px">
-            <input type="text" id="ntk-guest-name" class="ntk-input" style="margin-bottom:8px" placeholder="اسمك الكريم" />
-            <input type="email" id="ntk-guest-email" class="ntk-input" placeholder="بريدك الإلكتروني" />
+            <input type="text" id="ntk-guest-name" class="ntk-input" style="margin-bottom:8px" data-i18n-placeholder="support.newTicket.step2.guestNamePlaceholder" placeholder="اسمك الكريم" />
+            <input type="email" id="ntk-guest-email" class="ntk-input" data-i18n-placeholder="support.newTicket.step2.guestEmailPlaceholder" placeholder="بريدك الإلكتروني" />
           </div>
         </div>
 
         <!-- Step 3: Attachments -->
         <div class="ntk-step">
-          <h3><span class="step-num">٣</span> المرفقات <small style="font-weight:400;color:rgba(255,255,255,.5)">(اختياري)</small></h3>
-          <label class="ntk-label">ارفع صورة أو ملف يوضح المشكلة</label>
+          <h3><span class="step-num">3</span> <span data-i18n="support.newTicket.step3.title">المرفقات</span> <small style="font-weight:400;color:rgba(255,255,255,.5)" data-i18n="support.newTicket.step3.optionalHint">(اختياري)</small></h3>
+          <label class="ntk-label" data-i18n="support.newTicket.step3.attachLabel">ارفع صورة أو ملف يوضح المشكلة</label>
           <input type="file" id="ntk-attach" class="ntk-input" accept="image/*,application/pdf,video/mp4" multiple />
-          <small style="color:rgba(255,255,255,.45);font-size:12px;margin-top:6px;display:block">الصيغ المدعومة: صور، PDF، فيديو — الحجم الأقصى: 10MB</small>
+          <small style="color:rgba(255,255,255,.45);font-size:12px;margin-top:6px;display:block" data-i18n="support.newTicket.step3.attachHint">الصيغ المدعومة: صور، PDF، فيديو — الحجم الأقصى: 10MB</small>
           <div id="attach-preview" style="display:flex;gap:8px;flex-wrap:wrap;margin-top:10px"></div>
         </div>
 
         <button class="ntk-submit" id="ntk-submit" onclick="submitTicket()">
-          <i class="fas fa-paper-plane"></i> إرسال الطلب
+          <i class="fas fa-paper-plane"></i> <span data-i18n="support.newTicket.submitBtn">إرسال الطلب</span>
         </button>
         <div id="ntk-success" style="display:none;margin-top:16px;background:rgba(39,174,96,.15);border:1px solid rgba(39,174,96,.4);border-radius:12px;padding:18px;text-align:center">
           <i class="fas fa-check-circle" style="font-size:36px;color:#55efc4;margin-bottom:8px;display:block"></i>
-          <h3 style="font-size:18px;margin-bottom:6px">تم إرسال تذكرتك بنجاح!</h3>
+          <h3 style="font-size:18px;margin-bottom:6px" data-i18n="support.newTicket.success.title">تم إرسال تذكرتك بنجاح!</h3>
           <p style="color:rgba(255,255,255,.6);font-size:14px" id="ntk-success-msg"></p>
           <div style="margin-top:14px;display:flex;gap:10px;justify-content:center;flex-wrap:wrap">
-            <button class="hs-btn btn-green" onclick="switchTab('tickets')"><i class="fas fa-ticket-alt"></i> متابعة التذكرة</button>
-            <button class="hs-btn btn-ghost" onclick="resetNewTicket()"><i class="fas fa-plus"></i> تذكرة جديدة</button>
+            <button class="hs-btn btn-green" onclick="switchTab('tickets')"><i class="fas fa-ticket-alt"></i> <span data-i18n="support.newTicket.success.continueBtn">متابعة التذكرة</span></button>
+            <button class="hs-btn btn-ghost" onclick="resetNewTicket()"><i class="fas fa-plus"></i> <span data-i18n="support.newTicket.success.newTicketBtn">تذكرة جديدة</span></button>
           </div>
         </div>
       </div>
@@ -445,7 +463,7 @@
 
   <!-- Chat Widget -->
   <div id="chat-widget">
-    <button id="chat-toggle" onclick="toggleChat()" title="المساعد الذكي">
+    <button id="chat-toggle" onclick="toggleChat()" data-i18n-title="support.chat.title" title="المساعد الذكي">
       <i class="fas fa-robot" id="chat-ico"></i>
       <span class="chat-notif" id="chat-notif" style="display:none">1</span>
     </button>
@@ -453,14 +471,14 @@
       <div class="chat-hdr">
         <div class="chat-av">🤖</div>
         <div class="chat-hdr-txt">
-          <div class="bot-name">مساعد حرث الذكي</div>
-          <div class="bot-status"><i class="fas fa-circle" style="color:#6ab04c;font-size:7px"></i> متصل الآن</div>
+          <div class="bot-name" data-i18n="support.chat.botName">مساعد حرث الذكي</div>
+          <div class="bot-status"><i class="fas fa-circle" style="color:#6ab04c;font-size:7px"></i> <span data-i18n="support.chat.botStatus">متصل الآن</span></div>
         </div>
         <button class="chat-close" onclick="toggleChat()"><i class="fas fa-times"></i></button>
       </div>
       <div class="chat-messages" id="chat-msgs"></div>
       <div class="chat-footer">
-        <input class="chat-input" id="chat-input" placeholder="اكتب سؤالك..." onkeydown="if(event.key==='Enter')sendChat()" />
+        <input class="chat-input" id="chat-input" data-i18n-placeholder="support.chat.inputPlaceholder" placeholder="اكتب سؤالك..." onkeydown="if(event.key==='Enter')sendChat()" />
         <button class="chat-send" onclick="sendChat()"><i class="fas fa-paper-plane"></i></button>
       </div>
     </div>
@@ -468,6 +486,8 @@
 
   <div id="toast"></div>
 
+  <script src="i18n.js"></script>
+  <script src="lang-switcher.js"></script>
   <script src="design-system.js"></script>
   <script src="unified-nav.js"></script>
   <script src="script.js"></script>
@@ -475,65 +495,56 @@
   (function(){
     "use strict";
 
+    function t(key, vars) {
+      return window.HarthI18n ? window.HarthI18n.t(key, vars) : key;
+    }
+    function localeTag() {
+      return window.HarthI18n ? window.HarthI18n.localeTag() : "ar";
+    }
+
     // ── FAQ / Article Data ─────────────────────────────────────────────────
-    const CATS = [
-      { id:"technical",   icon:"🔧", label:"تقنية",        color:"#e74c3c" },
-      { id:"financial",   icon:"💰", label:"مالية ودفع",   color:"#f1c40f" },
-      { id:"account",     icon:"👤", label:"الحساب",       color:"#3498db" },
-      { id:"orders",      icon:"📦", label:"الطلبات",      color:"#9b59b6" },
-      { id:"suggestion",  icon:"💡", label:"اقتراح",       color:"#6ab04c" },
-      { id:"complaint",   icon:"⚠️", label:"شكوى",         color:"#e67e22" },
+    const CAT_META = [
+      { id:"technical",   icon:"🔧", color:"#e74c3c" },
+      { id:"financial",   icon:"💰", color:"#f1c40f" },
+      { id:"account",     icon:"👤", color:"#3498db" },
+      { id:"orders",      icon:"📦", color:"#9b59b6" },
+      { id:"suggestion",  icon:"💡", color:"#6ab04c" },
+      { id:"complaint",   icon:"⚠️", color:"#e67e22" },
     ];
 
-    const ARTICLES = [
-      // Technical
-      { id:"t1", cat:"technical", title:"تطبيق المنصة لا يفتح أو يتجمد", tags:["تقني","بطيء","لا يعمل","تجمد"],
-        body:`إذا لم تفتح المنصة أو تجمدت، جرّب الخطوات التالية:\n\n1. امسح ذاكرة التخزين المؤقتة للمتصفح (Ctrl+Shift+Delete)\n2. تأكد من سرعة الإنترنت وأنها لا تقل عن 1Mbps\n3. جرّب متصفحاً مختلفاً (Chrome/Edge/Firefox)\n4. أوقف تشغيل VPN إن كنت تستخدمه\n5. تأكد من تحديث المتصفح لأحدث إصدار\n\nإذا استمرت المشكلة افتح تذكرة دعم مع لقطة شاشة.` },
-      { id:"t2", cat:"technical", title:"الصور لا تُحمَّل أو تظهر", tags:["صور","تحميل","لا تظهر"],
-        body:`إذا لم تُحمَّل الصور:\n\n1. تحقق من اتصال الإنترنت\n2. امسح كاش المتصفح\n3. تأكد من أن الصورة بصيغة JPG/PNG/WEBP\n4. تأكد أن حجم الصورة لا يتجاوز 10 ميجابايت\n5. جرب تحديث الصفحة (F5)\n\nإذا لم تنجح الصور في الرفع، تأكد من صلاحيات الكاميرا/الوصول للملفات في المتصفح.` },
-      { id:"t3", cat:"technical", title:"مشكلة في الإشعارات", tags:["إشعارات","تنبيهات","لا تصل"],
-        body:`لتفعيل الإشعارات:\n\n1. اسمح للموقع بالإشعارات عند طلبها\n2. تأكد أن الجهاز غير على وضع "صامت" أو "لا تزعج"\n3. افتح إعدادات المتصفح ← الإشعارات ← اسمح لموقع حرث\n\nلاستقبال إشعارات البريد الإلكتروني، تأكد من صحة إيميلك في إعدادات الحساب.` },
+    const ARTICLE_IDS_BY_CAT = {
+      technical: ["t1","t2","t3"],
+      financial: ["f1","f2","f3"],
+      account: ["a1","a2","a3"],
+      orders: ["o1","o2","o3"],
+      suggestion: ["l1"],
+      complaint: [],
+    };
 
-      // Financial
-      { id:"f1", cat:"financial", title:"كيف أدفع؟ طرق الدفع المتاحة", tags:["دفع","بطاقة","استلام","كاش"],
-        body:`طرق الدفع المتاحة في منصة حرث:\n\n✅ بطاقة ائتمانية (Visa / Mastercard)\n✅ الدفع عند الاستلام (COD) — متاح لبعض المناطق\n\nعند الدفع بالبطاقة:\n- أدخل بيانات البطاقة في الصفحة الآمنة\n- قد يُطلب منك رمز OTP من البنك\n- المبلغ يُخصم فوراً عند تأكيد الطلب` },
-      { id:"f2", cat:"financial", title:"فشل عملية الدفع", tags:["فشل","رفض","دفع","خطأ بطاقة"],
-        body:`إذا فشلت عملية الدفع:\n\n1. تأكد من صحة بيانات البطاقة (رقم، تاريخ، CVV)\n2. تأكد أن الرصيد كافٍ\n3. تأكد أن البطاقة مفعَّلة للمدفوعات الإلكترونية\n4. اتصل بالبنك لرفع قيود الدفع عبر الإنترنت\n5. جرب بطاقة أخرى\n\nإذا خُصم المبلغ ولم يُكمل الطلب، يُرجع المبلغ خلال 3–5 أيام عمل تلقائياً.` },
-      { id:"f3", cat:"financial", title:"استرداد المبلغ — متى يصل؟", tags:["استرداد","استرجاع","مبلغ","رجوع"],
-        body:`سياسة الاسترداد:\n\n• الإلغاء قبل 24 ساعة من موعد التسليم: استرداد كامل\n• الإلغاء بعد 24 ساعة: قد يُطبَّق رسم إلغاء\n• وقت الاسترداد: 3–7 أيام عمل لبطاقات الائتمان\n\nإذا مرت 7 أيام ولم يصل المبلغ، تواصل معنا بتذكرة دعم.` },
+    function catLabel(catId) { return t(`support.categories.${catId}.label`); }
 
-      // Account
-      { id:"a1", cat:"account", title:"كيف أستعيد كلمة المرور؟", tags:["كلمة مرور","نسيت","تسجيل دخول"],
-        body:`لاستعادة كلمة المرور:\n\n1. اضغط "نسيت كلمة المرور" في صفحة تسجيل الدخول\n2. أدخل بريدك الإلكتروني المسجل\n3. افتح رسالة الاسترداد في بريدك (تحقق من مجلد الرسائل غير المرغوب فيها)\n4. اضغط الرابط وأدخل كلمة مرور جديدة\n\nالرابط صالح لمدة 24 ساعة فقط.` },
-      { id:"a2", cat:"account", title:"كيف أغير معلومات حسابي؟", tags:["تعديل","حساب","اسم","إيميل"],
-        body:`لتعديل بيانات حسابك:\n\n1. اضغط على اسمك في الزاوية العلوية\n2. اختر "إعدادات الحساب"\n3. عدّل الاسم أو رقم الهاتف أو الصورة الشخصية\n4. احفظ التغييرات\n\nملاحظة: تغيير البريد الإلكتروني يتطلب تحقق إضافي.` },
-      { id:"a3", cat:"account", title:"كيف أصبح مالك معدات؟", tags:["مالك","بائع","رفع معدة"],
-        body:`لبدء البيع أو التأجير كمالك معدات:\n\n1. سجّل حساباً جديداً أو ادخل لحسابك الحالي\n2. اختر دور "مالك" عند التسجيل أو من إعدادات الحساب\n3. أكمل التحقق من الهوية (KYC)\n4. انتقل لصفحة "لوحة الملاك"\n5. اضغط "إضافة معدة" وأدخل تفاصيل معدتك` },
-
-      // Orders
-      { id:"o1", cat:"orders", title:"كيف أستأجر معدة؟", tags:["استئجار","إيجار","حجز"],
-        body:`لاستئجار معدة في منصة حرث:\n\n1. تصفح المعدات في صفحة "المعدات"\n2. اختر المعدة المناسبة واضغط "حجز"\n3. حدد تاريخ البداية والنهاية\n4. راجع الأسعار وأكمل عملية الدفع\n5. ستصلك رسالة تأكيد فور إتمام الحجز\n6. سيتواصل معك المالك لتنسيق التسليم` },
-      { id:"o2", cat:"orders", title:"كيف أتبع طلبي؟", tags:["تتبع","طلب","مندوب","توصيل"],
-        body:`لتتبع طلبك:\n\n1. اذهب لصفحة "طلباتي" من القائمة\n2. ابحث عن طلبك أو اختره من القائمة\n3. اضغط "تتبع الطلب" لعرض الموقع الحالي للمندوب\n4. يمكنك الاتصال بالمندوب مباشرة من صفحة التتبع\n\nإذا تأخر الطلب عن الوقت المحدد، يُرجى فتح تذكرة دعم.` },
-      { id:"o3", cat:"orders", title:"كيف أُلغي طلباً؟", tags:["إلغاء","ألغي","إلغاء طلب"],
-        body:`لإلغاء طلب:\n\n1. اذهب لصفحة "طلباتي"\n2. اختر الطلب المراد إلغاؤه\n3. اضغط "إلغاء الطلب" (متاح فقط للطلبات بحالة "جديد" أو "مؤكد")\n4. حدد سبب الإلغاء\n\nبعد الإلغاء يُعاد المبلغ وفق سياسة الاسترداد.` },
-
-      // Loyalty
-      { id:"l1", cat:"suggestion", title:"كيف تعمل نقاط الولاء؟", tags:["نقاط","ولاء","مكافأة","خصم"],
-        body:`برنامج الولاء في حرث:\n\n🌟 تكسب نقاطاً مع كل طلب مكتمل\n💎 100 نقطة = 1 ر.ع خصم على طلباتك القادمة\n🏆 كلما زادت نقاطك ارتفعت درجتك (برونزي ← فضي ← ذهبي ← بلاتيني)\n\nلعرض رصيدك: اذهب لصفحة "برنامج الولاء" من القائمة.` },
-    ];
+    function getArticles() {
+      return Object.keys(ARTICLE_IDS_BY_CAT).flatMap(catId =>
+        ARTICLE_IDS_BY_CAT[catId].map(id => ({
+          id, cat: catId,
+          title: t(`support.articles.${id}.title`),
+          body: t(`support.articles.${id}.body`),
+          tags: t(`support.articles.${id}.tags`),
+        }))
+      );
+    }
 
     const BOT_KB = [
-      { kw:["استئجار","إيجار","أجار","حجز","معدة","تأجير"], art:"o1" },
-      { kw:["تتبع","طلب","توصيل","مندوب","وين"], art:"o2" },
-      { kw:["إلغاء","ألغي","كنسل","رجوع"], art:"o3" },
-      { kw:["دفع","سداد","فشل","رفض","بطاقة","مبلغ"], art:"f1" },
-      { kw:["استرداد","استرجاع","رجوع المبلغ","كاش"], art:"f3" },
-      { kw:["كلمة مرور","نسيت","تسجيل دخول","دخول"], art:"a1" },
-      { kw:["مالك","بائع","إضافة معدة","رفع معدة"], art:"a3" },
-      { kw:["نقاط","ولاء","مكافأة","خصم","درجة"], art:"l1" },
-      { kw:["تقني","بطيء","لا يفتح","تجمد","يتجمد"], art:"t1" },
-      { kw:["صور","تحميل","لا تظهر"], art:"t2" },
+      { kw:["استئجار","إيجار","أجار","حجز","معدة","تأجير","rent","rental","book","equipment"], art:"o1" },
+      { kw:["تتبع","طلب","توصيل","مندوب","وين","track","order","delivery","courier"], art:"o2" },
+      { kw:["إلغاء","ألغي","كنسل","رجوع","cancel","cancellation"], art:"o3" },
+      { kw:["دفع","سداد","فشل","رفض","بطاقة","مبلغ","pay","payment","card","fail"], art:"f1" },
+      { kw:["استرداد","استرجاع","رجوع المبلغ","كاش","refund","money back"], art:"f3" },
+      { kw:["كلمة مرور","نسيت","تسجيل دخول","دخول","password","forgot","login"], art:"a1" },
+      { kw:["مالك","بائع","إضافة معدة","رفع معدة","owner","seller","list equipment"], art:"a3" },
+      { kw:["نقاط","ولاء","مكافأة","خصم","درجة","points","loyalty","reward","discount"], art:"l1" },
+      { kw:["تقني","بطيء","لا يفتح","تجمد","يتجمد","technical","slow","freeze","frozen"], art:"t1" },
+      { kw:["صور","تحميل","لا تظهر","images","upload","not showing"], art:"t2" },
     ];
 
     // ── State ─────────────────────────────────────────────────────────────
@@ -547,7 +558,9 @@
     let previousHelpView = null; // "cats" or "search"
 
     // ── Init ──────────────────────────────────────────────────────────────
-    document.addEventListener("DOMContentLoaded", () => {
+    async function init() {
+      if (window.HarthI18n) await window.HarthI18n.ready();
+
       buildHomeFAQs();
       buildCatGrid();
       buildNewTicketCats();
@@ -558,6 +571,7 @@
       wireSubjectSuggest();
       wireHelpSearch();
       wireHeroSearch();
+      wireHeroChips();
       initChat();
 
       if (!getToken || !getToken()) {
@@ -568,7 +582,14 @@
       // Check hash for deep-link
       if (location.hash === "#new") switchTab("new-ticket");
       if (location.hash === "#tickets") switchTab("tickets");
-    });
+    }
+    document.addEventListener("DOMContentLoaded", init);
+
+    function wireHeroChips() {
+      document.querySelectorAll(".hero-chip[data-chip-key]").forEach(el => {
+        el.addEventListener("click", () => heroChip(t(`support.hero.chips.${el.dataset.chipKey}`)));
+      });
+    }
 
     // ── Tabs ──────────────────────────────────────────────────────────────
     function wireTabBtns() {
@@ -590,8 +611,10 @@
     function buildHomeFAQs() {
       const popular = ["o1","f1","a1","o2","a3","f2"];
       const wrap = document.getElementById("home-faqs");
+      wrap.innerHTML = "";
+      const articles = getArticles();
       popular.forEach(id => {
-        const a = ARTICLES.find(x => x.id === id);
+        const a = articles.find(x => x.id === id);
         if (!a) return;
         const item = document.createElement("div");
         item.className = "faq-item";
@@ -607,11 +630,12 @@
     function buildCatGrid() {
       const grid = document.getElementById("cat-grid");
       grid.innerHTML = "";
-      CATS.forEach(c => {
-        const counts = ARTICLES.filter(a => a.cat === c.id).length;
+      const articles = getArticles();
+      CAT_META.forEach(c => {
+        const counts = articles.filter(a => a.cat === c.id).length;
         const card = document.createElement("div");
         card.className = "cat-card";
-        card.innerHTML = `<div class="cat-ico">${c.icon}</div><h4>${c.label}</h4><div class="cat-count">${counts} مقالة</div>`;
+        card.innerHTML = `<div class="cat-ico">${c.icon}</div><h4>${escHtml(catLabel(c.id))}</h4><div class="cat-count">${counts} ${escHtml(t("support.help.articleCountSuffix"))}</div>`;
         card.addEventListener("click", () => openCat(c));
         grid.appendChild(card);
       });
@@ -622,14 +646,14 @@
       document.getElementById("help-categories").style.display = "block";
       document.getElementById("help-article-detail").style.display = "none";
       document.getElementById("cat-articles").style.display = "block";
-      document.getElementById("cat-title").innerHTML = `${cat.icon} ${cat.label}`;
+      document.getElementById("cat-title").innerHTML = `${cat.icon} ${escHtml(catLabel(cat.id))}`;
       const list = document.getElementById("articles-list");
       list.innerHTML = "";
-      const arts = ARTICLES.filter(a => a.cat === cat.id);
+      const arts = getArticles().filter(a => a.cat === cat.id);
       arts.forEach(a => {
         const row = document.createElement("div");
         row.className = "art-row";
-        row.innerHTML = `<span>${a.title}</span><i class="fas fa-chevron-left art-arrow"></i>`;
+        row.innerHTML = `<span>${escHtml(a.title)}</span><i class="fas fa-chevron-left art-arrow"></i>`;
         row.addEventListener("click", () => showArticle(a, "cats"));
         list.appendChild(row);
       });
@@ -648,14 +672,14 @@
       detail.style.display = "block";
       const box = document.getElementById("article-detail-box");
       box.innerHTML = `
-        <h3>${art.title}</h3>
-        <div class="art-body">${art.body.replace(/\n/g,"<br>")}</div>
+        <h3>${escHtml(art.title)}</h3>
+        <div class="art-body">${escHtml(art.body).replace(/\n/g,"<br>")}</div>
         <div class="art-helpful">
-          <span>هل أفادك هذا المقال؟</span>
-          <button onclick="artFeedback(true,this)">👍 نعم</button>
-          <button onclick="artFeedback(false,this)">👎 لا</button>
+          <span>${escHtml(t("support.help.helpfulQuestion"))}</span>
+          <button onclick="artFeedback(true,this)">${escHtml(t("support.help.helpfulYes"))}</button>
+          <button onclick="artFeedback(false,this)">${escHtml(t("support.help.helpfulNo"))}</button>
           <button onclick="switchTab('new-ticket')" style="margin-inline-start:auto;background:rgba(106,176,76,.15);border-color:rgba(106,176,76,.4);color:#6ab04c">
-            <i class="fas fa-ticket-alt"></i> فتح تذكرة دعم
+            <i class="fas fa-ticket-alt"></i> ${escHtml(t("support.help.openTicketFromArticle"))}
           </button>
         </div>`;
       const backLink = document.getElementById("art-back-link");
@@ -669,20 +693,21 @@
         }
       };
     }
+    window.artFeedback = artFeedback;
 
     function artFeedback(helpful, btn) {
       btn.closest(".art-helpful").innerHTML = helpful
-        ? '<span style="color:#55efc4">شكراً! سعيد أنه أفادك 🎉</span>'
-        : '<span style="color:#f1c40f">شكراً لملاحظتك. سنحسّن المقال.</span>';
+        ? `<span style="color:#55efc4">${escHtml(t("support.help.feedbackThanksPositive"))}</span>`
+        : `<span style="color:#f1c40f">${escHtml(t("support.help.feedbackThanksNegative"))}</span>`;
     }
 
     // ── Help Search ───────────────────────────────────────────────────────
     function wireHelpSearch() {
       const inp = document.getElementById("help-search");
-      let t;
+      let debounceTimer;
       inp.addEventListener("input", () => {
-        clearTimeout(t);
-        t = setTimeout(() => runHelpSearch(inp.value), 250);
+        clearTimeout(debounceTimer);
+        debounceTimer = setTimeout(() => runHelpSearch(inp.value), 250);
       });
     }
 
@@ -699,9 +724,9 @@
       resWrap.style.display = "block";
       catWrap.style.display = "none";
       document.getElementById("help-article-detail").style.display = "none";
-      const matches = ARTICLES.filter(a =>
+      const matches = getArticles().filter(a =>
         a.title.toLowerCase().includes(q) ||
-        (a.tags || []).some(t => t.includes(q)) ||
+        (a.tags || []).some(tag => tag.toLowerCase().includes(q)) ||
         a.body.toLowerCase().includes(q)
       );
       const list = document.getElementById("search-list");
@@ -712,8 +737,8 @@
       matches.forEach(a => {
         const row = document.createElement("div");
         row.className = "art-row";
-        const cat = CATS.find(c => c.id === a.cat);
-        row.innerHTML = `<span>${cat ? cat.icon + " " : ""}${a.title}</span><i class="fas fa-chevron-left art-arrow"></i>`;
+        const cat = CAT_META.find(c => c.id === a.cat);
+        row.innerHTML = `<span>${cat ? cat.icon + " " : ""}${escHtml(a.title)}</span><i class="fas fa-chevron-left art-arrow"></i>`;
         row.addEventListener("click", () => showArticle(a, "search"));
         list.appendChild(row);
       });
@@ -737,11 +762,12 @@
     // ── New Ticket Form ───────────────────────────────────────────────────
     function buildNewTicketCats() {
       const grid = document.getElementById("ntk-cats");
-      CATS.forEach(c => {
+      grid.innerHTML = "";
+      CAT_META.forEach(c => {
         const btn = document.createElement("button");
         btn.className = "cat-sel-btn";
         btn.dataset.cat = c.id;
-        btn.innerHTML = `<div class="c-ico">${c.icon}</div><div class="c-lbl">${c.label}</div>`;
+        btn.innerHTML = `<div class="c-ico">${c.icon}</div><div class="c-lbl">${escHtml(catLabel(c.id))}</div>`;
         btn.addEventListener("click", () => {
           document.querySelectorAll(".cat-sel-btn").forEach(b => b.classList.remove("sel"));
           btn.classList.add("sel");
@@ -765,10 +791,10 @@
 
     function wireSubjectSuggest() {
       const inp = document.getElementById("ntk-subject");
-      let t;
+      let debounceTimer;
       inp.addEventListener("input", () => {
-        clearTimeout(t);
-        t = setTimeout(() => updateSuggestions(inp.value), 300);
+        clearTimeout(debounceTimer);
+        debounceTimer = setTimeout(() => updateSuggestions(inp.value), 300);
       });
     }
 
@@ -777,19 +803,19 @@
       const box = document.getElementById("suggest-box");
       const list = document.getElementById("suggest-list");
       if (q.length < 3) { box.style.display = "none"; return; }
-      const matches = ARTICLES.filter(a =>
+      const matches = getArticles().filter(a =>
         a.title.toLowerCase().includes(q) ||
-        (a.tags || []).some(t => t.includes(q))
+        (a.tags || []).some(tag => tag.toLowerCase().includes(q))
       ).slice(0, 3);
       if (!matches.length) { box.style.display = "none"; return; }
       box.style.display = "block";
       list.innerHTML = matches.map(a =>
-        `<div class="suggest-row" onclick="openSuggestion('${a.id}')"><i class="fas fa-book" style="color:#6ab04c"></i>${a.title}</div>`
+        `<div class="suggest-row" onclick="openSuggestion('${a.id}')"><i class="fas fa-book" style="color:#6ab04c"></i>${escHtml(a.title)}</div>`
       ).join("");
     }
 
     function openSuggestion(id) {
-      const art = ARTICLES.find(a => a.id === id);
+      const art = getArticles().find(a => a.id === id);
       if (!art) return;
       switchTab("help");
       showArticle(art, "cats");
@@ -797,21 +823,21 @@
     window.openSuggestion = openSuggestion;
 
     async function submitTicket() {
-      if (!selectedCat) { toast("اختر تصنيف المشكلة أولاً", true); return; }
+      if (!selectedCat) { toast(t("support.toasts.selectCategoryFirst"), true); return; }
       const subject = document.getElementById("ntk-subject").value.trim();
       const body    = document.getElementById("ntk-body").value.trim();
-      if (!subject) { toast("أدخل عنوان الطلب", true); return; }
-      if (body.length < 20) { toast("يرجى كتابة تفاصيل أكثر (20 حرف على الأقل)", true); return; }
+      if (!subject) { toast(t("support.toasts.enterSubject"), true); return; }
+      if (body.length < 20) { toast(t("support.toasts.enterMoreDetails"), true); return; }
 
       const isGuest = !getToken || !getToken();
       if (isGuest) {
         const email = document.getElementById("ntk-guest-email").value.trim();
-        if (!email || !email.includes("@")) { toast("أدخل بريد إلكتروني صحيح", true); return; }
+        if (!email || !email.includes("@")) { toast(t("support.toasts.enterValidEmail"), true); return; }
       }
 
       const btn = document.getElementById("ntk-submit");
       btn.disabled = true;
-      btn.innerHTML = '<span class="spin"></span> جارٍ الإرسال...';
+      btn.innerHTML = `<span class="spin"></span> ${escHtml(t("support.newTicket.sendingBtn"))}`;
 
       try {
         const payload = { category: selectedCat, priority: selectedPri, subject, body };
@@ -820,16 +846,16 @@
           payload.guest_email = document.getElementById("ntk-guest-email").value.trim();
         }
         const res = await apiFetch("/support/tickets", { method:"POST", body: JSON.stringify(payload) });
-        if (!res || !res.success) throw new Error(res?.error?.message || "فشل الإرسال");
+        if (!res || !res.success) throw new Error(res?.error?.message || t("support.toasts.submitFailed"));
 
         document.getElementById("ntk-success-msg").textContent =
-          `رقم تذكرتك: ${res.ticket.ticket_number} — سيتواصل معك فريق الدعم خلال ${res.ticket.sla_hours} ساعة.`;
+          t("support.newTicket.success.messageTemplate", { number: res.ticket.ticket_number, hours: res.ticket.sla_hours });
         document.getElementById("ntk-success").style.display = "block";
         btn.style.display = "none";
       } catch (err) {
         toast(err.message, true);
         btn.disabled = false;
-        btn.innerHTML = '<i class="fas fa-paper-plane"></i> إرسال الطلب';
+        btn.innerHTML = `<i class="fas fa-paper-plane"></i> ${escHtml(t("support.newTicket.submitBtn"))}`;
       }
     }
     window.submitTicket = submitTicket;
@@ -842,7 +868,7 @@
       document.getElementById("ntk-success").style.display = "none";
       document.getElementById("ntk-submit").style.display = "";
       document.getElementById("ntk-submit").disabled = false;
-      document.getElementById("ntk-submit").innerHTML = '<i class="fas fa-paper-plane"></i> إرسال الطلب';
+      document.getElementById("ntk-submit").innerHTML = `<i class="fas fa-paper-plane"></i> ${escHtml(t("support.newTicket.submitBtn"))}`;
     }
     window.resetNewTicket = resetNewTicket;
 
@@ -881,33 +907,33 @@
         const res = await apiFetch(`/support/tickets/mine${qs}`);
         loading.style.display = "none";
         if (!res?.success || !res.tickets.length) { emptyEl.style.display = "block"; return; }
-        res.tickets.forEach(t => tktList.appendChild(buildTicketCard(t)));
+        res.tickets.forEach(tkt => tktList.appendChild(buildTicketCard(tkt)));
       } catch (err) {
         loading.style.display = "none";
         tktList.innerHTML = `<p style="color:#ff7675;padding:20px">${escHtml(err.message)}</p>`;
       }
     }
 
-    function buildTicketCard(t) {
+    function buildTicketCard(tkt) {
       const card = document.createElement("div");
       card.className = "tkt-card";
       card.innerHTML = `
         <div style="min-width:0;flex:1">
-          <div class="tkt-num">${escHtml(t.ticket_number)}</div>
-          <div class="tkt-subj">${escHtml(t.subject)}</div>
+          <div class="tkt-num">${escHtml(tkt.ticket_number)}</div>
+          <div class="tkt-subj">${escHtml(tkt.subject)}</div>
           <div class="tkt-meta">
-            <span class="stat-badge s-${t.status}">${statusAr(t.status)}</span>
-            <span class="pri-badge p-${t.priority}">${priAr(t.priority)}</span>
-            <span>${catAr(t.category)}</span>
-            <span><i class="far fa-clock"></i> ${fmtDate(t.updated_at)}</span>
+            <span class="stat-badge s-${tkt.status}">${statusLabel(tkt.status)}</span>
+            <span class="pri-badge p-${tkt.priority}">${priorityLabel(tkt.priority)}</span>
+            <span>${escHtml(catLabel(tkt.category))}</span>
+            <span><i class="far fa-clock"></i> ${fmtDate(tkt.updated_at)}</span>
           </div>
         </div>
         <i class="fas fa-chevron-left" style="color:#6ab04c;font-size:14px;flex-shrink:0;margin-top:4px"></i>`;
 
       const detail = document.createElement("div");
       detail.className = "tkt-detail";
-      detail.id = "detail-" + t.id;
-      card.addEventListener("click", () => toggleTicketDetail(t, card, detail));
+      detail.id = "detail-" + tkt.id;
+      card.addEventListener("click", () => toggleTicketDetail(tkt, card, detail));
 
       const wrap = document.createDocumentFragment();
       wrap.appendChild(card);
@@ -930,68 +956,68 @@
 
       try {
         const res = await apiFetch(`/support/tickets/${summary.id}`);
-        if (!res?.success) throw new Error("فشل التحميل");
+        if (!res?.success) throw new Error(t("support.tickets.loadFailed"));
         renderTicketDetail(detail, res.ticket);
       } catch (e) {
         detail.innerHTML = `<p style="color:#ff7675">${escHtml(e.message)}</p>`;
       }
     }
 
-    function renderTicketDetail(el, t) {
-      const msgs = (t.messages || []).map(m => {
+    function renderTicketDetail(el, tkt) {
+      const msgs = (tkt.messages || []).map(m => {
         const isAgent  = m.sender_type === "agent";
         const isSystem = m.sender_type === "system" || m.sender_type === "bot";
         const cls      = isSystem ? "msg-system" : isAgent ? "msg-agent" : "msg-user";
-        const sender   = isSystem ? "النظام" : isAgent ? (m.sender_name || "فريق الدعم") : "أنت";
+        const sender   = isSystem ? t("support.tickets.senderLabels.system") : isAgent ? (m.sender_name || t("support.tickets.senderLabels.agent")) : t("support.tickets.senderLabels.you");
         return `<div class="msg-bubble ${cls}">
           <div class="msg-sender">${escHtml(sender)}</div>
           ${escHtml(m.body).replace(/\n/g,"<br>")}
-          <div class="msg-time">${fmtDate(t.created_at)}</div>
+          <div class="msg-time">${fmtDate(tkt.created_at)}</div>
         </div>`;
       }).join("");
 
-      const canReply  = !["closed"].includes(t.status);
-      const canRate   = ["resolved","closed"].includes(t.status) && !t.csat_score;
-      const canReopen = ["resolved","closed"].includes(t.status);
+      const canReply  = !["closed"].includes(tkt.status);
+      const canRate   = ["resolved","closed"].includes(tkt.status) && !tkt.csat_score;
+      const canReopen = ["resolved","closed"].includes(tkt.status);
 
       el.innerHTML = `
         <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:14px;flex-wrap:wrap;gap:8px">
           <div>
-            <div class="tkt-num" style="font-size:14px">${escHtml(t.ticket_number)}</div>
-            <div style="font-size:13px;color:rgba(255,255,255,.55);margin-top:2px">${escHtml(t.subject)}</div>
+            <div class="tkt-num" style="font-size:14px">${escHtml(tkt.ticket_number)}</div>
+            <div style="font-size:13px;color:rgba(255,255,255,.55);margin-top:2px">${escHtml(tkt.subject)}</div>
           </div>
           <div style="display:flex;gap:8px;flex-wrap:wrap">
-            <span class="stat-badge s-${t.status}">${statusAr(t.status)}</span>
-            <span class="pri-badge p-${t.priority}">${priAr(t.priority)}</span>
+            <span class="stat-badge s-${tkt.status}">${statusLabel(tkt.status)}</span>
+            <span class="pri-badge p-${tkt.priority}">${priorityLabel(tkt.priority)}</span>
           </div>
         </div>
-        <div class="msg-thread" id="thread-${t.id}">${msgs}</div>
+        <div class="msg-thread" id="thread-${tkt.id}">${msgs}</div>
         ${canRate ? `
           <div class="csat-block">
-            <div style="font-weight:700;margin-bottom:4px">كيف كانت تجربتك معنا؟</div>
-            <div class="csat-stars" id="stars-${t.id}">
-              ${[1,2,3,4,5].map(i=>`<button class="star-btn" data-score="${i}" onclick="rateTkt('${t.id}',${i})">★</button>`).join("")}
+            <div style="font-weight:700;margin-bottom:4px">${escHtml(t("support.tickets.csat.question"))}</div>
+            <div class="csat-stars" id="stars-${tkt.id}">
+              ${[1,2,3,4,5].map(i=>`<button class="star-btn" data-score="${i}" onclick="rateTkt('${tkt.id}',${i})">★</button>`).join("")}
             </div>
-            <div style="font-size:12px;color:rgba(255,255,255,.5)">قيّمنا لمساعدتنا على التحسين</div>
+            <div style="font-size:12px;color:rgba(255,255,255,.5)">${escHtml(t("support.tickets.csat.hint"))}</div>
           </div>` : ""}
         ${canReply ? `
           <div class="reply-area">
-            <textarea id="reply-${t.id}" class="ntk-textarea" style="min-height:80px" placeholder="اكتب ردك هنا..."></textarea>
+            <textarea id="reply-${tkt.id}" class="ntk-textarea" style="min-height:80px" placeholder="${escHtml(t("support.tickets.reply.placeholder"))}"></textarea>
             <div class="reply-btns">
-              <button class="hs-btn btn-green" onclick="sendReply('${t.id}')"><i class="fas fa-paper-plane"></i> إرسال</button>
+              <button class="hs-btn btn-green" onclick="sendReply('${tkt.id}')"><i class="fas fa-paper-plane"></i> ${escHtml(t("support.tickets.reply.sendBtn"))}</button>
               ${canReopen ? "" : ""}
             </div>
           </div>` : ""}
         ${canReopen ? `
           <div class="reply-btns" style="margin-top:10px">
-            <button class="hs-btn btn-ghost" onclick="reopenTkt('${t.id}')"><i class="fas fa-redo"></i> إعادة فتح التذكرة</button>
+            <button class="hs-btn btn-ghost" onclick="reopenTkt('${tkt.id}')"><i class="fas fa-redo"></i> ${escHtml(t("support.tickets.reopenBtn"))}</button>
           </div>` : ""}`;
     }
 
     async function sendReply(ticketId) {
       const ta  = document.getElementById("reply-" + ticketId);
       const msg = ta?.value.trim();
-      if (!msg) { toast("اكتب ردك أولاً", true); return; }
+      if (!msg) { toast(t("support.toasts.writeReplyFirst"), true); return; }
 
       const btn = ta.nextElementSibling?.querySelector("button");
       if (btn) { btn.disabled = true; btn.innerHTML = '<span class="spin"></span>'; }
@@ -1001,29 +1027,29 @@
           method: "POST",
           body: JSON.stringify({ body: msg })
         });
-        if (!res?.success) throw new Error(res?.error?.message || "فشل");
+        if (!res?.success) throw new Error(res?.error?.message || t("support.toasts.sendFailed"));
         ta.value = "";
         const thread = document.getElementById("thread-" + ticketId);
         if (thread) {
           const bubble = document.createElement("div");
           bubble.className = "msg-bubble msg-user";
-          bubble.innerHTML = `<div class="msg-sender">أنت</div>${escHtml(msg).replace(/\n/g,"<br>")}`;
+          bubble.innerHTML = `<div class="msg-sender">${escHtml(t("support.tickets.senderLabels.you"))}</div>${escHtml(msg).replace(/\n/g,"<br>")}`;
           thread.appendChild(bubble);
           bubble.scrollIntoView({ behavior:"smooth" });
         }
-        toast("تم إرسال ردك بنجاح");
+        toast(t("support.toasts.replySent"));
       } catch (err) {
         toast(err.message, true);
       }
-      if (btn) { btn.disabled = false; btn.innerHTML = '<i class="fas fa-paper-plane"></i> إرسال'; }
+      if (btn) { btn.disabled = false; btn.innerHTML = `<i class="fas fa-paper-plane"></i> ${escHtml(t("support.tickets.reply.sendBtn"))}`; }
     }
     window.sendReply = sendReply;
 
     async function reopenTkt(ticketId) {
       try {
         const res = await apiFetch(`/support/tickets/${ticketId}/reopen`, { method:"POST" });
-        if (!res?.success) throw new Error("فشل");
-        toast("تم إعادة فتح التذكرة");
+        if (!res?.success) throw new Error(t("support.toasts.sendFailed"));
+        toast(t("support.toasts.reopenSuccess"));
         loadMyTickets();
       } catch (err) {
         toast(err.message, true);
@@ -1036,10 +1062,10 @@
         const res = await apiFetch(`/support/tickets/${ticketId}/rate`, {
           method:"POST", body: JSON.stringify({ score })
         });
-        if (!res?.success) throw new Error("فشل");
+        if (!res?.success) throw new Error(t("support.toasts.sendFailed"));
         const stars = document.getElementById("stars-" + ticketId);
-        if (stars) stars.closest(".csat-block").innerHTML = `<div style="color:#55efc4;font-weight:700">✓ شكراً على تقييمك! تقييمك: ${"★".repeat(score)}${"☆".repeat(5-score)}</div>`;
-        toast("شكراً على تقييمك!");
+        if (stars) stars.closest(".csat-block").innerHTML = `<div style="color:#55efc4;font-weight:700">${escHtml(t("support.tickets.csat.thanks"))} ${"★".repeat(score)}${"☆".repeat(5-score)}</div>`;
+        toast(t("support.toasts.rateThanks"));
       } catch (err) {
         toast(err.message, true);
       }
@@ -1065,12 +1091,14 @@
     window.toggleChat = toggleChat;
     window.openChat   = () => { if (!chatOpen) toggleChat(); };
 
+    function chatOpt(key) { return t(`support.chat.optLabels.${key}`); }
+
     function startChat() {
-      addBotMsg("مرحباً! 👋 أنا مساعد حرث الذكي. كيف يمكنني مساعدتك اليوم؟", [
-        "كيف أستأجر معدة؟",
-        "مشكلة في الدفع",
-        "تتبع طلب",
-        "تحدث مع موظف"
+      addBotMsg(t("support.chat.welcomeText"), [
+        chatOpt("rentEquipment"),
+        chatOpt("paymentIssue"),
+        chatOpt("trackOrder"),
+        chatOpt("talkToAgent")
       ]);
     }
 
@@ -1107,34 +1135,34 @@
 
     function showTyping(cb) {
       const msgs = document.getElementById("chat-msgs");
-      const t = document.createElement("div");
-      t.className = "chat-typing";
-      t.innerHTML = "<span></span><span></span><span></span>";
-      t.style.display = "flex";
-      msgs.appendChild(t);
+      const typingEl = document.createElement("div");
+      typingEl.className = "chat-typing";
+      typingEl.innerHTML = "<span></span><span></span><span></span>";
+      typingEl.style.display = "flex";
+      msgs.appendChild(typingEl);
       msgs.scrollTop = msgs.scrollHeight;
-      setTimeout(() => { t.remove(); cb(); }, 900 + Math.random() * 600);
+      setTimeout(() => { typingEl.remove(); cb(); }, 900 + Math.random() * 600);
     }
 
     function handleChatOpt(opt) {
       addUserMsg(opt);
-      if (opt === "تحدث مع موظف") {
+      if (opt === chatOpt("talkToAgent")) {
         showTyping(() => {
-          addBotMsg("سأحيلك لفريق الدعم الآن. يمكنك فتح تذكرة دعم أو التواصل عبر واتساب.", [
-            "فتح تذكرة دعم",
-            "واتساب"
+          addBotMsg(t("support.chat.employeeTransferText"), [
+            chatOpt("openTicket"),
+            chatOpt("whatsapp")
           ]);
         });
         return;
       }
-      if (opt === "فتح تذكرة دعم") {
+      if (opt === chatOpt("openTicket")) {
         showTyping(() => {
-          addBotMsg("سأفتح لك نموذج التذكرة...");
+          addBotMsg(t("support.chat.openTicketFormText"));
           setTimeout(() => { toggleChat(); switchTab("new-ticket"); }, 800);
         });
         return;
       }
-      if (opt === "واتساب") {
+      if (opt === chatOpt("whatsapp")) {
         window.open("https://wa.me/96812345678", "_blank");
         return;
       }
@@ -1153,24 +1181,26 @@
 
     function processBotQuery(q) {
       const ql = q.toLowerCase();
-      const match = BOT_KB.find(kb => kb.kw.some(w => ql.includes(w)));
+      const match = BOT_KB.find(kb => kb.kw.some(w => ql.includes(w.toLowerCase())));
       showTyping(() => {
         if (match) {
-          const art = ARTICLES.find(a => a.id === match.art);
+          const art = getArticles().find(a => a.id === match.art);
           if (art) {
-            addBotMsg(`وجدت مقالاً يتعلق بسؤالك:\n\n📄 ${art.title}`, ["اقرأ المقال", "سؤال آخر", "تحدث مع موظف"]);
+            addBotMsg(t("support.chat.articleFoundTemplate", { title: art.title }), [
+              chatOpt("readArticle"), chatOpt("anotherQuestion"), chatOpt("talkToAgent")
+            ]);
             document._lastArt = art;
             return;
           }
         }
-        if (ql === "اقرأ المقال" && document._lastArt) {
+        if (q === chatOpt("readArticle") && document._lastArt) {
           toggleChat(); switchTab("help"); showArticle(document._lastArt, "chat");
           return;
         }
-        addBotMsg("لم أفهم سؤالك تماماً. يمكنك تجربة البحث في مركز المساعدة أو التحدث مع أحد موظفينا.", [
-          "مركز المساعدة",
-          "فتح تذكرة دعم",
-          "تحدث مع موظف"
+        addBotMsg(t("support.chat.notUnderstoodText"), [
+          chatOpt("helpCenter"),
+          chatOpt("openTicket"),
+          chatOpt("talkToAgent")
         ]);
       });
     }
@@ -1182,7 +1212,7 @@
     }
     function fmtDate(d) {
       if (!d) return "—";
-      return new Date(d).toLocaleDateString("ar-SA",{year:"numeric",month:"short",day:"numeric"});
+      return new Date(d).toLocaleDateString(localeTag() === "ar" ? "ar-SA" : "en-US",{year:"numeric",month:"short",day:"numeric"});
     }
     function toast(msg, err = false) {
       const el = document.getElementById("toast");
@@ -1191,15 +1221,23 @@
       el.classList.add("show");
       setTimeout(() => el.classList.remove("show"), 3000);
     }
-    function statusAr(s) {
-      return ({open:"مفتوحة",in_progress:"قيد المعالجة",resolved:"تم الحل",closed:"مغلقة"})[s] || s;
+    function statusLabel(s) {
+      const label = t(`support.tickets.statusLabels.${s}`);
+      return label.startsWith("support.tickets.statusLabels.") ? s : label;
     }
-    function priAr(p) {
-      return ({low:"منخفضة",medium:"متوسطة",high:"⚡ عالية",urgent:"🚨 عاجلة"})[p] || p;
+    function priorityLabel(p) {
+      const label = t(`support.tickets.priorityLabels.${p}`);
+      return label.startsWith("support.tickets.priorityLabels.") ? p : label;
     }
-    function catAr(c) {
-      const m = ({technical:"تقنية",financial:"مالية",account:"الحساب",orders:"الطلبات",suggestion:"اقتراح",complaint:"شكوى"});
-      return m[c] || c;
+
+    if (window.HarthI18n) {
+      document.addEventListener("harth:langchange", () => {
+        buildHomeFAQs();
+        buildCatGrid();
+        buildNewTicketCats();
+        if (currentTab === "tickets") loadMyTickets();
+        document.querySelectorAll(".tkt-detail.show").forEach(d => d.classList.remove("show"));
+      });
     }
 
   })();

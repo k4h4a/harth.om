@@ -3,7 +3,25 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>تحقّق الهوية | منصة حرث</title>
+    <script>
+      // Apply the saved language/direction before first paint so there's no
+      // flash of Arabic/RTL when the visitor's saved language is English.
+      (function () {
+        try {
+          if (localStorage.getItem("harth_lang") === "en") {
+            document.documentElement.lang = "en";
+            document.documentElement.dir = "ltr";
+          }
+        } catch (e) {}
+        document.documentElement.classList.add("i18n-loading");
+      })();
+    </script>
+    <style>
+      html.i18n-loading body {
+        visibility: hidden;
+      }
+    </style>
+    <title data-i18n="kyc.title">تحقّق الهوية | منصة حرث</title>
     <link rel="stylesheet" href="design-system.css" />
     <link rel="stylesheet" href="style.css" />
     <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;700&display=swap" rel="stylesheet" />
@@ -95,7 +113,7 @@
         font-size: 12px;
         color: #444;
         margin-bottom: 14px;
-        text-align: right;
+        text-align: start;
       }
       .preview-img {
         max-width: 100%;
@@ -161,6 +179,12 @@
         padding: 12px 24px; font-family: inherit; font-size: 14px;
         cursor: pointer;
       }
+      /* These chevrons are direction-specific (point toward "next"/"back" in
+         reading order) — flip them in LTR so they still point the right way. */
+      [dir="ltr"] .nav-btns .fa-chevron-left,
+      [dir="ltr"] .nav-btns .fa-chevron-right {
+        transform: scaleX(-1);
+      }
       .btn-submit {
         width: 100%; background: #2d5016; color: #fff;
         border: none; border-radius: 12px;
@@ -209,7 +233,7 @@
           <ul class="nav-links"></ul>
         </nav>
         <div class="section left" id="auth-header">
-          <a href="register.html" class="hs-btn hs-btn--ghost hs-btn--sm" id="login-link">
+          <a href="register.html" class="hs-btn hs-btn--ghost hs-btn--sm" id="login-link" data-i18n="common.buttons.login">
             تسجيل دخول
           </a>
         </div>
@@ -218,8 +242,8 @@
 
     <div class="kyc-wrap">
       <div class="kyc-card">
-        <h2><i class="fas fa-shield-alt" style="color:#2d5016"></i> تحقّق الهوية</h2>
-        <p class="sub">
+        <h2><i class="fas fa-shield-alt" style="color:#2d5016"></i> <span data-i18n="kyc.heading">تحقّق الهوية</span></h2>
+        <p class="sub" data-i18n-html="kyc.lede">
           نطلب توثيق الهوية لزيادة ثقة المشترين وحماية الجميع من الاحتيال.
           بعد التحقّق ستظهر علامة <strong style="color:#2d5016">✓ موثَّق</strong> على ملفك ومعداتك.
         </p>
@@ -231,19 +255,19 @@
         <div class="steps" id="steps-bar">
           <div class="step active" data-step="1">
             <div class="step-circle">1</div>
-            <span class="step-label">وجه البطاقة</span>
+            <span class="step-label" data-i18n="kyc.steps.front">وجه البطاقة</span>
           </div>
           <div class="step" data-step="2">
             <div class="step-circle">2</div>
-            <span class="step-label">ظهر البطاقة</span>
+            <span class="step-label" data-i18n="kyc.steps.back">ظهر البطاقة</span>
           </div>
           <div class="step" data-step="3">
             <div class="step-circle">3</div>
-            <span class="step-label">صورة شخصية</span>
+            <span class="step-label" data-i18n="kyc.steps.selfie">صورة شخصية</span>
           </div>
           <div class="step" data-step="4">
             <div class="step-circle"><i class="fas fa-paper-plane" style="font-size:13px"></i></div>
-            <span class="step-label">مراجعة وإرسال</span>
+            <span class="step-label" data-i18n="kyc.steps.review">مراجعة وإرسال</span>
           </div>
         </div>
 
@@ -251,26 +275,26 @@
         <div class="panel active" id="panel-1">
           <div class="capture-zone" id="zone-front">
             <div class="icon"><i class="fas fa-id-card"></i></div>
-            <h4>وجه البطاقة الشخصية</h4>
-            <p>صورة واضحة للوجه الأمامي للبطاقة أو السجل التجاري</p>
+            <h4 data-i18n="kyc.panels.front.title">وجه البطاقة الشخصية</h4>
+            <p data-i18n="kyc.panels.front.desc">صورة واضحة للوجه الأمامي للبطاقة أو السجل التجاري</p>
             <div class="tip">
               <i class="fas fa-lightbulb" style="color:#f1c40f;margin-inline-end:4px"></i>
-              تأكد من وضوح الاسم ورقم الهوية — تجنب الوميض والظلال
+              <span data-i18n="kyc.panels.front.tip">تأكد من وضوح الاسم ورقم الهوية — تجنب الوميض والظلال</span>
             </div>
             <!-- capture="environment" forces rear camera on mobile (blocks gallery) -->
             <input type="file" id="input-front" accept="image/jpeg,image/png,image/webp" capture="environment" style="display:none" />
             <button class="capture-btn" id="btn-front">
-              <i class="fas fa-camera"></i> فتح الكاميرا والتقاط صورة
+              <i class="fas fa-camera"></i> <span data-i18n="kyc.panels.front.captureBtn">فتح الكاميرا والتقاط صورة</span>
             </button>
             <div id="preview-front" style="display:none">
-              <img id="img-front" class="preview-img" src="" alt="وجه البطاقة" />
-              <div><button class="retake-btn" id="retake-front"><i class="fas fa-redo"></i> إعادة الالتقاط</button></div>
+              <img id="img-front" class="preview-img" src="" data-i18n-alt="kyc.panels.front.imgAlt" alt="وجه البطاقة" />
+              <div><button class="retake-btn" id="retake-front"><i class="fas fa-redo"></i> <span data-i18n="kyc.retakeBtn">إعادة الالتقاط</span></button></div>
             </div>
             <div class="upload-status" id="status-front"></div>
           </div>
           <div class="nav-btns">
-            <a href="index.html" class="btn-back">العودة</a>
-            <button class="btn-next" id="next-1" disabled>التالي <i class="fas fa-chevron-left"></i></button>
+            <a href="index.html" class="btn-back" data-i18n="kyc.returnBtn">العودة</a>
+            <button class="btn-next" id="next-1" disabled><span data-i18n="common.buttons.next">التالي</span> <i class="fas fa-chevron-left"></i></button>
           </div>
         </div>
 
@@ -278,25 +302,25 @@
         <div class="panel" id="panel-2">
           <div class="capture-zone" id="zone-back">
             <div class="icon"><i class="fas fa-id-card-alt"></i></div>
-            <h4>ظهر البطاقة الشخصية</h4>
-            <p>صورة واضحة للوجه الخلفي للبطاقة</p>
+            <h4 data-i18n="kyc.panels.back.title">ظهر البطاقة الشخصية</h4>
+            <p data-i18n="kyc.panels.back.desc">صورة واضحة للوجه الخلفي للبطاقة</p>
             <div class="tip">
               <i class="fas fa-lightbulb" style="color:#f1c40f;margin-inline-end:4px"></i>
-              تأكد أن جميع الأرقام والبيانات ظاهرة بوضوح
+              <span data-i18n="kyc.panels.back.tip">تأكد أن جميع الأرقام والبيانات ظاهرة بوضوح</span>
             </div>
             <input type="file" id="input-back" accept="image/jpeg,image/png,image/webp" capture="environment" style="display:none" />
             <button class="capture-btn" id="btn-back">
-              <i class="fas fa-camera"></i> فتح الكاميرا والتقاط صورة
+              <i class="fas fa-camera"></i> <span data-i18n="kyc.captureBtnGeneric">فتح الكاميرا والتقاط صورة</span>
             </button>
             <div id="preview-back" style="display:none">
-              <img id="img-back" class="preview-img" src="" alt="ظهر البطاقة" />
-              <div><button class="retake-btn" id="retake-back"><i class="fas fa-redo"></i> إعادة الالتقاط</button></div>
+              <img id="img-back" class="preview-img" src="" data-i18n-alt="kyc.panels.back.imgAlt" alt="ظهر البطاقة" />
+              <div><button class="retake-btn" id="retake-back"><i class="fas fa-redo"></i> <span data-i18n="kyc.retakeBtn">إعادة الالتقاط</span></button></div>
             </div>
             <div class="upload-status" id="status-back"></div>
           </div>
           <div class="nav-btns">
-            <button class="btn-back" id="back-2"><i class="fas fa-chevron-right"></i> السابق</button>
-            <button class="btn-next" id="next-2" disabled>التالي <i class="fas fa-chevron-left"></i></button>
+            <button class="btn-back" id="back-2"><i class="fas fa-chevron-right"></i> <span data-i18n="common.buttons.previous">السابق</span></button>
+            <button class="btn-next" id="next-2" disabled><span data-i18n="common.buttons.next">التالي</span> <i class="fas fa-chevron-left"></i></button>
           </div>
         </div>
 
@@ -304,72 +328,72 @@
         <div class="panel" id="panel-3">
           <div class="capture-zone" id="zone-selfie">
             <div class="icon"><i class="fas fa-user-circle"></i></div>
-            <h4>صورة شخصية مع البطاقة</h4>
-            <p>صورتك وأنت تحمل البطاقة — يجب أن يظهر وجهك ورقم البطاقة بوضوح</p>
+            <h4 data-i18n="kyc.panels.selfie.title">صورة شخصية مع البطاقة</h4>
+            <p data-i18n="kyc.panels.selfie.desc">صورتك وأنت تحمل البطاقة — يجب أن يظهر وجهك ورقم البطاقة بوضوح</p>
             <div class="tip">
               <i class="fas fa-lightbulb" style="color:#f1c40f;margin-inline-end:4px"></i>
-              اجلس في مكان مضاء واحمل البطاقة بجانب وجهك
+              <span data-i18n="kyc.panels.selfie.tip">اجلس في مكان مضاء واحمل البطاقة بجانب وجهك</span>
             </div>
             <!-- capture="user" forces front camera (selfie cam) on mobile -->
             <input type="file" id="input-selfie" accept="image/jpeg,image/png,image/webp" capture="user" style="display:none" />
             <button class="capture-btn" id="btn-selfie">
-              <i class="fas fa-camera-retro"></i> فتح الكاميرا الأمامية
+              <i class="fas fa-camera-retro"></i> <span data-i18n="kyc.panels.selfie.captureBtn">فتح الكاميرا الأمامية</span>
             </button>
             <div id="preview-selfie" style="display:none">
-              <img id="img-selfie" class="preview-img" src="" alt="صورة شخصية" />
-              <div><button class="retake-btn" id="retake-selfie"><i class="fas fa-redo"></i> إعادة الالتقاط</button></div>
+              <img id="img-selfie" class="preview-img" src="" data-i18n-alt="kyc.panels.selfie.imgAlt" alt="صورة شخصية" />
+              <div><button class="retake-btn" id="retake-selfie"><i class="fas fa-redo"></i> <span data-i18n="kyc.retakeBtn">إعادة الالتقاط</span></button></div>
             </div>
             <div class="upload-status" id="status-selfie"></div>
           </div>
           <div class="nav-btns">
-            <button class="btn-back" id="back-3"><i class="fas fa-chevron-right"></i> السابق</button>
-            <button class="btn-next" id="next-3" disabled>التالي <i class="fas fa-chevron-left"></i></button>
+            <button class="btn-back" id="back-3"><i class="fas fa-chevron-right"></i> <span data-i18n="common.buttons.previous">السابق</span></button>
+            <button class="btn-next" id="next-3" disabled><span data-i18n="common.buttons.next">التالي</span> <i class="fas fa-chevron-left"></i></button>
           </div>
         </div>
 
         <!-- Step 4: Review & Submit -->
         <div class="panel" id="panel-4">
-          <h3 style="color:#2d5016;margin-bottom:12px"><i class="fas fa-check-circle"></i> مراجعة وإرسال</h3>
+          <h3 style="color:#2d5016;margin-bottom:12px"><i class="fas fa-check-circle"></i> <span data-i18n="kyc.panels.review.heading">مراجعة وإرسال</span></h3>
 
           <!-- Thumbnails -->
           <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:16px">
             <div style="text-align:center">
               <img id="thumb-front" src="" style="width:100%;aspect-ratio:4/3;object-fit:cover;border-radius:8px;border:2px solid #6ab04c" />
-              <div style="font-size:11px;color:#555;margin-top:4px">وجه البطاقة</div>
+              <div style="font-size:11px;color:#555;margin-top:4px" data-i18n="kyc.steps.front">وجه البطاقة</div>
             </div>
             <div style="text-align:center">
               <img id="thumb-back" src="" style="width:100%;aspect-ratio:4/3;object-fit:cover;border-radius:8px;border:2px solid #6ab04c" />
-              <div style="font-size:11px;color:#555;margin-top:4px">ظهر البطاقة</div>
+              <div style="font-size:11px;color:#555;margin-top:4px" data-i18n="kyc.steps.back">ظهر البطاقة</div>
             </div>
             <div style="text-align:center">
               <img id="thumb-selfie" src="" style="width:100%;aspect-ratio:4/3;object-fit:cover;border-radius:8px;border:2px solid #6ab04c" />
-              <div style="font-size:11px;color:#555;margin-top:4px">صورة شخصية</div>
+              <div style="font-size:11px;color:#555;margin-top:4px" data-i18n="kyc.steps.selfie">صورة شخصية</div>
             </div>
           </div>
 
           <!-- Identity number -->
           <div class="id-input-wrap">
-            <label for="kyc-identity"><i class="fas fa-hashtag"></i> رقم الهوية / السجل التجاري (اختياري)</label>
-            <input type="text" id="kyc-identity" maxlength="64" placeholder="أدخل رقم البطاقة كما هو مكتوب" />
+            <label for="kyc-identity"><i class="fas fa-hashtag"></i> <span data-i18n="kyc.panels.review.identityLabel">رقم الهوية / السجل التجاري (اختياري)</span></label>
+            <input type="text" id="kyc-identity" maxlength="64" data-i18n-placeholder="kyc.panels.review.identityPlaceholder" placeholder="أدخل رقم البطاقة كما هو مكتوب" />
           </div>
 
           <!-- GPS capture at submit time -->
           <div class="gps-bar" id="gps-bar">
             <i class="fas fa-location-dot"></i>
-            <span id="gps-text">جارٍ تحديد موقعك تلقائياً...</span>
+            <span id="gps-text" data-i18n="kyc.panels.review.gpsDetecting">جارٍ تحديد موقعك تلقائياً...</span>
           </div>
 
           <div style="background:#f8f8f8;border-radius:8px;padding:12px;font-size:12px;color:#555;line-height:1.7;margin-bottom:4px">
             <i class="fas fa-info-circle" style="color:#6ab04c;margin-inline-end:4px"></i>
-            سيتم مراجعة وثائقك من قِبل فريق حرث خلال 24–48 ساعة. ستصلك إشعار فور صدور القرار.
+            <span data-i18n="kyc.panels.review.reviewNotice">سيتم مراجعة وثائقك من قِبل فريق حرث خلال 24–48 ساعة. ستصلك إشعار فور صدور القرار.</span>
           </div>
 
           <button class="btn-submit" id="kyc-submit">
-            <i class="fas fa-paper-plane"></i> إرسال للمراجعة
+            <i class="fas fa-paper-plane"></i> <span data-i18n="kyc.panels.review.submitBtn">إرسال للمراجعة</span>
           </button>
 
           <div class="nav-btns" style="justify-content:flex-end;margin-top:10px">
-            <button class="btn-back" id="back-4"><i class="fas fa-chevron-right"></i> السابق</button>
+            <button class="btn-back" id="back-4"><i class="fas fa-chevron-right"></i> <span data-i18n="common.buttons.previous">السابق</span></button>
           </div>
         </div>
 
@@ -378,6 +402,8 @@
 
     <div id="toast"></div>
 
+    <script src="i18n.js"></script>
+    <script src="lang-switcher.js"></script>
     <script src="design-system.js"></script>
     <script src="unified-nav.js"></script>
     <script src="script.js"></script>
@@ -389,6 +415,10 @@
       if (!TOKEN) { window.location.href = "register.html"; return; }
 
       const $ = (s) => document.querySelector(s);
+
+      function t(key, vars) {
+        return window.HarthI18n ? window.HarthI18n.t(key, vars) : key;
+      }
 
       // ── Toast ──
       let toastTimer;
@@ -431,7 +461,7 @@
         const bar  = $("#gps-bar");
         const text = $("#gps-text");
         if (!navigator.geolocation) {
-          text.textContent = "الجهاز لا يدعم تحديد الموقع";
+          text.textContent = t("kyc.panels.review.gpsNoSupport");
           bar.classList.add("err");
           return;
         }
@@ -443,11 +473,11 @@
               accuracy: Math.round(pos.coords.accuracy),
               client_ts: new Date().toISOString(),
             };
-            text.textContent = `✓ تم تحديد الموقع (دقة ±${capturedGps.accuracy}م)`;
+            text.textContent = t("kyc.panels.review.gpsSuccess", { accuracy: capturedGps.accuracy });
             bar.classList.add("ok");
           },
           () => {
-            text.textContent = "تعذّر تحديد الموقع — تأكد من منح الإذن";
+            text.textContent = t("kyc.panels.review.gpsFailed");
             bar.classList.add("err");
           },
           { enableHighAccuracy: true, timeout: 10000, maximumAge: 0 },
@@ -492,7 +522,7 @@
           img.src = localUrl;
           preview.style.display = "block";
           btn.style.display = "none";
-          status.textContent = "جارٍ الرفع...";
+          status.textContent = t("kyc.uploading");
           status.className = "upload-status loading";
           nextBtn.disabled = true;
 
@@ -518,7 +548,7 @@
               return;
             }
             const data = await r.json();
-            if (!r.ok || !data.success) throw new Error(data?.error?.message || "فشل الرفع");
+            if (!r.ok || !data.success) throw new Error(data?.error?.message || t("kyc.uploadFailed"));
 
             urls[sl.urlKey] = data.url;
             img.src = data.url;
@@ -526,7 +556,7 @@
             const thumb = document.getElementById(sl.thumbId);
             if (thumb) thumb.src = data.url;
 
-            status.textContent = "✓ تم الرفع بنجاح";
+            status.textContent = t("kyc.uploadSuccess");
             status.className = "upload-status ok";
             nextBtn.disabled = false;
             document.getElementById(`zone-${sl.inputId.replace("input-", "")}`).classList.add("done");
@@ -552,12 +582,12 @@
       // ── Submit ──
       document.getElementById("kyc-submit").addEventListener("click", async () => {
         if (!urls.id_front_url || !urls.id_back_url || !urls.selfie_url) {
-          showToast("خطأ — بعض الصور غير مرفوعة", true);
+          showToast(t("kyc.toasts.missingImages"), true);
           return;
         }
         const btn = document.getElementById("kyc-submit");
         btn.disabled = true;
-        btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> جارٍ الإرسال...';
+        btn.innerHTML = `<i class="fas fa-spinner fa-spin"></i> ${t("kyc.panels.review.submitBtnLoading")}`;
 
         try {
           const body = {
@@ -572,25 +602,25 @@
             method: "POST",
             body: JSON.stringify(body),
           });
-          if (!res || !res.success) throw new Error(res?.error?.message || "فشل الإرسال");
+          if (!res || !res.success) throw new Error(res?.error?.message || t("kyc.toasts.submitFailed"));
 
-          showToast("✓ تم الإرسال — سيتم مراجعة وثائقك قريباً");
+          showToast(t("kyc.toasts.submitSuccess"));
           document.getElementById("steps-bar").style.display = "none";
           document.querySelectorAll(".panel").forEach((p) => (p.style.display = "none"));
           document.getElementById("status-banner").innerHTML = `
             <div class="banner banner-pending">
               <i class="fas fa-clock"></i>
-              <div>طلبك قيد المراجعة. سنُخطرك فور صدور القرار — لا حاجة لإعادة الإرسال.</div>
+              <div>${t("kyc.banners.pendingSubmitted")}</div>
             </div>`;
         } catch (err) {
           showToast(err.message, true);
           btn.disabled = false;
-          btn.innerHTML = '<i class="fas fa-paper-plane"></i> إرسال للمراجعة';
+          btn.innerHTML = `<i class="fas fa-paper-plane"></i> ${t("kyc.panels.review.submitBtn")}`;
         }
       });
 
       // ── Boot: load current KYC state ──
-      (async function init() {
+      async function init() {
         try {
           const res = await apiFetch("/kyc/me");
           if (!res || !res.success) return;
@@ -600,7 +630,7 @@
             document.getElementById("status-banner").innerHTML = `
               <div class="banner banner-pending">
                 <i class="fas fa-clock"></i>
-                <div>طلبك قيد المراجعة من قِبل الإدارة. سنُخطرك فور صدور القرار.</div>
+                <div>${t("kyc.banners.pendingExisting")}</div>
               </div>`;
             document.getElementById("steps-bar").style.display = "none";
             document.querySelectorAll(".panel").forEach((p) => (p.style.display = "none"));
@@ -610,7 +640,7 @@
             document.getElementById("status-banner").innerHTML = `
               <div class="banner banner-approved">
                 <i class="fas fa-check-circle"></i>
-                <div>هويتك موثَّقة ✓ — علامة <strong>موثَّق</strong> ظاهرة على ملفك ومعداتك.</div>
+                <div>${t("kyc.banners.approvedHtml")}</div>
               </div>`;
             document.getElementById("steps-bar").style.display = "none";
             document.querySelectorAll(".panel").forEach((p) => (p.style.display = "none"));
@@ -618,19 +648,26 @@
           }
           if (kyc.identity_status === "rejected") {
             const reason = kyc.identity_rejection_reason
-              ? `<div style="margin-top:4px"><strong>السبب:</strong> ${escapeHtml(kyc.identity_rejection_reason)}</div>`
+              ? `<div style="margin-top:4px"><strong>${t("kyc.banners.rejectedReasonLabel")}</strong> ${escapeHtml(kyc.identity_rejection_reason)}</div>`
               : "";
             document.getElementById("status-banner").innerHTML = `
               <div class="banner banner-rejected">
                 <i class="fas fa-times-circle"></i>
-                <div>لم تتم الموافقة على الوثائق المُقدَّمة. يمكنك إعادة الإرسال.${reason}</div>
+                <div>${t("kyc.banners.rejectedText")}${reason}</div>
               </div>`;
           }
           if (kyc.identity) {
             document.getElementById("kyc-identity").value = kyc.identity;
           }
         } catch (_e) { /* non-fatal */ }
-      })();
+      }
+
+      if (window.HarthI18n) {
+        window.HarthI18n.ready().then(init);
+        document.addEventListener("harth:langchange", init);
+      } else {
+        init();
+      }
     })();
     </script>
     <script src="responsive.js" defer></script>
