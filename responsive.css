@@ -1947,5 +1947,173 @@ a {
 }
 
 /* ============================================================
+ * 20. PAGE-SPECIFIC BUTTON OVERRIDES
+ * ============================================================
+ * Applies responsive sizing to buttons that use page-local class
+ * names (not .hs-btn).  This file is loaded LAST so these rules
+ * naturally win the cascade; !important is added only where an
+ * inline <style> block uses it or specificity could tie.
+ *
+ * All sizes use clamp() + logical properties (padding-inline /
+ * padding-block) so RTL/LTR adapts automatically.
+ * ============================================================ */
+
+/* ---- owner-dashboard: equipment card action buttons (.eq-btn) ---- */
+.eq-btn {
+  /* Touch target */
+  min-height:      clamp(34px, 4.5vw, 40px) !important;
+  /* Fluid font */
+  font-size:       clamp(11px, 1.3vw, 13px) !important;
+  /* Fluid padding */
+  padding-block:   clamp(6px, 0.9vw, 9px) !important;
+  padding-inline:  clamp(6px, 1.2vw, 10px) !important;
+  /* Layout */
+  display:         inline-flex !important;
+  align-items:     center !important;
+  justify-content: center !important;
+  gap:             clamp(3px, 0.5vw, 5px) !important;
+  box-sizing:      border-box !important;
+  white-space:     nowrap;
+  overflow:        hidden;
+  text-overflow:   ellipsis;
+}
+
+/* Icon-only delete / PDF buttons — keep square, just scale the size */
+.eq-btn--del,
+.eq-btn--pdf {
+  flex:           0 0 auto !important;
+  width:          clamp(34px, 4.5vw, 40px) !important;
+  padding-inline: 0 !important;
+}
+
+/* ---- owner-dashboard: form save / cancel buttons (.btn-save, .btn-cancel) ---- */
+.btn-save,
+.btn-cancel {
+  min-height:      clamp(40px, 5vw, 46px) !important;
+  font-size:       clamp(0.82rem, 0.78rem + 0.6vw, 1rem) !important;
+  padding-block:   clamp(9px, 1.2vw, 13px) !important;
+  padding-inline:  clamp(14px, 2.5vw, 22px) !important;
+  display:         inline-flex !important;
+  align-items:     center !important;
+  justify-content: center !important;
+  box-sizing:      border-box !important;
+  white-space:     nowrap;
+  font-family:     inherit;
+  border-radius:   var(--r-md, 12px);
+}
+
+/* ---- admin-dashboard: small action buttons (.btn-sm + color variants) ---- */
+.btn-sm {
+  min-height:      clamp(28px, 3.5vw, 34px) !important;
+  font-size:       clamp(11px, 1.3vw, 13px) !important;
+  padding-block:   clamp(4px, 0.6vw, 7px) !important;
+  padding-inline:  clamp(8px, 1.5vw, 12px) !important;
+  display:         inline-flex !important;
+  align-items:     center !important;
+  justify-content: center !important;
+  box-sizing:      border-box !important;
+  white-space:     nowrap;
+  font-family:     inherit;
+  cursor:          pointer;
+}
+
+/* Color variants inherit all sizing from .btn-sm above */
+.btn-green,
+.btn-yellow,
+.btn-red,
+.btn-blue {
+  /* only add font-family guard — colors stay from page style */
+  font-family: inherit;
+}
+
+/* ---- admin-dashboard: sub-tab pill buttons (.tab-sub) ---- */
+.tab-sub {
+  min-height:      clamp(30px, 4vw, 36px) !important;
+  font-size:       clamp(12px, 1.4vw, 14px) !important;
+  padding-block:   clamp(5px, 0.7vw, 8px) !important;
+  padding-inline:  clamp(10px, 1.8vw, 16px) !important;
+  display:         inline-flex !important;
+  align-items:     center !important;
+  justify-content: center !important;
+  box-sizing:      border-box !important;
+  white-space:     nowrap;
+  cursor:          pointer;
+}
+
+/* ---- my-orders / filter bars: clear button (.btn-clear) ---- */
+.btn-clear,
+.filter-bar .btn-clear {
+  min-height:      clamp(36px, 4.8vw, 44px) !important;
+  font-size:       clamp(0.78rem, 1.5vw, 0.875rem) !important;
+  padding-block:   clamp(7px, 1vw, 10px) !important;
+  padding-inline:  clamp(12px, 2vw, 18px) !important;
+  display:         inline-flex !important;
+  align-items:     center !important;
+  justify-content: center !important;
+  box-sizing:      border-box !important;
+  white-space:     nowrap;
+  cursor:          pointer;
+}
+
+/* ---- Generic .btn (post-story, profile, etc.) ---- */
+/* Targets pages that use .btn as their base button class
+   without inheriting from .hs-btn. */
+.btn:not(.hs-btn):not(.tab):not(.tab-btn):not(.pf-tab-btn) {
+  min-height:      clamp(40px, 5vw, 46px) !important;
+  font-size:       clamp(0.82rem, 1.8vw, 1rem) !important;
+  padding-block:   clamp(8px, 1.2vw, 12px) !important;
+  padding-inline:  clamp(0.9rem, 2vw, 1.4rem) !important;
+  display:         inline-flex !important;
+  align-items:     center !important;
+  justify-content: center !important;
+  gap:             clamp(4px, 0.6vw, 8px) !important;
+  box-sizing:      border-box !important;
+  white-space:     nowrap;
+  overflow:        hidden;
+  text-overflow:   ellipsis;
+  cursor:          pointer;
+}
+
+/* .btn-sm variant (profile, admin) — compact but still touch-friendly */
+.btn-sm:not(.hs-btn--sm) {
+  min-height:      clamp(30px, 4vw, 36px) !important;
+  font-size:       clamp(0.72rem, 1.4vw, 0.875rem) !important;
+  padding-block:   clamp(5px, 0.8vw, 8px) !important;
+  padding-inline:  clamp(10px, 1.8vw, 16px) !important;
+}
+
+/* ---- Generic: any <button> / <a> with class login-submit ---- */
+#login-submit,
+.login-gate button,
+button[type="submit"]:not(.hs-btn):not(.eq-btn):not(.btn-save):not(.tab):not(.tab-btn):not(.pf-tab-btn) {
+  min-height:      clamp(40px, 5vw, 48px);
+  font-size:       clamp(0.82rem, 1.8vw, 1rem);
+  padding-block:   clamp(8px, 1.2vw, 12px);
+  padding-inline:  clamp(1rem, 2vw, 1.5rem);
+  display:         inline-flex;
+  align-items:     center;
+  justify-content: center;
+  box-sizing:      border-box;
+  white-space:     nowrap;
+  font-family:     inherit;
+  cursor:          pointer;
+}
+
+/* ---- Mobile-specific: stack eq-actions on narrow screens ---- */
+@media (max-width: 400px) {
+  .eq-actions {
+    flex-wrap: wrap !important;
+  }
+  .eq-btn {
+    flex: 1 1 calc(50% - 4px) !important;
+  }
+  .eq-btn--del,
+  .eq-btn--pdf {
+    flex: 0 0 auto !important;
+    width: 36px !important;
+  }
+}
+
+/* ============================================================
  * END OF RESPONSIVE LAYER
  * ============================================================ */
