@@ -399,8 +399,10 @@ body.menu-open {
   }
   .header-capsule .section.left .login-nav-button,
   .header-capsule .section.left .hs-btn {
-    padding: 5px 9px !important;
-    font-size: 11px !important;
+    padding-block:   4px !important;
+    padding-inline:  8px !important;
+    font-size:       clamp(10px, 2.8vw, 12px) !important;
+    min-height:      32px !important;
   }
 }
 
@@ -452,33 +454,61 @@ body.menu-open {
 
   .header-capsule .section.center .nav-links {
     flex-direction: row !important;
-    gap: 12px !important;
-    width: auto;
-    align-items: center;
+    gap:            clamp(4px, 0.8vw, 12px) !important;
+    width:          100%;           /* fill the center section */
+    align-items:    stretch;        /* items stretch to full capsule height */
   }
 
   .header-capsule .section.center .nav-links li {
-    width: auto;
-    display: flex;
+    flex:      1 1 0;               /* equal share, ignores content size */
+    min-width: 0;                   /* allow shrinking below content width */
+    display:   flex;
   }
 
+  /* ---- Shared styles: all controls inside the header capsule ---- */
   .header-capsule .section.center .nav-links li a,
   .header-capsule .section.center .nav-links li .nav-item,
   .header-capsule .section.left .login-nav-button,
   .header-capsule .section.left .hs-btn,
   .header-capsule .lang-switcher-trigger {
-    box-sizing: border-box;
-    height: var(--nav-btn-h) !important;
-    min-width: 110px;
-    display: flex !important;
-    align-items: center;
+    box-sizing:      border-box;
+    height:          var(--nav-btn-h) !important;
+    min-height:      var(--nav-btn-h) !important;
+    /* Fluid horizontal padding — logical so RTL flips automatically */
+    padding-block:   0 !important;
+    padding-inline:  clamp(0.55rem, 1.4vw, 1.25rem) !important;
+    /* Fluid font size */
+    font-size:       clamp(0.82rem, 0.7rem + 0.9vw, 1rem) !important;
+    font-weight:     600 !important;
+    display:         flex !important;
+    align-items:     center;
     justify-content: center;
-    gap: 8px;
-    padding: 0 20px !important;
-    font-size: 16px !important;
-    font-weight: 600 !important;
-    border-radius: var(--nav-btn-radius) !important;
-    white-space: nowrap;
+    gap:             clamp(4px, 0.6vw, 8px);
+    border-radius:   var(--nav-btn-radius) !important;
+    /* Text overflow — prevent labels from breaking the capsule */
+    white-space:     nowrap;
+    overflow:        hidden;
+    text-overflow:   ellipsis;
+  }
+
+  /* Nav items: fill their flex-parent (li) equally */
+  .header-capsule .section.center .nav-links li a,
+  .header-capsule .section.center .nav-links li .nav-item {
+    width:     100%;
+    min-width: 0;
+  }
+
+  /* Left-section buttons: auto-sized (not stretched by the nav flex) */
+  .header-capsule .section.left .hs-btn,
+  .header-capsule .section.left .login-nav-button {
+    flex:      0 0 auto;
+    min-width: clamp(60px, 7vw, 110px) !important;
+  }
+
+  /* Language switcher: slightly narrower minimum */
+  .header-capsule .lang-switcher-trigger {
+    flex:      0 0 auto;
+    min-width: clamp(50px, 6vw, 90px) !important;
   }
 
   .header-capsule .section.center .nav-links li a,
@@ -578,9 +608,13 @@ body.menu-open .hs-header > nav {
 
 .hs-header > a:last-child,
 .hs-header .login-nav-button {
-  font-size: clamp(0.75rem, 2.2vw, 0.9rem);
-  padding: 7px 14px !important;
-  white-space: nowrap;
+  font-size:       clamp(0.75rem, 2.2vw, 0.9rem);
+  padding-block:   clamp(6px, 1vw, 9px) !important;
+  padding-inline:  clamp(10px, 2vw, 16px) !important;
+  min-height:      36px;
+  display:         inline-flex;
+  align-items:     center;
+  white-space:     nowrap;
 }
 
 @media (min-width: 768px) {
@@ -623,9 +657,13 @@ body.menu-open .hs-header > nav {
 }
 
 .header .back-btn {
-  font-size: clamp(0.8rem, 2.4vw, 0.95rem);
-  padding: 7px 14px !important;
-  white-space: nowrap;
+  font-size:       clamp(0.8rem, 2.4vw, 0.95rem);
+  padding-block:   clamp(6px, 1vw, 9px) !important;
+  padding-inline:  clamp(12px, 2.5vw, 20px) !important;
+  min-height:      38px;
+  display:         inline-flex;
+  align-items:     center;
+  white-space:     nowrap;
 }
 
 /* `.topbar` (delivery.html, admin-dashboard.html) */
@@ -658,9 +696,13 @@ body.menu-open .hs-header > nav {
 }
 
 .topbar .btn-logout {
-  font-size: clamp(0.75rem, 2vw, 0.9rem);
-  padding: 7px 14px !important;
-  white-space: nowrap;
+  font-size:       clamp(0.75rem, 2vw, 0.9rem);
+  padding-block:   clamp(6px, 1vw, 9px) !important;
+  padding-inline:  clamp(10px, 2vw, 16px) !important;
+  min-height:      36px;
+  display:         inline-flex;
+  align-items:     center;
+  white-space:     nowrap;
 }
 
 @media (min-width: 768px) {
@@ -714,20 +756,37 @@ body.menu-open .hs-header > nav {
 }
 
 .tabs .tab {
-  flex: 0 0 auto !important;
-  white-space: nowrap;
-  padding: 10px 14px !important;
-  font-size: clamp(0.8rem, 2.2vw, 0.95rem);
+  /* Mobile: content-sized, bar scrolls horizontally */
+  flex:            0 0 auto !important;
+  box-sizing:      border-box;
+  display:         flex !important;
+  align-items:     center;
+  justify-content: center;
+  gap:             clamp(4px, 0.8vw, 6px);
+  /* Fluid padding */
+  padding-block:   clamp(8px, 1.3vw, 12px) !important;
+  padding-inline:  clamp(10px, 2.5vw, 18px) !important;
+  /* Touch-target floor */
+  min-height:      clamp(40px, 5.5vw, 46px);
+  /* Fluid font */
+  font-size:       clamp(0.78rem, 1.9vw, 0.95rem);
+  /* Text never spills */
+  white-space:     nowrap;
+  overflow:        hidden;
+  text-overflow:   ellipsis;
 }
 
 @media (min-width: 768px) {
   .tabs {
     overflow-x: visible;
-    flex-wrap: wrap !important;
+    flex-wrap: nowrap !important;  /* single row; let flex distribute */
   }
   .tabs .tab {
-    flex: 1 1 auto !important;
-    padding: 12px 18px !important;
+    /* Tablet+: equal-width columns (1 1 0 ignores content size) */
+    flex:           1 1 0 !important;
+    min-width:      0 !important;  /* allow items to shrink below content */
+    padding-block:  clamp(10px, 1.4vw, 14px) !important;
+    padding-inline: clamp(12px, 2vw, 20px) !important;
   }
 }
 
@@ -1530,32 +1589,71 @@ main {
   flex-shrink: 0;
 }
 
-/* ------------------------------------------------------------
- * 13. BUTTONS — consistent sizing
- * ------------------------------------------------------------ */
+/* ============================================================
+ * 13. BUTTONS — comprehensive responsive system
+ * ============================================================
+ * All sizing uses clamp() — buttons scale fluidly from 320px
+ * to 1920px+.  Logical properties (padding-inline / padding-block)
+ * flip automatically in RTL so no direction-specific overrides
+ * are needed.
+ * ============================================================ */
+
+/* ---- Shared icon rules (always useful inside any button) ---- */
+.hs-btn > i,
+.hs-btn > svg,
+.hs-btn > [class*="fa-"] {
+  flex-shrink: 0;
+  font-size:   1em;
+  line-height: 1;
+}
+
+/* ---- Base .hs-btn ---- */
 .hs-btn {
-  font-size: clamp(0.85rem, 2.4vw, 1rem) !important;
-  padding: 10px 18px !important;
-  white-space: nowrap;
+  /* Layout */
+  display:         inline-flex !important;
+  align-items:     center !important;
+  justify-content: center !important;
+  gap:             clamp(4px, 0.6vw, 8px) !important;
+  box-sizing:      border-box !important;
+
+  /* Fluid vertical + horizontal padding */
+  padding-block:   clamp(8px, 1.2vw, 12px) !important;
+  padding-inline:  clamp(0.85rem, 2vw, 1.4rem) !important;
+
+  /* Touch target floor — WCAG 2.5.5 recommends 44 × 44 px */
+  min-height: 44px !important;
+
+  /* Fluid font */
+  font-size:   clamp(0.8rem, 0.75rem + 0.5vw, 1rem) !important;
+  font-weight: 700 !important;
+  line-height: 1 !important;
+
+  /* Text overflow handling — never let text break the button */
+  white-space:   nowrap;
+  overflow:      hidden;
+  text-overflow: ellipsis;
+  max-width:     100%;
+}
+
+/* ---- Size variants ---- */
+.hs-btn--sm {
+  padding-block:   clamp(5px, 0.8vw, 8px) !important;
+  padding-inline:  clamp(0.6rem, 1.5vw, 1rem) !important;
+  min-height:      36px !important;
+  font-size:       clamp(0.72rem, 0.68rem + 0.4vw, 0.875rem) !important;
 }
 
 .hs-btn--lg {
-  font-size: clamp(0.95rem, 2.6vw, 1.1rem) !important;
-  padding: 12px 24px !important;
+  padding-block:   clamp(10px, 1.5vw, 14px) !important;
+  padding-inline:  clamp(1rem, 2.5vw, 1.75rem) !important;
+  min-height:      52px !important;
+  font-size:       clamp(0.88rem, 0.82rem + 0.6vw, 1.1rem) !important;
 }
 
-.hs-btn--sm {
-  font-size: clamp(0.75rem, 2vw, 0.85rem) !important;
-  padding: 7px 14px !important;
-}
-
-@media (min-width: 768px) {
-  .hs-btn {
-    padding: 11px 22px !important;
-  }
-  .hs-btn--lg {
-    padding: 14px 28px !important;
-  }
+/* ---- Block variant — full width ---- */
+.hs-btn--block {
+  width: 100% !important;
+  flex:  none !important;
 }
 
 /* ------------------------------------------------------------
@@ -1669,6 +1767,185 @@ a {
   }
 }
 
-/* ------------------------------------------------------------
+/* ============================================================
+ * 19. BUTTON BARS — equal-distribution utility + page-specific bars
+ * ============================================================
+ *
+ * Use `.btn-bar` as a flex wrapper around any group of sibling
+ * buttons that should share the available width equally.
+ * All sizing is fluid; logical properties handle RTL/LTR.
+ * ============================================================ */
+
+/* ---- Generic button bar ---- */
+.btn-bar {
+  display:     flex !important;
+  flex-wrap:   wrap;
+  gap:         clamp(6px, 1.5vw, 12px);
+  align-items: stretch;
+  width:       100%;
+}
+
+/* Each child button grows equally */
+.btn-bar > .hs-btn,
+.btn-bar > button,
+.btn-bar > a[class*="btn"],
+.btn-bar > input[type="submit"],
+.btn-bar > input[type="button"] {
+  flex:            1 1 0 !important;
+  min-width:       clamp(80px, 20vw, 160px) !important;
+  max-width:       none !important;
+  width:           auto !important;
+  justify-content: center !important;
+  box-sizing:      border-box !important;
+}
+
+/* Collapse to a column on very narrow screens */
+@media (max-width: 360px) {
+  .btn-bar {
+    flex-direction: column !important;
+  }
+  .btn-bar > .hs-btn,
+  .btn-bar > button,
+  .btn-bar > a[class*="btn"],
+  .btn-bar > input[type="submit"],
+  .btn-bar > input[type="button"] {
+    flex:      none !important;
+    width:     100% !important;
+    max-width: 100% !important;
+  }
+}
+
+/* ---- Profile page tab buttons (.pf-tab-btn) ---- */
+.pf-tab-btn {
+  display:         flex !important;
+  align-items:     center !important;
+  justify-content: center !important;
+  gap:             clamp(4px, 0.8vw, 8px) !important;
+  box-sizing:      border-box !important;
+  flex:            1 1 0;
+  min-width:       0;
+  min-height:      clamp(40px, 5.5vw, 48px);
+  padding-block:   clamp(8px, 1.2vw, 12px) !important;
+  padding-inline:  clamp(0.6rem, 1.5vw, 1.1rem) !important;
+  font-size:       clamp(0.75rem, 1.6vw, 0.9rem) !important;
+  font-weight:     600 !important;
+  line-height:     1 !important;
+  white-space:     nowrap;
+  overflow:        hidden;
+  text-overflow:   ellipsis;
+  cursor:          pointer;
+}
+
+/* Profile tab container */
+.pf-tabs {
+  display:     flex !important;
+  flex-wrap:   wrap;
+  gap:         clamp(4px, 0.8vw, 8px);
+  align-items: stretch;
+  width:       100%;
+  overflow-x:  auto;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: thin;
+}
+
+@media (min-width: 600px) {
+  .pf-tabs {
+    overflow-x: visible;
+    flex-wrap:  nowrap;
+  }
+}
+
+/* ---- Support page tab buttons (.tab-btn) ---- */
+.tab-btn {
+  box-sizing:      border-box !important;
+  flex:            1 1 0 !important;
+  min-width:       0 !important;
+  min-height:      clamp(40px, 5.5vw, 48px) !important;
+  display:         flex !important;
+  align-items:     center !important;
+  justify-content: center !important;
+  gap:             clamp(4px, 0.8vw, 6px) !important;
+  padding-block:   clamp(8px, 1.2vw, 12px) !important;
+  padding-inline:  clamp(0.6rem, 1.5vw, 1rem) !important;
+  font-size:       clamp(0.76rem, 1.6vw, 0.9rem) !important;
+  font-weight:     600 !important;
+  line-height:     1 !important;
+  white-space:     nowrap;
+  overflow:        hidden;
+  text-overflow:   ellipsis;
+}
+
+/* ---- Form action rows (submit + cancel side by side) ---- */
+.form-actions,
+.action-row,
+.button-group {
+  display:     flex !important;
+  flex-wrap:   wrap;
+  gap:         clamp(8px, 1.5vw, 16px);
+  align-items: center;
+  width:       100%;
+}
+
+.form-actions > button,
+.form-actions > .hs-btn,
+.form-actions > input[type="submit"],
+.form-actions > input[type="button"],
+.action-row > button,
+.action-row > .hs-btn,
+.button-group > button,
+.button-group > .hs-btn {
+  flex:            1 1 auto;
+  min-width:       clamp(100px, 25vw, 180px);
+  justify-content: center !important;
+  text-align:      center;
+}
+
+@media (max-width: 480px) {
+  .form-actions,
+  .action-row,
+  .button-group {
+    flex-direction: column !important;
+  }
+  .form-actions > button,
+  .form-actions > .hs-btn,
+  .form-actions > input[type="submit"],
+  .form-actions > input[type="button"],
+  .action-row > button,
+  .action-row > .hs-btn,
+  .button-group > button,
+  .button-group > .hs-btn {
+    flex:  none !important;
+    width: 100% !important;
+  }
+}
+
+/* ---- Admin-dashboard tab bar: scrollable when many tabs ---- */
+@media (max-width: 1023px) {
+  /* Keep admin's many tabs scrollable on smaller screens */
+  .tabs {
+    overflow-x: auto !important;
+    flex-wrap:  nowrap !important;
+  }
+  .tabs .tab {
+    flex: 0 0 auto !important;
+  }
+}
+
+/* ---- RTL/LTR alignment guard ---- */
+/* Flex direction is always row in LTR and row-reverse-equivalent
+   in RTL thanks to the browser's built-in logical property support.
+   Nothing extra needed — but ensure icon margin uses inline-end: */
+.hs-btn > i + span,
+.hs-btn > [class*="fa-"] + span,
+.tab-btn > i + span,
+.tab-btn > [class*="fa-"] + span,
+.tabs .tab > i + span,
+.tabs .tab > [class*="fa-"] + span {
+  /* The gap property on the parent already spaces the icon;
+     avoid adding margin that would double-space in one direction. */
+  margin-inline-start: 0 !important;
+}
+
+/* ============================================================
  * END OF RESPONSIVE LAYER
- * ------------------------------------------------------------ */
+ * ============================================================ */
