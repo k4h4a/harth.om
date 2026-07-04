@@ -4,8 +4,6 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <script>
-      // Apply the saved language/direction before first paint so there's no
-      // flash of Arabic/RTL when the visitor's saved language is English.
       (function () {
         try {
           if (localStorage.getItem("harth_lang") === "en") {
@@ -17,9 +15,7 @@
       })();
     </script>
     <style>
-      html.i18n-loading body {
-        visibility: hidden;
-      }
+      html.i18n-loading body { visibility: hidden; }
     </style>
     <title data-i18n="checkout.title">سلة المبيعات - حرث</title>
 
@@ -69,7 +65,6 @@
         text-decoration: none;
         font-weight: 600;
       }
-      /* This arrow points toward "back" in reading order — flip it in LTR. */
       [dir="ltr"] .back-btn .fa-arrow-right {
         transform: scaleX(-1);
       }
@@ -84,9 +79,7 @@
         margin-bottom: 20px;
         text-shadow: 2px 2px 10px rgba(0, 0, 0, 0.4);
       }
-      .cart-title span {
-        color: #6ab04c;
-      }
+      .cart-title span { color: #6ab04c; }
 
       .cart-card {
         background: rgba(255, 255, 255, 0.1);
@@ -101,11 +94,8 @@
         width: 100%;
         border-collapse: collapse;
       }
-      .cart-table thead {
-        background: rgba(106, 176, 76, 0.4);
-      }
-      .cart-table th,
-      .cart-table td {
+      .cart-table thead { background: rgba(106, 176, 76, 0.4); }
+      .cart-table th, .cart-table td {
         padding: 12px;
         text-align: start;
       }
@@ -190,6 +180,9 @@
         .rental-checkout-form > div[style*="grid-template-columns"] {
           grid-template-columns: 1fr !important;
         }
+        .payment-radio {
+          grid-template-columns: repeat(auto-fit, minmax(100px, 1fr)) !important;
+        }
       }
 
       .totals-row {
@@ -206,6 +199,10 @@
         padding-top: 14px;
         margin-top: 10px;
         border-bottom: none;
+      }
+      .totals-row.delivery-row {
+        color: #6ab04c;
+        font-weight: 600;
       }
 
       .form-group {
@@ -226,20 +223,14 @@
         font-family: inherit;
         font-size: 15px;
       }
-      .form-control::placeholder {
-        color: rgba(255, 255, 255, 0.5);
-      }
-      .form-control:focus {
-        outline: 2px solid #6ab04c;
-      }
+      .form-control::placeholder { color: rgba(255, 255, 255, 0.5); }
+      .form-control:focus { outline: 2px solid #6ab04c; }
 
       .promo-row {
         display: flex;
         gap: 8px;
       }
-      .promo-row .form-control {
-        flex: 1;
-      }
+      .promo-row .form-control { flex: 1; }
       .btn-promo {
         background: #f1c40f;
         color: #1a1a1a;
@@ -265,17 +256,18 @@
       }
       .btn-primary:disabled { opacity: 0.5; cursor: not-allowed; }
 
+      /* ===== PAYMENT METHODS ===== */
       .payment-radio {
-        display: flex;
-        gap: 10px;
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(110px, 1fr));
+        gap: 8px;
         margin-top: 8px;
       }
       .payment-radio label {
-        flex: 1;
         background: rgba(255, 255, 255, 0.08);
         border: 2px solid rgba(255, 255, 255, 0.15);
         border-radius: 8px;
-        padding: 10px;
+        padding: 10px 6px;
         cursor: pointer;
         text-align: center;
         transition: all 0.2s;
@@ -284,7 +276,41 @@
         border-color: #6ab04c;
         background: rgba(106, 176, 76, 0.2);
       }
+      .payment-radio label i {
+        font-size: 20px;
+        display: block;
+        margin-bottom: 4px;
+      }
+      .payment-radio label div {
+        font-size: 13px;
+      }
       .payment-radio input { display: none; }
+
+      /* Delivery fee box */
+      .delivery-fee-box {
+        margin-top: 12px;
+        padding: 10px 14px;
+        background: rgba(106, 176, 76, 0.1);
+        border-radius: 8px;
+        border: 1px solid rgba(106, 176, 76, 0.3);
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+      }
+      .delivery-fee-box .label {
+        font-weight: 600;
+      }
+      .delivery-fee-box .value {
+        font-weight: 700;
+        color: #6ab04c;
+        font-size: 16px;
+      }
+      .delivery-fee-box small {
+        color: rgba(255, 255, 255, 0.5);
+        font-size: 11px;
+        display: block;
+        margin-top: 2px;
+      }
 
       #toast {
         position: fixed;
@@ -312,7 +338,6 @@
       .promo-feedback.ok { color: #6ab04c; }
       .promo-feedback.bad { color: #ffb3b3; }
 
-      /* ─── Rental Cart Section ─── */
       .rental-section {
         background: rgba(255, 255, 255, 0.08);
         border: 1px solid rgba(241, 196, 15, 0.35);
@@ -429,7 +454,6 @@
       @keyframes spin { to { transform: rotate(360deg); } }
     </style>
   
-    <!-- HARTH-RESPONSIVE-CSS -->
     <link rel="stylesheet" href="responsive.css" />
   </head>
   <body>
@@ -531,6 +555,11 @@
                 <span data-i18n="checkout.totals.loyaltyLabel">نقاط الولاء</span>
                 <span id="tot-loyalty" style="color: #f1c40f">-0 نقطة</span>
               </div>
+              <!-- Delivery fee row (added dynamically) -->
+              <div class="totals-row delivery-row" id="tot-delivery-row">
+                <span><i class="fas fa-truck"></i> <span data-i18n="checkout.deliveryForm.deliveryFeeLabel">عمولة التوصيل</span></span>
+                <span id="tot-delivery">2.00 ر.ع</span>
+              </div>
               <div class="totals-row grand">
                 <span data-i18n="checkout.totals.grand">الإجمالي</span>
                 <span id="tot-grand">0.00 ر.ع</span>
@@ -567,17 +596,49 @@
 
               <div class="form-group">
                 <label data-i18n="checkout.deliveryForm.paymentMethodLabel">طريقة الدفع</label>
+                <!-- ===== START: PAYMENT METHODS (MULTIPLE) ===== -->
                 <div class="payment-radio">
                   <label data-method="card" class="selected">
                     <input type="radio" name="pm" value="card" checked />
-                    <i class="fas fa-credit-card"></i>
-                    <div data-i18n="checkout.deliveryForm.paymentCard">بطاقة</div>
+                    <i class="fas fa-credit-card" style="color:#6ab04c;"></i>
+                    <div data-i18n="checkout.deliveryForm.paymentCard">بطاقة ائتمان</div>
+                  </label>
+                  <label data-method="mada">
+                    <input type="radio" name="pm" value="mada" />
+                    <i class="fas fa-credit-card" style="color:#00a651;"></i>
+                    <div>مدى</div>
+                  </label>
+                  <label data-method="applepay">
+                    <input type="radio" name="pm" value="applepay" />
+                    <i class="fab fa-apple" style="color:#fff;"></i>
+                    <div>Apple Pay</div>
+                  </label>
+                  <label data-method="stcpay">
+                    <input type="radio" name="pm" value="stcpay" />
+                    <i class="fas fa-mobile-alt" style="color:#662d91;"></i>
+                    <div>STC Pay</div>
+                  </label>
+                  <label data-method="banktransfer">
+                    <input type="radio" name="pm" value="banktransfer" />
+                    <i class="fas fa-university" style="color:#f39c12;"></i>
+                    <div data-i18n="checkout.deliveryForm.paymentBankTransfer">تحويل بنكي</div>
                   </label>
                   <label data-method="cash_on_delivery">
                     <input type="radio" name="pm" value="cash_on_delivery" />
-                    <i class="fas fa-money-bill-wave"></i>
+                    <i class="fas fa-money-bill-wave" style="color:#f1c40f;"></i>
                     <div data-i18n="checkout.deliveryForm.paymentCod">عند الاستلام</div>
                   </label>
+                </div>
+                <!-- ===== END: PAYMENT METHODS ===== -->
+
+                <!-- ===== DELIVERY FEE (fixed) ===== -->
+                <div class="delivery-fee-box">
+                  <div>
+                    <span class="label"><i class="fas fa-truck"></i> <span data-i18n="checkout.deliveryForm.deliveryFeeLabel">عمولة التوصيل</span></span>
+                    <small data-i18n="checkout.deliveryForm.deliveryFeeNote">مبلغ ثابت يضاف لكل طلب</small>
+                  </div>
+                  <span class="value" id="delivery-fee-display">2.00 ر.ع</span>
+                  <input type="hidden" id="delivery-fee" value="2.00" />
                 </div>
               </div>
 
@@ -598,11 +659,14 @@
     <script src="script.js"></script>
     <script>
       // =================================================================
-      // checkout.html — سلة موحّدة: بيع (DB) + إيجار (localStorage)
-      // فورم واحد وزر واحد يعالج كلا النوعين.
+      // checkout.html — Unified cart (sale + rental)
+      // Includes: multiple payment methods + fixed delivery fee
       // =================================================================
       (function () {
         "use strict";
+
+        // ---------- CONSTANTS ----------
+        const DELIVERY_FEE = 2.00; // fixed delivery fee in OMR
 
         function t(key, vars) {
           return window.HarthI18n ? window.HarthI18n.t(key, vars) : key;
@@ -658,13 +722,11 @@
           return true;
         }
 
-        // ---------- Load cart + totals from server ----------
+        // ---------- Load cart ----------
         async function loadCart() {
           $("#loading").style.display = "block";
           $("#content").style.display = "none";
 
-          // Set a translated baseline immediately — keeps the hint correct
-          // in the active language even if the cart/loyalty fetches fail.
           $("#loyalty-balance-hint").textContent = t("checkout.summary.loyaltyBalanceHint", { balance: loyaltyBalance });
 
           try {
@@ -675,7 +737,6 @@
             currentCart = res;
             renderCart(res);
 
-            // Load loyalty balance in parallel
             try {
               const l = await apiFetch("/loyalty?limit=1");
               if (l && l.success) {
@@ -683,11 +744,8 @@
                 $("#loyalty-balance-hint").textContent = t("checkout.summary.loyaltyBalanceHint", { balance: loyaltyBalance });
                 $("#loyalty-points").max = loyaltyBalance;
               }
-            } catch (_e) {
-              // non-fatal
-            }
+            } catch (_e) {}
 
-            // Prefill name/phone from user profile
             const user = typeof getUser === "function" ? getUser() : null;
             if (user) {
               if (!$("#f-name").value && user.name) $("#f-name").value = user.name;
@@ -725,7 +783,7 @@
           const qtyLabel = t("checkout.table.quantity");
           const totalLabel = t("checkout.table.total");
 
-          // ─── Sale items (from DB cart) ───
+          // Sale items
           for (const it of res.items) {
             const tr = document.createElement("tr");
             const img = it.primary_image_url || "";
@@ -760,7 +818,7 @@
             tr.querySelector(".remove-btn").addEventListener("click", () => removeItem(it.cart_item_id));
           }
 
-          // ─── Rental items (from localStorage) ───
+          // Rental items
           for (const r of rentals) {
             const tr = document.createElement("tr");
             const img = r.primary_image_url || "";
@@ -794,7 +852,6 @@
             });
           }
 
-          // Reset promo feedback on reload
           validatedPromo = null;
           $("#promo-feedback").textContent = "";
           $("#promo-feedback").className = "promo-feedback";
@@ -804,6 +861,7 @@
           renderTotals(res.totals);
         }
 
+        // ---------- Totals (including delivery fee) ----------
         function renderTotals(totals) {
           const rentals = getRentalCart();
           const rentalTotal = rentals.reduce((s, r) => s + Number(r.grand_total || r.rental_cost || 0), 0);
@@ -833,9 +891,19 @@
             $("#tot-loyalty-row").style.display = "none";
           }
 
-          // Grand total = sale total (server) + rental total (localStorage)
+          // Grand total = sale total (server) + rental total + delivery fee
           const serverGrand = Number(totals.total || 0);
-          $("#tot-grand").textContent = (serverGrand + rentalTotal).toFixed(2) + " " + t("common.currency");
+          const grand = serverGrand + rentalTotal + DELIVERY_FEE;
+          $("#tot-grand").textContent = grand.toFixed(2) + " " + t("common.currency");
+          // Update delivery fee display
+          const deliveryDisplay = document.getElementById("tot-delivery");
+          if (deliveryDisplay) {
+            deliveryDisplay.textContent = DELIVERY_FEE.toFixed(2) + " " + t("common.currency");
+          }
+          const feeDisplay = document.getElementById("delivery-fee-display");
+          if (feeDisplay) {
+            feeDisplay.textContent = DELIVERY_FEE.toFixed(2) + " " + t("common.currency");
+          }
         }
 
         async function updateQty(cartItemId, newQty) {
@@ -866,7 +934,7 @@
           }
         }
 
-        // ---------- Promo validation ----------
+        // ---------- Promo ----------
         async function applyPromo() {
           const code = $("#promo-code").value.trim();
           const fb = $("#promo-feedback");
@@ -901,7 +969,7 @@
           }
         }
 
-        // ---------- Submit order (sale + rental) ----------
+        // ---------- Submit order ----------
         async function submitOrder(e) {
           e.preventDefault();
           const name = $("#f-name").value.trim();
@@ -931,7 +999,7 @@
           let trackingNumber = null;
 
           try {
-            // ─── 1. Submit sale order (if any) ───
+            // Sale order
             if (hasSale) {
               const payload = {
                 shipping_address: shippingAddress,
@@ -949,7 +1017,6 @@
               }
               trackingNumber = res.order.tracking_number;
 
-              // Mock Stripe webhook for demo
               if (res.payment && res.payment.mock && res.payment.payment_intent_id) {
                 fetch(`${API_BASE_URL}/payments/webhook`, {
                   method: "POST",
@@ -962,7 +1029,7 @@
               }
             }
 
-            // ─── 2. Submit rental requests (if any) ───
+            // Rental requests
             const rentalErrors = [];
             for (const r of rentals) {
               try {
@@ -990,7 +1057,6 @@
               return;
             }
 
-            // ─── 3. Clear rental cart & redirect ───
             clearRentalCart();
             const successMsg = [
               hasSale ? t("checkout.toasts.saleOrderCreated") : "",
@@ -1028,12 +1094,12 @@
           $("#apply-promo").addEventListener("click", applyPromo);
           $("#checkout-form").addEventListener("submit", submitOrder);
 
-          document.querySelectorAll(".payment-radio label").forEach((lbl) => {
-            lbl.addEventListener("click", () => {
-              document.querySelectorAll(".payment-radio label").forEach((x) =>
-                x.classList.remove("selected"),
-              );
-              lbl.classList.add("selected");
+          // Payment method selection styling
+          const paymentLabels = document.querySelectorAll(".payment-radio label");
+          paymentLabels.forEach((label) => {
+            label.addEventListener("click", function () {
+              paymentLabels.forEach((l) => l.classList.remove("selected"));
+              this.classList.add("selected");
             });
           });
 
@@ -1044,7 +1110,6 @@
       })();
     </script>
   
-    <!-- HARTH-RESPONSIVE-JS -->
     <script src="responsive.js" defer></script>
   </body>
 </html>
