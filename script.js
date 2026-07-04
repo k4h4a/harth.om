@@ -369,5 +369,68 @@ document.addEventListener("DOMContentLoaded", () => {
     renderTranslatedUi();
   }
 
-  initRegisterPage(); // Only if register page
+    initRegisterPage(); // Only if register page
+});
+
+// ============================================================
+// COMMISSION CALCULATION (10% platform fee on farmer price)
+// ============================================================
+
+// Commission percentage (10%)
+const PLATFORM_COMMISSION_PCT = 10;
+
+/**
+ * Calculate final price including platform commission
+ * @param {number} farmerPrice - The farmer's base price
+ * @returns {object} { farmerPrice, commission, finalPrice }
+ */
+function calculateCommission(farmerPrice) {
+    const price = parseFloat(farmerPrice) || 0;
+    const commission = price * (PLATFORM_COMMISSION_PCT / 100);
+    const finalPrice = price + commission;
+    return {
+        farmerPrice: price,
+        commission: commission,
+        finalPrice: finalPrice
+    };
+}
+
+/**
+ * Auto-calculate commission when farmer enters price
+ * Works on any input with class "farmer-price-input" or id ending with "-farmer-price"
+ */
+function setupCommissionAutoCalc() {
+    // Find all farmer price inputs
+    const farmerPriceInputs = document.querySelectorAll(
+        'input.farmer-price-input, input[id$="-farmer-price"]'
+    );
+    
+    farmerPriceInputs.forEach(input => {
+        input.addEventListener('input', function() {
+            const value = parseFloat(this.value) || 0;
+            const result = calculateCommission(value);
+            
+            // Find the corresponding final price display
+            const container = this.closest('.price-group') || this.parentElement;
+            const finalPriceDisplay = container.querySelector('.final-price-display') || 
+                                      document.getElementById('final-price-display');
+            
+            if (finalPriceDisplay) {
+                finalPriceDisplay.textContent = result.finalPrice.toFixed(2);
+            }
+            
+            // Also update a hidden input if it exists
+            const finalPriceInput = container.querySelector('input.final-price-input') ||
+                                    document.getElementById('final-price-input');
+            if (finalPriceInput) {
+                finalPriceInput.value = result.finalPrice.toFixed(2);
+            }
+        });
+    });
+}
+
+// Auto-setup when DOM is ready - using a separate listener
+// This will run AFTER the main DOMContentLoaded above
+document.addEventListener('DOMContentLoaded', function() {
+    setupCommissionAutoCalc();
 });
