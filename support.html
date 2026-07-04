@@ -4,8 +4,6 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <script>
-    // Apply the saved language/direction before first paint so there's no
-    // flash of Arabic/RTL when the visitor's saved language is English.
     (function () {
       try {
         if (localStorage.getItem("harth_lang") === "en") {
@@ -17,9 +15,7 @@
     })();
   </script>
   <style>
-    html.i18n-loading body {
-      visibility: hidden;
-    }
+    html.i18n-loading body { visibility: hidden; }
   </style>
   <title data-i18n="support.title">مركز الدعم الفني — حرث</title>
   <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800&display=swap" rel="stylesheet" />
@@ -29,11 +25,10 @@
   <link rel="stylesheet" href="responsive.css" />
 
   <style>
-    /* ── Base ── */
     *{margin:0;padding:0;box-sizing:border-box}
     body{font-family:"Cairo",sans-serif;direction:rtl;background:linear-gradient(135deg,#0a1a0a 0%,#0d2010 50%,#091508 100%);min-height:100vh;color:#fff;padding-bottom:80px}
 
-    /* ── Hero ── */
+    /* Hero */
     .sp-hero{background:linear-gradient(135deg,rgba(106,176,76,.18),rgba(13,31,7,.6));padding:40px 20px 32px;text-align:center}
     .sp-hero h1{font-size:clamp(22px,4vw,36px);font-weight:800;margin-bottom:8px}
     .sp-hero h1 span{color:#6ab04c}
@@ -47,10 +42,10 @@
     .hero-chip{background:rgba(106,176,76,.12);border:1px solid rgba(106,176,76,.3);color:#a8e090;padding:4px 14px;border-radius:20px;font-size:12px;cursor:pointer;transition:.15s;white-space:nowrap}
     .hero-chip:hover{background:rgba(106,176,76,.25)}
 
-    /* ── Container ── */
+    /* Container */
     .sp-container{max-width:1060px;margin:0 auto;padding:0 16px}
 
-    /* ── Tab Nav ── */
+    /* Tab Nav */
     .sp-tabs-wrap{background:#0d1f0d;border-bottom:1px solid rgba(106,176,76,.2);margin-bottom:24px;position:sticky;top:0;z-index:200}
     .sp-tabs{display:flex;gap:6px;padding:14px 0;overflow-x:auto;scrollbar-width:none;max-width:1060px;margin:0 auto;padding-left:16px;padding-right:16px}
     .sp-tabs::-webkit-scrollbar{display:none}
@@ -58,16 +53,16 @@
     .tab-btn:hover{background:rgba(255,255,255,.12);color:#fff}
     .tab-btn.active{background:linear-gradient(135deg,#6ab04c,#4ab625);color:#fff;border-color:#6ab04c;box-shadow:0 4px 14px rgba(106,176,76,.35)}
 
-    /* ── Views ── */
+    /* Views */
     .sp-view{display:none;animation:fadeUp .22s ease both}
     .sp-view.active{display:block}
     @keyframes fadeUp{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
 
-    /* ── Section title ── */
+    /* Section title */
     .sec-h{font-size:17px;font-weight:700;margin:28px 0 14px;color:#fff;display:flex;align-items:center;gap:8px}
     .sec-h span{color:#6ab04c}
 
-    /* ── Quick Actions ── */
+    /* Quick Actions */
     .qa-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:12px;margin-bottom:28px}
     .qa-card{background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.12);border-radius:16px;padding:20px;text-align:center;cursor:pointer;transition:.2s;text-decoration:none;color:#fff;display:block}
     .qa-card:hover{background:rgba(255,255,255,.12);border-color:rgba(106,176,76,.4);transform:translateY(-2px)}
@@ -75,7 +70,7 @@
     .qa-card h3{font-size:15px;font-weight:700;margin-bottom:4px}
     .qa-card p{font-size:12px;color:rgba(255,255,255,.55)}
 
-    /* ── FAQ Accordion ── */
+    /* FAQ Accordion */
     .faq-item{background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.1);border-radius:12px;margin-bottom:8px;overflow:hidden;transition:.2s}
     .faq-item:hover{border-color:rgba(106,176,76,.3)}
     .faq-q{padding:15px 18px;cursor:pointer;display:flex;justify-content:space-between;align-items:center;font-size:14px;font-weight:600;user-select:none}
@@ -84,7 +79,7 @@
     .faq-a{display:none;padding:0 18px 15px;font-size:13px;color:rgba(255,255,255,.75);line-height:1.8}
     .faq-item.open .faq-a{display:block}
 
-    /* ── Contact Channels ── */
+    /* Contact Channels */
     .ch-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:10px;margin-bottom:28px}
     .ch-card{border-radius:14px;padding:16px;display:flex;align-items:center;gap:12px;text-decoration:none;transition:.2s}
     .ch-card:hover{transform:translateY(-2px);filter:brightness(1.1)}
@@ -93,7 +88,7 @@
     .ch-card .ch-lbl{font-size:13px;font-weight:700;color:#fff}
     .ch-card .ch-sub{font-size:11px;color:rgba(255,255,255,.65);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 
-    /* ── Help Center ── */
+    /* Help Center */
     .cat-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:10px;margin-bottom:22px}
     .cat-card{background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.11);border-radius:14px;padding:18px 14px;text-align:center;cursor:pointer;transition:.2s}
     .cat-card:hover,.cat-card.active{background:rgba(106,176,76,.15);border-color:rgba(106,176,76,.45)}
@@ -116,7 +111,7 @@
     .no-results{text-align:center;padding:40px 20px;color:rgba(255,255,255,.45)}
     .no-results i{font-size:42px;margin-bottom:12px;display:block}
 
-    /* ── Tickets ── */
+    /* Tickets */
     .tkts-filter{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:16px;margin-top:20px}
     .f-chip{padding:7px 16px;border-radius:20px;border:1px solid rgba(255,255,255,.18);background:transparent;color:rgba(255,255,255,.7);font-family:inherit;font-size:13px;cursor:pointer;transition:.15s;white-space:nowrap}
     .f-chip.active,.f-chip:hover{background:rgba(106,176,76,.18);border-color:#6ab04c;color:#fff}
@@ -133,10 +128,13 @@
     .pri-badge{display:inline-flex;align-items:center;gap:3px;font-size:11px;font-weight:700;padding:2px 8px;border-radius:20px}
     .p-low{color:#b2bec3}.p-medium{color:#74b9ff}.p-high{color:#f1c40f}.p-urgent{color:#ff7675}
 
-    /* ── Ticket Detail ── */
+    /* Ticket Detail */
     .tkt-detail{background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.1);border-radius:16px;padding:20px;margin-top:8px;display:none}
     .tkt-detail.show{display:block;animation:fadeUp .2s ease}
-    .msg-thread{display:flex;flex-direction:column;gap:12px;margin:16px 0}
+    .msg-thread{display:flex;flex-direction:column;gap:12px;margin:16px 0;max-height:350px;overflow-y:auto;padding-inline-end:4px}
+    .msg-thread::-webkit-scrollbar{width:5px}
+    .msg-thread::-webkit-scrollbar-track{background:rgba(255,255,255,.05);border-radius:10px}
+    .msg-thread::-webkit-scrollbar-thumb{background:#6ab04c;border-radius:10px}
     .msg-bubble{border-radius:14px;padding:12px 16px;max-width:85%;font-size:14px;line-height:1.75}
     .msg-user{background:rgba(106,176,76,.18);border:1px solid rgba(106,176,76,.3);align-self:flex-start}
     .msg-agent{background:rgba(52,152,219,.14);border:1px solid rgba(52,152,219,.3);align-self:flex-end}
@@ -156,7 +154,7 @@
     .csat-stars:hover .star-btn{color:#f1c40f}
     .csat-stars .star-btn:hover~.star-btn{color:rgba(255,255,255,.3)!important}
 
-    /* ── New Ticket Form ── */
+    /* New Ticket Form */
     .ntk-wrap{max-width:680px;padding-top:20px}
     .ntk-step{background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.1);border-radius:16px;padding:22px;margin-bottom:16px}
     .ntk-step h3{font-size:16px;font-weight:700;margin-bottom:16px;color:#a8e090;display:flex;align-items:center;gap:8px}
@@ -186,12 +184,12 @@
     .suggest-row:last-child{border-bottom:none}
     .suggest-row:hover{color:#fff}
 
-    /* ── Chat Widget ── */
+    /* Chat Widget */
     #chat-widget{position:fixed;bottom:24px;left:20px;z-index:1500}
     #chat-toggle{width:56px;height:56px;border-radius:50%;background:linear-gradient(135deg,#6ab04c,#4ab625);border:none;color:#fff;font-size:22px;cursor:pointer;box-shadow:0 4px 18px rgba(106,176,76,.5);transition:.2s;display:flex;align-items:center;justify-content:center}
     #chat-toggle:hover{transform:scale(1.08)}
     .chat-notif{position:absolute;top:-4px;right:-4px;width:18px;height:18px;background:#e74c3c;border-radius:50%;font-size:10px;font-weight:700;display:flex;align-items:center;justify-content:center;border:2px solid #0d2010}
-    #chat-panel{position:absolute;bottom:70px;left:0;width:320px;background:linear-gradient(135deg,#0d1f07,#162b0f);border:1px solid rgba(106,176,76,.3);border-radius:18px;box-shadow:0 16px 48px rgba(0,0,0,.6);overflow:hidden;display:none;flex-direction:column;max-height:480px}
+    #chat-panel{position:absolute;bottom:70px;left:0;width:340px;background:linear-gradient(135deg,#0d1f07,#162b0f);border:1px solid rgba(106,176,76,.3);border-radius:18px;box-shadow:0 16px 48px rgba(0,0,0,.6);overflow:hidden;display:none;flex-direction:column;max-height:480px}
     #chat-panel.open{display:flex}
     .chat-hdr{background:linear-gradient(135deg,#1a3a0a,#2d6018);padding:14px 16px;display:flex;align-items:center;gap:10px}
     .chat-av{width:38px;height:38px;border-radius:50%;background:#6ab04c;display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0}
@@ -217,7 +215,7 @@
     .chat-send{background:#6ab04c;border:none;color:#fff;width:38px;height:38px;border-radius:10px;cursor:pointer;font-size:15px;transition:.15s;display:flex;align-items:center;justify-content:center;flex-shrink:0}
     .chat-send:hover{background:#5a9a3c}
 
-    /* ── Utility ── */
+    /* Utility */
     .hs-btn{display:inline-flex;align-items:center;gap:6px;padding:9px 18px;border-radius:10px;font-family:inherit;font-size:13px;font-weight:700;cursor:pointer;transition:.2s;border:none}
     .btn-green{background:linear-gradient(135deg,#6ab04c,#4ab625);color:#fff}
     .btn-green:hover{background:linear-gradient(135deg,#5a9a3c,#3da01a);transform:translateY(-1px)}
@@ -239,13 +237,26 @@
       .qa-grid{grid-template-columns:1fr 1fr}
       .cat-grid{grid-template-columns:repeat(3,1fr)}
       .cat-select-grid{grid-template-columns:repeat(3,1fr)}
-      #chat-panel{width:290px}
+      #chat-panel{width:290px;right:0;left:auto}
+      .sp-tabs .tab-btn{font-size:12px;padding:8px 10px}
+      .sp-tabs .tab-btn i{font-size:14px}
+    }
+    @media(max-width:480px){
+      .cat-grid{grid-template-columns:1fr 1fr}
+      .cat-select-grid{grid-template-columns:1fr 1fr}
+      .qa-grid{grid-template-columns:1fr}
+      .hero-chips .hero-chip{font-size:11px;padding:3px 10px}
+      .sp-hero{padding:24px 12px 20px}
+      .sp-hero h1{font-size:20px}
+      .ch-grid{grid-template-columns:1fr 1fr}
+      .tkts-filter .f-chip{font-size:12px;padding:5px 12px}
+      .tkt-card{flex-wrap:wrap}
     }
   </style>
 </head>
 <body>
 
-  <!-- Standard Header -->
+  <!-- Header -->
   <header class="header-container">
     <div class="header-capsule">
       <div class="section right">
@@ -291,9 +302,8 @@
   <!-- Views -->
   <div class="sp-container">
 
-    <!-- ───────── VIEW: HOME ───────── -->
+    <!-- VIEW: HOME -->
     <div id="view-home" class="sp-view active">
-
       <div class="sec-h"><i class="fas fa-bolt" style="color:#f1c40f"></i> <span data-i18n="support.home.quickActionsTitle">إجراءات سريعة</span></div>
       <div class="qa-grid">
         <div class="qa-card" onclick="switchTab('new-ticket')">
@@ -342,7 +352,7 @@
       </div>
     </div>
 
-    <!-- ───────── VIEW: HELP CENTER ───────── -->
+    <!-- VIEW: HELP CENTER -->
     <div id="view-help" class="sp-view">
       <div style="max-width:480px;margin:20px 0 18px;position:relative">
         <i class="fas fa-search" style="position:absolute;inset-inline-end:14px;top:50%;transform:translateY(-50%);color:#6ab04c;pointer-events:none"></i>
@@ -374,7 +384,7 @@
       </div>
     </div>
 
-    <!-- ───────── VIEW: MY TICKETS ───────── -->
+    <!-- VIEW: MY TICKETS -->
     <div id="view-tickets" class="sp-view">
       <div id="tickets-auth-gate" class="auth-gate" style="display:none">
         <i class="fas fa-lock"></i>
@@ -400,11 +410,10 @@
       </div>
     </div>
 
-    <!-- ───────── VIEW: NEW TICKET ───────── -->
+    <!-- VIEW: NEW TICKET -->
     <div id="view-new-ticket" class="sp-view">
       <div class="ntk-wrap">
-
-        <!-- Step 1: Category + Priority -->
+        <!-- Step 1 -->
         <div class="ntk-step">
           <h3><span class="step-num">1</span> <span data-i18n="support.newTicket.step1.title">نوع المشكلة والأولوية</span></h3>
           <div class="cat-select-grid" id="ntk-cats"></div>
@@ -417,7 +426,7 @@
           </div>
         </div>
 
-        <!-- Step 2: Subject + Message -->
+        <!-- Step 2 -->
         <div class="ntk-step">
           <h3><span class="step-num">2</span> <span data-i18n="support.newTicket.step2.title">تفاصيل المشكلة</span></h3>
           <label class="ntk-label" data-i18n="support.newTicket.step2.subjectLabel">عنوان الطلب *</label>
@@ -435,7 +444,7 @@
           </div>
         </div>
 
-        <!-- Step 3: Attachments -->
+        <!-- Step 3 -->
         <div class="ntk-step">
           <h3><span class="step-num">3</span> <span data-i18n="support.newTicket.step3.title">المرفقات</span> <small style="font-weight:400;color:rgba(255,255,255,.5)" data-i18n="support.newTicket.step3.optionalHint">(اختياري)</small></h3>
           <label class="ntk-label" data-i18n="support.newTicket.step3.attachLabel">ارفع صورة أو ملف يوضح المشكلة</label>
@@ -502,7 +511,9 @@
       return window.HarthI18n ? window.HarthI18n.localeTag() : "ar";
     }
 
-    // ── FAQ / Article Data ─────────────────────────────────────────────────
+    // ================================================================
+    // DATA
+    // ================================================================
     const CAT_META = [
       { id:"technical",   icon:"🔧", color:"#e74c3c" },
       { id:"financial",   icon:"💰", color:"#f1c40f" },
@@ -547,7 +558,9 @@
       { kw:["صور","تحميل","لا تظهر","images","upload","not showing"], art:"t2" },
     ];
 
-    // ── State ─────────────────────────────────────────────────────────────
+    // ================================================================
+    // STATE
+    // ================================================================
     let currentTab = "home";
     let selectedCat = null;
     let selectedPri = "medium";
@@ -556,8 +569,11 @@
     let chatHistory = [];
     let selectedArticleId = null;
     let previousHelpView = null; // "cats" or "search"
+    let chatPollInterval = null;
 
-    // ── Init ──────────────────────────────────────────────────────────────
+    // ================================================================
+    // INIT
+    // ================================================================
     async function init() {
       if (window.HarthI18n) await window.HarthI18n.ready();
 
@@ -579,19 +595,24 @@
         document.getElementById("guest-fields-label").style.display = "block";
       }
 
-      // Check hash for deep-link
+      // Deep-link
       if (location.hash === "#new") switchTab("new-ticket");
       if (location.hash === "#tickets") switchTab("tickets");
     }
     document.addEventListener("DOMContentLoaded", init);
 
+    // ================================================================
+    // HERO CHIPS
+    // ================================================================
     function wireHeroChips() {
       document.querySelectorAll(".hero-chip[data-chip-key]").forEach(el => {
         el.addEventListener("click", () => heroChip(t(`support.hero.chips.${el.dataset.chipKey}`)));
       });
     }
 
-    // ── Tabs ──────────────────────────────────────────────────────────────
+    // ================================================================
+    // TABS
+    // ================================================================
     function wireTabBtns() {
       document.querySelectorAll(".tab-btn").forEach(btn => {
         btn.addEventListener("click", () => switchTab(btn.dataset.view));
@@ -607,7 +628,9 @@
     }
     window.switchTab = switchTab;
 
-    // ── Home FAQs ─────────────────────────────────────────────────────────
+    // ================================================================
+    // HOME FAQS
+    // ================================================================
     function buildHomeFAQs() {
       const popular = ["o1","f1","a1","o2","a3","f2"];
       const wrap = document.getElementById("home-faqs");
@@ -626,7 +649,9 @@
       });
     }
 
-    // ── Help Center ───────────────────────────────────────────────────────
+    // ================================================================
+    // HELP CENTER
+    // ================================================================
     function buildCatGrid() {
       const grid = document.getElementById("cat-grid");
       grid.innerHTML = "";
@@ -701,7 +726,9 @@
         : `<span style="color:#f1c40f">${escHtml(t("support.help.feedbackThanksNegative"))}</span>`;
     }
 
-    // ── Help Search ───────────────────────────────────────────────────────
+    // ================================================================
+    // HELP SEARCH
+    // ================================================================
     function wireHelpSearch() {
       const inp = document.getElementById("help-search");
       let debounceTimer;
@@ -744,7 +771,9 @@
       });
     }
 
-    // ── Hero Search ───────────────────────────────────────────────────────
+    // ================================================================
+    // HERO SEARCH
+    // ================================================================
     function wireHeroSearch() {
       const inp = document.getElementById("hero-search");
       inp.addEventListener("keydown", e => {
@@ -759,7 +788,9 @@
     }
     window.heroChip = heroChip;
 
-    // ── New Ticket Form ───────────────────────────────────────────────────
+    // ================================================================
+    // NEW TICKET FORM
+    // ================================================================
     function buildNewTicketCats() {
       const grid = document.getElementById("ntk-cats");
       grid.innerHTML = "";
@@ -872,7 +903,9 @@
     }
     window.resetNewTicket = resetNewTicket;
 
-    // ── My Tickets ────────────────────────────────────────────────────────
+    // ================================================================
+    // MY TICKETS
+    // ================================================================
     function wireFilterChips() {
       document.querySelectorAll(".f-chip").forEach(btn => {
         btn.addEventListener("click", () => {
@@ -935,10 +968,6 @@
       detail.id = "detail-" + tkt.id;
       card.addEventListener("click", () => toggleTicketDetail(tkt, card, detail));
 
-      const wrap = document.createDocumentFragment();
-      wrap.appendChild(card);
-      wrap.appendChild(detail);
-
       const container = document.createElement("div");
       container.appendChild(card);
       container.appendChild(detail);
@@ -947,7 +976,6 @@
 
     async function toggleTicketDetail(summary, card, detail) {
       const isOpen = detail.classList.contains("show");
-      // Close all
       document.querySelectorAll(".tkt-detail.show").forEach(d => d.classList.remove("show"));
       if (isOpen) return;
 
@@ -1005,7 +1033,6 @@
             <textarea id="reply-${tkt.id}" class="ntk-textarea" style="min-height:80px" placeholder="${escHtml(t("support.tickets.reply.placeholder"))}"></textarea>
             <div class="reply-btns">
               <button class="hs-btn btn-green" onclick="sendReply('${tkt.id}')"><i class="fas fa-paper-plane"></i> ${escHtml(t("support.tickets.reply.sendBtn"))}</button>
-              ${canReopen ? "" : ""}
             </div>
           </div>` : ""}
         ${canReopen ? `
@@ -1072,9 +1099,10 @@
     }
     window.rateTkt = rateTkt;
 
-    // ── Chat Bot ──────────────────────────────────────────────────────────
+    // ================================================================
+    // CHAT BOT
+    // ================================================================
     function initChat() {
-      // Show notification dot after 3s
       setTimeout(() => {
         if (!chatOpen) document.getElementById("chat-notif").style.display = "flex";
       }, 3000);
@@ -1205,7 +1233,9 @@
       });
     }
 
-    // ── Helpers ───────────────────────────────────────────────────────────
+    // ================================================================
+    // HELPERS
+    // ================================================================
     function escHtml(s) {
       if (!s) return "";
       return String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'})[c]);
@@ -1230,6 +1260,7 @@
       return label.startsWith("support.tickets.priorityLabels.") ? p : label;
     }
 
+    // Rebuild UI on language change
     if (window.HarthI18n) {
       document.addEventListener("harth:langchange", () => {
         buildHomeFAQs();
