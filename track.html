@@ -4,8 +4,6 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <script>
-      // Apply the saved language/direction before first paint so there's no
-      // flash of Arabic/RTL when the visitor's saved language is English.
       (function () {
         try {
           if (localStorage.getItem("harth_lang") === "en") {
@@ -17,9 +15,7 @@
       })();
     </script>
     <style>
-      html.i18n-loading body {
-        visibility: hidden;
-      }
+      html.i18n-loading body { visibility: hidden; }
     </style>
     <title data-i18n="track.title">تتبع الطلب - حرث</title>
     <link
@@ -163,6 +159,128 @@
       .timeline-item.current .tl-text { color: #a3d5ff; font-weight: 700; }
       .timeline-item.future .tl-text { color: #666; }
 
+      /* ===== CHAT SECTION ===== */
+      .chat-section {
+        margin-top: 24px;
+        padding: 16px;
+        background: rgba(0, 0, 0, 0.25);
+        border-radius: 12px;
+        border: 1px solid rgba(255, 255, 255, 0.08);
+      }
+      .chat-section h4 {
+        color: #f1c40f;
+        font-size: 16px;
+        margin-bottom: 12px;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+      }
+      .chat-messages {
+        max-height: 240px;
+        overflow-y: auto;
+        display: flex;
+        flex-direction: column;
+        gap: 6px;
+        margin-bottom: 12px;
+        padding-inline-end: 4px;
+      }
+      .chat-messages::-webkit-scrollbar {
+        width: 5px;
+      }
+      .chat-messages::-webkit-scrollbar-track {
+        background: rgba(255,255,255,0.05);
+        border-radius: 10px;
+      }
+      .chat-messages::-webkit-scrollbar-thumb {
+        background: #6ab04c;
+        border-radius: 10px;
+      }
+
+      .chat-msg {
+        padding: 10px 14px;
+        border-radius: 12px;
+        max-width: 80%;
+        word-wrap: break-word;
+        font-size: 14px;
+        line-height: 1.5;
+        align-self: flex-start;
+        background: rgba(255, 255, 255, 0.08);
+        border: 1px solid rgba(255, 255, 255, 0.05);
+      }
+      .chat-msg.own {
+        align-self: flex-end;
+        background: rgba(106, 176, 76, 0.25);
+        border-color: rgba(106, 176, 76, 0.3);
+      }
+      .chat-msg .sender {
+        font-size: 11px;
+        font-weight: 700;
+        color: #6ab04c;
+        margin-bottom: 2px;
+        display: block;
+      }
+      .chat-msg .sender.courier { color: #3498db; }
+      .chat-msg .sender.farmer { color: #f39c12; }
+      .chat-msg .time {
+        font-size: 10px;
+        color: rgba(255, 255, 255, 0.3);
+        margin-top: 4px;
+        display: block;
+        text-align: end;
+      }
+      .chat-msg .system {
+        color: #f1c40f;
+        font-style: italic;
+        background: rgba(241, 196, 15, 0.08);
+        border-color: rgba(241, 196, 15, 0.15);
+        text-align: center;
+        max-width: 90%;
+        align-self: center;
+      }
+      .chat-input-row {
+        display: flex;
+        gap: 8px;
+      }
+      .chat-input-row input {
+        flex: 1;
+        padding: 10px 14px;
+        border: 1px solid rgba(255, 255, 255, 0.2);
+        background: rgba(255, 255, 255, 0.06);
+        color: #fff;
+        border-radius: 8px;
+        font-family: inherit;
+        font-size: 14px;
+      }
+      .chat-input-row input::placeholder {
+        color: rgba(255, 255, 255, 0.4);
+      }
+      .chat-input-row input:focus {
+        outline: none;
+        border-color: #6ab04c;
+      }
+      .chat-input-row button {
+        padding: 10px 18px;
+        background: #6ab04c;
+        color: #fff;
+        border: none;
+        border-radius: 8px;
+        cursor: pointer;
+        font-weight: 700;
+        font-family: inherit;
+        font-size: 14px;
+        white-space: nowrap;
+      }
+      .chat-input-row button:disabled {
+        opacity: 0.4;
+        cursor: not-allowed;
+      }
+      .chat-empty {
+        text-align: center;
+        color: rgba(255, 255, 255, 0.3);
+        font-size: 13px;
+        padding: 20px 0;
+      }
+
       .empty-hint {
         text-align: center; padding: 40px 20px; color: #aaa;
       }
@@ -181,7 +299,6 @@
       }
     </style>
   
-    <!-- HARTH-RESPONSIVE-CSS -->
     <link rel="stylesheet" href="responsive.css" />
   </head>
 
@@ -261,13 +378,13 @@
     <script src="script.js"></script>
     <script>
       // =================================================================
-      // track.html — public order lookup. Shows status + courier info
-      // (if logged in as the customer).
+      // track.html — public order lookup + CHAT between customer, courier & farmer
       // =================================================================
       (function () {
         "use strict";
 
         const $ = (s) => document.querySelector(s);
+        const $$ = (s) => document.querySelectorAll(s);
 
         function t(key, vars) {
           return window.HarthI18n ? window.HarthI18n.t(key, vars) : key;
@@ -290,9 +407,20 @@
           return label.startsWith("track.statusLabels.") ? s : label;
         }
 
+        // ---------- Chat state ----------
+        let currentOrderId = null;
+        let chatPollInterval = null;
+        const CHAT_POLL_MS = 10000; // 10 seconds
+
+        // ---------- Track order ----------
         async function track(trackingNumber) {
           const $res = $("#result");
-          // Skeleton placeholder shaped like the eventual order card
+          // Stop any previous chat polling
+          if (chatPollInterval) {
+            clearInterval(chatPollInterval);
+            chatPollInterval = null;
+          }
+
           $res.innerHTML = `
             <div class="hs-card" style="padding: var(--sp-6); display: flex; flex-direction: column; gap: var(--sp-4)">
               <div style="display:flex;justify-content:space-between;align-items:center">
@@ -322,6 +450,7 @@
             }
 
             const order = trackRes.order;
+            currentOrderId = order.id;
 
             // Try to fetch delivery info (only works if logged in as customer).
             let delivery = null;
@@ -330,16 +459,59 @@
                 const dRes = await apiFetch(`/deliveries?order_id=${order.id}`);
                 if (dRes?.success && dRes.items?.length) delivery = dRes.items[0];
               } catch (_e) {
-                // silent — delivery info not accessible to this user
+                // silent
               }
             }
 
             renderResult(order, delivery);
+            // Start chat polling if we have an order ID and user is logged in
+            if (currentOrderId && getToken && getToken()) {
+              loadChatMessages(currentOrderId);
+              chatPollInterval = setInterval(() => {
+                loadChatMessages(currentOrderId, true); // silent refresh
+              }, CHAT_POLL_MS);
+            }
           } catch (err) {
             $res.innerHTML = `<div class="err-msg"><i class="fas fa-exclamation-circle" style="font-size:36px;margin-bottom:8px;display:block"></i>${escapeHtml(err.message)}</div>`;
           }
         }
 
+        // ---------- Render order result + chat ----------
+        function renderResult(order, delivery) {
+          const banner = chooseBanner(order, delivery);
+          const courierBlock = renderCourier(delivery);
+          const timeline = renderTimeline(order, delivery);
+          const proofBlock = renderProof(delivery);
+          const chatBlock = renderChatSection(order.id);
+
+          $("#result").innerHTML = `
+            ${banner}
+            <div class="info-grid">
+              <div class="info-item">
+                <div class="label">${t("track.info.trackingNumberLabel")}</div>
+                <div class="value"><code>${escapeHtml(order.tracking_number)}</code></div>
+              </div>
+              <div class="info-item">
+                <div class="label">${t("track.info.totalLabel")}</div>
+                <div class="value">${money(order.total)}</div>
+              </div>
+              <div class="info-item">
+                <div class="label">${t("track.info.orderStatusLabel")}</div>
+                <div class="value">${escapeHtml(statusLabel(order.status))}</div>
+              </div>
+              <div class="info-item">
+                <div class="label">${t("track.info.orderDateLabel")}</div>
+                <div class="value">${new Date(order.created_at).toLocaleDateString(localeTag())}</div>
+              </div>
+            </div>
+            ${courierBlock}
+            ${timeline}
+            ${proofBlock}
+            ${chatBlock}
+          `;
+        }
+
+        // ---------- Render rental result (no chat for rentals yet) ----------
         function renderRentalResult(r) {
           const rTotal = (Number(r.total_price||0) + Number(r.deposit_amount||0)).toFixed(2);
           const startD = (r.start_date||"—").slice(0,10);
@@ -397,41 +569,7 @@
           `;
         }
 
-        function renderResult(order, delivery) {
-          const banner = chooseBanner(order, delivery);
-          const courierBlock = renderCourier(delivery);
-          const timeline = renderTimeline(order, delivery);
-          const proofBlock = renderProof(delivery);
-
-          $("#result").innerHTML = `
-            ${banner}
-            <div class="info-grid">
-              <div class="info-item">
-                <div class="label">${t("track.info.trackingNumberLabel")}</div>
-                <div class="value"><code>${escapeHtml(order.tracking_number)}</code></div>
-              </div>
-              <div class="info-item">
-                <div class="label">${t("track.info.totalLabel")}</div>
-                <div class="value">${money(order.total)}</div>
-              </div>
-              <div class="info-item">
-                <div class="label">${t("track.info.orderStatusLabel")}</div>
-                <div class="value">${escapeHtml(statusLabel(order.status))}</div>
-              </div>
-              <div class="info-item">
-                <div class="label">${t("track.info.orderDateLabel")}</div>
-                <div class="value">${new Date(order.created_at).toLocaleDateString(localeTag())}</div>
-              </div>
-            </div>
-            ${courierBlock}
-            ${timeline}
-            ${proofBlock}
-          `;
-        }
-
-        // Render proof-of-pickup + proof-of-delivery photo galleries if present.
-        // These come back as JSONB arrays from delivery_requests. They may be
-        // strings (uploaded URL paths) — we just use them as <img src>.
+        // ---------- Proof galleries ----------
         function renderProof(delivery) {
           if (!delivery) return "";
           const parse = (v) => {
@@ -475,6 +613,7 @@
           `;
         }
 
+        // ---------- Status banner ----------
         function chooseBanner(order, delivery) {
           if (order.status === "cancelled" || order.status === "refunded") {
             return `
@@ -505,6 +644,7 @@
             </div>`;
         }
 
+        // ---------- Courier info ----------
         function renderCourier(delivery) {
           if (!delivery || !delivery.courier_id) return "";
           if (!delivery.courier_name && !delivery.courier_phone) {
@@ -541,6 +681,7 @@
             </div>`;
         }
 
+        // ---------- Timeline ----------
         function renderTimeline(order, delivery) {
           const steps = [
             { label: t("track.timeline.orderCreated"), icon: "shopping-cart" },
@@ -571,17 +712,176 @@
           return `<div class="timeline">${html}</div>`;
         }
 
+        // ================================================================
+        //  CHAT
+        // ================================================================
+
+        function renderChatSection(orderId) {
+          const isLoggedIn = getToken && getToken();
+          if (!isLoggedIn) {
+            return `
+              <div class="chat-section" style="opacity:0.6">
+                <h4><i class="fas fa-comment-dots"></i> ${t("track.chat.title")}</h4>
+                <p style="color:rgba(255,255,255,0.4);font-size:13px;text-align:center;padding:10px 0">
+                  <i class="fas fa-lock"></i> ${t("track.chat.loginRequired")}
+                </p>
+              </div>
+            `;
+          }
+          return `
+            <div class="chat-section" id="chat-section" data-order-id="${orderId}">
+              <h4><i class="fas fa-comment-dots"></i> ${t("track.chat.title")}</h4>
+              <div class="chat-messages" id="chat-messages">
+                <div class="chat-empty">${t("track.chat.noMessages")}</div>
+              </div>
+              <div class="chat-input-row">
+                <input type="text" id="chat-input" placeholder="${t("track.chat.inputPlaceholder")}" />
+                <button id="chat-send-btn" disabled>${t("track.chat.sendBtn")}</button>
+              </div>
+            </div>
+          `;
+        }
+
+        // Load chat messages from server
+        async function loadChatMessages(orderId, silent = false) {
+          if (!orderId) return;
+          try {
+            const res = await apiFetch(`/chat/${orderId}`);
+            if (!res?.success) {
+              if (!silent) console.warn("Chat load error:", res?.error);
+              return;
+            }
+            renderChatMessages(res.messages || []);
+          } catch (err) {
+            if (!silent) console.error("Chat load error:", err);
+          }
+        }
+
+        // Render messages into the chat container
+        function renderChatMessages(messages) {
+          const container = document.getElementById("chat-messages");
+          if (!container) return;
+
+          if (!messages.length) {
+            container.innerHTML = `<div class="chat-empty">${t("track.chat.noMessages")}</div>`;
+            return;
+          }
+
+          // Get current user info (if available)
+          const user = getUser ? getUser() : null;
+          const userId = user?.id || null;
+
+          let html = "";
+          for (const msg of messages) {
+            const isOwn = msg.user_id === userId;
+            const senderClass = isOwn ? "own" : "";
+            let senderLabel = "";
+            if (msg.role === "courier") senderLabel = t("track.chat.courierLabel");
+            else if (msg.role === "farmer") senderLabel = t("track.chat.farmerLabel");
+            else if (msg.role === "customer") senderLabel = t("track.chat.customerLabel");
+            else senderLabel = msg.sender_name || "";
+
+            const time = msg.created_at ? new Date(msg.created_at).toLocaleTimeString(localeTag(), { hour:'2-digit', minute:'2-digit' }) : "";
+
+            if (msg.is_system) {
+              html += `
+                <div class="chat-msg system">
+                  ${escapeHtml(msg.content)}
+                  ${time ? `<span class="time">${time}</span>` : ""}
+                </div>
+              `;
+            } else {
+              html += `
+                <div class="chat-msg ${senderClass}">
+                  ${senderLabel ? `<span class="sender ${msg.role}">${escapeHtml(senderLabel)}</span>` : ""}
+                  ${escapeHtml(msg.content)}
+                  ${time ? `<span class="time">${time}</span>` : ""}
+                </div>
+              `;
+            }
+          }
+          container.innerHTML = html;
+          // Scroll to bottom
+          container.scrollTop = container.scrollHeight;
+        }
+
+        // Send a new message
+        async function sendChatMessage(orderId) {
+          const input = document.getElementById("chat-input");
+          const btn = document.getElementById("chat-send-btn");
+          if (!input || !btn) return;
+          const content = input.value.trim();
+          if (!content || !orderId) return;
+
+          btn.disabled = true;
+          try {
+            const res = await apiFetch(`/chat/${orderId}`, {
+              method: "POST",
+              body: JSON.stringify({ content }),
+            });
+            if (!res?.success) {
+              alert(res?.error?.message || t("track.chat.sendError"));
+              return;
+            }
+            input.value = "";
+            // Reload messages
+            await loadChatMessages(orderId);
+          } catch (err) {
+            alert(err.message || t("track.chat.sendError"));
+          } finally {
+            btn.disabled = false;
+          }
+        }
+
+        // ---------- Chat event wiring ----------
+        function setupChatEvents(orderId) {
+          const input = document.getElementById("chat-input");
+          const btn = document.getElementById("chat-send-btn");
+          if (!input || !btn) return;
+
+          // Enable/disable send button based on input
+          input.addEventListener("input", () => {
+            btn.disabled = !input.value.trim();
+          });
+          // Send on Enter
+          input.addEventListener("keypress", (e) => {
+            if (e.key === "Enter" && !e.shiftKey) {
+              e.preventDefault();
+              if (input.value.trim()) sendChatMessage(orderId);
+            }
+          });
+          btn.addEventListener("click", () => sendChatMessage(orderId));
+        }
+
+        // Override renderResult to attach chat events after DOM update
+        const originalRenderResult = renderResult;
+        renderResult = function(order, delivery) {
+          originalRenderResult(order, delivery);
+          // Re-bind chat events if chat section exists
+          const chatSection = document.getElementById("chat-section");
+          if (chatSection && order?.id) {
+            setupChatEvents(order.id);
+            // Also load messages again to be safe
+            loadChatMessages(order.id);
+          }
+        };
+
+        // ---------- Search ----------
         $("#search-btn").addEventListener("click", () => {
           const trackingNo = $("#tracking-input").value.trim();
           if (!trackingNo) return;
+          // Stop old polling
+          if (chatPollInterval) {
+            clearInterval(chatPollInterval);
+            chatPollInterval = null;
+          }
           track(trackingNo);
         });
         $("#tracking-input").addEventListener("keypress", (e) => {
           if (e.key === "Enter") $("#search-btn").click();
         });
 
-        // Auto-search from ?t= (checkout redirects here after success).
-        // Waits for translations first so the result renders in the right language.
+        // Auto-search from ?t=
         function autoSearchFromQuery() {
           const url = new URL(window.location.href);
           const trackingNo = url.searchParams.get("t");
@@ -590,6 +890,7 @@
             track(trackingNo);
           }
         }
+
         document.addEventListener("DOMContentLoaded", () => {
           if (window.HarthI18n) {
             window.HarthI18n.ready().then(autoSearchFromQuery);
@@ -600,7 +901,6 @@
       })();
     </script>
   
-    <!-- HARTH-RESPONSIVE-JS -->
     <script src="responsive.js" defer></script>
   </body>
 </html>
