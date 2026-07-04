@@ -56,9 +56,7 @@
         cursor: not-allowed;
       }
 
-      /* OTP code input — six digits, big, monospace. We render a single
-         numeric input rather than 6 boxes; six boxes look fancier but break
-         autofill from the native "from messages" suggestion on iOS/Android. */
+      /* OTP code input */
       .otp-input {
         width: 100%;
         padding: 14px 18px;
@@ -94,9 +92,6 @@
         text-decoration: none;
       }
 
-      /* Force a solid background so native dropdown options stay readable
-         (white text on the browser's default white option list was
-         rendering invisible). */
       #reg-governorate {
         background: rgba(20, 40, 15, 0.95) !important;
         color: #ffffff !important;
@@ -111,6 +106,70 @@
         background: #2d5016;
         color: #ffffff;
       }
+
+      /* Social Login Buttons */
+      .social-login-wrap {
+        margin: 18px 0 16px;
+        text-align: center;
+      }
+      .social-login-wrap .social-divider {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        margin: 14px 0 10px;
+      }
+      .social-login-wrap .social-divider hr {
+        flex: 1;
+        border: none;
+        border-top: 1px solid rgba(255, 255, 255, 0.08);
+      }
+      .social-login-wrap .social-divider span {
+        color: rgba(255, 255, 255, 0.3);
+        font-size: 12px;
+        white-space: nowrap;
+      }
+      .social-btn {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        gap: 8px;
+        padding: 10px 22px;
+        border-radius: 10px;
+        font-family: inherit;
+        font-size: 14px;
+        font-weight: 600;
+        text-decoration: none;
+        transition: all 0.2s ease;
+        min-width: 130px;
+        border: 1px solid transparent;
+        cursor: pointer;
+      }
+      .social-btn.google {
+        background: #ffffff;
+        color: #333333;
+        border-color: #ddd;
+      }
+      .social-btn.google:hover {
+        box-shadow: 0 2px 12px rgba(0, 0, 0, 0.15);
+        transform: translateY(-1px);
+      }
+      .social-btn.apple {
+        background: #000000;
+        color: #ffffff;
+        border-color: #444;
+      }
+      .social-btn.apple:hover {
+        box-shadow: 0 2px 12px rgba(0, 0, 0, 0.4);
+        transform: translateY(-1px);
+      }
+      .social-btn i {
+        font-size: 18px;
+      }
+      .social-btn svg {
+        width: 20px;
+        height: 20px;
+        flex-shrink: 0;
+      }
     </style>
   
     <!-- HARTH-RESPONSIVE-CSS -->
@@ -122,6 +181,39 @@
       <div class="login-card">
         <div class="logo-area">
           <h2 data-i18n="register.logoText">مَنْصَةُ حَرْثْ</h2>
+        </div>
+
+        <!-- ============================================ -->
+        <!-- SOCIAL LOGIN - Google & Apple                -->
+        <!-- ============================================ -->
+        <div class="social-login-wrap">
+          <p style="color: rgba(255,255,255,0.5); font-size: 13px; margin-bottom: 12px;" data-i18n="register.socialLoginTitle">
+            أو سجل دخول باستخدام
+          </p>
+          <div style="display: flex; gap: 12px; justify-content: center; flex-wrap: wrap;">
+            <!-- Google Button (Redirect to backend) -->
+            <a href="/api/v1/auth/google" class="social-btn google">
+              <svg viewBox="0 0 48 48">
+                <path fill="#FFC107" d="M43.611,20.083H42V20H24v8h11.303c-1.649,4.657-6.08,8-11.303,8c-6.627,0-12-5.373-12-12c0-6.627,5.373-12,12-12c3.059,0,5.842,1.154,7.961,3.039l5.657-5.657C34.046,6.053,29.268,4,24,4C12.955,4,4,12.955,4,24c0,11.045,8.955,20,20,20c11.045,0,20-8.955,20-20C44,22.659,43.862,21.35,43.611,20.083z" />
+                <path fill="#FF3D00" d="M6.306,14.691l6.571,4.819C14.655,15.108,18.961,12,24,12c3.059,0,5.842,1.154,7.961,3.039l5.657-5.657C34.046,6.053,29.268,4,24,4C16.318,4,9.656,8.337,6.306,14.691z" />
+                <path fill="#4CAF50" d="M24,44c5.166,0,9.86-1.977,13.409-5.192l-6.19-5.238C29.211,35.091,26.715,36,24,36c-5.202,0-9.619-3.317-11.283-7.946l-6.522,5.025C9.505,39.556,16.227,44,24,44z" />
+                <path fill="#1976D2" d="M43.611,20.083H42V20H24v8h11.303c-0.792,2.237-2.231,4.166-4.087,5.571c0.001-0.001,0.002-0.001,0.003-0.002l6.19,5.238C36.971,39.205,44,34,44,24C44,22.659,43.862,21.35,43.611,20.083z" />
+              </svg>
+              <span data-i18n="register.googleBtn">Google</span>
+            </a>
+
+            <!-- Apple Button (Redirect to backend) -->
+            <a href="/api/v1/auth/apple" class="social-btn apple">
+              <i class="fab fa-apple"></i>
+              <span data-i18n="register.appleBtn">Apple</span>
+            </a>
+          </div>
+
+          <div class="social-divider">
+            <hr />
+            <span data-i18n="register.socialDivider">أو</span>
+            <hr />
+          </div>
         </div>
 
         <h3 id="page-title" data-i18n="register.login.title">تسجيل الدخول</h3>
@@ -155,7 +247,7 @@
           </button>
         </form>
 
-        <!-- REGISTER FORM (initially hidden, toggled by the link below) -->
+        <!-- REGISTER FORM -->
         <div
           id="createAccountSection"
           style="
@@ -338,8 +430,7 @@
           </form>
         </div>
 
-        <!-- OTP STEP — shown after a successful register, replaces the
-             register/login forms while the user types the 6-digit code. -->
+        <!-- OTP STEP (Disabled) -->
         <div id="otpSection" style="display: none; margin-top: 20px">
           <h4 style="color: #6ab04c; margin-bottom: 8px; text-align: center">
             <i class="fas fa-shield-alt"></i> <span data-i18n="register.otp.heading">تأكيد البريد الإلكتروني</span>
@@ -567,12 +658,6 @@
                 (res && res.error && res.error.message) || t("register.form.failed"),
               );
             }
-            // Email verification was removed — registration succeeds and
-            // we're logged in immediately. Skip the OTP step entirely
-            // and go straight to the role-appropriate landing page. We
-            // keep the OTP DOM around (hidden) for backwards-compat with
-            // any in-flight tabs the user might have, but the flow no
-            // longer routes through it.
             localStorage.setItem("token", res.token);
             localStorage.setItem("user", JSON.stringify(res.user));
 
@@ -592,16 +677,7 @@
           }
         });
 
-        // ─── OTP step (DISABLED) ───────────────────────────────────
-        //
-        // Email verification was removed as a feature. The OTP form
-        // markup is kept in the page (hidden) for layout stability, but
-        // its event listeners and resend timer are gone — they would do
-        // nothing useful now.
-
-        // No-op stubs so any leftover references in code that hasn't
-        // been touched yet don't throw. Safe to delete in a future
-        // cleanup pass.
+        // ─── OTP (Disabled) ────────────────────────────────────────
         function startResendCooldown() { /* no-op */ }
       })();
     </script>
