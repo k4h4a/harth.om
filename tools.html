@@ -708,6 +708,77 @@
           display: inline-flex;
         }
       }
+
+      /* ===== RESPONSIVE FIXES FOR TOOLS ===== */
+      @media (max-width: 768px) {
+        .marketplace-layout {
+          grid-template-columns: 1fr !important;
+          gap: var(--sp-4);
+        }
+        .filters-sidebar {
+          position: fixed;
+          inset: 0 !important;
+          top: auto !important;
+          bottom: 0 !important;
+          max-height: 80vh;
+          border-radius: var(--r-2xl) var(--r-2xl) 0 0 !important;
+          transform: translateY(100%);
+          transition: transform 0.3s ease;
+          z-index: 1000;
+        }
+        .filters-sidebar.is-open {
+          transform: translateY(0);
+        }
+        .filters-close-btn {
+          display: block !important;
+        }
+        #filters-drawer-btn {
+          display: inline-flex !important;
+        }
+        .listings-toolbar {
+          flex-wrap: wrap;
+          gap: var(--sp-2);
+        }
+        .listings-toolbar .search-field {
+          flex: 1 1 100%;
+        }
+        .equipment-grid {
+          grid-template-columns: 1fr !important;
+        }
+        .equipment-card .equip-img {
+          height: 160px !important;
+        }
+        .filter-group-title {
+          font-size: 13px;
+        }
+        .price-range-inputs {
+          flex-wrap: wrap;
+        }
+        .price-range-inputs .hs-input {
+          flex: 1;
+          min-width: 60px;
+        }
+      }
+      @media (max-width: 480px) {
+        .equipment-card .equip-details h3 {
+          font-size: 16px;
+        }
+        .equipment-card .equip-details p {
+          font-size: 13px;
+        }
+        .equipment-card .btn-order {
+          font-size: 12px;
+          padding: 7px 10px;
+        }
+        .modal {
+          padding: var(--sp-4);
+          width: 96%;
+        }
+        .rc-day {
+          height: 24px;
+          font-size: 10px;
+        }
+      }
     </style>
 
     <!-- HARTH-RESPONSIVE-CSS -->
@@ -814,14 +885,15 @@
 
           <div class="filter-group">
             <label class="filter-group-title" for="filter-min-rating" data-i18n="home.marketplace.minRatingLabel">التقييم الأدنى</label>
-          <select id="filter-min-rating" class="hs-select">
-  <option value="" data-i18n="home.marketplace.anyRating">⭐ أي تقييم</option>
-  <option value="1">⭐ 1 نجمة فأكثر</option>
-  <option value="2">⭐⭐ 2 نجمة فأكثر</option>
-  <option value="3">⭐⭐⭐ 3 نجوم فأكثر</option>
-  <option value="4">⭐⭐⭐⭐ 4 نجوم فأكثر</option>
-  <option value="5">⭐⭐⭐⭐⭐ 5 نجوم</option>
-</select>
+            <!-- 🔧 تم التعديل: إضافة التقييم بالنجوم -->
+            <select id="filter-min-rating" class="hs-select">
+              <option value="" data-i18n="home.marketplace.anyRating">⭐ أي تقييم</option>
+              <option value="1">⭐ 1 نجمة فأكثر</option>
+              <option value="2">⭐⭐ 2 نجمة فأكثر</option>
+              <option value="3">⭐⭐⭐ 3 نجوم فأكثر</option>
+              <option value="4">⭐⭐⭐⭐ 4 نجوم فأكثر</option>
+              <option value="5">⭐⭐⭐⭐⭐ 5 نجوم</option>
+            </select>
           </div>
 
           <div class="filter-group">
