@@ -15,9 +15,7 @@
       })();
     </script>
     <style>
-      html.i18n-loading body {
-        visibility: hidden;
-      }
+      html.i18n-loading body { visibility: hidden; }
     </style>
     <title data-i18n="register.title">تسجيل الدخول | منصة حرث</title>
     <link rel="stylesheet" href="design-system.css" />
@@ -48,15 +46,12 @@
         background: rgba(106, 176, 76, 0.25);
         color: #a9dc98;
       }
-      .form-msg:empty {
-        display: none;
-      }
+      .form-msg:empty { display: none; }
       .login-btn:disabled {
         opacity: 0.6;
         cursor: not-allowed;
       }
 
-      /* OTP code input */
       .otp-input {
         width: 100%;
         padding: 14px 18px;
@@ -107,7 +102,7 @@
         color: #ffffff;
       }
 
-      /* Social Login Buttons */
+      /* ===== SOCIAL LOGIN ===== */
       .social-login-wrap {
         margin: 18px 0 16px;
         text-align: center;
@@ -162,17 +157,68 @@
         box-shadow: 0 2px 12px rgba(0, 0, 0, 0.4);
         transform: translateY(-1px);
       }
-      .social-btn i {
-        font-size: 18px;
-      }
+      .social-btn i { font-size: 18px; }
       .social-btn svg {
         width: 20px;
         height: 20px;
         flex-shrink: 0;
       }
+
+      /* ===== RESPONSIVE FIXES ===== */
+      @media (max-width: 600px) {
+        .social-login-wrap .social-divider {
+          gap: 8px;
+        }
+        .social-btn {
+          min-width: 100px;
+          padding: 8px 12px;
+          font-size: 12px;
+        }
+        .social-btn svg {
+          width: 16px;
+          height: 16px;
+        }
+        .social-btn i {
+          font-size: 16px;
+        }
+        .radio-group label {
+          font-size: 13px;
+          padding: 8px !important;
+        }
+        .login-card {
+          padding: 20px 16px !important;
+        }
+        .input-field input {
+          font-size: 14px !important;
+          padding: 10px 12px !important;
+        }
+        .login-btn {
+          font-size: 15px !important;
+          padding: 12px !important;
+        }
+      }
+      @media (max-width: 400px) {
+        .social-btn {
+          min-width: 80px;
+          padding: 6px 10px;
+          font-size: 11px;
+        }
+        .social-btn svg {
+          width: 14px;
+          height: 14px;
+        }
+        .social-btn i {
+          font-size: 14px;
+        }
+        .login-card h2 {
+          font-size: 20px !important;
+        }
+        .login-card h3 {
+          font-size: 18px !important;
+        }
+      }
     </style>
   
-    <!-- HARTH-RESPONSIVE-CSS -->
     <link rel="stylesheet" href="responsive.css" />
   </head>
 
@@ -191,7 +237,7 @@
             أو سجل دخول باستخدام
           </p>
           <div style="display: flex; gap: 12px; justify-content: center; flex-wrap: wrap;">
-            <!-- Google Button (Redirect to backend) -->
+            <!-- Google Button -->
             <a href="/api/v1/auth/google" class="social-btn google">
               <svg viewBox="0 0 48 48">
                 <path fill="#FFC107" d="M43.611,20.083H42V20H24v8h11.303c-1.649,4.657-6.08,8-11.303,8c-6.627,0-12-5.373-12-12c0-6.627,5.373-12,12-12c3.059,0,5.842,1.154,7.961,3.039l5.657-5.657C34.046,6.053,29.268,4,24,4C12.955,4,4,12.955,4,24c0,11.045,8.955,20,20,20c11.045,0,20-8.955,20-20C44,22.659,43.862,21.35,43.611,20.083z" />
@@ -202,7 +248,7 @@
               <span data-i18n="register.googleBtn">Google</span>
             </a>
 
-            <!-- Apple Button (Redirect to backend) -->
+            <!-- Apple Button -->
             <a href="/api/v1/auth/apple" class="social-btn apple">
               <i class="fab fa-apple"></i>
               <span data-i18n="register.appleBtn">Apple</span>
@@ -521,7 +567,6 @@
       // =========================================================
       // register.html — login + register + email-verification OTP.
       // Roles sent to backend: renter | owner | delivery
-      // (admin accounts are bootstrapped in env, never self-registered.)
       // =========================================================
       (function () {
         "use strict";
@@ -538,9 +583,6 @@
           box.className = "form-msg " + (isError ? "err" : "ok");
         }
 
-        // Where to send the user after a successful auth. We keep pending
-        // farmers/delivery agents on the storefront — they can still browse/
-        // buy while admin reviews their account.
         function landingFor(user) {
           if (user.account_status === "pending") return "tools.html";
           return (
@@ -553,7 +595,6 @@
           );
         }
 
-        // Mode state. Three modes: "login", "register", "otp".
         let mode = "login";
 
         function setMode(next) {
@@ -580,7 +621,6 @@
           }
         }
 
-        // Toggle login ↔ register
         $("#toggle-mode").addEventListener("click", (e) => {
           e.preventDefault();
           setMode(mode === "login" ? "register" : "login");
@@ -682,7 +722,6 @@
       })();
     </script>
   
-    <!-- HARTH-RESPONSIVE-JS -->
     <script src="responsive.js" defer></script>
   </body>
 </html>
