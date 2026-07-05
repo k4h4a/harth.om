@@ -4,8 +4,6 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <script>
-      // Apply the saved language/direction before first paint so there's no
-      // flash of Arabic/RTL when the visitor's saved language is English.
       (function () {
         try {
           if (localStorage.getItem("harth_lang") === "en") {
@@ -17,9 +15,7 @@
       })();
     </script>
     <style>
-      html.i18n-loading body {
-        visibility: hidden;
-      }
+      html.i18n-loading body { visibility: hidden; }
     </style>
     <title data-i18n="ownerDashboard.title">لوحة المالك - حرث</title>
 
@@ -35,7 +31,6 @@
     <link rel="stylesheet" href="style.css" />
 
     <style>
-      /* Dashboard-specific styles (scoped to this page only) */
       .dash-container {
         max-width: 1200px;
         margin: 24px auto;
@@ -64,7 +59,6 @@
         grid-template-columns: repeat(auto-fill, minmax(270px, 1fr));
         gap: var(--sp-5);
       }
-      /* ── Premium Equipment Cards ─────────────────────────── */
       .equip-card {
         background: var(--surface-glass);
         backdrop-filter: blur(12px);
@@ -83,7 +77,6 @@
         transform: translateY(-4px);
         box-shadow: var(--shadow-lg);
       }
-      /* Media */
       .eq-media {
         position: relative;
         height: 190px;
@@ -111,7 +104,6 @@
         opacity: 0.6;
         font-size: 48px;
       }
-      /* Floating badges over image */
       .eq-badges {
         position: absolute;
         top: var(--sp-2);
@@ -137,7 +129,6 @@
       .eq-badge--rent  { background: rgba(106,176,76,0.92); color:#fff; }
       .eq-badge--sale  { background: rgba(52,152,219,0.92); color:#fff; }
       .eq-badge--both  { background: rgba(155,89,182,0.92); color:#fff; }
-      /* Status pill top-right */
       .eq-status-pill {
         position: absolute;
         top: var(--sp-2);
@@ -158,7 +149,6 @@
       .eq-s-maintenance { background:rgba(231,76,60,0.93);   color:#fff; }
       .eq-s-sold        { background:rgba(52,73,94,0.93);    color:#fff; }
       .eq-s-hidden      { background:rgba(150,150,150,0.93); color:#fff; }
-      /* Card body */
       .eq-body {
         padding: var(--sp-4);
         flex: 1;
@@ -206,7 +196,6 @@
         gap: 4px;
       }
       .eq-meta-row i { color: var(--color-brand-500); width:12px; text-align:center; }
-      /* Action buttons */
       .eq-actions {
         display: flex;
         gap: 6px;
@@ -234,10 +223,8 @@
       .eq-btn--show   { background: linear-gradient(135deg,#27ae60,#2ecc71); color:#fff; }
       .eq-btn--del    { background: linear-gradient(135deg,#e74c3c,#c0392b); color:#fff; flex:0 0 auto; width:38px; }
       .eq-btn--pdf    { background: linear-gradient(135deg,#8e44ad,#9b59b6); color:#fff; flex:0 0 auto; width:38px; }
-      /* Legacy badge selectors kept for compat */
       .badge { display:none; }
 
-      /* ── Technical specs accordion ── */
       .specs-acc { margin-top: var(--sp-4); border: var(--border-width) solid var(--border-soft); border-radius: var(--r-md); overflow:hidden; background: var(--surface-2); }
       .specs-acc summary { cursor:pointer; padding:13px 18px; font-weight:700; color: var(--color-text); font-size:14px; background: var(--surface-3); list-style:none; display:flex; align-items:center; gap:8px; user-select:none; }
       .specs-acc summary::-webkit-details-marker { display:none; }
@@ -253,7 +240,6 @@
       .pdf-current-link a { color: var(--color-brand-500); text-decoration:none; }
       .pdf-current-link a:hover { text-decoration:underline; }
 
-      /* Form */
       .form-grid {
         display: grid;
         grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
@@ -285,9 +271,6 @@
         border-color: var(--color-brand-500);
         box-shadow: 0 0 0 3px rgba(106, 176, 76, 0.1);
       }
-      /* Force a solid background so native dropdown options stay readable
-         (white --color-text on the browser's default white option list
-         was rendering invisible text). */
       .form-grid select {
         background: rgba(20, 40, 15, 0.95) !important;
         color: #ffffff !important;
@@ -387,6 +370,40 @@
         border-radius: 4px;
       }
 
+      /* ===== PRICE CALCULATION STYLES (Commission Only) ===== */
+      .price-group .commission-box {
+        margin-top: 6px;
+        padding: 10px 12px;
+        background: rgba(106, 176, 76, 0.08);
+        border-radius: 8px;
+        border: 1px solid rgba(106, 176, 76, 0.2);
+      }
+      .price-group .price-row {
+        display: flex;
+        justify-content: space-between;
+        font-size: 13px;
+        padding: 2px 0;
+        color: var(--color-text-muted);
+      }
+      .price-group .price-row .commission-text {
+        color: #f1c40f;
+        font-weight: 600;
+      }
+      .price-group .price-row .final-text {
+        color: #6ab04c;
+        font-weight: 700;
+        font-size: 15px;
+        border-top: 1px solid rgba(106, 176, 76, 0.15);
+        padding-top: 4px;
+        margin-top: 4px;
+      }
+      .price-group .commission-note {
+        color: var(--color-text-soft);
+        display: block;
+        margin-top: 4px;
+        font-size: 12px;
+      }
+
       #toast {
         position: fixed;
         bottom: 24px;
@@ -403,12 +420,8 @@
         pointer-events: none;
         max-width: 90vw;
       }
-      #toast.show {
-        opacity: 1;
-      }
-      #toast.error {
-        background: var(--color-danger-600, #c0392b);
-      }
+      #toast.show { opacity: 1; }
+      #toast.error { background: var(--color-danger-600, #c0392b); }
 
       .empty-state {
         text-align: center;
@@ -555,13 +568,6 @@
         color: #ffffff;
       }
 
-      /* ============================================================
-         RESPONSIVE — phones and tablets
-         The owner dashboard is heavily used by farmers on their
-         phones, so layout has to hold up at narrow widths. The
-         desktop grid (260px-min cards) becomes one column under
-         640px, and form fields stretch full-width.
-      ============================================================ */
       @media (max-width: 640px) {
         .dash-container {
           margin: 14px auto;
@@ -575,14 +581,11 @@
         .dash-card h2 {
           font-size: 18px;
         }
-        /* Equipment cards single-column on phones — 260px-min was
-           causing horizontal overflow on small screens. */
         .dash-grid {
           grid-template-columns: 1fr;
           gap: 12px;
         }
         .eq-media { height: 180px; }
-        /* Filter bar wraps + inputs grow to share rows. */
         .filter-bar {
           flex-wrap: wrap;
           gap: 8px;
@@ -592,12 +595,10 @@
           flex: 1 1 calc(50% - 4px);
           min-width: 0;
         }
-        /* Modals — let them fill more of the screen. */
         .modal {
           max-width: 94vw !important;
           padding: 16px;
         }
-        /* Tables collapse a bit. */
         table th,
         table td {
           padding: 8px;
@@ -606,7 +607,6 @@
       }
 
       @media (max-width: 420px) {
-        /* Tightest layout — phones in portrait. */
         .dash-container {
           padding: 0 10px;
         }
@@ -620,7 +620,6 @@
         .eq-media { height: 160px; }
         .eq-name { font-size: 15px; }
         .eq-meta-row { font-size: 11px; }
-        /* Trust + status banner action buttons should stack. */
         #trust-banner-actions,
         #status-banner-actions {
           flex-wrap: wrap;
@@ -634,7 +633,6 @@
       }
     </style>
   
-    <!-- HARTH-RESPONSIVE-CSS -->
     <link rel="stylesheet" href="responsive.css" />
   </head>
 
@@ -663,7 +661,6 @@
       </div>
     </header>
 
-    <!-- ========== LOGIN GATE (shown if not logged in) ========== -->
     <section id="login-section" class="login-gate hidden">
       <h2><i class="fas fa-user-shield"></i> <span data-i18n="ownerDashboard.loginGate.heading">تسجيل دخول المالك</span></h2>
       <p style="color: var(--color-text-muted); font-size: 14px" data-i18n="ownerDashboard.loginGate.desc">
@@ -678,9 +675,7 @@
       </p>
     </section>
 
-    <!-- ========== DASHBOARD (shown when logged in as owner/admin) ========== -->
     <main id="dashboard-section" class="dash-container hidden">
-      <!-- Account-status banner (shown for pending/rejected/etc; hidden for approved) -->
       <div id="status-banner" class="dash-card hidden" style="border:1px solid #f1c40f; background:rgba(241,196,15,0.12)">
         <div style="display:flex;gap:12px;align-items:flex-start">
           <i class="fas fa-info-circle" id="status-banner-icon" style="font-size:24px;color:#f1c40f;margin-top:2px"></i>
@@ -693,10 +688,6 @@
         </div>
       </div>
 
-      <!-- Trust banner: prompts the owner to verify their email and submit
-           KYC. Hidden once both are done. Filled in by initTrustBanner()
-           after the page loads (data comes from /auth/me, which already
-           returns email_verified + identity_status). -->
       <div
         id="trust-banner"
         class="dash-card hidden"
@@ -714,7 +705,6 @@
         </div>
       </div>
 
-      <!-- Welcome + stats -->
       <div class="dash-card">
         <h2>
           <i class="fas fa-tractor"></i>
@@ -740,7 +730,6 @@
         </div>
       </div>
 
-      <!-- Add / Edit form (hidden when account isn't approved) -->
       <div class="dash-card" id="equip-form-card">
         <h2 id="form-title">
           <i class="fas fa-plus-circle"></i> <span data-i18n="ownerDashboard.form.addTitle">إضافة معدة جديدة</span>
@@ -788,22 +777,54 @@
               </select>
             </label>
 
-            <label id="f-daily-wrap">
-              <span data-i18n="ownerDashboard.form.dailyPriceLabel">سعر اليوم (ريال) *</span>
-              <input type="number" id="f-daily-price" min="0" step="0.01" />
-              <small id="f-daily-commission-hint" style="color:var(--color-text-soft);display:block;margin-top:4px"></small>
+            <!-- 🔧 MODIFIED: Daily Price with Commission Only (No Tax) -->
+            <label id="f-daily-wrap" class="price-group">
+              <span data-i18n="ownerDashboard.form.dailyPriceLabel">سعر المزارع (ريال) *</span>
+              <input type="number" id="f-daily-price" class="farmer-price-input" min="0" step="0.01" />
+              <small class="commission-note">
+                ⚠️ تضاف عمولة المنصة 10% تلقائياً
+              </small>
+              <div class="commission-box">
+                <div class="price-row">
+                  <span>السعر الأساسي:</span>
+                  <span id="base-price-display">0.00 ر.ع</span>
+                </div>
+                <div class="price-row">
+                  <span class="commission-text">عمولة المنصة (10%):</span>
+                  <span class="commission-text" id="commission-display">0.00 ر.ع</span>
+                </div>
+                <div class="price-row">
+                  <span class="final-text">السعر النهائي:</span>
+                  <span class="final-text" id="final-price-display">0.00 ر.ع</span>
+                </div>
+                <input type="hidden" id="final-price-input" class="final-price-input" value="0">
+              </div>
             </label>
 
-            <label id="f-sale-wrap">
-              <span data-i18n="ownerDashboard.form.salePriceLabel">سعر البيع (ريال)</span>
-              <input type="number" id="f-sale-price" min="0" step="0.01" />
-              <small id="f-sale-commission-hint" style="color:var(--color-text-soft);display:block;margin-top:4px"></small>
+            <!-- 🔧 MODIFIED: Sale Price with Commission Only (No Tax) -->
+            <label id="f-sale-wrap" class="price-group">
+              <span data-i18n="ownerDashboard.form.salePriceLabel">سعر المزارع للبيع (ريال)</span>
+              <input type="number" id="f-sale-price" class="farmer-price-input" min="0" step="0.01" />
+              <small class="commission-note">
+                ⚠️ تضاف عمولة المنصة 10% تلقائياً
+              </small>
+              <div class="commission-box">
+                <div class="price-row">
+                  <span>السعر الأساسي:</span>
+                  <span class="sale-base-price-display">0.00 ر.ع</span>
+                </div>
+                <div class="price-row">
+                  <span class="commission-text">عمولة المنصة (10%):</span>
+                  <span class="commission-text sale-commission-display">0.00 ر.ع</span>
+                </div>
+                <div class="price-row">
+                  <span class="final-text">السعر النهائي:</span>
+                  <span class="final-text sale-final-price-display">0.00 ر.ع</span>
+                </div>
+                <input type="hidden" class="final-price-input sale-final-price-input" value="0">
+              </div>
             </label>
 
-            <!-- Optional security deposit. Held when the rental starts and
-                 refunded at completion (or forfeited on damage). Hidden for
-                 listing_type='sale' — it makes no sense to hold a deposit
-                 against a sale. -->
             <label id="f-deposit-wrap">
               <span data-i18n="ownerDashboard.form.depositLabel">تأمين قابل للاسترداد (ريال)</span> <small style="color:var(--color-text-soft)" data-i18n="ownerDashboard.form.depositOptionalHint">— اختياري</small>
               <input
@@ -851,7 +872,6 @@
             ></textarea>
           </div>
 
-          <!-- Technical specs accordion -->
           <details class="specs-acc" id="tech-specs-acc">
             <summary>
               <i class="fas fa-cogs"></i> <span data-i18n="ownerDashboard.form.specsAcc.summary">المواصفات الفنية التفصيلية</span>
@@ -859,7 +879,6 @@
               <span class="acc-arrow">▼</span>
             </summary>
             <div class="acc-body">
-
               <p class="specs-sub"><i class="fas fa-id-card"></i> <span data-i18n="ownerDashboard.form.specsAcc.idSection">بيانات التعريف</span></p>
               <div class="form-grid">
                 <label><span data-i18n="ownerDashboard.form.specsAcc.manufacturerLabel">الشركة المصنعة</span> <input type="text" id="f-manufacturer" maxlength="100" data-i18n-placeholder="ownerDashboard.form.specsAcc.manufacturerPlaceholder" placeholder="مثال: John Deere، كوبوتا"></label>
@@ -953,8 +972,6 @@
         </form>
       </div>
 
-      <!-- My equipment list -->
-
       <div class="dash-card">
         <h2><i class="fas fa-list"></i> <span data-i18n="ownerDashboard.list.heading">معدّاتي</span></h2>
         <div class="filter-bar">
@@ -1007,8 +1024,7 @@
 
     <script>
       // =================================================================
-      // Owner Dashboard — talks only to /api/v1/*.
-      // All data lives in Postgres via the backend; nothing is hardcoded.
+      // Owner Dashboard
       // =================================================================
       (function () {
         "use strict";
@@ -1024,8 +1040,7 @@
           return window.HarthI18n ? window.HarthI18n.localeTag() : "ar";
         }
 
-        // Local in-memory state for the form
-        let currentImages = []; // [{ url, filename }]
+        let currentImages = [];
         let primaryImageUrl = null;
         let editingId = null;
 
@@ -1034,11 +1049,9 @@
           return label.startsWith("common.governorates.") ? g : label;
         }
 
-        // Pagination state
         const PAGE_SIZE = 12;
         let currentPage = 1;
 
-        // ---------- tiny helpers ----------
         const $ = (sel) => document.querySelector(sel);
         const $$ = (sel) => document.querySelectorAll(sel);
 
@@ -1069,10 +1082,6 @@
           }
         }
 
-        /**
-         * Centralised API caller. Handles auth header, JSON body,
-         * consistent error surfacing.
-         */
         async function api(path, opts = {}) {
           const headers = { ...(opts.headers || {}) };
           const token = getToken();
@@ -1095,7 +1104,6 @@
             const err = new Error(msg);
             err.status = res.status;
             err.details = data && data.error && data.error.details;
-            // Auto-logout on 401
             if (res.status === 401) {
               clearAuth();
               showLogin();
@@ -1105,13 +1113,7 @@
           return data;
         }
 
-        // ---------- view switching ----------
         function showLogin() {
-          // Full logout: send the user to the main login page so the rest of
-          // the app (basket, tools, track, header) also sees a logged-out
-          // state. Staying on this page with a hidden dashboard left users
-          // confused because script.js elsewhere still thought they were
-          // logged in from a stale localStorage entry.
           clearAuth();
           window.location.href = "register.html";
         }
@@ -1128,9 +1130,6 @@
           return String(s).replace(/[&<>"']/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"})[c]);
         }
 
-        // Trust nudge: a single banner that lists what's still TODO for this
-        // owner to earn the "موثَّق" badge. Hidden once everything's done.
-        // Admins see no banner — they don't need to verify themselves.
         function renderTrustBanner(user) {
           const banner = $("#trust-banner");
           if (!banner) return;
@@ -1139,22 +1138,16 @@
             return;
           }
           const todo = [];
-          // Email verification was removed as a feature, so we no
-          // longer push "email" into the todo list. Only KYC remains.
-          // identity_verified / identity_status come back from /auth/me. If
-          // both are missing (older sessions) we fall through and don't
-          // pester the user — the next /auth/me will populate them.
           const idStatus = user.identity_status || "none";
           if (idStatus === "none") todo.push("kyc_submit");
           else if (idStatus === "rejected") todo.push("kyc_resubmit");
-          else if (idStatus === "pending") todo.push("kyc_pending"); // info only
+          else if (idStatus === "pending") todo.push("kyc_pending");
 
           if (!todo.length) {
             banner.classList.add("hidden");
             return;
           }
 
-          // Compose a single coherent message from the todos.
           const msgParts = [];
           if (todo.includes("kyc_submit")) {
             msgParts.push(t("ownerDashboard.trustBanner.kycSubmitMsg"));
@@ -1168,7 +1161,6 @@
           $("#trust-banner-msg").textContent =
             t("ownerDashboard.trustBanner.msgPrefix") + " " + msgParts.join(" ");
 
-          // Render action buttons.
           const actions = $("#trust-banner-actions");
           actions.innerHTML = "";
           if (todo.includes("kyc_submit") || todo.includes("kyc_resubmit")) {
@@ -1184,19 +1176,6 @@
           banner.classList.remove("hidden");
         }
 
-        function actionButton(label, onClick) {
-          const b = document.createElement("button");
-          b.type = "button";
-          b.className = "btn-save";
-          b.style.cssText = "padding:8px 14px";
-          b.textContent = label;
-          b.addEventListener("click", onClick);
-          return b;
-        }
-
-        // (Email verification flow was removed — see auth.controller.js.
-        //  The function previously here is no longer needed.)
-
         async function reloadUser() {
           try {
             const r = await api("/auth/me");
@@ -1206,15 +1185,11 @@
           } catch (e) { /* ignore */ }
         }
 
-        // Show/hide the account-approval banner and toggle the create-equipment
-        // form so non-approved farmers can't fill out a form whose POST will
-        // be rejected by the API anyway.
         function renderStatusBanner(user) {
           const banner = $("#status-banner");
           const formCard = $("#equip-form-card");
           if (!banner) return;
 
-          // Admins always have full power on this page.
           if (user.role === "admin" || user.account_status === "approved") {
             banner.classList.add("hidden");
             if (formCard) formCard.classList.remove("hidden");
@@ -1223,7 +1198,7 @@
 
           let title, msg, color;
           if (user.account_status === "pending") {
-            color = "#f1c40f"; // amber
+            color = "#f1c40f";
             title = t("ownerDashboard.statusBanner.pendingTitle");
             msg = t("ownerDashboard.statusBanner.pendingMsg");
           } else if (user.account_status === "rejected") {
@@ -1232,21 +1207,18 @@
             msg = (user.status_reason ? `${t("ownerDashboard.statusBanner.rejectedReasonPrefix")} ${user.status_reason}. ` : "") +
               t("ownerDashboard.statusBanner.rejectedMsg");
           } else {
-            // blocked/deleted users wouldn't reach here (auth blocks them),
-            // but render a generic message just in case.
             color = "#e74c3c";
             title = t("ownerDashboard.statusBanner.inactiveTitle");
             msg = t("ownerDashboard.statusBanner.inactiveMsg");
           }
 
           banner.style.borderColor = color;
-          banner.style.background = `${color}1f`; // ~12% alpha hex suffix
+          banner.style.background = `${color}1f`;
           $("#status-banner-icon").style.color = color;
           $("#status-banner-title").textContent = title;
           $("#status-banner-msg").textContent = msg;
           banner.classList.remove("hidden");
 
-          // Hide the create form so they don't try to use it.
           if (formCard) formCard.classList.add("hidden");
         }
 
@@ -1279,7 +1251,7 @@
           }
         }
 
-        // ---------- init / session check ----------
+        // ---------- init ----------
         async function init() {
           if (window.HarthI18n) await window.HarthI18n.ready();
           if (!getToken()) return showLogin();
@@ -1291,7 +1263,7 @@
               showToast(t("ownerDashboard.toasts.ownersOnly"), true);
               return;
             }
-            setAuth(getToken(), res.user); // refresh cached user
+            setAuth(getToken(), res.user);
             showDashboard(res.user);
             await refreshEquipment();
           } catch (err) {
@@ -1365,10 +1337,18 @@
           $("#f-status").value = "available";
           $("#f-listing-type").value = "rent";
           $("#f-stock").value = "1";
-          commissionPct = 10;
-          updateCommissionPreview("daily");
-          updateCommissionPreview("sale");
-          // Clear specs fields and PDF state
+          // Reset commission displays
+          document.querySelectorAll('.price-group').forEach(group => {
+            const baseDisplay = group.querySelector('#base-price-display, .sale-base-price-display');
+            const commissionDisplay = group.querySelector('#commission-display, .sale-commission-display');
+            const finalDisplay = group.querySelector('#final-price-display, .sale-final-price-display');
+            const hiddenInput = group.querySelector('.final-price-input');
+            const currency = 'ر.ع';
+            if (baseDisplay) baseDisplay.textContent = '0.00 ' + currency;
+            if (commissionDisplay) commissionDisplay.textContent = '0.00 ' + currency;
+            if (finalDisplay) finalDisplay.textContent = '0.00 ' + currency;
+            if (hiddenInput) hiddenInput.value = '0';
+          });
           const pdfUrlEl = $("#f-datasheet-pdf-url");
           const pdfInfoEl = $("#pdf-upload-info");
           const pdfLinkEl = $("#pdf-current-link");
@@ -1394,28 +1374,52 @@
           }
         }
 
-        // Client-side preview only — purely cosmetic feedback while typing.
-        // The server is the sole source of truth: it recomputes and stores
-        // the authoritative commission/final price on save, ignoring any
-        // commission/final value sent from the client.
-        let commissionPct = 10;
+        // ============================================================
+        // PRICE CALCULATION (COMMISSION ONLY - NO TAX)
+        // ============================================================
+        const COMMISSION_PERCENT = 10;
 
-        function updateCommissionPreview(kind) {
-          const input = $(`#f-${kind}-price`);
-          const hintEl = $(`#f-${kind}-commission-hint`);
-          const farmerPrice = Number(input.value) || 0;
-          const commission = Math.round((farmerPrice * commissionPct / 100 + Number.EPSILON) * 100) / 100;
-          const final = Math.round((farmerPrice + commission + Number.EPSILON) * 100) / 100;
-          hintEl.innerHTML = t("ownerDashboard.form.commissionHintTemplate", {
-            pct: commissionPct,
-            amount: commission.toFixed(2),
-            final: final.toFixed(2),
-            currency: t("common.currency"),
-          });
+        function calculatePriceWithCommission(farmerPrice) {
+            const price = parseFloat(farmerPrice) || 0;
+            const commission = price * (COMMISSION_PERCENT / 100);
+            const finalPrice = price + commission;
+            
+            return {
+                basePrice: price,
+                commission: commission,
+                finalPrice: finalPrice
+            };
         }
 
-        $("#f-daily-price").addEventListener("input", () => updateCommissionPreview("daily"));
-        $("#f-sale-price").addEventListener("input", () => updateCommissionPreview("sale"));
+        function setupPriceCalculation() {
+            const farmerInputs = document.querySelectorAll('.farmer-price-input');
+            
+            farmerInputs.forEach(input => {
+                input.addEventListener('input', function() {
+                    const value = parseFloat(this.value) || 0;
+                    const result = calculatePriceWithCommission(value);
+                    
+                    const container = this.closest('.price-group');
+                    if (container) {
+                        const baseDisplay = container.querySelector('#base-price-display, .sale-base-price-display');
+                        const commissionDisplay = container.querySelector('#commission-display, .sale-commission-display');
+                        const finalDisplay = container.querySelector('#final-price-display, .sale-final-price-display');
+                        const hiddenInput = container.querySelector('.final-price-input');
+                        
+                        const currency = 'ر.ع';
+                        if (baseDisplay) baseDisplay.textContent = result.basePrice.toFixed(2) + ' ' + currency;
+                        if (commissionDisplay) commissionDisplay.textContent = result.commission.toFixed(2) + ' ' + currency;
+                        if (finalDisplay) finalDisplay.textContent = result.finalPrice.toFixed(2) + ' ' + currency;
+                        if (hiddenInput) hiddenInput.value = result.finalPrice.toFixed(2);
+                    }
+                });
+            });
+        }
+
+        // Run setup when DOM is ready
+        document.addEventListener('DOMContentLoaded', function() {
+            setupPriceCalculation();
+        });
 
         function toggleListingPriceFields() {
           const listingType = $("#f-listing-type").value;
@@ -1438,8 +1442,6 @@
             daily.required = true;
             sale.required = true;
           }
-          // For rent-only listings, sale price and stock quantity don't
-          // apply — hide them entirely instead of just making them optional.
           if (listingType === "rent") {
             saleWrap.style.display = "none";
             stockWrap.style.display = "none";
@@ -1448,9 +1450,6 @@
             saleWrap.style.display = "";
             stockWrap.style.display = "";
           }
-          // Deposits only make sense for rentals (or 'both' which can be
-          // rented). Hide it on sale-only and clear the field so the value
-          // doesn't carry over silently.
           if (listingType === "sale") {
             depositWrap.style.display = "none";
             depositInput.value = "";
@@ -1459,7 +1458,7 @@
           }
         }
 
-        // ---------- submit (create or update) ----------
+        // ---------- submit ----------
         async function handleSubmit(e) {
           e.preventDefault();
           const payload = {
@@ -1474,19 +1473,16 @@
             primary_image_url: primaryImageUrl,
           };
 
+          // Use the FARMER's base price (not final price with commission)
           const daily = $("#f-daily-price").value;
           const sale = $("#f-sale-price").value;
           payload.daily_price = daily === "" ? null : Number(daily);
           payload.sale_price = sale === "" ? null : Number(sale);
 
-          // Optional deposit. Empty string = no deposit (null), preserving
-          // the difference between "owner explicitly set 0" and "owner
-          // hasn't configured a deposit". Server treats both the same for
-          // booking math but we keep the distinction.
           const dep = $("#f-deposit-amount").value;
           payload.deposit_amount = dep === "" ? null : Number(dep);
 
-          // Collect optional technical specs from the accordion section
+          // Collect specs
           const specs = {};
           const specStrFields = {
             manufacturer:         "#f-manufacturer",
@@ -1558,16 +1554,13 @@
             renderEquipmentList(res.items);
             updateStats(res.items, res.pagination.total);
             renderPagination(res.pagination);
-            applyClientFilters(); // apply search + status filter on rendered items
+            applyClientFilters();
           } catch (err) {
             showToast(err.message, true);
           }
         }
 
         function updateStats(items, total) {
-          // These counts are for the *current page* slice when counting by status,
-          // except for total which is the real total. For truly accurate status
-          // counts you'd need a dedicated /stats endpoint — good enough for now.
           $("#stat-total").textContent = total;
           $("#stat-available").textContent = items.filter(
             (i) => i.status === "available",
@@ -1580,10 +1573,6 @@
           ).length;
         }
 
-        function badgeFor(status) {
-          return `<span class="badge badge-${status}">${statusLabel(status)}</span>`;
-        }
-
         function priceLabel(eq) {
           const parts = [];
           if (eq.daily_price != null && eq.daily_price !== "")
@@ -1591,21 +1580,6 @@
           if (eq.sale_price != null && eq.sale_price !== "")
             parts.push(`${t("ownerDashboard.saleLabelPrefix")} ${eq.sale_price} ${t("common.currency")}`);
           return parts.join(" · ") || t("ownerDashboard.noPriceLabel");
-        }
-
-        function escapeHtml(s) {
-          if (s == null) return "";
-          return String(s).replace(
-            /[&<>"']/g,
-            (c) =>
-              ({
-                "&": "&amp;",
-                "<": "&lt;",
-                ">": "&gt;",
-                '"': "&quot;",
-                "'": "&#39;",
-              })[c],
-          );
         }
 
         function catLabel(cat) {
@@ -1621,7 +1595,6 @@
           maintenance:"fa-tools", sold:"fa-handshake", hidden:"fa-eye-slash",
         };
 
-        // Cache for PDF generation (keyed by equipment id)
         const ownerEquipCache = {};
 
         function renderEquipmentList(items) {
@@ -1647,7 +1620,6 @@
               ? `<span class="eq-badge eq-badge--both"><i class="fas fa-exchange-alt"></i> ${t("ownerDashboard.badges.bothSaleRent")}</span>`
               : `<span class="eq-badge eq-badge--rent"><i class="fas fa-key"></i> ${t("ownerDashboard.badges.forRent")}</span>`;
 
-            // Price row
             let priceHtml = "";
             if (eq.daily_price != null && eq.daily_price !== "") {
               priceHtml += `<span class="eq-price-main">${Number(eq.daily_price).toFixed(2)}</span><span class="eq-price-unit">${t("common.currency")} / ${t("common.perDay")}</span>`;
@@ -1764,10 +1736,6 @@
             $("#f-category").value = eq.category || "other";
             $("#f-listing-type").value = eq.listing_type || "rent";
             $("#f-status").value = eq.status || "available";
-            // Prefill with the FARMER's base price (not the marked-up final
-            // price the buyer sees) — handleSubmit always re-sends this
-            // field, so prefilling with the final price would double the
-            // commission on every save.
             $("#f-daily-price").value = eq.farmer_daily_price ?? "";
             $("#f-sale-price").value = eq.farmer_sale_price ?? "";
             $("#f-deposit-amount").value = eq.deposit_amount ?? "";
@@ -1775,9 +1743,29 @@
             $("#f-governorate").value = eq.governorate || "";
             $("#f-description").value = eq.description || "";
 
-            commissionPct = Number(eq.commission_percentage) || 10;
-            updateCommissionPreview("daily");
-            updateCommissionPreview("sale");
+            // Update commission displays (No Tax)
+            const dailyResult = calculatePriceWithCommission(eq.farmer_daily_price);
+            const saleResult = calculatePriceWithCommission(eq.farmer_sale_price);
+            
+            const dailyBase = document.querySelector('#f-daily-wrap #base-price-display');
+            const dailyCommission = document.querySelector('#f-daily-wrap #commission-display');
+            const dailyFinal = document.querySelector('#f-daily-wrap #final-price-display');
+            const dailyHidden = document.querySelector('#f-daily-wrap .final-price-input');
+            const saleBase = document.querySelector('#f-sale-wrap .sale-base-price-display');
+            const saleCommission = document.querySelector('#f-sale-wrap .sale-commission-display');
+            const saleFinal = document.querySelector('#f-sale-wrap .sale-final-price-display');
+            const saleHidden = document.querySelector('#f-sale-wrap .final-price-input');
+            const currency = 'ر.ع';
+            
+            if (dailyBase) dailyBase.textContent = dailyResult.basePrice.toFixed(2) + ' ' + currency;
+            if (dailyCommission) dailyCommission.textContent = dailyResult.commission.toFixed(2) + ' ' + currency;
+            if (dailyFinal) dailyFinal.textContent = dailyResult.finalPrice.toFixed(2) + ' ' + currency;
+            if (dailyHidden) dailyHidden.value = dailyResult.finalPrice.toFixed(2);
+            
+            if (saleBase) saleBase.textContent = saleResult.basePrice.toFixed(2) + ' ' + currency;
+            if (saleCommission) saleCommission.textContent = saleResult.commission.toFixed(2) + ' ' + currency;
+            if (saleFinal) saleFinal.textContent = saleResult.finalPrice.toFixed(2) + ' ' + currency;
+            if (saleHidden) saleHidden.value = saleResult.finalPrice.toFixed(2);
 
             currentImages = (Array.isArray(eq.images) ? eq.images : []).map(
               (u) => ({
@@ -1790,7 +1778,6 @@
             toggleListingPriceFields();
             updateFormMode();
 
-            // Populate technical specs fields
             const specs = (typeof eq.specs === "object" && eq.specs !== null) ? eq.specs : {};
             const specAllFields = {
               manufacturer:          "#f-manufacturer",
@@ -1817,7 +1804,6 @@
               const el = $(sel);
               if (el && specs[key] != null) el.value = specs[key];
             }
-            // Restore uploaded PDF link
             const pdfUrlEl = $("#f-datasheet-pdf-url");
             const pdfLinkEl = $("#pdf-current-link");
             if (pdfUrlEl) pdfUrlEl.value = specs.datasheet_pdf_url || "";
@@ -1826,7 +1812,6 @@
             } else if (pdfLinkEl) {
               pdfLinkEl.innerHTML = "";
             }
-            // Auto-open accordion if specs exist
             if (Object.keys(specs).length > 0) {
               const acc = document.getElementById("tech-specs-acc");
               if (acc) acc.open = true;
@@ -1860,7 +1845,6 @@
           }
         }
 
-        // ---------- client-side filters on rendered cards ----------
         function applyClientFilters() {
           const q = $("#filter-search").value.trim().toLowerCase();
           const s = $("#filter-status").value;
@@ -1882,13 +1866,15 @@
           $("#f-listing-type").addEventListener("change", toggleListingPriceFields);
           $("#f-images").addEventListener("change", (e) => {
             handleImageFiles(e.target.files);
-            e.target.value = ""; // allow selecting the same file again
+            e.target.value = "";
           });
           $("#filter-search").addEventListener("input", applyClientFilters);
           $("#filter-status").addEventListener("change", applyClientFilters);
           $("#filter-refresh").addEventListener("click", refreshEquipment);
 
-          // PDF file upload handler
+          // Run price calculation setup (No Tax)
+          setupPriceCalculation();
+
           const pdfInput = $("#f-datasheet-pdf");
           if (pdfInput) {
             pdfInput.addEventListener("change", async (e) => {
@@ -1924,8 +1910,6 @@
 
           if (window.HarthI18n) {
             document.addEventListener("harth:langchange", () => {
-              updateCommissionPreview("daily");
-              updateCommissionPreview("sale");
               updateFormMode();
               if ($("#dashboard-section") && !$("#dashboard-section").classList.contains("hidden")) {
                 const user = getUser();
@@ -1944,7 +1928,6 @@
       })();
     </script>
   
-    <!-- HARTH-RESPONSIVE-JS -->
     <script src="responsive.js" defer></script>
   </body>
 </html>
