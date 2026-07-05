@@ -180,8 +180,33 @@
         .rental-checkout-form > div[style*="grid-template-columns"] {
           grid-template-columns: 1fr !important;
         }
+        /* 🔧 إصلاح توافق الأزرار */
         .payment-radio {
-          grid-template-columns: repeat(auto-fit, minmax(100px, 1fr)) !important;
+          grid-template-columns: repeat(2, 1fr) !important;
+          gap: 6px;
+        }
+        .payment-radio label {
+          font-size: 12px;
+          padding: 6px 4px;
+        }
+        .delivery-fee-box {
+          flex-direction: column;
+          text-align: center;
+        }
+        .delivery-fee-box .value {
+          font-size: 14px;
+        }
+      }
+      @media (max-width: 480px) {
+        .payment-radio {
+          grid-template-columns: 1fr 1fr !important;
+        }
+        .payment-radio label {
+          font-size: 11px;
+          padding: 5px 3px;
+        }
+        .payment-radio label i {
+          font-size: 16px;
         }
       }
 
@@ -259,7 +284,7 @@
       /* ===== PAYMENT METHODS ===== */
       .payment-radio {
         display: grid;
-        grid-template-columns: repeat(auto-fit, minmax(110px, 1fr));
+        grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
         gap: 8px;
         margin-top: 8px;
       }
@@ -555,7 +580,7 @@
                 <span data-i18n="checkout.totals.loyaltyLabel">نقاط الولاء</span>
                 <span id="tot-loyalty" style="color: #f1c40f">-0 نقطة</span>
               </div>
-              <!-- Delivery fee row (added dynamically) -->
+              <!-- Delivery fee row -->
               <div class="totals-row delivery-row" id="tot-delivery-row">
                 <span><i class="fas fa-truck"></i> <span data-i18n="checkout.deliveryForm.deliveryFeeLabel">عمولة التوصيل</span></span>
                 <span id="tot-delivery">2.00 ر.ع</span>
@@ -809,307 +834,4 @@
                   <button type="button" class="qty-inc" data-id="${it.cart_item_id}">+</button>
                 </div>
               </td>
-              <td data-label="${totalLabel}">${money(it.line_total)}</td>
-              <td><button class="remove-btn" data-id="${it.cart_item_id}"><i class="fas fa-trash"></i></button></td>
-            `;
-            tbody.appendChild(tr);
-            tr.querySelector(".qty-dec").addEventListener("click", () => updateQty(it.cart_item_id, it.quantity - 1));
-            tr.querySelector(".qty-inc").addEventListener("click", () => updateQty(it.cart_item_id, it.quantity + 1));
-            tr.querySelector(".remove-btn").addEventListener("click", () => removeItem(it.cart_item_id));
-          }
-
-          // Rental items
-          for (const r of rentals) {
-            const tr = document.createElement("tr");
-            const img = r.primary_image_url || "";
-            const depNote = r.deposit_amount > 0
-              ? `<div style="font-size:11px;color:#f1c40f;margin-top:2px">${t("checkout.depositLabel", { amount: Number(r.deposit_amount).toFixed(2), currency: t("common.currency") })}</div>`
-              : "";
-            tr.style.borderInlineStart = "3px solid rgba(241,196,15,0.6)";
-            tr.innerHTML = `
-              <td data-label="${productLabel}">
-                ${img
-                  ? `<img src="${escapeHtml(img)}" class="cart-img" alt="" />`
-                  : `<div class="cart-img" style="background:#333;display:inline-flex;align-items:center;justify-content:center"><i class="fas fa-tractor" style="color:#555"></i></div>`}
-                <div style="display:inline-block;margin-inline-start:10px;vertical-align:middle">
-                  <div>${escapeHtml(r.name)}</div>
-                  <span style="font-size:11px;background:rgba(241,196,15,0.2);color:#f1c40f;padding:2px 6px;border-radius:4px">${t("checkout.rentalBadge")}</span>
-                  <div style="font-size:11px;color:rgba(255,255,255,0.6);margin-top:2px">
-                    ${fmtDate(r.start_date)} ${dirArrow} ${fmtDate(r.end_date)}
-                  </div>
-                  ${depNote}
-                </div>
-              </td>
-              <td data-label="${priceLabel}">${Number(r.daily_price).toFixed(2)} ${t("common.currency")}/${t("common.perDay")}</td>
-              <td data-label="${qtyLabel}">${t("checkout.daysSuffix", { n: r.days })}</td>
-              <td data-label="${totalLabel}">${Number(r.grand_total || r.rental_cost).toFixed(2)} ${t("common.currency")}</td>
-              <td><button class="remove-btn" data-rental-id="${escapeHtml(r.equipment_id)}"><i class="fas fa-trash"></i></button></td>
-            `;
-            tbody.appendChild(tr);
-            tr.querySelector(".remove-btn").addEventListener("click", () => {
-              removeRentalItem(r.equipment_id);
-              renderCart(currentCart);
-            });
-          }
-
-          validatedPromo = null;
-          $("#promo-feedback").textContent = "";
-          $("#promo-feedback").className = "promo-feedback";
-          $("#tot-discount-row").style.display = "none";
-          $("#tot-loyalty-row").style.display = "none";
-
-          renderTotals(res.totals);
-        }
-
-        // ---------- Totals (including delivery fee) ----------
-        function renderTotals(totals) {
-          const rentals = getRentalCart();
-          const rentalTotal = rentals.reduce((s, r) => s + Number(r.grand_total || r.rental_cost || 0), 0);
-          const totalDays = rentals.reduce((s, r) => s + Number(r.days || 0), 0);
-
-          $("#tot-subtotal").textContent = money(totals.subtotal);
-          $("#tot-tax").textContent = money(totals.tax);
-
-          if (rentalTotal > 0) {
-            $("#tot-rental-row").style.display = "flex";
-            $("#tot-rental").textContent = rentalTotal.toFixed(2) + " " + t("common.currency");
-            $("#tot-rental-days").textContent = t("checkout.daysParenSuffix", { n: totalDays });
-          } else {
-            $("#tot-rental-row").style.display = "none";
-          }
-
-          if (totals.discount > 0) {
-            $("#tot-discount-row").style.display = "flex";
-            $("#tot-discount").textContent = "-" + money(totals.discount);
-          } else {
-            $("#tot-discount-row").style.display = "none";
-          }
-          if (totals.loyalty_points_used > 0) {
-            $("#tot-loyalty-row").style.display = "flex";
-            $("#tot-loyalty").textContent = t("checkout.totals.loyaltyValue", { n: totals.loyalty_points_used });
-          } else {
-            $("#tot-loyalty-row").style.display = "none";
-          }
-
-          // Grand total = sale total (server) + rental total + delivery fee
-          const serverGrand = Number(totals.total || 0);
-          const grand = serverGrand + rentalTotal + DELIVERY_FEE;
-          $("#tot-grand").textContent = grand.toFixed(2) + " " + t("common.currency");
-          // Update delivery fee display
-          const deliveryDisplay = document.getElementById("tot-delivery");
-          if (deliveryDisplay) {
-            deliveryDisplay.textContent = DELIVERY_FEE.toFixed(2) + " " + t("common.currency");
-          }
-          const feeDisplay = document.getElementById("delivery-fee-display");
-          if (feeDisplay) {
-            feeDisplay.textContent = DELIVERY_FEE.toFixed(2) + " " + t("common.currency");
-          }
-        }
-
-        async function updateQty(cartItemId, newQty) {
-          if (newQty < 0) newQty = 0;
-          try {
-            const res = await apiFetch(`/cart/items/${cartItemId}`, {
-              method: "PATCH",
-              body: JSON.stringify({ quantity: newQty }),
-            });
-            if (!res || !res.success) {
-              throw new Error((res && res.error && res.error.message) || t("checkout.toasts.updateFailed"));
-            }
-            await loadCart();
-          } catch (err) {
-            showToast(err.message, true);
-          }
-        }
-
-        async function removeItem(cartItemId) {
-          try {
-            const res = await apiFetch(`/cart/items/${cartItemId}`, { method: "DELETE" });
-            if (!res || !res.success) {
-              throw new Error((res && res.error && res.error.message) || t("checkout.toasts.deleteFailed"));
-            }
-            await loadCart();
-          } catch (err) {
-            showToast(err.message, true);
-          }
-        }
-
-        // ---------- Promo ----------
-        async function applyPromo() {
-          const code = $("#promo-code").value.trim();
-          const fb = $("#promo-feedback");
-          if (!code) {
-            fb.textContent = t("checkout.toasts.enterCodeFirst");
-            fb.className = "promo-feedback bad";
-            return;
-          }
-          try {
-            const res = await apiFetch("/promos/validate", {
-              method: "POST",
-              body: JSON.stringify({ code }),
-            });
-            if (!res || !res.success) {
-              throw new Error((res && res.error && res.error.message) || t("checkout.toasts.invalidCode"));
-            }
-            if (!res.valid) {
-              fb.textContent = res.reason || t("checkout.toasts.codeNotEligible");
-              fb.className = "promo-feedback bad";
-              validatedPromo = null;
-              renderTotals(currentCart.totals);
-              return;
-            }
-            validatedPromo = { code };
-            fb.textContent = t("checkout.toasts.promoApplied", { amount: res.totals.discount, currency: t("common.currency") });
-            fb.className = "promo-feedback ok";
-            renderTotals(res.totals);
-          } catch (err) {
-            fb.textContent = err.message;
-            fb.className = "promo-feedback bad";
-            validatedPromo = null;
-          }
-        }
-
-        // ---------- Submit order ----------
-        async function submitOrder(e) {
-          e.preventDefault();
-          const name = $("#f-name").value.trim();
-          const phone = $("#f-phone").value.trim();
-          const city = $("#f-city").value.trim();
-          const street = $("#f-street").value.trim();
-          const loyaltyUsed = parseInt($("#loyalty-points").value, 10) || 0;
-          const paymentMethod = document.querySelector('input[name="pm"]:checked').value;
-
-          if (!name || !phone || !city) {
-            showToast(t("checkout.toasts.missingFields"), true);
-            return;
-          }
-
-          const rentals = getRentalCart();
-          const hasSale = currentCart && currentCart.items.length;
-          if (!hasSale && !rentals.length) {
-            showToast(t("checkout.toasts.cartEmpty"), true);
-            return;
-          }
-
-          const btn = $("#submit-btn");
-          btn.disabled = true;
-          btn.innerHTML = `<i class="fas fa-spinner fa-spin"></i> ${t("checkout.deliveryForm.submitBtnLoading")}`;
-
-          const shippingAddress = { name, city, street: street || null, phone };
-          let trackingNumber = null;
-
-          try {
-            // Sale order
-            if (hasSale) {
-              const payload = {
-                shipping_address: shippingAddress,
-                payment_method: paymentMethod,
-                loyalty_points: loyaltyUsed,
-              };
-              if (validatedPromo) payload.promo_code = validatedPromo.code;
-
-              const res = await apiFetch("/orders", {
-                method: "POST",
-                body: JSON.stringify(payload),
-              });
-              if (!res || !res.success) {
-                throw new Error((res && res.error && res.error.message) || t("checkout.toasts.saleOrderFailed"));
-              }
-              trackingNumber = res.order.tracking_number;
-
-              if (res.payment && res.payment.mock && res.payment.payment_intent_id) {
-                fetch(`${API_BASE_URL}/payments/webhook`, {
-                  method: "POST",
-                  headers: { "Content-Type": "application/json" },
-                  body: JSON.stringify({
-                    type: "payment_intent.succeeded",
-                    data: { object: { id: res.payment.payment_intent_id } },
-                  }),
-                }).catch(() => {});
-              }
-            }
-
-            // Rental requests
-            const rentalErrors = [];
-            for (const r of rentals) {
-              try {
-                const res = await apiFetch("/rentals", {
-                  method: "POST",
-                  body: JSON.stringify({
-                    equipment_id: r.equipment_id,
-                    start_date: r.start_date,
-                    end_date: r.end_date,
-                    renter_notes: r.notes || null,
-                    delivery_address: shippingAddress,
-                    payment_method: paymentMethod,
-                  }),
-                });
-                if (!res || !res.success) throw new Error(res?.error?.message || t("checkout.toasts.genericFailed"));
-              } catch (err) {
-                rentalErrors.push(`${r.name}: ${err.message}`);
-              }
-            }
-
-            if (rentalErrors.length) {
-              showToast(t("checkout.toasts.rentalErrorsPrefix") + " " + rentalErrors.join(" | "), true);
-              btn.disabled = false;
-              btn.innerHTML = `<i class="fas fa-check-circle"></i> ${t("checkout.deliveryForm.submitBtn")}`;
-              return;
-            }
-
-            clearRentalCart();
-            const successMsg = [
-              hasSale ? t("checkout.toasts.saleOrderCreated") : "",
-              rentals.length ? t("checkout.toasts.rentalOrdersSent", { n: rentals.length }) : "",
-            ].filter(Boolean).join(" + ");
-            showToast(`✓ ${successMsg}`);
-
-            setTimeout(() => {
-              window.location.href = trackingNumber
-                ? `track.html?t=${trackingNumber}`
-                : "my-orders.html";
-            }, 1800);
-
-          } catch (err) {
-            showToast(err.message, true);
-            btn.disabled = false;
-            btn.innerHTML = `<i class="fas fa-check-circle"></i> ${t("checkout.deliveryForm.submitBtn")}`;
-          }
-        }
-
-        // ---------- Wire up ----------
-        document.addEventListener("DOMContentLoaded", async () => {
-          const ok = await requireAuthOrRedirect();
-          if (!ok) return;
-
-          async function loadTranslatedCart() {
-            await loadCart();
-          }
-          if (window.HarthI18n) {
-            await window.HarthI18n.ready();
-            document.addEventListener("harth:langchange", loadTranslatedCart);
-          }
-          await loadTranslatedCart();
-
-          $("#apply-promo").addEventListener("click", applyPromo);
-          $("#checkout-form").addEventListener("submit", submitOrder);
-
-          // Payment method selection styling
-          const paymentLabels = document.querySelectorAll(".payment-radio label");
-          paymentLabels.forEach((label) => {
-            label.addEventListener("click", function () {
-              paymentLabels.forEach((l) => l.classList.remove("selected"));
-              this.classList.add("selected");
-            });
-          });
-
-          $("#loyalty-points").addEventListener("change", () => {
-            if (validatedPromo) applyPromo();
-          });
-        });
-      })();
-    </script>
-  
-    <script src="responsive.js" defer></script>
-  </body>
-</html>
+              <
