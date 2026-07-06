@@ -98,7 +98,7 @@
     ul.innerHTML = navItems()
       .filter(i => allowed(i, role))
       .map(i => `<li><a href="${i.href}" class="nav-item${isActive(i.href) ? " active" : ""}">
-          <i class="fas ${i.icon}"></i> ${i.label}
+          <i class="fas ${i.icon}"></i><span class="nav-item__label">${i.label}</span>
         </a></li>`)
       .join("");
   }

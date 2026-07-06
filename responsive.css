@@ -438,6 +438,11 @@ body.menu-open {
   .header-capsule .section.center {
     position: static;
     width: auto;
+    /* Without this, the flex item's automatic min-width falls back to its
+       max-content size (since overflow is visible), which pins it at the
+       nav's full unshrunk width and defeats every child shrink rule below —
+       this is what let the button row spill out of the capsule. */
+    min-width: 0;
     height: auto;
     background: transparent;
     flex-direction: row;
@@ -491,11 +496,14 @@ body.menu-open {
     text-overflow:   ellipsis;
   }
 
-  /* Nav items: fill their flex-parent (li) equally */
+  /* Nav items: fill their flex-parent (li) equally so they shrink together
+     instead of overflowing the capsule when there are many of them. */
   .header-capsule .section.center .nav-links li a,
   .header-capsule .section.center .nav-links li .nav-item {
-    width:     100%;
-    min-width: 0;
+    width:      100%;
+    min-width:  0;
+    background: rgba(255, 255, 255, 0.1);
+    border:     none;
   }
 
   /* Left-section buttons: auto-sized (not stretched by the nav flex) */
@@ -511,11 +519,16 @@ body.menu-open {
     min-width: clamp(50px, 6vw, 90px) !important;
   }
 
-  .header-capsule .section.center .nav-links li a,
-  .header-capsule .section.center .nav-links li .nav-item {
-    width: auto;
-    background: rgba(255, 255, 255, 0.1);
-    border: none;
+  /* The label text is a flex child of the (now display:flex) link, which
+     means the browser's default flex min-width:auto would let it keep its
+     full un-wrapped width and blow past the button's shrunk box. Wrapping
+     it in its own element lets us zero that out and ellipsize instead. */
+  .header-capsule .section.center .nav-links li a .nav-item__label,
+  .header-capsule .section.center .nav-links li .nav-item .nav-item__label {
+    flex:          1 1 auto;
+    min-width:     0;
+    overflow:      hidden;
+    text-overflow: ellipsis;
   }
 
   .header-capsule .section.center .nav-links li a i,
@@ -625,17 +638,30 @@ body.menu-open .hs-header > nav {
   .hs-header > nav {
     display: block;
     flex: 1 1 auto;
+    min-width: 0; /* let the nav shrink instead of stretching the header */
     order: 0;
   }
   .hs-header > nav .nav-links {
     flex-direction: row;
+    flex-wrap: nowrap;
     justify-content: center;
     width: auto;
+    max-width: 100%;
+    /* Too many items to fit? Scroll inside the bar instead of spilling
+       past the header's edges. */
+    overflow-x: auto;
+    overflow-y: hidden;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: thin;
+  }
+  .hs-header > nav .nav-links li {
+    flex: 0 0 auto;
   }
   .hs-header > nav .nav-links li a {
     width: auto;
     padding: 8px 16px;
     background: transparent;
+    white-space: nowrap;
   }
 }
 
