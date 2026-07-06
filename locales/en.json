@@ -674,7 +674,8 @@
       "payouts": "Payouts",
       "audit": "Audit Log",
       "banners": "Ads",
-      "support": "Support"
+      "support": "Support",
+      "more": "More"
     },
     "overview": {
       "analyticsHeading": "Interactive Analytics",
