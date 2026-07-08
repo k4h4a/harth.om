@@ -77,43 +77,48 @@
       }
 
       /* Nav bar: a single flex container that wraps buttons onto as many
-         rows as needed. Every tab keeps its natural width (flex: 0 0 auto)
-         so labels/icons never clip, and the row grows instead of shrinking
-         its children — no horizontal scrolling, no overflow menu, so tabs
-         can never overlap or spill out regardless of how many there are.
-         `gap` (not margins) gives even spacing that also works when the
-         row wraps to a second or third line. Direction follows the page's
-         `dir` attribute (logical properties throughout), so this also
-         works correctly when the admin switches to the English/LTR UI. */
+         rows as needed. Every tab sizes to its own content — width:
+         fit-content + min-width: max-content + flex: 0 0 auto means a
+         button can only grow to fit its label, never shrink and clip it,
+         and never stretch to fill leftover row space either. No
+         `overflow`/`text-overflow` anywhere here, so labels always render
+         in full. `gap` (not margins) gives even spacing that also works
+         when the row wraps to a second or third line. Direction follows
+         the page's `dir` attribute (logical properties throughout), so
+         this also works correctly when the admin switches to the
+         English/LTR UI. */
       .tabs-bar {
         display: flex;
         flex-wrap: wrap;
         align-items: center;
         justify-content: flex-start;
-        gap: 12px;
+        gap: 14px;
         width: 100%;
         background: rgba(255, 255, 255, 0.05);
-        padding: 10px;
+        padding: 12px;
         border-radius: 12px;
         margin-bottom: 20px;
       }
       .tab {
-        flex: 0 0 auto; /* keep natural size — never shrunk, never overlaps */
-        min-height: 48px;
-        padding: 0 18px;
+        flex: 0 0 auto; /* never shrunk, never stretched — no overlap */
+        width: fit-content;
+        min-width: max-content; /* the button can only grow with its label */
+        min-height: 54px;
+        padding: 0 22px;
         border: none;
         background: transparent;
         color: #ddd;
         cursor: pointer;
-        border-radius: 10px;
+        border-radius: 12px;
         font-family: inherit;
         font-weight: 600;
-        font-size: 14px;
+        font-size: 17px;
         line-height: 1.2;
         white-space: nowrap; /* never clip/wrap mid-label */
         display: inline-flex; /* keeps icon + text aligned on one baseline */
         align-items: center;
-        gap: 8px;
+        justify-content: center;
+        gap: 10px;
       }
       .tab.active {
         background: #6ab04c;
@@ -873,15 +878,18 @@
         }
 
         /* Nav bar on tablets/phones: same wrapping flex layout, just
-           tighter spacing so more tabs fit per row before wrapping. */
+           tighter spacing so more tabs fit per row before wrapping. Labels
+           still render in full — only the padding/font shrink a bit,
+           `min-width: max-content` keeps every button sized to its text. */
         .tabs-bar {
-          padding: 8px;
-          gap: 8px;
+          padding: 10px;
+          gap: 10px;
           margin-bottom: 12px;
         }
         .tab {
-          padding: 0 14px;
-          font-size: 13px;
+          min-height: 48px;
+          padding: 0 16px;
+          font-size: 15px;
         }
 
         .card {
@@ -1017,9 +1025,9 @@
         }
 
         .tab {
-          min-height: 44px;
-          padding: 0 12px;
-          font-size: 12px;
+          min-height: 46px;
+          padding: 0 14px;
+          font-size: 13px;
         }
 
         /* Stats stack vertically on very narrow screens. */
