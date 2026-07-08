@@ -424,16 +424,18 @@ body.menu-open {
   /* ---- Unified navbar button system ----
      Height/padding/radius/font scale shared by the CTA + login hs-btn
      buttons and the language switcher. Nav menu links (below) are sized
-     separately — they grow to fit their own label instead of sharing a
-     fixed box, so an Arabic label can never be cut off. */
+     separately — they scale fluidly with viewport width and grow to fit
+     their own label, so an Arabic label can never be cut off. */
   .header-capsule {
     --nav-h: 64px;
     --nav-btn-h: 48px; /* ~75% of --nav-h */
     --nav-btn-radius: 14px;
     min-height: var(--nav-h);
-    height: auto; /* let the capsule grow if the nav wraps to a 2nd row */
+    height: auto; /* lets the capsule grow if the nav wraps to a 2nd row —
+                     e.g. a logged-in role with many menu items on a
+                     narrower desktop width */
     box-sizing: border-box;
-    padding: 0 22px;
+    padding: 10px 22px;
     gap: 12px;
   }
 
@@ -442,8 +444,8 @@ body.menu-open {
     width: auto;
     /* Without this, the flex item's automatic min-width falls back to its
        max-content size (since overflow is visible), which pins it at the
-       nav's full unshrunk width — this is what let the button row spill
-       out of the capsule before the nav-links row itself could wrap. */
+       nav's full unshrunk width and defeats every child sizing rule below —
+       this is what let the button row spill out of the capsule. */
     min-width: 0;
     height: auto;
     background: transparent;
@@ -459,43 +461,51 @@ body.menu-open {
     contain: none;
   }
 
-  /* Nav row: wraps onto additional rows instead of shrinking its
-     buttons — every label always renders in full, on any screen size or
-     item count. `gap` (not margins) gives even spacing on every row. */
+  /* Nav row: one straight line whenever there's room (the common case —
+     fluid font/padding below keep it that way on nearly every desktop
+     width). Falls back to wrapping onto a 2nd row only when an item-heavy
+     role (e.g. admin) genuinely doesn't fit even at the smallest fluid
+     size — never a horizontal scroll, never a hidden/cut-off item. */
   .header-capsule .section.center .nav-links {
     flex-direction: row !important;
     flex-wrap:      wrap !important;
-    gap:            14px !important;
+    gap:            clamp(6px, 1vw, 14px) !important;
     width:          100%;
     align-items:    center;
+    justify-content: center;
   }
 
   .header-capsule .section.center .nav-links li {
     flex:    0 0 auto; /* sized to its own link — never stretched/shrunk */
+    /* Reset the mobile-drawer rule's `width: 100%` (li.nav-links li),
+       which otherwise leaks through here and stretches every <li> to the
+       full row width — leaving huge gaps and pushing the other items
+       off-screen past the visible edge. */
+    width:   auto;
     display: flex;
   }
 
   /* ---- Nav menu items ----
-     width: fit-content + min-width: max-content means a button can only
-     grow to fit its label; flex: 0 0 auto means it's never shrunk below
-     that. No overflow/text-overflow anywhere here, so labels always
-     render in full. */
+     Font size, padding and height scale fluidly with viewport width
+     (clamp) instead of being fixed, so the row stays on one straight
+     line on nearly every screen, shrinking/growing in proportion to the
+     screen — never truncating with "...". */
   .header-capsule .section.center .nav-links li a,
   .header-capsule .section.center .nav-links li .nav-item {
     box-sizing:      border-box;
     width:           fit-content;
     min-width:       max-content;
     flex:            0 0 auto;
-    padding-inline:  22px !important;
+    padding-inline:  clamp(10px, 1.6vw, 20px) !important;
     padding-block:   0 !important;
-    min-height:      54px !important;
+    min-height:      clamp(44px, 3.2vw, 56px) !important;
     white-space:     nowrap;
-    font-size:       17px !important;
+    font-size:       clamp(13px, 1.4vw, 16px) !important;
     font-weight:     600 !important;
     display:         inline-flex !important;
     align-items:     center;
     justify-content: center;
-    gap:             10px;
+    gap:             clamp(6px, 0.7vw, 10px);
     border-radius:   12px !important;
     background:      rgba(255, 255, 255, 0.1);
     border:          none;
@@ -503,7 +513,7 @@ body.menu-open {
 
   /* ---- Shared styles: CTA/login button + language switcher ----
      Unchanged from before — still on the original shared 48px scale;
-     only the nav menu items above grew. */
+     only the nav menu items above got their own fluid scale. */
   .header-capsule .section.left .login-nav-button,
   .header-capsule .section.left .hs-btn,
   .header-capsule .lang-switcher-trigger {
