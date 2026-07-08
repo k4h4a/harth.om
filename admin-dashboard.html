@@ -76,84 +76,48 @@
         padding: 0 20px;
       }
 
-      /* Outer pill: holds the scrollable tab row + the "More" menu side
-         by side. Flexbox with `gap` keeps fixed, even spacing between the
-         two regardless of how many tabs are visible. */
+      /* Nav bar: a single flex container that wraps buttons onto as many
+         rows as needed. Every tab keeps its natural width (flex: 0 0 auto)
+         so labels/icons never clip, and the row grows instead of shrinking
+         its children — no horizontal scrolling, no overflow menu, so tabs
+         can never overlap or spill out regardless of how many there are.
+         `gap` (not margins) gives even spacing that also works when the
+         row wraps to a second or third line. Direction follows the page's
+         `dir` attribute (logical properties throughout), so this also
+         works correctly when the admin switches to the English/LTR UI. */
       .tabs-bar {
         display: flex;
-        align-items: stretch;
-        gap: 6px;
+        flex-wrap: wrap;
+        align-items: center;
+        justify-content: flex-start;
+        gap: 12px;
+        width: 100%;
         background: rgba(255, 255, 255, 0.05);
-        padding: 6px;
+        padding: 10px;
         border-radius: 12px;
         margin-bottom: 20px;
-        min-width: 0;
-      }
-      .tabs {
-        display: flex;
-        gap: 6px;
-        flex: 1 1 auto;
-        min-width: 0; /* let the row shrink so it — not the page — scrolls */
-        overflow-x: auto;
-        scrollbar-width: thin;
-        -webkit-overflow-scrolling: touch;
       }
       .tab {
-        flex: 0 0 auto; /* never shrink or grow — no two tabs ever overlap */
-        min-width: fit-content;
-        padding: 10px 18px;
+        flex: 0 0 auto; /* keep natural size — never shrunk, never overlaps */
+        min-height: 48px;
+        padding: 0 18px;
         border: none;
         background: transparent;
         color: #ddd;
         cursor: pointer;
-        border-radius: 8px;
+        border-radius: 10px;
         font-family: inherit;
         font-weight: 600;
-        white-space: nowrap;
+        font-size: 14px;
+        line-height: 1.2;
+        white-space: nowrap; /* never clip/wrap mid-label */
+        display: inline-flex; /* keeps icon + text aligned on one baseline */
+        align-items: center;
+        gap: 8px;
       }
       .tab.active {
         background: #6ab04c;
         color: #fff;
-      }
-
-      /* "More" menu — holds whatever tabs don't fit the visible row.
-         Hidden until JS detects overflow and flags it. */
-      .tabs-more {
-        position: relative;
-        flex: 0 0 auto;
-        display: none;
-      }
-      .tabs-more.has-overflow {
-        display: block;
-      }
-      .tabs-more-btn {
-        display: flex;
-        align-items: center;
-        gap: 6px;
-      }
-      .tabs-more-menu {
-        position: absolute;
-        top: calc(100% + 6px);
-        inset-inline-end: 0;
-        display: none;
-        flex-direction: column;
-        gap: 2px;
-        min-width: 200px;
-        max-height: 60vh;
-        overflow-y: auto;
-        background: #16281a;
-        border: 1px solid rgba(255, 255, 255, 0.12);
-        border-radius: 10px;
-        padding: 6px;
-        box-shadow: 0 12px 32px rgba(0, 0, 0, 0.4);
-        z-index: 50;
-      }
-      .tabs-more-menu.open {
-        display: flex;
-      }
-      .tabs-more-menu .tab {
-        width: 100%;
-        text-align: start;
       }
 
       .card {
@@ -908,18 +872,15 @@
           padding: 0 12px;
         }
 
-        /* Tabs that don't fit collapse into the "More" menu; whatever's
-           left still scrolls horizontally instead of cramming. */
+        /* Nav bar on tablets/phones: same wrapping flex layout, just
+           tighter spacing so more tabs fit per row before wrapping. */
         .tabs-bar {
-          padding: 4px;
-          gap: 4px;
+          padding: 8px;
+          gap: 8px;
           margin-bottom: 12px;
         }
-        .tabs {
-          gap: 4px;
-        }
         .tab {
-          padding: 8px 13px;
+          padding: 0 14px;
           font-size: 13px;
         }
 
@@ -1056,7 +1017,8 @@
         }
 
         .tab {
-          padding: 7px 11px;
+          min-height: 44px;
+          padding: 0 12px;
           font-size: 12px;
         }
 
@@ -1238,8 +1200,7 @@
     </div>
 
     <div class="container">
-      <div class="tabs-bar">
-      <div class="tabs" id="admin-tabs">
+      <div class="tabs-bar" id="admin-tabs">
         <button class="tab active" data-tab="overview">
           <i class="fas fa-chart-line"></i> <span data-i18n="adminDashboard.tabs.overview">الرئيسية</span>
         </button>
@@ -1290,16 +1251,6 @@
           <i class="fas fa-headset"></i> <span data-i18n="adminDashboard.tabs.support">الدعم الفني</span>
           <span id="pending-support-badge" style="background:#e74c3c;color:#fff;font-size:11px;padding:2px 7px;border-radius:999px;margin-inline-start:4px;display:none"></span>
         </button>
-      </div>
-
-      <!-- Tabs that don't fit the visible row get moved in here by JS
-           (see "Tabs overflow" below) so they never overlap or spill out. -->
-      <div class="tabs-more" id="tabs-more">
-        <button type="button" class="tab tabs-more-btn" id="tabs-more-btn" aria-haspopup="true" aria-expanded="false">
-          <i class="fas fa-ellipsis-h"></i> <span data-i18n="adminDashboard.tabs.more">المزيد</span>
-        </button>
-        <div class="tabs-more-menu" id="tabs-more-menu" role="menu"></div>
-      </div>
       </div>
 
       <!-- OVERVIEW -->
@@ -2724,80 +2675,8 @@
             if (btn.dataset.tab === "audit") loadAudit();
             if (btn.dataset.tab === "banners") loadBanners();
             if (btn.dataset.tab === "support") loadSupport();
-
-            // Selecting a tab that was tucked into "More" pulls it back
-            // into the visible row so the active tab is never hidden.
-            window.__adminTabsRecompute?.();
           });
         });
-
-        // ---------- Tabs overflow → "More" menu ----------
-        // Keeps every tab clickable and never lets one clip or overlap
-        // another: whatever doesn't fit the visible row is physically
-        // relocated (not cloned, so click handlers above stay attached)
-        // into a dropdown, and moved back once there's room again.
-        (function setupTabsOverflow() {
-          const bar = $("#admin-tabs");
-          const moreWrap = $("#tabs-more");
-          const moreBtn = $("#tabs-more-btn");
-          const moreMenu = $("#tabs-more-menu");
-          if (!bar || !moreWrap || !moreBtn || !moreMenu) return;
-
-          const allTabs = $$(".tab[data-tab]"); // stable left-to-right order
-
-          function recompute() {
-            allTabs.forEach((btn) => bar.appendChild(btn)); // reset first
-            moreWrap.classList.remove("has-overflow");
-            moreMenu.classList.remove("open");
-            moreBtn.setAttribute("aria-expanded", "false");
-
-            if (bar.scrollWidth <= bar.clientWidth + 1) return; // all fit
-
-            moreWrap.classList.add("has-overflow");
-            const activeTab = bar.querySelector(".tab.active");
-            for (
-              let i = allTabs.length - 1;
-              i >= 0 && bar.scrollWidth > bar.clientWidth + 1;
-              i--
-            ) {
-              const btn = allTabs[i];
-              if (btn === activeTab) continue; // keep the current tab visible
-              moreMenu.appendChild(btn);
-            }
-          }
-
-          moreBtn.addEventListener("click", (e) => {
-            e.stopPropagation();
-            const open = moreMenu.classList.toggle("open");
-            moreBtn.setAttribute("aria-expanded", String(open));
-          });
-          document.addEventListener("click", (e) => {
-            if (!moreWrap.contains(e.target)) {
-              moreMenu.classList.remove("open");
-              moreBtn.setAttribute("aria-expanded", "false");
-            }
-          });
-          moreMenu.addEventListener("click", (e) => {
-            if (e.target.closest(".tab")) {
-              moreMenu.classList.remove("open");
-              moreBtn.setAttribute("aria-expanded", "false");
-            }
-          });
-
-          let resizeTimer;
-          window.addEventListener("resize", () => {
-            clearTimeout(resizeTimer);
-            resizeTimer = setTimeout(recompute, 150);
-          });
-
-          window.__adminTabsRecompute = recompute; // re-run after i18n swaps text width
-          recompute();
-          // Re-measure once the web font finishes loading — until then,
-          // widths are based on the fallback font and can be slightly off.
-          if (document.fonts && document.fonts.ready) {
-            document.fonts.ready.then(recompute);
-          }
-        })();
 
         // ---------- Overview ----------
         async function loadOverview() {
@@ -5754,10 +5633,6 @@
             else if (activeTab === "audit") loadAudit();
             else if (activeTab === "banners") loadBanners();
             else if (activeTab === "support") loadSupport();
-
-            // Translated labels are a different length — re-measure which
-            // tabs still fit the visible row.
-            setTimeout(() => window.__adminTabsRecompute?.(), 0);
           });
         });
       })();
