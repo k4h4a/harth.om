@@ -422,14 +422,16 @@ body.menu-open {
   }
 
   /* ---- Unified navbar button system ----
-     One height/padding/radius/font scale shared by nav links, the
-     CTA + login hs-btn buttons, and the language switcher, so no
-     control in the bar looks taller/shorter/rounder than another. */
+     Height/padding/radius/font scale shared by the CTA + login hs-btn
+     buttons and the language switcher. Nav menu links (below) are sized
+     separately — they grow to fit their own label instead of sharing a
+     fixed box, so an Arabic label can never be cut off. */
   .header-capsule {
     --nav-h: 64px;
     --nav-btn-h: 48px; /* ~75% of --nav-h */
     --nav-btn-radius: 14px;
-    height: var(--nav-h);
+    min-height: var(--nav-h);
+    height: auto; /* let the capsule grow if the nav wraps to a 2nd row */
     box-sizing: border-box;
     padding: 0 22px;
     gap: 12px;
@@ -440,8 +442,8 @@ body.menu-open {
     width: auto;
     /* Without this, the flex item's automatic min-width falls back to its
        max-content size (since overflow is visible), which pins it at the
-       nav's full unshrunk width and defeats every child shrink rule below —
-       this is what let the button row spill out of the capsule. */
+       nav's full unshrunk width — this is what let the button row spill
+       out of the capsule before the nav-links row itself could wrap. */
     min-width: 0;
     height: auto;
     background: transparent;
@@ -457,22 +459,51 @@ body.menu-open {
     contain: none;
   }
 
+  /* Nav row: wraps onto additional rows instead of shrinking its
+     buttons — every label always renders in full, on any screen size or
+     item count. `gap` (not margins) gives even spacing on every row. */
   .header-capsule .section.center .nav-links {
     flex-direction: row !important;
-    gap:            clamp(4px, 0.8vw, 12px) !important;
-    width:          100%;           /* fill the center section */
-    align-items:    stretch;        /* items stretch to full capsule height */
+    flex-wrap:      wrap !important;
+    gap:            14px !important;
+    width:          100%;
+    align-items:    center;
   }
 
   .header-capsule .section.center .nav-links li {
-    flex:      1 1 0;               /* equal share, ignores content size */
-    min-width: 0;                   /* allow shrinking below content width */
-    display:   flex;
+    flex:    0 0 auto; /* sized to its own link — never stretched/shrunk */
+    display: flex;
   }
 
-  /* ---- Shared styles: all controls inside the header capsule ---- */
+  /* ---- Nav menu items ----
+     width: fit-content + min-width: max-content means a button can only
+     grow to fit its label; flex: 0 0 auto means it's never shrunk below
+     that. No overflow/text-overflow anywhere here, so labels always
+     render in full. */
   .header-capsule .section.center .nav-links li a,
-  .header-capsule .section.center .nav-links li .nav-item,
+  .header-capsule .section.center .nav-links li .nav-item {
+    box-sizing:      border-box;
+    width:           fit-content;
+    min-width:       max-content;
+    flex:            0 0 auto;
+    padding-inline:  22px !important;
+    padding-block:   0 !important;
+    min-height:      54px !important;
+    white-space:     nowrap;
+    font-size:       17px !important;
+    font-weight:     600 !important;
+    display:         inline-flex !important;
+    align-items:     center;
+    justify-content: center;
+    gap:             10px;
+    border-radius:   12px !important;
+    background:      rgba(255, 255, 255, 0.1);
+    border:          none;
+  }
+
+  /* ---- Shared styles: CTA/login button + language switcher ----
+     Unchanged from before — still on the original shared 48px scale;
+     only the nav menu items above grew. */
   .header-capsule .section.left .login-nav-button,
   .header-capsule .section.left .hs-btn,
   .header-capsule .lang-switcher-trigger {
@@ -496,16 +527,6 @@ body.menu-open {
     text-overflow:   ellipsis;
   }
 
-  /* Nav items: fill their flex-parent (li) equally so they shrink together
-     instead of overflowing the capsule when there are many of them. */
-  .header-capsule .section.center .nav-links li a,
-  .header-capsule .section.center .nav-links li .nav-item {
-    width:      100%;
-    min-width:  0;
-    background: rgba(255, 255, 255, 0.1);
-    border:     none;
-  }
-
   /* Left-section buttons: auto-sized (not stretched by the nav flex) */
   .header-capsule .section.left .hs-btn,
   .header-capsule .section.left .login-nav-button {
@@ -517,18 +538,6 @@ body.menu-open {
   .header-capsule .lang-switcher-trigger {
     flex:      0 0 auto;
     min-width: clamp(50px, 6vw, 90px) !important;
-  }
-
-  /* The label text is a flex child of the (now display:flex) link, which
-     means the browser's default flex min-width:auto would let it keep its
-     full un-wrapped width and blow past the button's shrunk box. Wrapping
-     it in its own element lets us zero that out and ellipsize instead. */
-  .header-capsule .section.center .nav-links li a .nav-item__label,
-  .header-capsule .section.center .nav-links li .nav-item .nav-item__label {
-    flex:          1 1 auto;
-    min-width:     0;
-    overflow:      hidden;
-    text-overflow: ellipsis;
   }
 
   .header-capsule .section.center .nav-links li a i,
