@@ -762,7 +762,6 @@
               <select id="f-listing-type" required>
                 <option value="rent" data-i18n="ownerDashboard.form.listingTypeOptions.rent">للإيجار</option>
                 <option value="sale" data-i18n="ownerDashboard.form.listingTypeOptions.sale">للبيع</option>
-                <option value="both" data-i18n="ownerDashboard.form.listingTypeOptions.both">بيع وإيجار</option>
               </select>
             </label>
 
@@ -1425,6 +1424,7 @@
           const listingType = $("#f-listing-type").value;
           const daily = $("#f-daily-price");
           const sale = $("#f-sale-price");
+          const dailyWrap = $("#f-daily-wrap");
           const saleWrap = $("#f-sale-wrap");
           const stock = $("#f-stock");
           const stockWrap = $("#f-stock-wrap");
@@ -1441,6 +1441,11 @@
           } else {
             daily.required = true;
             sale.required = true;
+          }
+          if (listingType === "sale") {
+            dailyWrap.style.display = "none";
+          } else {
+            dailyWrap.style.display = "";
           }
           if (listingType === "rent") {
             saleWrap.style.display = "none";

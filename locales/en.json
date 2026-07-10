@@ -534,7 +534,7 @@
       "nameLabel": "Name *",
       "categoryLabel": "Category *",
       "listingTypeLabel": "Listing Type *",
-      "listingTypeOptions": { "rent": "For Rent", "sale": "For Sale", "both": "Sale & Rent" },
+      "listingTypeOptions": { "rent": "For Rent", "sale": "For Sale" },
       "statusLabel": "Status",
       "dailyPriceLabel": "Daily Price (OMR) *",
       "salePriceLabel": "Sale Price (OMR)",

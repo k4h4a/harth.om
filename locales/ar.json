@@ -534,7 +534,7 @@
       "nameLabel": "الاسم *",
       "categoryLabel": "التصنيف *",
       "listingTypeLabel": "نوع الإدراج *",
-      "listingTypeOptions": { "rent": "للإيجار", "sale": "للبيع", "both": "بيع وإيجار" },
+      "listingTypeOptions": { "rent": "للإيجار", "sale": "للبيع" },
       "statusLabel": "الحالة",
       "dailyPriceLabel": "سعر اليوم (ريال) *",
       "salePriceLabel": "سعر البيع (ريال)",
