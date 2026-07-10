@@ -1623,41 +1623,6 @@
       "delivered": "Delivered"
     }
   },
-  "postStory": {
-    "title": "Post a Story | Harth Platform",
-    "heading": "Post a story from your farm",
-    "lede": "Share what's happening on your farm today with your followers — harvest, new seedlings, equipment at work, or any moment. The story disappears automatically after 24 hours.",
-    "imageFieldLabel": "Story image",
-    "uploadHint": "Upload a vertical image (9:16 recommended) for the best viewing experience.",
-    "previewEmpty": "No image uploaded yet",
-    "captionFieldLabel": "Caption (optional)",
-    "captionPlaceholder": "Write a short description (≤ 280 characters)",
-    "equipmentFieldLabel": "Link to equipment (optional)",
-    "equipmentNoneOption": "— Don't link —",
-    "equipmentHint": "A \"View equipment\" button will appear inside the story and open it for the viewer.",
-    "submitBtn": "Post Story",
-    "submitBtnLoading": "Posting...",
-    "cancelBtn": "Cancel",
-    "myStoriesTitle": "My Active Stories",
-    "noActiveStories": "No active stories. Post your first story from the form above.",
-    "deleteTitle": "Delete",
-    "hoursLeftSuffix": "{{n}}h left",
-    "confirmDeleteStory": "Delete this story?",
-    "alerts": {
-      "ownersOnly": "Posting stories is available to farmers only.",
-      "pendingApproval": "Your account is awaiting approval. Posting will be enabled once approved."
-    },
-    "toasts": {
-      "uploadFailed": "Upload failed",
-      "imageUploaded": "Image uploaded ✓",
-      "uploadFirst": "Please upload the image first",
-      "postFailed": "Failed to post",
-      "posted": "Story posted ✓ It will disappear in 24 hours",
-      "loadFailed": "Failed to load",
-      "deleted": "Deleted",
-      "deleteFailed": "Failed to delete"
-    }
-  },
   "loyalty": {
     "title": "Loyalty Program | Harth Platform",
     "heroTitle": "Harth Loyalty Program",
@@ -1768,17 +1733,6 @@
       "searchAriaLabel": "Search for equipment",
       "categoryAriaLabel": "Equipment category",
       "governorateAriaLabel": "Governorate"
-    },
-    "stories": {
-      "title": "Today's photos from the farms",
-      "hint": "Disappears after 24 hours",
-      "addStory": "Post a story",
-      "yourStory": "Your story",
-      "verifiedFarmer": "Verified farmer",
-      "viewEquipment": "View equipment",
-      "secondsAgo": "Seconds ago",
-      "minutesAgo": "{{n}} minutes ago",
-      "hoursAgo": "{{n}} hours ago"
     },
     "categoriesSection": {
       "title": "Browse by Category",

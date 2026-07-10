@@ -586,7 +586,7 @@ body.menu-open {
  * 2b. ALTERNATE HEADER PATTERNS (hs-header / header / topbar)
  * ------------------------------------------------------------ */
 
-/* .hs-header — used by loyalty.html, kyc.html, post-story.html etc.
+/* .hs-header — used by loyalty.html, kyc.html etc.
    Has a logo, an inline <nav> with .nav-links, and a login/logout link.
    On mobile: stack everything, hide the nav behind a hamburger. */
 .hs-header {
@@ -2100,7 +2100,7 @@ a {
   cursor:          pointer;
 }
 
-/* ---- Generic .btn (post-story, profile, etc.) ---- */
+/* ---- Generic .btn (profile, etc.) ---- */
 /* Targets pages that use .btn as their base button class
    without inheriting from .hs-btn. */
 .btn:not(.hs-btn):not(.tab):not(.tab-btn):not(.pf-tab-btn) {

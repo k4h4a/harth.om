@@ -7,7 +7,7 @@
  *
  *   1. .header-capsule (capsule nav: index, tools, basket, track,
  *      check, owner-dashboard) — slide-in panel from the side
- *   2. .hs-header (loyalty, kyc, post-story) — collapse nav into
+ *   2. .hs-header (loyalty, kyc) — collapse nav into
  *      an in-flow accordion under the header
  *
  * Pages with no nav (.header / .topbar / .top-navigation only — back

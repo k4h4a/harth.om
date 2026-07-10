@@ -1623,41 +1623,6 @@
       "delivered": "تم التسليم"
     }
   },
-  "postStory": {
-    "title": "نشر قصة | منصة حرث",
-    "heading": "انشر قصة من مزرعتك",
-    "lede": "شارك متابعيك ما يحدث في مزرعتك اليوم — حصاد، شتلات جديدة، معدات تعمل، أو أي لحظة. القصة تختفي تلقائياً بعد 24 ساعة.",
-    "imageFieldLabel": "صورة القصة",
-    "uploadHint": "ارفع صورة عمودية (9:16 موصى بها) لتجربة عرض أفضل.",
-    "previewEmpty": "لم تُرفع صورة بعد",
-    "captionFieldLabel": "تعليق (اختياري)",
-    "captionPlaceholder": "اكتب وصفاً قصيراً (≤ 280 حرفاً)",
-    "equipmentFieldLabel": "ربط بمعدة (اختياري)",
-    "equipmentNoneOption": "— لا تربط —",
-    "equipmentHint": "يظهر زرّ \"اعرض المعدة\" داخل القصة ويفتحها للمشاهد.",
-    "submitBtn": "نشر القصة",
-    "submitBtnLoading": "جارٍ النشر...",
-    "cancelBtn": "إلغاء",
-    "myStoriesTitle": "قصصي النشطة",
-    "noActiveStories": "لا توجد قصص نشطة. انشر أوّل قصة من النموذج بالأعلى.",
-    "deleteTitle": "حذف",
-    "hoursLeftSuffix": "{{n}}س متبقية",
-    "confirmDeleteStory": "حذف القصة؟",
-    "alerts": {
-      "ownersOnly": "نشر القصص متاح للمزارعين فقط.",
-      "pendingApproval": "حسابك بانتظار الموافقة. سيتم تفعيل النشر بعد الاعتماد."
-    },
-    "toasts": {
-      "uploadFailed": "فشل الرفع",
-      "imageUploaded": "تم رفع الصورة ✓",
-      "uploadFirst": "الرجاء رفع الصورة أولاً",
-      "postFailed": "فشل النشر",
-      "posted": "تم نشر القصة ✓ ستختفي بعد 24 ساعة",
-      "loadFailed": "فشل التحميل",
-      "deleted": "تم الحذف",
-      "deleteFailed": "فشل الحذف"
-    }
-  },
   "loyalty": {
     "title": "برنامج الولاء | منصة حرث",
     "heroTitle": "برنامج ولاء حرث",
@@ -1768,17 +1733,6 @@
       "searchAriaLabel": "ابحث عن معدة",
       "categoryAriaLabel": "فئة المعدات",
       "governorateAriaLabel": "المحافظة"
-    },
-    "stories": {
-      "title": "صور اليوم من المزارع",
-      "hint": "تختفي بعد 24 ساعة",
-      "addStory": "انشر قصة",
-      "yourStory": "قصتك",
-      "verifiedFarmer": "مزارع موثَّق",
-      "viewEquipment": "اعرض المعدة",
-      "secondsAgo": "قبل ثوانٍ",
-      "minutesAgo": "قبل {{n}} دقيقة",
-      "hoursAgo": "قبل {{n}} ساعة"
     },
     "categoriesSection": {
       "title": "تصفح حسب الفئة",
