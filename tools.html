@@ -558,9 +558,13 @@
 
       .equipment-card .contact-buttons {
         display: flex;
+        flex-wrap: wrap;
         gap: var(--sp-2);
         margin-top: auto;
         padding-top: var(--sp-3);
+      }
+      .equipment-card .contact-buttons > * {
+        flex: 1 1 auto;
       }
       .equipment-card .btn-order {
         flex: 1;
@@ -766,9 +770,10 @@
         .equipment-card .equip-details p {
           font-size: 13px;
         }
-        .equipment-card .btn-order {
-          font-size: 12px;
-          padding: 7px 10px;
+        .equipment-card .btn-order,
+        .equipment-card .pdf-btn {
+          font-size: 12px !important;
+          padding: 7px 10px !important;
         }
         .modal {
           padding: var(--sp-4);

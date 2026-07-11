@@ -1130,6 +1130,14 @@
       .featured-nav--next {
         inset-inline-end: -1.2rem;
       }
+      @media (max-width: 767px) {
+        .featured-nav--prev {
+          inset-inline-start: 4px;
+        }
+        .featured-nav--next {
+          inset-inline-end: 4px;
+        }
+      }
 
       .featured-card {
         flex: 0 0 300px;
@@ -1292,7 +1300,12 @@
       .listings-toolbar-actions {
         display: flex;
         align-items: center;
+        flex-wrap: wrap;
         gap: var(--sp-3);
+      }
+      .listings-toolbar-actions select {
+        flex: 1 1 160px;
+        min-width: 0;
       }
       #mp-filters-drawer-btn {
         display: none;
@@ -1735,13 +1748,15 @@
         box-shadow: 0 4px 14px rgba(0, 0, 0, 0.18);
       }
       .secondary-banner-card img {
-        width: 130px;
+        width: clamp(80px, 28vw, 130px);
+        height: 100%;
         object-fit: cover;
         flex-shrink: 0;
       }
       .secondary-banner-body {
         padding: 16px;
         flex: 1;
+        min-width: 0;
       }
       .secondary-banner-body h3 {
         margin: 0 0 6px;

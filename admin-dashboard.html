@@ -1185,6 +1185,46 @@
         background: #1a2e1a;
         color: #e0e0e0;
       }
+
+      /* Approval-queue rows (equipment + account approvals) — scroll instead
+         of silently clipping when the fixed-width tracks don't fit. */
+      #approvals-list, #account-approvals-list {
+        overflow-x: auto;
+        -webkit-overflow-scrolling: touch;
+      }
+      @media (max-width: 480px) {
+        .eq-approval-row {
+          grid-template-columns: auto 1fr !important;
+        }
+        .eq-approval-row > img,
+        .eq-approval-row > div[style*="width:100px"] {
+          grid-column: 1 / -1;
+          width: 100% !important;
+          height: auto !important;
+          max-height: 160px;
+        }
+        .eq-approval-row .eq-approval-actions,
+        .account-approval-row > div:last-child {
+          flex-direction: row !important;
+          flex-wrap: wrap;
+          grid-column: 1 / -1;
+        }
+        .eq-approval-row .eq-approval-actions button,
+        .account-approval-row > div:last-child button {
+          flex: 1 1 auto;
+        }
+      }
+
+      /* Order/rental detail modal info rows */
+      .info-row {
+        display: flex;
+        gap: 8px;
+        flex-wrap: wrap;
+      }
+      .info-row > .info-value {
+        min-width: 0;
+        overflow-wrap: anywhere;
+      }
     </style>
     <!-- Chart.js for the analytics charts on the overview tab. Loaded
          deferred so initial paint isn't blocked; the charts mount after
@@ -2902,12 +2942,14 @@
             }).join("");
 
             el.innerHTML = `
+              <div style="overflow-x:auto">
               <table>
                 <thead>
                   <tr><th></th><th>${t("adminDashboard.equipmentList.colName")}</th><th>${t("adminDashboard.equipmentList.colPrice")}</th><th>${t("adminDashboard.equipmentList.colQty")}</th><th>${t("adminDashboard.equipmentList.colGov")}</th><th>${t("adminDashboard.equipmentList.colStatus")}</th><th></th></tr>
                 </thead>
                 <tbody>${rows}</tbody>
               </table>
+              </div>
             `;
           } catch (err) {
             el.innerHTML = `<div class="empty" style="color:#ffb3b3">${escapeHtml(err.message)}</div>`;
@@ -3031,7 +3073,7 @@
               const img = eq.primary_image_url || (Array.isArray(eq.images) && eq.images[0]) || "";
               const listing = t(`adminDashboard.approvals.listingTypes.${eq.listing_type}`) || eq.listing_type;
               return `
-                <div style="background:rgba(0,0,0,0.2);border:1px solid rgba(255,255,255,0.1);border-radius:12px;padding:14px;margin-bottom:12px;display:grid;grid-template-columns:auto 100px 1fr auto;gap:14px;align-items:center">
+                <div class="eq-approval-row" style="background:rgba(0,0,0,0.2);border:1px solid rgba(255,255,255,0.1);border-radius:12px;padding:14px;margin-bottom:12px;display:grid;grid-template-columns:auto 100px 1fr auto;gap:14px;align-items:center">
                   ${bulkCheckboxHtml("equipment", eq.id)}
                   ${img
                     ? `<img src="${escapeHtml(img)}" style="width:100px;height:100px;object-fit:cover;border-radius:8px" />`
@@ -3050,7 +3092,7 @@
                       · ${new Date(eq.created_at).toLocaleDateString(localeTag())}
                     </div>
                   </div>
-                  <div style="display:flex;flex-direction:column;gap:6px">
+                  <div class="eq-approval-actions" style="display:flex;flex-direction:column;gap:6px">
                     <button class="btn-sm btn-green" data-approve="${eq.id}">
                       <i class="fas fa-check"></i> ${t("adminDashboard.approvals.approveBtn")}
                     </button>
@@ -3124,7 +3166,7 @@
             }
 
             $("#account-approvals-list").innerHTML = res.items.map((u) => `
-              <div style="background:rgba(0,0,0,0.2);border:1px solid rgba(255,255,255,0.1);border-radius:12px;padding:14px;margin-bottom:12px;display:grid;grid-template-columns:1fr auto;gap:14px;align-items:center">
+              <div class="account-approval-row" style="background:rgba(0,0,0,0.2);border:1px solid rgba(255,255,255,0.1);border-radius:12px;padding:14px;margin-bottom:12px;display:grid;grid-template-columns:1fr auto;gap:14px;align-items:center">
                 <div>
                   <div style="font-size:16px;font-weight:700">
                     ${escapeHtml(u.name || "—")}
@@ -5709,9 +5751,9 @@
 
     function _infoRow(label, value) {
       if (!value && value !== 0) return "";
-      return `<div style="display:flex;gap:8px;padding:8px 0;border-bottom:1px solid rgba(255,255,255,.05)">
+      return `<div class="info-row" style="padding:8px 0;border-bottom:1px solid rgba(255,255,255,.05)">
         <span style="color:#aaa;min-width:130px;font-size:13px">${label}</span>
-        <span style="color:#f1f2f6;font-size:13px;flex:1">${value}</span>
+        <span class="info-value" style="color:#f1f2f6;font-size:13px;flex:1">${value}</span>
       </div>`;
     }
 

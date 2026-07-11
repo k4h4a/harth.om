@@ -169,7 +169,7 @@
       @media (max-width: 768px) {
         .summary-grid { grid-template-columns: 1fr; }
         .cart-table thead { display: none; }
-        .cart-table, .cart-table tbody, .cart-table tr, .cart-table td { display: block; width: 100%; }
+        .cart-table, .cart-table tbody, .cart-table tr, .cart-table td { display: block; width: 100%; min-width: 0 !important; }
         .cart-table tr {
           background: rgba(255, 255, 255, 0.05);
           margin-bottom: 10px;
@@ -177,6 +177,12 @@
           padding: 10px;
         }
         .cart-table td { text-align: start; padding: 6px 0; }
+        .cart-table td[data-label]::before {
+          content: attr(data-label);
+          font-weight: 700;
+          display: block;
+          margin-bottom: 2px;
+        }
         .rental-checkout-form > div[style*="grid-template-columns"] {
           grid-template-columns: 1fr !important;
         }
@@ -350,6 +356,8 @@
         opacity: 0;
         transition: opacity 0.25s;
         pointer-events: none;
+        max-width: 90vw;
+        text-align: center;
       }
       #toast.show { opacity: 1; }
       #toast.error { background: #c0392b; }
