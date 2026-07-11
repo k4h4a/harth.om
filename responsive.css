@@ -406,6 +406,88 @@ body.menu-open {
   }
 }
 
+/* ------------------------------------------------------------
+ * 2c. MOBILE TOP-BAR — guarantee the hamburger + auth controls
+ * never get pushed past the viewport edge.
+ *
+ * Root cause this fixes: on mobile the capsule row is
+ * `flex-wrap: nowrap` and both `.section.right` (brand) and
+ * `.section.left` (lang switcher + CTA + logged-in user corner)
+ * are non-shrinking (`flex: 0 0 auto`). When their combined
+ * natural width exceeds the viewport, the overflow has nowhere
+ * to go — it renders past the capsule's own box (which has no
+ * overflow clipping of its own) and then gets silently clipped
+ * by the page-level `overflow-x: hidden`. Whatever sits at the
+ * trailing edge (the hamburger button, and often part of the
+ * auth corner) ends up positioned off-screen and unusable.
+ *
+ * Fix: let `.section.left` actually shrink, and collapse its
+ * decorative/secondary content (button labels, the lang
+ * switcher) down to icon-only so the whole row's natural width
+ * fits inside even a 320px viewport — nothing is removed, every
+ * control (orders / account / logout / language / add listing)
+ * stays a single tap away, just icon-only instead of icon+label.
+ * ------------------------------------------------------------ */
+@media (max-width: 1023px) {
+  .header-capsule .section.left {
+    flex: 1 1 auto;
+    min-width: 0;
+    justify-content: flex-end;
+    overflow: visible;
+  }
+
+  /* Logged-in user corner (nav.js #nav-user-corner): icon-only */
+  #nav-user-corner .nav-corner-label {
+    display: none;
+  }
+  #nav-user-corner .nav-corner-btn {
+    padding: 8px !important;
+    min-width: 36px;
+    min-height: 36px;
+    justify-content: center;
+  }
+  #nav-user-corner .nav-corner-btn i {
+    margin-inline-end: 0 !important;
+  }
+
+  /* Lang switcher: shrink the circle a bit */
+  .header-capsule .lang-switcher-trigger {
+    width: 34px !important;
+    height: 34px !important;
+    font-size: 15px !important;
+  }
+}
+
+@media (max-width: 420px) {
+  /* "Add listing" CTA: icon-only once things get tight */
+  #add-listing-cta span {
+    display: none;
+  }
+  #add-listing-cta {
+    padding-inline: 10px !important;
+    min-width: 36px;
+  }
+  #add-listing-cta i {
+    margin-inline-end: 0 !important;
+  }
+}
+
+/* Last-resort safety net: even after collapsing everything to
+   icon-only, a long logged-in name + every control at once can
+   still be tight on the smallest phones (320px). Rather than let
+   anything overflow past the viewport and get invisibly clipped,
+   let the row wrap onto a second line — still fully visible and
+   tappable, just stacked. */
+@media (max-width: 360px) {
+  .header-capsule {
+    flex-wrap: wrap !important;
+    row-gap: 6px;
+  }
+  .header-capsule .section.left {
+    flex: 1 1 auto;
+  }
+}
+
 /* DESKTOP NAV (≥ 1024px) — restore inline horizontal nav */
 @media (min-width: 1024px) {
   .hs-hamburger {

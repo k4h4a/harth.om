@@ -129,9 +129,9 @@
 
     const wrap = existing || document.createElement("div");
     wrap.id = "nav-user-corner";
-    wrap.style.cssText = "display:flex;gap:8px;align-items:center;flex-wrap:wrap";
+    wrap.style.cssText = "display:flex;gap:8px;align-items:center;flex-wrap:wrap;min-width:0";
     wrap.innerHTML = `
-      <a href="my-orders.html" style="
+      <a href="my-orders.html" class="nav-corner-btn" title="${t("nav.myOrders")}" aria-label="${t("nav.myOrders")}" style="
         color:#6ab04c;
         font-size:13px;
         text-decoration:none;
@@ -140,15 +140,16 @@
         padding:5px 10px;
         border-radius:6px;
         white-space:nowrap;
+        display:inline-flex;
+        align-items:center;
       ">
-        <i class="fas fa-receipt" style="margin-inline-end:4px"></i>${t("nav.myOrders")}
+        <i class="fas fa-receipt" style="margin-inline-end:4px"></i><span class="nav-corner-label">${t("nav.myOrders")}</span>
       </a>
-      <span style="color:#fff;font-size:13px;white-space:nowrap;">
-        <i class="fas fa-user-circle" style="margin-inline-end:4px"></i>
-        ${escapeHtml(user.name || user.email)}
+      <span class="nav-corner-btn" title="${escapeHtml(user.name || user.email)}" aria-label="${escapeHtml(user.name || user.email)}" style="color:#fff;font-size:13px;white-space:nowrap;display:inline-flex;align-items:center;">
+        <i class="fas fa-user-circle" style="margin-inline-end:4px"></i><span class="nav-corner-label">${escapeHtml(user.name || user.email)}</span>
       </span>
-      <button id="nav-logout" style="background:rgba(231,76,60,0.8);color:#fff;border:none;padding:5px 10px;border-radius:6px;cursor:pointer;font-family:inherit;font-size:13px;white-space:nowrap">
-        ${t("common.buttons.logoutShort")}
+      <button id="nav-logout" class="nav-corner-btn" title="${t("common.buttons.logoutShort")}" aria-label="${t("common.buttons.logoutShort")}" style="background:rgba(231,76,60,0.8);color:#fff;border:none;padding:5px 10px;border-radius:6px;cursor:pointer;font-family:inherit;font-size:13px;white-space:nowrap;display:inline-flex;align-items:center;">
+        <i class="fas fa-sign-out-alt" style="margin-inline-end:4px"></i><span class="nav-corner-label">${t("common.buttons.logoutShort")}</span>
       </button>
     `;
     if (!existing) corner.replaceWith(wrap);
