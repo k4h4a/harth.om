@@ -454,6 +454,51 @@
           </div>
         </div>
 
+        <!-- Phone Verification -->
+        <div class="pf-card">
+          <div class="pf-card-title"><i class="fas fa-mobile-alt"></i> <span data-i18n="profile.panels.security.phoneTitle">رقم الهاتف</span></div>
+          <div style="max-width:420px;display:flex;flex-direction:column;gap:12px">
+            <div style="display:flex;align-items:center;gap:10px;flex-wrap:wrap">
+              <span id="phone-current" style="font-family:monospace;direction:ltr"></span>
+              <span id="phone-badge" style="font-size:12px;padding:3px 10px;border-radius:20px;font-weight:700"></span>
+            </div>
+
+            <div id="phone-verify-row" style="display:none">
+              <button class="btn btn-ghost btn-sm" onclick="startPhoneVerify()">
+                <i class="fas fa-check-circle"></i> <span data-i18n="profile.panels.security.verifyPhoneBtn">توثيق الرقم الحالي</span>
+              </button>
+            </div>
+
+            <button class="btn btn-ghost btn-sm" style="width:fit-content" onclick="togglePhoneChangeForm()" id="phone-change-toggle-btn">
+              <i class="fas fa-exchange-alt"></i> <span data-i18n="profile.panels.security.changePhoneBtn">تغيير رقم الهاتف</span>
+            </button>
+
+            <div id="phone-change-form" style="display:none;flex-direction:column;gap:12px">
+              <div>
+                <label class="f-label" data-i18n="profile.panels.security.newPhoneLabel">رقم الهاتف الجديد</label>
+                <input type="tel" class="f-input" id="phone-new" placeholder="+96899999999" data-i18n-placeholder="profile.panels.security.newPhonePlaceholder" style="direction:ltr" />
+              </div>
+              <div>
+                <label class="f-label" data-i18n="profile.panels.security.currentPasswordConfirmLabel">كلمة المرور الحالية (للتأكيد)</label>
+                <input type="password" class="f-input" id="phone-current-password" placeholder="••••••••" />
+              </div>
+              <button class="btn btn-primary btn-sm" style="width:fit-content" onclick="requestPhoneOtp()">
+                <i class="fas fa-paper-plane"></i> <span data-i18n="profile.panels.security.sendCodeBtn">إرسال رمز التحقق</span>
+              </button>
+
+              <div id="phone-otp-row" style="display:none;flex-direction:column;gap:12px">
+                <div>
+                  <label class="f-label" data-i18n="profile.panels.security.otpCodeLabel">رمز التحقق</label>
+                  <input type="text" class="otp-input" id="phone-otp-code" inputmode="numeric" autocomplete="one-time-code" maxlength="6" style="max-width:220px" />
+                </div>
+                <button class="btn btn-primary btn-sm" style="width:fit-content" onclick="confirmPhoneOtp()">
+                  <i class="fas fa-shield-alt"></i> <span data-i18n="profile.panels.security.confirmPhoneBtn">تأكيد رقم الهاتف</span>
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+
         <!-- 2FA -->
         <div class="pf-card">
           <div class="pf-card-title"><i class="fas fa-mobile-alt"></i> <span data-i18n="profile.panels.security.twoFaTitle">المصادقة الثنائية (2FA)</span></div>
@@ -896,6 +941,8 @@
       setToggle("sw-login-alerts",  p.login_alerts  !== false);
       setSelect("pref-lang",        p.language || (window.HarthI18n ? window.HarthI18n.getLanguage() : "ar"));
 
+      renderPhoneCard(data);
+
       // Stats (placeholder)
       document.getElementById("stat-orders").textContent   = "—";
       document.getElementById("stat-listings").textContent = "—";
@@ -1042,6 +1089,111 @@
       } catch (err) { toast(err.message, true); }
     }
     window.changePassword = changePassword;
+
+    // ── Phone verification / change ──────────────────────────────
+    // phoneFlowMode tracks which action the visible OTP field belongs to,
+    // since both "verify current number" and "change number" reuse the
+    // same #phone-otp-code input.
+    let phoneFlowMode = null; // "verify" | "change"
+    let pendingNewPhone = null;
+
+    function renderPhoneCard(data) {
+      const cur = document.getElementById("phone-current");
+      const badge = document.getElementById("phone-badge");
+      const verifyRow = document.getElementById("phone-verify-row");
+      if (!cur || !badge) return;
+
+      if (!data.phone) {
+        cur.textContent = t("profile.panels.security.phoneNoneSet");
+        badge.style.display = "none";
+        verifyRow.style.display = "none";
+        return;
+      }
+
+      cur.textContent = data.phone;
+      badge.style.display = "inline-block";
+      if (data.phone_verified) {
+        badge.textContent = t("profile.panels.security.phoneVerifiedBadge");
+        badge.style.background = "rgba(106,176,76,.2)";
+        badge.style.color = "#a9dc98";
+        verifyRow.style.display = "none";
+      } else {
+        badge.textContent = t("profile.panels.security.phoneUnverifiedBadge");
+        badge.style.background = "rgba(230,126,34,.2)";
+        badge.style.color = "#f0b27a";
+        verifyRow.style.display = "block";
+      }
+    }
+
+    function togglePhoneChangeForm() {
+      const form = document.getElementById("phone-change-form");
+      const showing = form.style.display === "flex";
+      form.style.display = showing ? "none" : "flex";
+      if (showing) {
+        document.getElementById("phone-otp-row").style.display = "none";
+        phoneFlowMode = null;
+      }
+    }
+    window.togglePhoneChangeForm = togglePhoneChangeForm;
+
+    async function startPhoneVerify() {
+      try {
+        const res = await apiFetch("/phone/send-otp", { method: "POST" });
+        if (!res?.success) throw new Error(res?.error?.message || t("profile.toasts.genericFailed"));
+        phoneFlowMode = "verify";
+        document.getElementById("phone-change-form").style.display = "flex";
+        document.getElementById("phone-otp-row").style.display = "flex";
+        toast(t("profile.panels.security.phoneOtpSent"));
+      } catch (err) { toast(err.message, true); }
+    }
+    window.startPhoneVerify = startPhoneVerify;
+
+    async function requestPhoneOtp() {
+      const newPhone = document.getElementById("phone-new").value.trim();
+      const currentPassword = document.getElementById("phone-current-password").value;
+      if (!newPhone || !currentPassword) { toast(t("profile.toasts.fillCurrentAndNewPassword"), true); return; }
+      try {
+        const res = await apiFetch("/profile/phone/request-change", {
+          method: "POST",
+          body: JSON.stringify({ new_phone: newPhone, current_password: currentPassword }),
+        });
+        if (!res?.success) throw new Error(res?.error?.message || t("profile.toasts.genericFailed"));
+        phoneFlowMode = "change";
+        pendingNewPhone = newPhone;
+        document.getElementById("phone-otp-row").style.display = "flex";
+        toast(t("profile.panels.security.phoneOtpSent"));
+      } catch (err) { toast(err.message, true); }
+    }
+    window.requestPhoneOtp = requestPhoneOtp;
+
+    async function confirmPhoneOtp() {
+      const code = document.getElementById("phone-otp-code").value.trim();
+      if (!code) return;
+      try {
+        let res;
+        if (phoneFlowMode === "verify") {
+          res = await apiFetch("/phone/verify-otp", { method: "POST", body: JSON.stringify({ code }) });
+        } else {
+          const currentPassword = document.getElementById("phone-current-password").value;
+          res = await apiFetch("/profile/phone/change", {
+            method: "POST",
+            body: JSON.stringify({ new_phone: pendingNewPhone, current_password: currentPassword, code }),
+          });
+        }
+        if (!res?.success) throw new Error(res?.error?.message || t("profile.toasts.genericFailed"));
+        toast(phoneFlowMode === "verify"
+          ? t("profile.panels.security.phoneVerifySuccess")
+          : t("profile.panels.security.phoneChangeSuccess"));
+        document.getElementById("phone-change-form").style.display = "none";
+        document.getElementById("phone-otp-row").style.display = "none";
+        document.getElementById("phone-new").value = "";
+        document.getElementById("phone-current-password").value = "";
+        document.getElementById("phone-otp-code").value = "";
+        phoneFlowMode = null;
+        loadProfile();
+      } catch (err) { toast(err.message, true); }
+    }
+    window.confirmPhoneOtp = confirmPhoneOtp;
 
     // ── 2FA ────────────────────────────────────────────────────
     async function toggle2FA(enabled) {

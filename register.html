@@ -338,6 +338,8 @@
                 id="reg-phone"
                 placeholder="رقم الهاتف (مثال: +96899999999)"
                 data-i18n-placeholder="register.form.phonePlaceholder"
+                required
+                autocomplete="tel"
               />
             </div>
             <div class="input-field">
@@ -476,15 +478,15 @@
           </form>
         </div>
 
-        <!-- OTP STEP (Disabled) -->
+        <!-- OTP STEP — phone verification, required to finish registration -->
         <div id="otpSection" style="display: none; margin-top: 20px">
           <h4 style="color: #6ab04c; margin-bottom: 8px; text-align: center">
-            <i class="fas fa-shield-alt"></i> <span data-i18n="register.otp.heading">تأكيد البريد الإلكتروني</span>
+            <i class="fas fa-shield-alt"></i> <span data-i18n="register.otp.heading">تأكيد رقم الهاتف</span>
           </h4>
           <p class="otp-help">
-            <span data-i18n="register.otp.helpText">أرسلنا رمزاً مكوناً من 6 أرقام إلى</span>
-            <strong id="otp-email-label" style="color: #fff"></strong>.
-            <span data-i18n="register.otp.helpTextSuffix">الرمز صالح لمدة 10 دقائق.</span>
+            <span data-i18n="register.otp.helpText">أرسلنا رمزاً إلى</span>
+            <strong id="otp-phone-label" style="color: #fff"></strong>.
+            <span id="otp-help-suffix"></span>
           </p>
           <form id="otpForm">
             <input
@@ -494,7 +496,7 @@
               inputmode="numeric"
               autocomplete="one-time-code"
               maxlength="6"
-              pattern="\d{6}"
+              pattern="\d{4,6}"
               required
               placeholder="------"
             />
@@ -514,18 +516,6 @@
                 إعادة الإرسال
               </button>
               <span id="otp-resend-timer" style="color: #888"></span>
-            </p>
-            <p style="margin-top: 8px; text-align: center; font-size: 12px">
-              <a
-                href="#"
-                id="otp-skip"
-                style="color: #ccc"
-                title="يمكنك إكمال التحقّق لاحقاً من إعدادات الحساب"
-                data-i18n-title="register.otp.skipTitle"
-                data-i18n="register.otp.skipLink"
-              >
-                تخطّي الآن — أكمل لاحقاً
-              </a>
             </p>
           </form>
         </div>
@@ -565,7 +555,7 @@
     <script src="script.js"></script>
     <script>
       // =========================================================
-      // register.html — login + register + email-verification OTP.
+      // register.html — login + register + phone-verification OTP.
       // Roles sent to backend: renter | owner | delivery
       // =========================================================
       (function () {
@@ -660,7 +650,12 @@
           }
         });
 
-        // ─── Register ──────────────────────────────────────────────
+        // ─── Register (step 1: submit data, send phone OTP) ─────────
+        // Pending state carried from the register submit into the OTP step.
+        let pendingRegistrationId = null;
+        let pendingOtpMinutes = 5;
+        let resendCooldownTimer = null;
+
         $("#registerForm").addEventListener("submit", async (e) => {
           e.preventDefault();
           const name = $("#reg-name").value.trim();
@@ -678,47 +673,127 @@
             showMsg("#register-msg", t("register.form.passwordTooShort"), true);
             return;
           }
+          if (!phone) {
+            showMsg("#register-msg", t("register.form.phonePlaceholder"), true);
+            return;
+          }
 
           btn.disabled = true;
           btn.textContent = t("register.form.submitBtnLoading");
           showMsg("#register-msg", "");
 
-          const body = { email, password, name, role };
+          const body = { email, password, name, role, phone };
           if (identity) body.identity = identity;
-          if (phone) body.phone = phone;
           if (governorate) body.governorate = governorate;
 
           try {
-            const res = await apiFetch("/auth/register", {
+            const res = await apiFetch("/auth/register/init", {
               method: "POST",
               body: JSON.stringify(body),
             });
             if (!res || !res.success) {
               throw new Error(
-                (res && res.error && res.error.message) || t("register.form.failed"),
+                (res && res.error && res.error.message) || t("register.otp.initFailed"),
               );
             }
-            localStorage.setItem("token", res.token);
-            localStorage.setItem("user", JSON.stringify(res.user));
+            pendingRegistrationId = res.pending_registration_id;
+            pendingOtpMinutes = Math.round((new Date(res.expires_at) - Date.now()) / 60000) || 5;
 
-            const isPending = res.user.account_status === "pending";
-            if (isPending) {
-              showMsg("#register-msg", t("register.form.pendingMsg"));
-            } else {
-              showMsg("#register-msg", t("register.form.successMsg"));
-            }
-            setTimeout(() => {
-              window.location.href = landingFor(res.user);
-            }, 1200);
+            const codeLen = res.otp_length || 6;
+            const otpInput = $("#otp-code");
+            otpInput.maxLength = codeLen;
+            otpInput.pattern = `\\d{${codeLen}}`;
+            otpInput.value = "";
+
+            $("#otp-phone-label").textContent = phone;
+            $("#otp-help-suffix").textContent = t("register.otp.helpTextSuffix", {
+              minutes: pendingOtpMinutes,
+            });
+            showMsg("#otp-msg", "");
+            setMode("otp");
+            startResendCooldown();
           } catch (err) {
             showMsg("#register-msg", err.message || t("register.login.genericError"), true);
+          } finally {
             btn.disabled = false;
             btn.textContent = t("register.form.submitBtn");
           }
         });
 
-        // ─── OTP (Disabled) ────────────────────────────────────────
-        function startResendCooldown() { /* no-op */ }
+        // ─── OTP (step 2: verify phone code, account gets created) ──
+        $("#otpForm").addEventListener("submit", async (e) => {
+          e.preventDefault();
+          const code = $("#otp-code").value.trim();
+          const btn = $("#otp-submit-btn");
+
+          btn.disabled = true;
+          showMsg("#otp-msg", "");
+
+          try {
+            const res = await apiFetch("/auth/register/verify", {
+              method: "POST",
+              body: JSON.stringify({
+                pending_registration_id: pendingRegistrationId,
+                code,
+              }),
+            });
+            if (!res || !res.success) {
+              throw new Error(
+                (res && res.error && res.error.message) || t("register.otp.verifyFailed"),
+              );
+            }
+            localStorage.setItem("token", res.token);
+            localStorage.setItem("user", JSON.stringify(res.user));
+            showMsg("#otp-msg", t("register.form.successMsg"));
+            setTimeout(() => {
+              window.location.href = landingFor(res.user);
+            }, 1000);
+          } catch (err) {
+            showMsg("#otp-msg", err.message || t("register.otp.verifyFailed"), true);
+            btn.disabled = false;
+          }
+        });
+
+        $("#otp-resend-btn").addEventListener("click", async () => {
+          const btn = $("#otp-resend-btn");
+          btn.disabled = true;
+          try {
+            const res = await apiFetch("/auth/register/resend", {
+              method: "POST",
+              body: JSON.stringify({ pending_registration_id: pendingRegistrationId }),
+            });
+            if (!res || !res.success) {
+              throw new Error(
+                (res && res.error && res.error.message) || t("register.otp.resendFailed"),
+              );
+            }
+            showMsg("#otp-msg", t("register.otp.resendBtn"));
+            startResendCooldown();
+          } catch (err) {
+            showMsg("#otp-msg", err.message || t("register.otp.resendFailed"), true);
+            btn.disabled = false;
+          }
+        });
+
+        function startResendCooldown(seconds = 60) {
+          const btn = $("#otp-resend-btn");
+          const timerEl = $("#otp-resend-timer");
+          btn.disabled = true;
+          let remaining = seconds;
+          if (resendCooldownTimer) clearInterval(resendCooldownTimer);
+          timerEl.textContent = t("register.otp.resendWait", { seconds: remaining });
+          resendCooldownTimer = setInterval(() => {
+            remaining -= 1;
+            if (remaining <= 0) {
+              clearInterval(resendCooldownTimer);
+              resendCooldownTimer = null;
+              timerEl.textContent = "";
+              btn.disabled = false;
+            } else {
+              timerEl.textContent = t("register.otp.resendWait", { seconds: remaining });
+            }
+          }, 1000);
+        }
       })();
     </script>
   

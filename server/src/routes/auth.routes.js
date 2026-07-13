@@ -1,36 +1,47 @@
 const express = require("express");
 const router = express.Router();
-const rateLimit = require("express-rate-limit");
 const authController = require("../controllers/auth.controller");
 const {
   checkEmailValidator,
   loginValidator,
   registerValidator,
+  registerInitValidator,
+  registerResendValidator,
+  registerVerifyValidator,
   verifyEmailValidator,
   requestPasswordResetValidator,
   resetPasswordValidator,
   changePasswordValidator,
 } = require("../validators/auth.validator");
 const auth = require("../middleware/auth");
-
-// OTP endpoints get an extra-tight rate limit on top of the global /auth one.
-// The point is to prevent a single email/IP from triggering hundreds of OTP
-// emails in a row (cost + spam-filter risk). Verifying codes is also limited
-// so brute-forcing the 6-digit space is impractical even with the per-row
-// attempt cap as an additional layer of defence.
-const otpLimiter = rateLimit({
-  windowMs: 60 * 1000,
-  max: 6,
-  standardHeaders: true,
-  legacyHeaders: false,
-  message: { error: { code: 429, message: "Too many OTP requests" } },
-});
+const { otpLimiter, resendLimiter } = require("../middleware/otpRateLimit");
 
 // POST /api/v1/auth/check-email
 router.post("/check-email", checkEmailValidator, authController.checkEmail);
 
 // POST /api/v1/auth/register
 router.post("/register", registerValidator, authController.register);
+
+// ─── Deferred registration (phone-verified) ───────────────────────────
+// No `users` row is created until /register/verify succeeds.
+router.post(
+  "/register/init",
+  otpLimiter,
+  registerInitValidator,
+  authController.registerInit,
+);
+router.post(
+  "/register/resend",
+  resendLimiter,
+  registerResendValidator,
+  authController.registerResend,
+);
+router.post(
+  "/register/verify",
+  otpLimiter,
+  registerVerifyValidator,
+  authController.registerVerify,
+);
 
 // POST /api/v1/auth/login
 router.post("/login", loginValidator, authController.login);

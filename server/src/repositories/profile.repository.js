@@ -12,7 +12,10 @@ async function getProfile(userId) {
   await ensureProfile(userId);
   const user = await knex("users")
     .where({ id: userId })
-    .first("id", "name", "email", "role", "is_pro", "account_status", "created_at");
+    .first(
+      "id", "name", "email", "role", "is_pro", "account_status", "created_at",
+      "phone", "phone_verified", "phone_verified_at",
+    );
   const profile = await knex("user_profiles").where({ user_id: userId }).first();
   return { ...user, profile: profile || {} };
 }

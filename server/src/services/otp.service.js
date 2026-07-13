@@ -27,11 +27,10 @@
  *    a local Omani provider).
  */
 
-const crypto = require("crypto");
-const bcrypt = require("bcrypt");
 const knex = require("../db");
 const emailService = require("./email.service");
 const { AppError } = require("../middleware/errorHandler");
+const otpCode = require("../utils/otpCode");
 
 const OTP_TTL_MS = 10 * 60 * 1000;       // 10 minutes
 const OTP_MAX_ATTEMPTS = 5;
@@ -40,15 +39,9 @@ const OTP_LENGTH = 6;
 
 /**
  * Generate a numeric code of length OTP_LENGTH.
- * Uses crypto.randomInt for unbiased uniform distribution.
  */
 function generateCode() {
-  // randomInt(min, max) returns int in [min, max). We want OTP_LENGTH digits.
-  // For 6 digits that's 100000..999999 (so 0-padding is unnecessary), but
-  // we pad anyway so OTP_LENGTH=4/5/etc still works.
-  const max = 10 ** OTP_LENGTH;
-  const n = crypto.randomInt(0, max);
-  return String(n).padStart(OTP_LENGTH, "0");
+  return otpCode.generateNumericCode(OTP_LENGTH);
 }
 
 /**
@@ -82,7 +75,7 @@ async function issueOtp({
   }
 
   const code = generateCode();
-  const codeHash = await bcrypt.hash(code, OTP_HASH_ROUNDS);
+  const codeHash = await otpCode.hashCode(code, OTP_HASH_ROUNDS);
   const expiresAt = new Date(Date.now() + OTP_TTL_MS);
 
   await knex.transaction(async (trx) => {
@@ -193,7 +186,7 @@ async function verifyOtp({ email, code, purpose }) {
     throw new AppError("تم تجاوز الحد المسموح من المحاولات. اطلب رمزاً جديداً.", 429);
   }
 
-  const ok = await bcrypt.compare(code, row.code_hash);
+  const ok = await otpCode.compareCode(code, row.code_hash);
   if (!ok) {
     // Record the wrong attempt. If this push us over the cap, mark consumed.
     const newAttempts = row.attempts + 1;

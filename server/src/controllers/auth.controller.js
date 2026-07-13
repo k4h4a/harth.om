@@ -6,6 +6,8 @@ const { AppError, asyncHandler } = require("../middleware/errorHandler");
 const { SELF_REGISTER_ROLES } = require("../validators/auth.validator");
 const notificationService = require("../services/notification.service");
 const otpService = require("../services/otp.service");
+const phoneOtpService = require("../services/phoneOtp.service");
+const pendingRegistrationService = require("../services/pendingRegistration.service");
 const loyaltyRepo = require("../repositories/loyalty.repository");
 
 /**
@@ -44,6 +46,8 @@ const PUBLIC_USER_FIELDS = [
   "status_reason",
   "email_verified",
   "email_verified_at",
+  "phone_verified",
+  "phone_verified_at",
   "identity_status",
   "identity_verified",
   "created_at",
@@ -68,18 +72,27 @@ const checkEmail = asyncHandler(async (req, res) => {
   res.json({ exists: !!row });
 });
 
-const register = asyncHandler(async (req, res) => {
-  const {
-    email,
-    password,
-    name,
-    role,
-    phone = null,
-    identity = null,
-    location = null,
-    governorate = null,
-    referral_code: referredByCode = null,
-  } = req.body;
+/**
+ * Shared account-creation logic used by both the legacy immediate-signup
+ * endpoint (register) and the deferred, phone-verified flow
+ * (registerInit/registerVerify). Returns the response payload; callers
+ * decide the HTTP status.
+ */
+async function createUserAndRespond({
+  email,
+  password = null,
+  passwordHash: precomputedPasswordHash = null,
+  name,
+  role,
+  phone = null,
+  identity = null,
+  location = null,
+  governorate = null,
+  referredByCode = null,
+  phoneVerified = false,
+  trx = null,
+}) {
+  const db = trx || knex;
 
   // Hard block: server-side admin creation is off limits here.
   // SELF_REGISTER_ROLES excludes 'admin', so this is a belt-and-suspenders check.
@@ -90,21 +103,23 @@ const register = asyncHandler(async (req, res) => {
   // Resolve referrer (if any) *before* insertion so a bad code fails fast.
   let referredBy = null;
   if (referredByCode) {
-    const referrer = await knex("users")
+    const referrer = await db("users")
       .where({ referral_code: referredByCode, is_active: true })
       .first("id");
     if (!referrer) throw new AppError("Invalid referral code", 400);
     referredBy = referrer.id;
   }
 
-  const passwordHash = await hashPassword(password);
+  // The deferred-registration flow (registerVerify) already has a bcrypt
+  // hash from pending_registrations — hashing again would double-hash it.
+  const passwordHash = precomputedPasswordHash || (await hashPassword(password));
 
   // Try up to 3 times in case of referral_code collision. Cheap retry.
   let inserted;
   for (let attempt = 0; attempt < 3; attempt++) {
     const referralCode = generateReferralCode();
     try {
-      const rows = await knex("users")
+      const rows = await db("users")
         .insert({
           email,
           phone,
@@ -126,6 +141,8 @@ const register = asyncHandler(async (req, res) => {
           // email-verified flag the user has no way to flip.
           email_verified: true,
           email_verified_at: knex.fn.now(),
+          phone_verified: phoneVerified,
+          phone_verified_at: phoneVerified ? knex.fn.now() : null,
         })
         .returning(PUBLIC_USER_FIELDS);
       inserted = rows[0];
@@ -148,17 +165,19 @@ const register = asyncHandler(async (req, res) => {
 
   // Referral bonus: award both the referrer and the new user. Synchronous
   // since it's part of the registration outcome and the user likely wants
-  // to see their bonus immediately.
+  // to see their bonus immediately. If we're already inside a caller-
+  // supplied transaction (registerVerify), reuse it instead of opening a
+  // nested one; otherwise open our own.
   if (referredBy) {
     try {
-      await knex.transaction(async (trx) => {
+      const creditBoth = async (t) => {
         await loyaltyRepo.credit({
           userId: referredBy,
           kind: "referral_bonus",
           amount: loyaltyRepo.REFERRER_BONUS,
           referredUserId: inserted.id,
           notes: `Referral bonus — ${inserted.name} joined using your code`,
-          trx,
+          trx: t,
         });
         await loyaltyRepo.credit({
           userId: inserted.id,
@@ -166,9 +185,14 @@ const register = asyncHandler(async (req, res) => {
           amount: loyaltyRepo.REFERRED_BONUS,
           referredUserId: referredBy,
           notes: "Welcome bonus for joining via a referral",
-          trx,
+          trx: t,
         });
-      });
+      };
+      if (trx) {
+        await creditBoth(trx);
+      } else {
+        await knex.transaction(creditBoth);
+      }
     } catch (e) {
       // eslint-disable-next-line no-console
       console.error("[referral bonus failed]", e.message);
@@ -179,13 +203,16 @@ const register = asyncHandler(async (req, res) => {
   // `email_verification` block in the response so any older client code
   // doesn't crash on missing fields — but with `required: false` and
   // `already_verified: true` so any verification UI hides itself.
-  notificationService.events.registered(inserted.id, inserted.name).catch((e) => {
-    // eslint-disable-next-line no-console
-    console.error("[register notify failed]", e.message);
-  });
+  //
+  // NOTE: the "registered" notification is intentionally NOT fired here.
+  // It inserts into notifications_log via the plain `knex` connection
+  // (not `trx`), so firing it while still inside registerVerify's wrapping
+  // transaction would try to reference a user_id no other connection can
+  // see yet — a foreign-key violation. Callers fire notifyRegistered()
+  // themselves once they know the insert has actually committed.
 
   const token = signToken(inserted);
-  res.status(201).json({
+  return {
     success: true,
     token,
     user: inserted,
@@ -196,7 +223,161 @@ const register = asyncHandler(async (req, res) => {
       reason: null,
       expires_at: null,
     },
+  };
+}
+
+function notifyRegistered(user) {
+  notificationService.events.registered(user.id, user.name).catch((e) => {
+    // eslint-disable-next-line no-console
+    console.error("[register notify failed]", e.message);
   });
+}
+
+const register = asyncHandler(async (req, res) => {
+  const {
+    email,
+    password,
+    name,
+    role,
+    phone = null,
+    identity = null,
+    location = null,
+    governorate = null,
+    referral_code: referredByCode = null,
+  } = req.body;
+
+  const payload = await createUserAndRespond({
+    email,
+    password,
+    name,
+    role,
+    phone,
+    identity,
+    location,
+    governorate,
+    referredByCode,
+    phoneVerified: false,
+  });
+  notifyRegistered(payload.user);
+  res.status(201).json(payload);
+});
+
+// ─── Deferred registration (phone-verified) ───────────────────────────
+//
+// POST /auth/register/init   — validate + stash data, send phone OTP
+// POST /auth/register/resend — resend the OTP for a still-live pending row
+// POST /auth/register/verify — check the OTP, THEN create the account
+//
+// No `users` row exists until /verify succeeds. POST /auth/register above
+// is untouched and still creates the account immediately, kept for backward
+// compatibility with any client still calling it directly.
+
+const registerInit = asyncHandler(async (req, res) => {
+  const {
+    email,
+    password,
+    name,
+    role,
+    phone,
+    identity = null,
+    location = null,
+    governorate = null,
+    referral_code: referredByCode = null,
+  } = req.body;
+
+  if (role === "admin" || !SELF_REGISTER_ROLES.includes(role)) {
+    throw new AppError("Role not allowed", 400);
+  }
+
+  const pending = await pendingRegistrationService.createPendingRegistration({
+    email,
+    phone,
+    password,
+    name,
+    role,
+    identity,
+    location,
+    governorate,
+    referredByCode,
+    requesterIp: req.ip,
+  });
+
+  const otpResult = await phoneOtpService.issuePhoneOtp({
+    phoneNumber: phone,
+    purpose: "registration",
+    pendingRegistrationId: pending.id,
+    requesterIp: req.ip,
+  });
+
+  res.status(201).json({
+    success: true,
+    pending_registration_id: pending.id,
+    otp_sent: otpResult.sent,
+    otp_length: otpResult.otp_length,
+    reason: otpResult.reason,
+    expires_at: otpResult.expires_at,
+  });
+});
+
+const registerResend = asyncHandler(async (req, res) => {
+  const { pending_registration_id: pendingRegistrationId } = req.body;
+
+  const pending = await pendingRegistrationService.getLivePendingRegistration(
+    pendingRegistrationId,
+  );
+
+  const otpResult = await phoneOtpService.issuePhoneOtp({
+    phoneNumber: pending.phone,
+    purpose: "registration",
+    pendingRegistrationId: pending.id,
+    requesterIp: req.ip,
+  });
+
+  res.json({
+    success: true,
+    otp_sent: otpResult.sent,
+    otp_length: otpResult.otp_length,
+    reason: otpResult.reason,
+    expires_at: otpResult.expires_at,
+  });
+});
+
+const registerVerify = asyncHandler(async (req, res) => {
+  const { pending_registration_id: pendingRegistrationId, code } = req.body;
+
+  const pending = await pendingRegistrationService.getLivePendingRegistration(
+    pendingRegistrationId,
+  );
+
+  await phoneOtpService.verifyPhoneOtp({
+    phoneNumber: pending.phone,
+    code: String(code),
+    purpose: "registration",
+    pendingRegistrationId: pending.id,
+  });
+
+  const payload = await knex.transaction(async (trx) => {
+    const result = await createUserAndRespond({
+      email: pending.email,
+      passwordHash: pending.password_hash, // already hashed at registerInit time
+      name: pending.name,
+      role: pending.role,
+      phone: pending.phone,
+      identity: pending.identity,
+      location: pending.location,
+      governorate: pending.governorate,
+      referredByCode: pending.referred_by_code,
+      phoneVerified: true,
+      trx,
+    });
+    await pendingRegistrationService.consumePendingRegistration(pending.id, trx);
+    return result;
+  });
+
+  // Only now that the transaction has committed is the user row visible to
+  // the notification service's own (separate) connection.
+  notifyRegistered(payload.user);
+  res.status(201).json(payload);
 });
 
 const login = asyncHandler(async (req, res) => {
@@ -430,6 +611,10 @@ module.exports = {
   login,
   me,
   logout,
+  // Deferred (phone-verified) registration
+  registerInit,
+  registerResend,
+  registerVerify,
   // OTP / verification flows
   sendEmailVerificationOtp,
   verifyEmail,

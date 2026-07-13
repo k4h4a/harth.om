@@ -90,6 +90,17 @@ const env = {
   TWILIO_AUTH_TOKEN: process.env.TWILIO_AUTH_TOKEN || "",
   TWILIO_WHATSAPP_FROM: process.env.TWILIO_WHATSAPP_FROM || "",
   TWILIO_SMS_FROM: process.env.TWILIO_SMS_FROM || "",
+
+  // Phone OTP verification (Phase 5). Length must be 4 or 6; anything else
+  // silently falls back to 6 rather than failing boot (matches the SMTP/
+  // Twilio vars above — not critical enough to be fail-fast like JWT_SECRET).
+  PHONE_OTP_LENGTH: [4, 6].includes(parseInt(process.env.PHONE_OTP_LENGTH, 10))
+    ? parseInt(process.env.PHONE_OTP_LENGTH, 10)
+    : 6,
+  PHONE_OTP_EXPIRY_MINUTES: parseInt(process.env.PHONE_OTP_EXPIRY_MINUTES, 10) || 5,
+  PHONE_OTP_MAX_ATTEMPTS: parseInt(process.env.PHONE_OTP_MAX_ATTEMPTS, 10) || 5,
+  PENDING_REGISTRATION_TTL_MINUTES:
+    parseInt(process.env.PENDING_REGISTRATION_TTL_MINUTES, 10) || 30,
 };
 
 module.exports = Object.freeze(env);

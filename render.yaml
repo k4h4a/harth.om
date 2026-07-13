@@ -59,3 +59,11 @@ services:
         sync: false
       - key: TWILIO_SMS_FROM
         sync: false
+      - key: PHONE_OTP_LENGTH
+        value: "6"
+      - key: PHONE_OTP_EXPIRY_MINUTES
+        value: "5"
+      - key: PHONE_OTP_MAX_ATTEMPTS
+        value: "5"
+      - key: PENDING_REGISTRATION_TTL_MINUTES
+        value: "30"

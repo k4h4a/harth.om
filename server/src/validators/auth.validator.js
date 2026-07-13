@@ -1,5 +1,7 @@
 const { body, validationResult } = require("express-validator");
 const { AppError } = require("../middleware/errorHandler");
+const phoneOtpService = require("../services/phoneOtp.service");
+const env = require("../config/env");
 
 /**
  * Final step in every validator chain: convert errors to AppError(400).
@@ -57,6 +59,64 @@ const registerValidator = [
     .optional({ values: "falsy" })
     .isString()
     .isLength({ min: 4, max: 16 }),
+  validate,
+];
+
+// Same fields as registerValidator, but phone is required — the deferred
+// registration flow verifies it before any account exists.
+const registerInitValidator = [
+  body("email").isEmail().withMessage("Invalid email").normalizeEmail(),
+  body("password")
+    .isString()
+    .isLength({ min: 8, max: 128 })
+    .withMessage("Password must be 8-128 characters"),
+  body("name")
+    .isString()
+    .trim()
+    .isLength({ min: 2, max: 100 })
+    .withMessage("Name must be 2-100 characters"),
+  body("role")
+    .isIn(SELF_REGISTER_ROLES)
+    .withMessage(`Role must be one of: ${SELF_REGISTER_ROLES.join(", ")}`),
+  body("phone")
+    .isString()
+    .matches(/^\+?[0-9\s\-()]{7,20}$/)
+    .withMessage("Invalid phone number"),
+  body("identity")
+    .optional({ values: "falsy" })
+    .isString()
+    .isLength({ min: 5, max: 64 })
+    .withMessage("Identity must be 5-64 characters"),
+  body("location")
+    .optional({ values: "falsy" })
+    .isObject()
+    .withMessage("Location must be an object"),
+  body("governorate")
+    .optional({ values: "falsy" })
+    .isIn([
+      "muscat", "dhofar", "musandam", "buraimi",
+      "dakhiliyah", "north_batinah", "south_batinah",
+      "south_sharqiyah", "north_sharqiyah", "dhahirah", "wusta",
+    ])
+    .withMessage("Invalid governorate"),
+  body("referral_code")
+    .optional({ values: "falsy" })
+    .isString()
+    .isLength({ min: 4, max: 16 }),
+  validate,
+];
+
+const registerResendValidator = [
+  body("pending_registration_id").isUUID().withMessage("Invalid pending_registration_id"),
+  validate,
+];
+
+const registerVerifyValidator = [
+  body("pending_registration_id").isUUID().withMessage("Invalid pending_registration_id"),
+  body("code")
+    .isString()
+    .matches(phoneOtpService.CODE_REGEX)
+    .withMessage(`الرمز يجب أن يكون ${env.PHONE_OTP_LENGTH} أرقام`),
   validate,
 ];
 
@@ -129,6 +189,9 @@ const changePasswordValidator = [
 module.exports = {
   validate,
   registerValidator,
+  registerInitValidator,
+  registerResendValidator,
+  registerVerifyValidator,
   loginValidator,
   checkEmailValidator,
   verifyEmailValidator,
