@@ -6,7 +6,7 @@ const { AppError, asyncHandler } = require("../middleware/errorHandler");
 const { SELF_REGISTER_ROLES } = require("../validators/auth.validator");
 const notificationService = require("../services/notification.service");
 const otpService = require("../services/otp.service");
-const phoneOtpService = require("../services/phoneOtp.service");
+const registrationOtpService = require("../services/registrationOtp.service");
 const pendingRegistrationService = require("../services/pendingRegistration.service");
 const loyaltyRepo = require("../repositories/loyalty.repository");
 
@@ -46,8 +46,6 @@ const PUBLIC_USER_FIELDS = [
   "status_reason",
   "email_verified",
   "email_verified_at",
-  "phone_verified",
-  "phone_verified_at",
   "identity_status",
   "identity_verified",
   "created_at",
@@ -74,7 +72,7 @@ const checkEmail = asyncHandler(async (req, res) => {
 
 /**
  * Shared account-creation logic used by both the legacy immediate-signup
- * endpoint (register) and the deferred, phone-verified flow
+ * endpoint (register) and the deferred, email-verified flow
  * (registerInit/registerVerify). Returns the response payload; callers
  * decide the HTTP status.
  */
@@ -89,7 +87,6 @@ async function createUserAndRespond({
   location = null,
   governorate = null,
   referredByCode = null,
-  phoneVerified = false,
   trx = null,
 }) {
   const db = trx || knex;
@@ -134,15 +131,14 @@ async function createUserAndRespond({
           is_active: true,
           account_status: defaultStatusForRole(role),
           status_changed_at: knex.fn.now(),
-          // Email verification was removed as a feature — see auth.routes.js.
-          // We default new accounts to verified=true so the existing trust
-          // badge logic (in trust.repository.js) continues to grant the
-          // verified mark based on KYC + approval, without requiring an
-          // email-verified flag the user has no way to flip.
+          // `register()` (legacy, immediate signup) sets this true
+          // unconditionally — email verification was a soft, disabled
+          // feature there (see auth.routes.js comment on verify-email).
+          // `registerVerify` (deferred flow) also sets it true, but here
+          // it's earned: the caller already passed registrationOtpService's
+          // verification before reaching this insert.
           email_verified: true,
           email_verified_at: knex.fn.now(),
-          phone_verified: phoneVerified,
-          phone_verified_at: phoneVerified ? knex.fn.now() : null,
         })
         .returning(PUBLIC_USER_FIELDS);
       inserted = rows[0];
@@ -256,15 +252,14 @@ const register = asyncHandler(async (req, res) => {
     location,
     governorate,
     referredByCode,
-    phoneVerified: false,
   });
   notifyRegistered(payload.user);
   res.status(201).json(payload);
 });
 
-// ─── Deferred registration (phone-verified) ───────────────────────────
+// ─── Deferred registration (email-verified) ────────────────────────────
 //
-// POST /auth/register/init   — validate + stash data, send phone OTP
+// POST /auth/register/init   — validate + stash data, send email OTP
 // POST /auth/register/resend — resend the OTP for a still-live pending row
 // POST /auth/register/verify — check the OTP, THEN create the account
 //
@@ -278,7 +273,7 @@ const registerInit = asyncHandler(async (req, res) => {
     password,
     name,
     role,
-    phone,
+    phone = null,
     identity = null,
     location = null,
     governorate = null,
@@ -302,9 +297,8 @@ const registerInit = asyncHandler(async (req, res) => {
     requesterIp: req.ip,
   });
 
-  const otpResult = await phoneOtpService.issuePhoneOtp({
-    phoneNumber: phone,
-    purpose: "registration",
+  const otpResult = await registrationOtpService.issueRegistrationOtp({
+    email,
     pendingRegistrationId: pending.id,
     requesterIp: req.ip,
   });
@@ -313,7 +307,6 @@ const registerInit = asyncHandler(async (req, res) => {
     success: true,
     pending_registration_id: pending.id,
     otp_sent: otpResult.sent,
-    otp_length: otpResult.otp_length,
     reason: otpResult.reason,
     expires_at: otpResult.expires_at,
   });
@@ -326,9 +319,8 @@ const registerResend = asyncHandler(async (req, res) => {
     pendingRegistrationId,
   );
 
-  const otpResult = await phoneOtpService.issuePhoneOtp({
-    phoneNumber: pending.phone,
-    purpose: "registration",
+  const otpResult = await registrationOtpService.issueRegistrationOtp({
+    email: pending.email,
     pendingRegistrationId: pending.id,
     requesterIp: req.ip,
   });
@@ -336,7 +328,6 @@ const registerResend = asyncHandler(async (req, res) => {
   res.json({
     success: true,
     otp_sent: otpResult.sent,
-    otp_length: otpResult.otp_length,
     reason: otpResult.reason,
     expires_at: otpResult.expires_at,
   });
@@ -349,10 +340,9 @@ const registerVerify = asyncHandler(async (req, res) => {
     pendingRegistrationId,
   );
 
-  await phoneOtpService.verifyPhoneOtp({
-    phoneNumber: pending.phone,
+  await registrationOtpService.verifyRegistrationOtp({
+    email: pending.email,
     code: String(code),
-    purpose: "registration",
     pendingRegistrationId: pending.id,
   });
 
@@ -367,7 +357,6 @@ const registerVerify = asyncHandler(async (req, res) => {
       location: pending.location,
       governorate: pending.governorate,
       referredByCode: pending.referred_by_code,
-      phoneVerified: true,
       trx,
     });
     await pendingRegistrationService.consumePendingRegistration(pending.id, trx);

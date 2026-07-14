@@ -1,7 +1,5 @@
 const { body, validationResult } = require("express-validator");
 const { AppError } = require("../middleware/errorHandler");
-const phoneOtpService = require("../services/phoneOtp.service");
-const env = require("../config/env");
 
 /**
  * Final step in every validator chain: convert errors to AppError(400).
@@ -14,6 +12,11 @@ const validate = (req, _res, next) => {
 
 // Roles a client is allowed to self-register as. Admins are bootstrapped only.
 const SELF_REGISTER_ROLES = ["owner", "renter", "delivery"];
+
+// 6-digit numeric OTP (we accept it as a string so leading zeros aren't lost).
+// Shared by every OTP-code field in this file — registration, password
+// reset, and password change all use the same 6-digit shape.
+const OTP_REGEX = /^\d{6}$/;
 
 const registerValidator = [
   body("email")
@@ -62,8 +65,8 @@ const registerValidator = [
   validate,
 ];
 
-// Same fields as registerValidator, but phone is required — the deferred
-// registration flow verifies it before any account exists.
+// Same fields as registerValidator (phone stays optional — email is the
+// verification channel, not phone).
 const registerInitValidator = [
   body("email").isEmail().withMessage("Invalid email").normalizeEmail(),
   body("password")
@@ -79,6 +82,7 @@ const registerInitValidator = [
     .isIn(SELF_REGISTER_ROLES)
     .withMessage(`Role must be one of: ${SELF_REGISTER_ROLES.join(", ")}`),
   body("phone")
+    .optional({ values: "falsy" })
     .isString()
     .matches(/^\+?[0-9\s\-()]{7,20}$/)
     .withMessage("Invalid phone number"),
@@ -115,8 +119,8 @@ const registerVerifyValidator = [
   body("pending_registration_id").isUUID().withMessage("Invalid pending_registration_id"),
   body("code")
     .isString()
-    .matches(phoneOtpService.CODE_REGEX)
-    .withMessage(`الرمز يجب أن يكون ${env.PHONE_OTP_LENGTH} أرقام`),
+    .matches(OTP_REGEX)
+    .withMessage("الرمز يجب أن يكون 6 أرقام"),
   validate,
 ];
 
@@ -132,9 +136,6 @@ const checkEmailValidator = [
 ];
 
 // ─── OTP / password reset / password change validators ──────────────────
-
-// 6-digit numeric OTP (we accept it as a string so leading zeros aren't lost).
-const OTP_REGEX = /^\d{6}$/;
 
 const verifyEmailValidator = [
   body("code")

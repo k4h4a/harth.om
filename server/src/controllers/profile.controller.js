@@ -2,7 +2,6 @@ const knex = require("../db");
 const bcrypt = require("bcrypt");
 const repo = require("../repositories/profile.repository");
 const { AppError, asyncHandler } = require("../middleware/errorHandler");
-const phoneOtpService = require("../services/phoneOtp.service");
 
 // GET /profile/me
 const getMe = asyncHandler(async (req, res) => {
@@ -57,85 +56,6 @@ const changePassword = asyncHandler(async (req, res) => {
   await knex("users").where({ id: req.user.id }).update({ password_hash: hash });
   await repo.logActivity(req.user.id, { action: "password_change", description: "تم تغيير كلمة المرور", ip: req.ip, risk: "medium" });
   res.json({ success: true });
-});
-
-// POST /profile/phone/request-change
-// Body: { new_phone, current_password }
-// Sends an OTP to the NEW phone number. Requiring the current password here
-// (rather than an OTP to the old phone) mirrors changePassword's existing
-// "prove you're the account owner" pattern instead of inventing a new one.
-const requestPhoneChange = asyncHandler(async (req, res) => {
-  const { new_phone, current_password } = req.body;
-
-  const user = await knex("users").where({ id: req.user.id }).first("password_hash");
-  if (!user) throw new AppError("User not found", 404);
-
-  const ok = await bcrypt.compare(current_password || "", user.password_hash);
-  if (!ok) throw new AppError("كلمة المرور الحالية غير صحيحة", 401);
-
-  const taken = await knex("users")
-    .where({ phone: new_phone })
-    .whereNot({ id: req.user.id })
-    .first("id");
-  if (taken) throw new AppError("رقم الهاتف مستخدَم بالفعل", 409);
-
-  const result = await phoneOtpService.issuePhoneOtp({
-    phoneNumber: new_phone,
-    purpose: "phone_change",
-    userId: req.user.id,
-    requesterIp: req.ip,
-  });
-  await repo.logActivity(req.user.id, {
-    action: "phone_change_requested",
-    description: "طلب تغيير رقم الهاتف",
-    ip: req.ip,
-    risk: "medium",
-  });
-
-  res.json({
-    success: true,
-    otp_sent: result.sent,
-    otp_length: result.otp_length,
-    reason: result.reason,
-    expires_at: result.expires_at,
-  });
-});
-
-// POST /profile/phone/change
-// Body: { new_phone, current_password, code }
-// Requires BOTH the current password AND the OTP sent to new_phone.
-const changePhone = asyncHandler(async (req, res) => {
-  const { new_phone, current_password, code } = req.body;
-
-  const user = await knex("users").where({ id: req.user.id }).first("password_hash");
-  if (!user) throw new AppError("User not found", 404);
-
-  const ok = await bcrypt.compare(current_password || "", user.password_hash);
-  if (!ok) throw new AppError("كلمة المرور الحالية غير صحيحة", 401);
-
-  await phoneOtpService.verifyPhoneOtp({
-    phoneNumber: new_phone,
-    code: String(code),
-    purpose: "phone_change",
-    userId: req.user.id,
-  });
-
-  await knex("users")
-    .where({ id: req.user.id })
-    .update({
-      phone: new_phone,
-      phone_verified: true,
-      phone_verified_at: knex.fn.now(),
-      updated_at: knex.fn.now(),
-    });
-  await repo.logActivity(req.user.id, {
-    action: "phone_changed",
-    description: "تم تغيير رقم الهاتف",
-    ip: req.ip,
-    risk: "high",
-  });
-
-  res.json({ success: true, message: "تم تحديث رقم الهاتف بنجاح." });
 });
 
 // PUT /profile/preferences
@@ -216,7 +136,6 @@ const deleteAccount = asyncHandler(async (req, res) => {
 
 module.exports = {
   getMe, updateMe, uploadAvatar, removeAvatar, changePassword,
-  requestPhoneChange, changePhone,
   updatePreferences, getSessions, revokeSession, revokeAllSessions,
   getActivity, toggle2FA, exportData, deactivate, deleteAccount,
 };

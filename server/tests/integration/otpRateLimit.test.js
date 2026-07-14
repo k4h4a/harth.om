@@ -3,22 +3,26 @@
 // this process shares (and pollutes) the in-memory rate-limit bucket.
 const request = require("supertest");
 const app = require("../helpers/app");
-const { knex, resetDb, createTestUser } = require("../helpers/db");
-const { signToken } = require("../../src/utils/jwt");
+const { knex, resetDb } = require("../helpers/db");
+const pendingRegistrationService = require("../../src/services/pendingRegistration.service");
 
 beforeEach(resetDb);
 afterAll(() => knex.destroy());
 
 describe("otpRateLimit", () => {
-  test("resend is rate-limited after 3 requests within the window (max 3 per 5 minutes)", async () => {
-    const id = await createTestUser({ phone: "+96899000000" });
-    const token = signToken({ id, role: "renter" });
+  test("register/resend is rate-limited after 3 requests within the window (max 3 per 5 minutes)", async () => {
+    const pending = await pendingRegistrationService.createPendingRegistration({
+      email: "rate-limit@test.harth",
+      password: "password123",
+      name: "Rate Limit Tester",
+      role: "renter",
+    });
 
     const results = [];
     for (let i = 0; i < 4; i++) {
       const res = await request(app)
-        .post("/api/v1/phone/resend-otp")
-        .set("Authorization", `Bearer ${token}`);
+        .post("/api/v1/auth/register/resend")
+        .send({ pending_registration_id: pending.id });
       results.push(res.status);
     }
 

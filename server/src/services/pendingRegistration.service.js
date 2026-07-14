@@ -1,7 +1,11 @@
 /**
- * Holds registration data submitted before phone verification completes.
+ * Holds registration data submitted before email verification completes.
  * No `users` row exists until the OTP tied to a pending registration is
  * verified — see authController.registerVerify.
+ *
+ * `phone` is optional, unverified contact info here (matches users.phone's
+ * original, pre-verification-feature behavior) — email is the sole identity
+ * check, since email is the verification channel.
  */
 const knex = require("../db");
 const env = require("../config/env");
@@ -10,7 +14,7 @@ const { AppError } = require("../middleware/errorHandler");
 
 async function createPendingRegistration({
   email,
-  phone,
+  phone = null,
   password,
   name,
   role,
@@ -20,28 +24,17 @@ async function createPendingRegistration({
   referredByCode = null,
   requesterIp = null,
 }) {
-  const existingUser = await knex("users")
-    .where({ email })
-    .orWhere({ phone })
-    .first("id", "email", "phone");
-  if (existingUser) {
-    if (existingUser.email === email) throw new AppError("Email already registered", 409);
-    throw new AppError("Phone already registered", 409);
-  }
+  const existingUser = await knex("users").where({ email }).first("id");
+  if (existingUser) throw new AppError("Email already registered", 409);
 
   const passwordHash = await hashPassword(password);
   const expiresAt = new Date(Date.now() + env.PENDING_REGISTRATION_TTL_MINUTES * 60 * 1000);
 
   const inserted = await knex.transaction(async (trx) => {
-    // Supersede any abandoned pending registration for the same phone/email
-    // so the live partial-unique-index doesn't reject this attempt. Grouped
-    // so the OR doesn't escape the "still live" condition (operator
-    // precedence: `.where(a).orWhere(b).whereNull(c)` would compile to
-    // `a OR (b AND c)`, not `(a OR b) AND c`).
+    // Supersede any abandoned pending registration for the same email so
+    // the live partial-unique-index doesn't reject this attempt.
     await trx("pending_registrations")
-      .where(function () {
-        this.where({ phone }).orWhere({ email });
-      })
+      .where({ email })
       .whereNull("consumed_at")
       .update({ consumed_at: trx.fn.now() });
 
@@ -84,7 +77,7 @@ function consumePendingRegistration(id, trx) {
 
 /**
  * Best-effort cleanup. Not wired to a scheduler — same status as
- * otp.service.purgeOldOtps / phoneOtp.service.purgeExpiredPhoneVerifications.
+ * otp.service.purgeOldOtps / registrationOtp.service.purgeExpiredRegistrationVerifications.
  */
 async function purgeExpiredPendingRegistrations({ olderThanHours = 24 } = {}) {
   return knex("pending_registrations")

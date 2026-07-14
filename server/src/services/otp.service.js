@@ -22,9 +22,10 @@
  *  - Email delivery happens via the existing email.service. If SMTP isn't
  *    configured, send() returns sent:false and we surface that as a 503 so
  *    the user knows to reach out instead of being stuck in a loop.
- *  - SMS is wired through twilio's sendSms(); we don't use it yet for OTPs
- *    but the call site is ready when phone-based OTPs go live (Twilio /
- *    a local Omani provider).
+ *
+ * Account registration has its own, separate email-OTP engine
+ * (registrationOtp.service.js) with a shorter TTL and hard-delete-on-use —
+ * see that file for why it isn't just another purpose here.
  */
 
 const knex = require("../db");

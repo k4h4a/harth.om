@@ -338,7 +338,6 @@
                 id="reg-phone"
                 placeholder="رقم الهاتف (مثال: +96899999999)"
                 data-i18n-placeholder="register.form.phonePlaceholder"
-                required
                 autocomplete="tel"
               />
             </div>
@@ -478,14 +477,14 @@
           </form>
         </div>
 
-        <!-- OTP STEP — phone verification, required to finish registration -->
+        <!-- OTP STEP — email verification, required to finish registration -->
         <div id="otpSection" style="display: none; margin-top: 20px">
           <h4 style="color: #6ab04c; margin-bottom: 8px; text-align: center">
-            <i class="fas fa-shield-alt"></i> <span data-i18n="register.otp.heading">تأكيد رقم الهاتف</span>
+            <i class="fas fa-shield-alt"></i> <span data-i18n="register.otp.heading">تأكيد البريد الإلكتروني</span>
           </h4>
           <p class="otp-help">
             <span data-i18n="register.otp.helpText">أرسلنا رمزاً إلى</span>
-            <strong id="otp-phone-label" style="color: #fff"></strong>.
+            <strong id="otp-email-label" style="color: #fff"></strong>.
             <span id="otp-help-suffix"></span>
           </p>
           <form id="otpForm">
@@ -496,7 +495,7 @@
               inputmode="numeric"
               autocomplete="one-time-code"
               maxlength="6"
-              pattern="\d{4,6}"
+              pattern="\d{6}"
               required
               placeholder="------"
             />
@@ -555,7 +554,7 @@
     <script src="script.js"></script>
     <script>
       // =========================================================
-      // register.html — login + register + phone-verification OTP.
+      // register.html — login + register + email-verification OTP.
       // Roles sent to backend: renter | owner | delivery
       // =========================================================
       (function () {
@@ -650,7 +649,7 @@
           }
         });
 
-        // ─── Register (step 1: submit data, send phone OTP) ─────────
+        // ─── Register (step 1: submit data, send email OTP) ─────────
         // Pending state carried from the register submit into the OTP step.
         let pendingRegistrationId = null;
         let pendingOtpMinutes = 5;
@@ -673,17 +672,14 @@
             showMsg("#register-msg", t("register.form.passwordTooShort"), true);
             return;
           }
-          if (!phone) {
-            showMsg("#register-msg", t("register.form.phonePlaceholder"), true);
-            return;
-          }
 
           btn.disabled = true;
           btn.textContent = t("register.form.submitBtnLoading");
           showMsg("#register-msg", "");
 
-          const body = { email, password, name, role, phone };
+          const body = { email, password, name, role };
           if (identity) body.identity = identity;
+          if (phone) body.phone = phone;
           if (governorate) body.governorate = governorate;
 
           try {
@@ -699,13 +695,8 @@
             pendingRegistrationId = res.pending_registration_id;
             pendingOtpMinutes = Math.round((new Date(res.expires_at) - Date.now()) / 60000) || 5;
 
-            const codeLen = res.otp_length || 6;
-            const otpInput = $("#otp-code");
-            otpInput.maxLength = codeLen;
-            otpInput.pattern = `\\d{${codeLen}}`;
-            otpInput.value = "";
-
-            $("#otp-phone-label").textContent = phone;
+            $("#otp-code").value = "";
+            $("#otp-email-label").textContent = email;
             $("#otp-help-suffix").textContent = t("register.otp.helpTextSuffix", {
               minutes: pendingOtpMinutes,
             });
@@ -720,7 +711,7 @@
           }
         });
 
-        // ─── OTP (step 2: verify phone code, account gets created) ──
+        // ─── OTP (step 2: verify email code, account gets created) ──
         $("#otpForm").addEventListener("submit", async (e) => {
           e.preventDefault();
           const code = $("#otp-code").value.trim();

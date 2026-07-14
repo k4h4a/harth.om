@@ -1,7 +1,8 @@
 /**
  * Numeric OTP code generation + hashing. Shared by every OTP engine in the
- * app (email OTPs in otp.service.js, phone OTPs in phoneOtp.service.js) so
- * the crypto/bcrypt details live in exactly one place.
+ * app (otp.service.js for password reset/change, registrationOtp.service.js
+ * for account registration) so the crypto/bcrypt details live in exactly
+ * one place.
  */
 const crypto = require("crypto");
 const bcrypt = require("bcrypt");

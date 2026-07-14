@@ -10,7 +10,7 @@
 const nodemailer = require("nodemailer");
 const env = require("../config/env");
 
-const hasSmtp = !!(env.SMTP_HOST && env.SMTP_USER && env.SMTP_PASSWORD);
+const hasSmtp = !!(env.SMTP_HOST && env.SMTP_USER && env.SMTP_PASS);
 
 let transporter = null;
 if (hasSmtp) {
@@ -20,7 +20,7 @@ if (hasSmtp) {
     secure: env.SMTP_PORT === 465, // implicit TLS on 465, STARTTLS elsewhere
     auth: {
       user: env.SMTP_USER,
-      pass: env.SMTP_PASSWORD,
+      pass: env.SMTP_PASS,
     },
   });
 }

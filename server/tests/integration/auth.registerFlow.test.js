@@ -55,7 +55,7 @@ describe("deferred registration flow (POST /auth/register/init|verify|resend)", 
     expect(user).toBeUndefined();
   });
 
-  test("verify with the correct code creates the account, phone_verified=true, and returns a token", async () => {
+  test("verify with the correct code creates the account, email_verified=true, and returns a token", async () => {
     mockCode("654321");
     const init = await request(app).post("/api/v1/auth/register/init").send(registrant);
 
@@ -67,7 +67,7 @@ describe("deferred registration flow (POST /auth/register/init|verify|resend)", 
     expect(res.status).toBe(201);
     expect(res.body.success).toBe(true);
     expect(res.body.token).toBeTruthy();
-    expect(res.body.user.phone_verified).toBe(true);
+    expect(res.body.user.email_verified).toBe(true);
 
     const user = await knex("users").where({ email: registrant.email }).first();
     expect(user).toBeTruthy();
@@ -77,9 +77,16 @@ describe("deferred registration flow (POST /auth/register/init|verify|resend)", 
       .where({ id: init.body.pending_registration_id })
       .first();
     expect(pending.consumed_at).not.toBeNull();
+
+    // The registration_verifications row is hard-deleted on success, not
+    // soft-consumed — nothing should be left behind for this pending id.
+    const verifications = await knex("registration_verifications")
+      .where({ pending_registration_id: init.body.pending_registration_id })
+      .first();
+    expect(verifications).toBeUndefined();
   });
 
-  test("a duplicate init for a phone that's already a real user is rejected with 409", async () => {
+  test("a duplicate init for an email that's already a real user is rejected with 409", async () => {
     mockCode("111111");
     const init = await request(app).post("/api/v1/auth/register/init").send(registrant);
     await request(app).post("/api/v1/auth/register/verify").send({
@@ -87,10 +94,9 @@ describe("deferred registration flow (POST /auth/register/init|verify|resend)", 
       code: "111111",
     });
 
-    const res = await request(app).post("/api/v1/auth/register/init").send({
-      ...registrant,
-      email: "another@test.harth",
-    });
+    const res = await request(app)
+      .post("/api/v1/auth/register/init")
+      .send({ ...registrant, phone: "+96894444444" });
     expect(res.status).toBe(409);
   });
 
@@ -119,10 +125,28 @@ describe("deferred registration flow (POST /auth/register/init|verify|resend)", 
     expect(fresh.status).toBe(201);
   });
 
-  test("validation rejects init without a phone number", async () => {
+  test("phone is optional — registering without one still works", async () => {
+    mockCode("444555");
+    const { phone: _phone, ...noPhone } = registrant;
+    const init = await request(app)
+      .post("/api/v1/auth/register/init")
+      .send({ ...noPhone, email: "no-phone@test.harth" });
+    expect(init.status).toBe(201);
+
+    const res = await request(app).post("/api/v1/auth/register/verify").send({
+      pending_registration_id: init.body.pending_registration_id,
+      code: "444555",
+    });
+    expect(res.status).toBe(201);
+
+    const user = await knex("users").where({ email: "no-phone@test.harth" }).first();
+    expect(user.phone).toBeNull();
+  });
+
+  test("validation rejects init without an email", async () => {
     const res = await request(app)
       .post("/api/v1/auth/register/init")
-      .send({ ...registrant, phone: undefined });
+      .send({ ...registrant, email: undefined });
     expect(res.status).toBe(400);
   });
 });

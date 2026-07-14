@@ -20,6 +20,25 @@ describe("pendingRegistration.service", () => {
     expect(row.password_hash.startsWith("$2")).toBe(true);
   });
 
+  test("stores phone as optional, unverified contact info without any dedupe check on it", async () => {
+    // Two different registrants sharing the same (unverified) phone number
+    // must both be allowed to create pending registrations — phone is no
+    // longer the identity/verification channel, email is.
+    const first = await pendingRegistrationService.createPendingRegistration(base);
+    const second = await pendingRegistrationService.createPendingRegistration({
+      ...base,
+      email: "another-user@test.harth",
+    });
+    expect(first.id).not.toBe(second.id);
+  });
+
+  test("allows registering with no phone at all", async () => {
+    const { phone: _phone, ...noPhone } = base;
+    const pending = await pendingRegistrationService.createPendingRegistration(noPhone);
+    const row = await knex("pending_registrations").where({ id: pending.id }).first();
+    expect(row.phone).toBeNull();
+  });
+
   test("rejects when the email already belongs to a real user", async () => {
     await knex("users").insert({
       email: base.email,
@@ -37,29 +56,9 @@ describe("pendingRegistration.service", () => {
     });
   });
 
-  test("rejects when the phone already belongs to a real user", async () => {
-    await knex("users").insert({
-      email: "someone-else@test.harth",
-      phone: base.phone,
-      password_hash: "x",
-      role: "renter",
-      name: "X",
-      referral_code: "IJKLMNOP",
-      account_status: "approved",
-      email_verified: true,
-    });
-
-    await expect(pendingRegistrationService.createPendingRegistration(base)).rejects.toMatchObject({
-      statusCode: 409,
-    });
-  });
-
-  test("a second attempt for the same phone supersedes the first pending row", async () => {
+  test("a second attempt for the same email supersedes the first pending row", async () => {
     const first = await pendingRegistrationService.createPendingRegistration(base);
-    const second = await pendingRegistrationService.createPendingRegistration({
-      ...base,
-      email: "second@test.harth",
-    });
+    const second = await pendingRegistrationService.createPendingRegistration(base);
 
     const firstRow = await knex("pending_registrations").where({ id: first.id }).first();
     expect(firstRow.consumed_at).not.toBeNull();

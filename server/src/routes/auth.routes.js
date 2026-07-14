@@ -22,7 +22,7 @@ router.post("/check-email", checkEmailValidator, authController.checkEmail);
 // POST /api/v1/auth/register
 router.post("/register", registerValidator, authController.register);
 
-// ─── Deferred registration (phone-verified) ───────────────────────────
+// ─── Deferred registration (email-verified) ────────────────────────────
 // No `users` row is created until /register/verify succeeds.
 router.post(
   "/register/init",

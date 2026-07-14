@@ -42,7 +42,6 @@ router.use("/commissions", require("./commission.routes"));
 router.use("/admin",   require("./admin.routes"));
 router.use("/support", require("./support.routes"));
 router.use("/profile", require("./profile.routes"));
-router.use("/phone", require("./phone.routes"));
 
 // /payments/webhook is mounted in app.js with raw body parsing.
 

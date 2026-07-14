@@ -79,26 +79,25 @@ const env = {
   STRIPE_CURRENCY: process.env.STRIPE_CURRENCY || "omr",
 
   // Email / SMTP (Phase 4). All optional — missing vars silently disable email.
+  // Also the delivery channel for registration OTP codes (Phase 5).
   SMTP_HOST: process.env.SMTP_HOST || "",
   SMTP_PORT: parseInt(process.env.SMTP_PORT, 10) || 587,
   SMTP_USER: process.env.SMTP_USER || "",
-  SMTP_PASSWORD: process.env.SMTP_PASSWORD || "",
+  SMTP_PASS: process.env.SMTP_PASS || "",
   SMTP_FROM: process.env.SMTP_FROM || "",
 
-  // Twilio / WhatsApp / SMS (Phase 4). Also all optional.
+  // Twilio / WhatsApp (Phase 4). Used only for order/rental WhatsApp
+  // notifications (notification.service.js) — NOT for account verification,
+  // which uses email OTP (registrationOtp.service.js). All optional.
   TWILIO_ACCOUNT_SID: process.env.TWILIO_ACCOUNT_SID || "",
   TWILIO_AUTH_TOKEN: process.env.TWILIO_AUTH_TOKEN || "",
   TWILIO_WHATSAPP_FROM: process.env.TWILIO_WHATSAPP_FROM || "",
-  TWILIO_SMS_FROM: process.env.TWILIO_SMS_FROM || "",
 
-  // Phone OTP verification (Phase 5). Length must be 4 or 6; anything else
-  // silently falls back to 6 rather than failing boot (matches the SMTP/
-  // Twilio vars above — not critical enough to be fail-fast like JWT_SECRET).
-  PHONE_OTP_LENGTH: [4, 6].includes(parseInt(process.env.PHONE_OTP_LENGTH, 10))
-    ? parseInt(process.env.PHONE_OTP_LENGTH, 10)
-    : 6,
-  PHONE_OTP_EXPIRY_MINUTES: parseInt(process.env.PHONE_OTP_EXPIRY_MINUTES, 10) || 5,
-  PHONE_OTP_MAX_ATTEMPTS: parseInt(process.env.PHONE_OTP_MAX_ATTEMPTS, 10) || 5,
+  // Registration email OTP (Phase 5).
+  REGISTRATION_OTP_EXPIRY_MINUTES:
+    parseInt(process.env.REGISTRATION_OTP_EXPIRY_MINUTES, 10) || 5,
+  REGISTRATION_OTP_MAX_ATTEMPTS:
+    parseInt(process.env.REGISTRATION_OTP_MAX_ATTEMPTS, 10) || 5,
   PENDING_REGISTRATION_TTL_MINUTES:
     parseInt(process.env.PENDING_REGISTRATION_TTL_MINUTES, 10) || 30,
 };

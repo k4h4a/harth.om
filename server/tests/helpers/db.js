@@ -5,7 +5,7 @@ const knex = require("../../src/db");
 async function resetDb() {
   await knex.raw(`
     TRUNCATE TABLE
-      phone_verifications,
+      registration_verifications,
       pending_registrations,
       user_activity_log,
       users
@@ -17,8 +17,8 @@ let userSeq = 0;
 
 /**
  * Insert a minimal real `users` row directly (bypassing the API) so tests
- * can satisfy phone_verifications.user_id's FK without going through the
- * whole registration flow.
+ * can exercise authenticated routes without going through the whole
+ * registration flow.
  */
 async function createTestUser(overrides = {}) {
   userSeq += 1;
@@ -34,7 +34,6 @@ async function createTestUser(overrides = {}) {
       status_changed_at: knex.fn.now(),
       email_verified: true,
       email_verified_at: knex.fn.now(),
-      phone_verified: !!overrides.phone_verified,
     })
     .returning(["id"]);
   return row.id;

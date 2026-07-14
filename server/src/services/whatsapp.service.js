@@ -1,5 +1,7 @@
 /**
- * WhatsApp / SMS via Twilio.
+ * WhatsApp via Twilio — used by notification.service.js for order/rental
+ * WhatsApp notifications (unrelated to account verification, which uses
+ * email OTP — see registrationOtp.service.js).
  *
  * Follows the same contract as email.service: never throws, returns
  * { sent, reason, ... } so notification flow is uniform across channels.
@@ -48,29 +50,7 @@ async function sendWhatsApp({ to, body }) {
   }
 }
 
-/**
- * Plain SMS fallback — uses TWILIO_SMS_FROM if set.
- */
-async function sendSms({ to, body }) {
-  if (!hasTwilio || !env.TWILIO_SMS_FROM) {
-    return { sent: false, reason: "not_configured" };
-  }
-  if (!to) return { sent: false, reason: "no_recipient" };
-
-  try {
-    const msg = await client.messages.create({
-      from: env.TWILIO_SMS_FROM,
-      to: to.startsWith("+") ? to : `+${to}`,
-      body,
-    });
-    return { sent: true, messageId: msg.sid };
-  } catch (err) {
-    return { sent: false, reason: "error", error: err.message };
-  }
-}
-
 module.exports = {
   sendWhatsApp,
-  sendSms,
   isConfigured: hasTwilio,
 };
