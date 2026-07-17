@@ -4,6 +4,35 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <script>
+      // Already logged in? Bounce straight to the right landing page instead
+      // of flashing the login form. Runs before anything else renders.
+      // Skipped if we're mid-way through a Google redirect (token/error still
+      // in the URL) so that flow gets to finish processing first.
+      (function () {
+        try {
+          var midGoogleRedirect =
+            /(?:^|[#&])g_token=/.test(window.location.hash) ||
+            /[?&]g_error=/.test(window.location.search);
+          if (midGoogleRedirect) return;
+
+          var token = localStorage.getItem("token");
+          var user = JSON.parse(localStorage.getItem("user") || "null");
+          if (token && user && user.id) {
+            var landing =
+              user.account_status === "pending"
+                ? "tools.html"
+                : ({
+                    admin: "admin-dashboard.html",
+                    owner: "owner-dashboard.html",
+                    delivery: "delivery.html",
+                    renter: "basket.html",
+                  }[user.role] || "index.html");
+            window.location.replace(landing);
+          }
+        } catch (e) {}
+      })();
+    </script>
+    <script>
       (function () {
         try {
           if (localStorage.getItem("harth_lang") === "en") {
@@ -582,6 +611,70 @@
               renter: "basket.html",
             }[user.role] || "index.html"
           );
+        }
+
+        // ─── Google OAuth: pick up the result of a redirect round-trip ──
+        // Success: the backend redirects to /register.html#g_token=<jwt>.
+        // Failure: /register.html?g_error=<code>. Fragment (not query) is
+        // used for the token so it never lingers in server logs/Referer.
+        async function handleGoogleCallbackToken() {
+          const match = /(?:^|[#&])g_token=([^&]+)/.exec(window.location.hash);
+          if (!match) return false;
+
+          // Strip it from the URL immediately so a refresh/back-navigation
+          // can't re-process (or re-expose) the token.
+          history.replaceState(
+            null,
+            "",
+            window.location.pathname + window.location.search,
+          );
+
+          const token = decodeURIComponent(match[1]);
+          showMsg("#login-msg", t("register.google.connecting"));
+          localStorage.setItem("token", token);
+          try {
+            const res = await apiFetch("/auth/me");
+            if (!res || !res.success) throw new Error();
+            localStorage.setItem("user", JSON.stringify(res.user));
+            window.location.replace(landingFor(res.user));
+          } catch (err) {
+            localStorage.removeItem("token");
+            showMsg("#login-msg", t("register.google.failed"), true);
+          }
+          return true;
+        }
+
+        function handleGoogleCallbackError() {
+          const params = new URLSearchParams(window.location.search);
+          const code = params.get("g_error");
+          if (!code) return;
+          history.replaceState(null, "", window.location.pathname);
+
+          const messages = {
+            access_denied: t("register.google.denied"),
+            account_disabled: t("register.google.accountDisabled"),
+          };
+          showMsg(
+            "#login-msg",
+            messages[code] || t("register.google.failed"),
+            true,
+          );
+        }
+
+        handleGoogleCallbackToken().then((handled) => {
+          if (!handled) handleGoogleCallbackError();
+        });
+
+        // Plain <a href> navigation to the backend — can't preventDefault,
+        // just show a loading state while the browser leaves the page.
+        const googleBtn = document.querySelector(".social-btn.google");
+        if (googleBtn) {
+          googleBtn.addEventListener("click", function () {
+            this.style.pointerEvents = "none";
+            this.style.opacity = "0.7";
+            const label = this.querySelector("span");
+            if (label) label.textContent = t("register.google.connecting");
+          });
         }
 
         let mode = "login";

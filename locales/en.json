@@ -95,6 +95,16 @@
     "title": "Log In | Harth Platform",
     "logoText": "Harth Platform",
     "backBtn": "Back",
+    "socialLoginTitle": "Or sign in with",
+    "googleBtn": "Google",
+    "appleBtn": "Apple",
+    "socialDivider": "or",
+    "google": {
+      "connecting": "Connecting to Google...",
+      "failed": "Google sign-in failed. Please try again.",
+      "denied": "Google sign-in was cancelled.",
+      "accountDisabled": "This account has been disabled. Contact support."
+    },
     "login": {
       "title": "Log In",
       "subtitle": "Welcome back to our farming community",

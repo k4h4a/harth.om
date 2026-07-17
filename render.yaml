@@ -64,3 +64,13 @@ services:
         value: "5"
       - key: PENDING_REGISTRATION_TTL_MINUTES
         value: "30"
+      # Google OAuth ("Sign in with Google"). Set in the Render dashboard.
+      # GOOGLE_CALLBACK_URL must be registered as an Authorized redirect URI
+      # in Google Cloud Console and must be the production HTTPS URL, e.g.
+      # https://<your-service>.onrender.com/api/v1/auth/google/callback
+      - key: GOOGLE_CLIENT_ID
+        sync: false
+      - key: GOOGLE_CLIENT_SECRET
+        sync: false
+      - key: GOOGLE_CALLBACK_URL
+        sync: false

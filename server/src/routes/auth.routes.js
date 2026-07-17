@@ -46,6 +46,12 @@ router.post(
 // POST /api/v1/auth/login
 router.post("/login", loginValidator, authController.login);
 
+// ─── Google OAuth ("Sign in with Google") ──────────────────────────────
+// GET /api/v1/auth/google - redirect to Google's consent screen
+router.get("/google", authController.googleAuthStart);
+// GET /api/v1/auth/google/callback - Google redirects back here with ?code
+router.get("/google/callback", authController.googleAuthCallback);
+
 // GET /api/v1/auth/me - protected
 router.get("/me", auth, authController.me);
 

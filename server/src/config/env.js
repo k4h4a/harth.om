@@ -100,6 +100,14 @@ const env = {
     parseInt(process.env.REGISTRATION_OTP_MAX_ATTEMPTS, 10) || 5,
   PENDING_REGISTRATION_TTL_MINUTES:
     parseInt(process.env.PENDING_REGISTRATION_TTL_MINUTES, 10) || 30,
+
+  // Google OAuth ("Sign in with Google"). Optional — if left blank, the
+  // /auth/google routes respond with a clear 503 instead of crashing.
+  GOOGLE_CLIENT_ID: process.env.GOOGLE_CLIENT_ID || "",
+  GOOGLE_CLIENT_SECRET: process.env.GOOGLE_CLIENT_SECRET || "",
+  GOOGLE_CALLBACK_URL:
+    process.env.GOOGLE_CALLBACK_URL ||
+    `http://localhost:${parseInt(process.env.PORT, 10) || 3000}/api/v1/auth/google/callback`,
 };
 
 module.exports = Object.freeze(env);

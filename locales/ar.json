@@ -95,6 +95,16 @@
     "title": "تسجيل الدخول | منصة حرث",
     "logoText": "مَنْصَةُ حَرْثْ",
     "backBtn": "التراجع",
+    "socialLoginTitle": "أو سجل دخول باستخدام",
+    "googleBtn": "Google",
+    "appleBtn": "Apple",
+    "socialDivider": "أو",
+    "google": {
+      "connecting": "جارٍ الاتصال بـ Google...",
+      "failed": "فشل تسجيل الدخول عبر Google. حاول مرة أخرى.",
+      "denied": "تم إلغاء تسجيل الدخول عبر Google.",
+      "accountDisabled": "تم إيقاف هذا الحساب. الرجاء التواصل مع الدعم."
+    },
     "login": {
       "title": "تسجيل الدخول",
       "subtitle": "مرحباً بك مجدداً في مجتمعنا الزراعي",

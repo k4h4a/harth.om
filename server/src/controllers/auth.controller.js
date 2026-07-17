@@ -1,7 +1,7 @@
 const crypto = require("crypto");
 const knex = require("../db");
 const { hashPassword, verifyPassword } = require("../utils/password");
-const { signToken } = require("../utils/jwt");
+const { signToken, signOAuthState, verifyOAuthState } = require("../utils/jwt");
 const { AppError, asyncHandler } = require("../middleware/errorHandler");
 const { SELF_REGISTER_ROLES } = require("../validators/auth.validator");
 const notificationService = require("../services/notification.service");
@@ -9,6 +9,7 @@ const otpService = require("../services/otp.service");
 const registrationOtpService = require("../services/registrationOtp.service");
 const pendingRegistrationService = require("../services/pendingRegistration.service");
 const loyaltyRepo = require("../repositories/loyalty.repository");
+const googleOAuth = require("../utils/googleOAuth");
 
 /**
  * Generate a short, unambiguous referral code.
@@ -48,6 +49,7 @@ const PUBLIC_USER_FIELDS = [
   "email_verified_at",
   "identity_status",
   "identity_verified",
+  "avatar_url",
   "created_at",
 ];
 
@@ -376,8 +378,14 @@ const login = asyncHandler(async (req, res) => {
     .where({ email, is_active: true })
     .first();
 
-  // Constant-ish error to avoid leaking which part failed.
-  if (!user || !(await verifyPassword(password, user.password_hash))) {
+  // Constant-ish error to avoid leaking which part failed. Google-only
+  // accounts have no password_hash — short-circuit before bcrypt.compare,
+  // which throws on a non-string hash.
+  if (
+    !user ||
+    !user.password_hash ||
+    !(await verifyPassword(password, user.password_hash))
+  ) {
     throw new AppError("Invalid credentials", 401);
   }
 
@@ -398,6 +406,142 @@ const login = asyncHandler(async (req, res) => {
   const { password_hash: _ph, ...safeUser } = user;
   const token = signToken(safeUser);
   res.json({ success: true, token, user: safeUser });
+});
+
+// ─── Google OAuth ("Sign in with Google") ─────────────────────────────
+//
+// Classic server-side redirect flow: GET /auth/google sends the browser to
+// Google's consent screen; Google redirects back to GET /auth/google/callback
+// with a one-time code. We exchange it for tokens, verify the ID token
+// ourselves (never trust the frontend), then upsert the user and hand back
+// our own JWT — same shape/mechanism as the password login above.
+//
+// There's no server session to stash a CSRF nonce in between those two
+// requests, so `state` is a signed, 10-minute JWT (see utils/jwt.js) instead
+// of a stored value.
+
+const GOOGLE_OAUTH_STATE_PURPOSE = "google_oauth";
+
+const googleAuthStart = asyncHandler(async (req, res) => {
+  if (!googleOAuth.isConfigured()) {
+    throw new AppError("Google sign-in is not configured", 503);
+  }
+  const state = signOAuthState(GOOGLE_OAUTH_STATE_PURPOSE);
+  res.redirect(googleOAuth.getAuthUrl(state));
+});
+
+/**
+ * Creates the local user for a first-time Google sign-in with a fresh
+ * referral code, retrying on the (rare) referral_code collision — mirrors
+ * the retry loop in createUserAndRespond above.
+ */
+async function insertGoogleUser({ googleId, email, name, picture }) {
+  for (let attempt = 0; attempt < 3; attempt++) {
+    const referralCode = generateReferralCode();
+    try {
+      const rows = await knex("users")
+        .insert({
+          email,
+          password_hash: null,
+          role: "renter",
+          name,
+          google_id: googleId,
+          avatar_url: picture,
+          referral_code: referralCode,
+          is_active: true,
+          account_status: defaultStatusForRole("renter"),
+          status_changed_at: knex.fn.now(),
+          // Google already verified this address; no local OTP step needed.
+          email_verified: true,
+          email_verified_at: knex.fn.now(),
+        })
+        .returning("*");
+      return rows[0];
+    } catch (err) {
+      if (err.code === "23505" && /referral_code/.test(err.detail || err.message)) {
+        continue;
+      }
+      throw err;
+    }
+  }
+  throw new AppError("Could not generate referral code", 500);
+}
+
+/**
+ * Finds-or-creates the local user for a verified Google profile. Matches by
+ * google_id first, then falls back to matching by email so someone who
+ * already has a password account can also sign in with Google on the same
+ * address without ending up with two accounts — safe because Google itself
+ * already confirmed the caller controls that mailbox (email_verified).
+ */
+async function upsertGoogleUser({ googleId, email, name, picture }) {
+  const byGoogleId = await knex("users").where({ google_id: googleId }).first();
+  if (byGoogleId) return byGoogleId;
+
+  const byEmail = await knex("users").where({ email }).first();
+  if (byEmail) {
+    const rows = await knex("users")
+      .where({ id: byEmail.id })
+      .update({
+        google_id: googleId,
+        avatar_url: byEmail.avatar_url || picture,
+        updated_at: knex.fn.now(),
+      })
+      .returning("*");
+    return rows[0];
+  }
+
+  return insertGoogleUser({ googleId, email, name, picture });
+}
+
+const googleAuthCallback = asyncHandler(async (req, res) => {
+  const redirectWithError = (code) =>
+    res.redirect(`/register.html?g_error=${encodeURIComponent(code)}`);
+
+  // User clicked "Cancel" on Google's consent screen.
+  if (req.query.error) {
+    return redirectWithError("access_denied");
+  }
+
+  const { code, state } = req.query;
+  if (!code || typeof code !== "string" || !state || typeof state !== "string") {
+    return redirectWithError("invalid_request");
+  }
+
+  try {
+    verifyOAuthState(state, GOOGLE_OAUTH_STATE_PURPOSE);
+  } catch {
+    return redirectWithError("invalid_state");
+  }
+
+  let profile;
+  try {
+    profile = await googleOAuth.getProfileFromCode(code);
+  } catch (e) {
+    // eslint-disable-next-line no-console
+    console.error("[google oauth] token exchange/verify failed:", e.message);
+    return redirectWithError("verification_failed");
+  }
+
+  let user;
+  try {
+    user = await upsertGoogleUser(profile);
+  } catch (e) {
+    // eslint-disable-next-line no-console
+    console.error("[google oauth] user upsert failed:", e.message);
+    return redirectWithError("server_error");
+  }
+
+  if (["blocked", "deleted"].includes(user.account_status)) {
+    return redirectWithError("account_disabled");
+  }
+
+  const { password_hash: _ph, ...safeUser } = user;
+  const token = signToken(safeUser);
+  // Fragment, not query string: it's never sent to the server on the next
+  // request and never appears in server logs/Referer headers, only visible
+  // to the frontend JS that immediately stores it and rewrites the URL.
+  res.redirect(`/register.html#g_token=${encodeURIComponent(token)}`);
 });
 
 const me = asyncHandler(async (req, res) => {
@@ -598,6 +742,8 @@ module.exports = {
   checkEmail,
   register,
   login,
+  googleAuthStart,
+  googleAuthCallback,
   me,
   logout,
   // Deferred (phone-verified) registration
