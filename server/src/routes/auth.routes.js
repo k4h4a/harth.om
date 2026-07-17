@@ -4,44 +4,22 @@ const authController = require("../controllers/auth.controller");
 const {
   checkEmailValidator,
   loginValidator,
-  registerValidator,
-  registerInitValidator,
-  registerResendValidator,
-  registerVerifyValidator,
   verifyEmailValidator,
   requestPasswordResetValidator,
   resetPasswordValidator,
   changePasswordValidator,
 } = require("../validators/auth.validator");
 const auth = require("../middleware/auth");
-const { otpLimiter, resendLimiter } = require("../middleware/otpRateLimit");
+const { otpLimiter } = require("../middleware/otpRateLimit");
 
 // POST /api/v1/auth/check-email
 router.post("/check-email", checkEmailValidator, authController.checkEmail);
 
-// POST /api/v1/auth/register
-router.post("/register", registerValidator, authController.register);
-
-// ─── Deferred registration (email-verified) ────────────────────────────
-// No `users` row is created until /register/verify succeeds.
-router.post(
-  "/register/init",
-  otpLimiter,
-  registerInitValidator,
-  authController.registerInit,
-);
-router.post(
-  "/register/resend",
-  resendLimiter,
-  registerResendValidator,
-  authController.registerResend,
-);
-router.post(
-  "/register/verify",
-  otpLimiter,
-  registerVerifyValidator,
-  authController.registerVerify,
-);
+// Self-service email/password registration removed — accounts can only be
+// created via "Sign in with Google" (see /google, /google/callback below).
+// Email/password below only logs into an account that already exists.
+// (authController.register/registerInit/registerResend/registerVerify and
+// their validators are kept, unrouted, in case this ever needs reverting.)
 
 // POST /api/v1/auth/login
 router.post("/login", loginValidator, authController.login);
