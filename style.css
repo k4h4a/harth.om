@@ -1404,148 +1404,39 @@ footer {
   display: flex;
   justify-content: center;
   align-items: center;
-  min-height: 80vh; /* عشان يجي في النص بالنسبة للطول */
-  padding: 20px;
-}
-
-/* بطاقة تسجيل الدخول الزجاجية */
-.login-card {
-  background: rgba(255, 255, 255, 0.1);
-  backdrop-filter: blur(15px);
-  -webkit-backdrop-filter: blur(15px);
-  border: 1px solid rgba(255, 255, 255, 0.2);
-  border-radius: 30px;
-  padding: 40px;
-  width: 100%;
-  max-width: 450px;
-  text-align: center;
-  box-shadow: 0 15px 35px rgba(0, 0, 0, 0.2);
-}
-
-.login-card h2 {
-  color: #fff;
-  margin-bottom: 10px;
-  font-size: 28px;
-}
-
-.login-card p {
-  color: #dcdde1;
-  font-size: 14px;
-  margin-bottom: 30px;
-}
-
-/* الحقول */
-.input-field {
-  margin-bottom: 20px;
-}
-
-.input-field input {
-  width: 100%;
-  padding: 15px;
-  border-radius: 15px;
-  border: 1px solid rgba(255, 255, 255, 0.3);
-  background: rgba(255, 255, 255, 0.05);
-  color: white;
-  font-family: "Cairo", sans-serif;
-  box-sizing: border-box;
-  transition: 0.3s;
-  text-align: start;
-}
-
-.input-field input:focus {
-  outline: none;
-  border-color: #6ab04c;
-  background: rgba(255, 255, 255, 0.1);
-}
-
-/* خيارات الراديو */
-.radio-group {
-  display: flex;
-  justify-content: space-around;
-  margin-bottom: 25px;
-  color: white;
-}
-
-.radio-group label {
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-  gap: 8px;
-}
-
-/* زر الدخول */
-.login-btn {
-  width: 100%;
-  padding: 15px;
-  border-radius: 15px;
-  border: none;
-  background: #6ab04c;
-  color: white;
-  font-size: 18px;
-  font-weight: bold;
-  cursor: pointer;
-  transition: 0.3s;
-  box-shadow: 0 5px 15px rgba(106, 176, 76, 0.3);
-}
-
-.login-btn:hover {
-  background: #4ab625;
-  transform: translateY(-2px);
-}
-
-/* تذييل البطاقة */
-.login-footer {
-  margin-top: 20px;
-}
-
-.login-footer a {
-  color: #dcdde1;
-  text-decoration: none;
-  font-size: 13px;
-}
-
-.login-footer a:hover {
-  color: #6ab04c;
-}
-/* تنسيقات إضافية لصفحة الدخول */
-
-.login-page {
-  display: flex;
-  justify-content: center;
-  align-items: center;
   min-height: 100vh;
   padding: 20px;
-  background: transparent; /* سيعتمد على خلفية الـ body اللي برمجناها أول */
+  background: var(--surface-2);
 }
 
+/* بطاقة تسجيل الدخول */
 .login-card {
-  background: rgba(255, 255, 255, 0.1);
-  backdrop-filter: blur(20px);
-  -webkit-backdrop-filter: blur(20px);
-  border: 1px solid rgba(255, 255, 255, 0.2);
+  background: var(--surface-1);
+  border: 1px solid var(--border-soft);
   border-radius: 30px;
   padding: 40px;
   width: 100%;
   max-width: 420px;
   text-align: center;
-  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+  box-shadow: var(--shadow-lg);
 }
 
 .logo-area h2 {
-  color: #6ab04c;
+  color: var(--color-brand-700);
   font-size: 32px;
   margin-bottom: 5px;
   letter-spacing: 1px;
 }
 
+.login-card h2,
 .login-card h3 {
-  color: #fff;
+  color: var(--color-text);
   margin: 10px 0;
   font-size: 24px;
 }
 
 .login-card p {
-  color: #dcdde1;
+  color: var(--color-text-soft);
   font-size: 14px;
   margin-bottom: 30px;
 }
@@ -1559,20 +1450,23 @@ footer {
   width: 100%;
   padding: 14px 20px;
   border-radius: 12px;
-  border: 1px solid rgba(255, 255, 255, 0.2);
-  background: rgba(255, 255, 255, 0.08);
-  color: white;
+  border: 1px solid var(--border-soft);
+  background: var(--surface-1);
+  color: var(--color-text);
   font-family: "Cairo", sans-serif;
   font-size: 14px;
   box-sizing: border-box;
   transition: 0.3s ease;
 }
 
+.input-field input::placeholder {
+  color: var(--color-text-dim);
+}
+
 .input-field input:focus {
   outline: none;
-  border-color: #6ab04c;
-  background: rgba(255, 255, 255, 0.15);
-  box-shadow: 0 0 10px rgba(106, 176, 76, 0.2);
+  border-color: var(--color-brand-500);
+  box-shadow: var(--shadow-glow);
 }
 
 /* تنسيق أزرار الاختيار (Radio) */
@@ -1581,7 +1475,7 @@ footer {
   justify-content: center;
   gap: 30px;
   margin: 20px 0;
-  color: #fff;
+  color: var(--color-text);
 }
 
 .radio-container {
@@ -1594,7 +1488,7 @@ footer {
 
 .radio-container input {
   margin-inline-end: 8px;
-  accent-color: #6ab04c; /* يغير لون الدائرة للأخضر */
+  accent-color: var(--color-brand-500);
   width: 18px;
   height: 18px;
 }
@@ -1605,8 +1499,8 @@ footer {
   padding: 14px;
   border-radius: 12px;
   border: none;
-  background: #6ab04c;
-  color: white;
+  background: var(--color-brand-700);
+  color: #fff;
   font-size: 16px;
   font-weight: bold;
   font-family: "Cairo", sans-serif;
@@ -1616,9 +1510,9 @@ footer {
 }
 
 .login-btn:hover {
-  background: #4ab625;
+  background: var(--color-brand-600);
   transform: translateY(-2px);
-  box-shadow: 0 8px 20px rgba(106, 176, 76, 0.4);
+  box-shadow: var(--shadow-md);
 }
 
 /* التذييل */
@@ -1628,17 +1522,17 @@ footer {
 }
 
 .login-footer a {
-  color: #dcdde1;
+  color: var(--color-text-soft);
   text-decoration: none;
   transition: 0.3s;
 }
 
 .login-footer a:hover {
-  color: #6ab04c;
+  color: var(--color-brand-700);
 }
 
 .divider {
-  color: rgba(255, 255, 255, 0.2);
+  color: var(--border-strong);
   margin: 0 10px;
 }
 
@@ -1894,20 +1788,20 @@ footer {
 }
 
 .back-btn {
-  background: rgba(106, 176, 76, 0.8);
-  color: white;
+  background: var(--color-brand-700);
+  color: #fff;
   padding: 8px 20px;
   border-radius: 20px;
   text-decoration: none;
   font-weight: 600;
   font-size: 15px;
-  border: 1px solid rgba(255, 255, 255, 0.2);
+  border: 1px solid transparent;
   transition: all 0.3s ease;
 }
 
 .back-btn:hover {
-  background: #6ab04c;
-  box-shadow: 0 4px 15px rgba(106, 176, 76, 0.4);
+  background: var(--color-brand-600);
+  box-shadow: var(--shadow-sm);
 }
 
 /* حاوية السلة الرئيسية */
@@ -2188,15 +2082,14 @@ footer {
 
 /* تنسيق زر التراجع (مطابق لصفحة الفاتورة) */
 .back-btn {
-  background: rgba(106, 176, 76, 0.8) !important;
-  color: white !important;
+  background: var(--color-brand-700) !important;
+  color: #fff !important;
   padding: 10px 25px !important;
   border-radius: 25px !important;
   text-decoration: none !important;
   font-weight: bold !important;
   font-family: "Cairo", sans-serif !important;
-  border: 1px solid rgba(255, 255, 255, 0.2) !important;
-  backdrop-filter: blur(5px) !important;
+  border: 1px solid transparent !important;
   transition: all 0.3s ease !important;
   display: inline-flex !important;
   align-items: center !important;
@@ -2204,8 +2097,8 @@ footer {
 }
 
 .back-btn:hover {
-  background: #6ab04c !important;
-  box-shadow: 0 4px 15px rgba(106, 176, 76, 0.4) !important;
+  background: var(--color-brand-600) !important;
+  box-shadow: var(--shadow-sm) !important;
   transform: translateX(5px); /* حركة خفيفة عند تمرير الماوس */
 }
 
@@ -2216,21 +2109,6 @@ footer {
 /* أيقونة السهم */
 .back-btn i {
   font-size: 14px;
-}
-.login-btn {
-  display: block; /* يجعل الزر يأخذ السطر بمفرده لتسهيل توسيطه */
-  width: 100%; /* أو يمكنك وضع عرض محدد مثل 80% أو 250px حسب رغبتك */
-  margin: 0 auto 30px auto; /* 'auto' يميناً ويساراً تقوم بتوسيط الزر، و '30px' تضيف مساحة بالأسفل */
-  text-align: center; /* يضمن أن يكون النص (تسجيل الدخول) في منتصف الزر تماماً */
-
-  /* يرجى الإبقاء على باقي التنسيقات الخاصة بك (مثل لون الخلفية والخط) كما هي */
-}
-.login-btn {
-  display: block;
-  width: 250px; /* أو يمكنك استخدام نسبة مئوية مثل 50% */
-  margin: 0 auto -45px auto;
-  text-align: center;
-  align-self: center; /* هذه الخاصية إضافية تضمن التوسيط في حال كانت الحاوية تستخدم Flexbox */
 }
 /* ملاحظة: تم حذف تكرار قديم لتنسيقات الهيدر (.header-content/.right-section/
    .mid-section/.left-section) — لا يوجد له استخدام في القالب الحالي، والتنسيق

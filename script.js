@@ -123,63 +123,28 @@ function renderHeaderAuthState() {
     loginLink.replaceWith(dd);
     const loginLink2 = dd;
     loginLink2.innerHTML = `
-      <div class="hs-user-dd" style="position:relative;display:inline-block">
-        <button class="hs-user-trigger" style="
-          display:flex;align-items:center;gap:8px;
-          background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.2);
-          color:#fff;padding:7px 14px;border-radius:24px;
-          font-family:inherit;font-size:14px;font-weight:700;cursor:pointer;
-          transition:.2s;white-space:nowrap;
-        ">
-          <span style="
-            width:28px;height:28px;border-radius:50%;
-            background:linear-gradient(135deg,#6ab04c,#4ab625);
-            display:flex;align-items:center;justify-content:center;
-            font-size:13px;font-weight:800;flex-shrink:0;
-          ">${initials}</span>
+      <div class="hs-user-dd">
+        <button class="hs-user-trigger" type="button">
+          <span class="hs-user-avatar">${initials}</span>
           ${user.name || user.email}
-          <i class="fas fa-chevron-down" style="font-size:11px;opacity:.7"></i>
+          <i class="fas fa-chevron-down"></i>
         </button>
-        <div class="hs-user-menu" style="
-          position:absolute;top:calc(100% + 8px);left:0;
-          background:#1a2e0f;border:1px solid rgba(106,176,76,.3);
-          border-radius:14px;box-shadow:0 8px 32px rgba(0,0,0,.5);
-          min-width:200px;overflow:hidden;
-          opacity:0;visibility:hidden;transform:translateY(-6px);
-          transition:opacity .18s,visibility .18s,transform .18s;
-          z-index:9999;
-        ">
-          <div style="padding:12px 16px 10px;border-bottom:1px solid rgba(255,255,255,.08)">
-            <div style="font-size:13px;font-weight:700;color:#fff">${user.name || ""}</div>
-            <div style="font-size:11px;color:rgba(255,255,255,.5);margin-top:1px">${user.email || ""}</div>
+        <div class="hs-user-menu">
+          <div class="hs-user-menu-head">
+            <div class="hs-user-menu-name">${user.name || ""}</div>
+            <div class="hs-user-menu-email">${user.email || ""}</div>
           </div>
-          <a href="profile.html" style="
-            display:flex;align-items:center;gap:10px;
-            padding:11px 16px;color:rgba(255,255,255,.85);
-            text-decoration:none;font-size:14px;transition:.15s;
-          " onmouseover="this.style.background='rgba(106,176,76,.12)';this.style.color='#fff'"
-             onmouseout="this.style.background='';this.style.color='rgba(255,255,255,.85)'">
-            <i class="fas fa-user-circle" style="color:#6ab04c;width:16px;text-align:center"></i>
+          <a href="profile.html">
+            <i class="fas fa-user-circle"></i>
             ${t("common.buttons.profile")}
           </a>
-          <a href="kyc.html" style="
-            display:flex;align-items:center;gap:10px;
-            padding:11px 16px;color:rgba(255,255,255,.85);
-            text-decoration:none;font-size:14px;transition:.15s;
-          " onmouseover="this.style.background='rgba(106,176,76,.12)';this.style.color='#fff'"
-             onmouseout="this.style.background='';this.style.color='rgba(255,255,255,.85)'">
-            <i class="fas fa-shield-alt" style="color:#f1c40f;width:16px;text-align:center"></i>
+          <a href="kyc.html">
+            <i class="fas fa-shield-alt hs-user-menu-kyc-ico"></i>
             ${t("common.buttons.verifyIdentity")}
           </a>
-          <div style="height:1px;background:rgba(255,255,255,.07);margin:0 12px"></div>
-          <button onclick="logout();window.location.reload();" style="
-            width:100%;display:flex;align-items:center;gap:10px;
-            padding:11px 16px;border:none;background:none;
-            color:rgba(255,255,255,.75);font-family:inherit;font-size:14px;
-            cursor:pointer;transition:.15s;
-          " onmouseover="this.style.background='rgba(231,76,60,.12)';this.style.color='#ff7675'"
-             onmouseout="this.style.background='';this.style.color='rgba(255,255,255,.75)'">
-            <i class="fas fa-sign-out-alt" style="color:#ff7675;width:16px;text-align:center"></i>
+          <div class="hs-user-menu-sep"></div>
+          <button class="hs-user-logout" type="button" onclick="logout();window.location.reload();">
+            <i class="fas fa-sign-out-alt"></i>
             ${t("common.buttons.logout")}
           </button>
         </div>
@@ -191,17 +156,12 @@ function renderHeaderAuthState() {
     const menu    = loginLink2.querySelector(".hs-user-menu");
     trigger.addEventListener("click", (e) => {
       e.stopPropagation();
-      const open = menu.style.opacity === "1";
-      menu.style.opacity    = open ? "0" : "1";
-      menu.style.visibility = open ? "hidden" : "visible";
-      menu.style.transform  = open ? "translateY(-6px)" : "translateY(0)";
+      menu.classList.toggle("is-open");
     });
 
     // Close on outside click
     document.addEventListener("click", () => {
-      menu.style.opacity    = "0";
-      menu.style.visibility = "hidden";
-      menu.style.transform  = "translateY(-6px)";
+      menu.classList.remove("is-open");
     });
   } else {
     // Not logged

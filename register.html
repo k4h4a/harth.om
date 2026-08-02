@@ -66,12 +66,12 @@
         font-size: 14px;
       }
       .form-msg.err {
-        background: rgba(192, 57, 43, 0.25);
-        color: #ffb3b3;
+        background: rgba(192, 57, 43, 0.1);
+        color: #c0392b;
       }
       .form-msg.ok {
-        background: rgba(106, 176, 76, 0.25);
-        color: #a9dc98;
+        background: rgba(15, 77, 55, 0.1);
+        color: #0f4d37;
       }
       .form-msg:empty { display: none; }
       .login-btn:disabled {
@@ -87,21 +87,21 @@
         letter-spacing: 0.5em;
         font-family: ui-monospace, "SFMono-Regular", Menlo, Consolas, monospace;
         direction: ltr;
-        background: rgba(255, 255, 255, 0.95);
-        color: #1a1a1a;
-        border: 1px solid rgba(255, 255, 255, 0.2);
+        background: #fff;
+        color: #173828;
+        border: 1px solid #e8e4da;
         border-radius: 10px;
       }
       .otp-help {
         font-size: 13px;
-        color: #ccc;
+        color: #69746c;
         margin: 8px 0 14px;
         text-align: center;
       }
       .otp-resend {
         background: none;
         border: none;
-        color: #6ab04c;
+        color: #0f4d37;
         cursor: pointer;
         font-family: inherit;
         font-size: 13px;
@@ -109,24 +109,25 @@
         padding: 0;
       }
       .otp-resend:disabled {
-        color: #888;
+        color: #8b948d;
         cursor: not-allowed;
         text-decoration: none;
       }
 
       #reg-governorate {
-        background: rgba(20, 40, 15, 0.95) !important;
-        color: #ffffff !important;
+        background: #fff !important;
+        color: #173828 !important;
+        border: 1px solid #e8e4da;
       }
       #reg-governorate option {
-        background: #1a2e10;
-        color: #ffffff;
+        background: #fff;
+        color: #173828;
         padding: 6px 10px;
       }
       #reg-governorate option:checked,
       #reg-governorate option:hover {
-        background: #2d5016;
-        color: #ffffff;
+        background: #eaf3ec;
+        color: #173828;
       }
 
       /* ===== SOCIAL LOGIN ===== */
@@ -143,10 +144,10 @@
       .social-login-wrap .social-divider hr {
         flex: 1;
         border: none;
-        border-top: 1px solid rgba(255, 255, 255, 0.08);
+        border-top: 1px solid #e8e4da;
       }
       .social-login-wrap .social-divider span {
-        color: rgba(255, 255, 255, 0.3);
+        color: #8b948d;
         font-size: 12px;
         white-space: nowrap;
       }
@@ -173,15 +174,6 @@
       }
       .social-btn.google:hover {
         box-shadow: 0 2px 12px rgba(0, 0, 0, 0.15);
-        transform: translateY(-1px);
-      }
-      .social-btn.apple {
-        background: #000000;
-        color: #ffffff;
-        border-color: #444;
-      }
-      .social-btn.apple:hover {
-        box-shadow: 0 2px 12px rgba(0, 0, 0, 0.4);
         transform: translateY(-1px);
       }
       .social-btn i { font-size: 18px; }
@@ -244,6 +236,23 @@
           font-size: 18px !important;
         }
       }
+
+      /* Dark mode — .login-card/.input-field/.login-btn etc already ride
+         var(--token) from style.css; only this page's own hardcoded bits
+         need a twin here. */
+      html[data-theme="dark"] .form-msg.err { background: rgba(239,91,74,.12); color: #ef5b4a; }
+      html[data-theme="dark"] .form-msg.ok { background: rgba(63,165,98,.12); color: #7fc13b; }
+      html[data-theme="dark"] .otp-input { background: #17251e; color: #eaf1ec; border-color: rgba(255,255,255,.16); }
+      html[data-theme="dark"] .otp-help { color: #b7c4bb; }
+      html[data-theme="dark"] .otp-resend { color: #7fc13b; }
+      html[data-theme="dark"] .otp-resend:disabled { color: #66716a; }
+      html[data-theme="dark"] #reg-governorate { background: #17251e !important; color: #eaf1ec !important; border-color: rgba(255,255,255,.16); }
+      html[data-theme="dark"] #reg-governorate option { background: #17251e; color: #eaf1ec; }
+      html[data-theme="dark"] #reg-governorate option:checked,
+      html[data-theme="dark"] #reg-governorate option:hover { background: #1f3128; color: #eaf1ec; }
+      html[data-theme="dark"] .social-login-wrap .social-divider hr { border-top-color: rgba(255,255,255,.16); }
+      html[data-theme="dark"] .social-login-wrap .social-divider span { color: #66716a; }
+      html[data-theme="dark"] .social-login-wrap p { color: #b7c4bb !important; }
     </style>
   
     <link rel="stylesheet" href="responsive.css" />
@@ -257,10 +266,10 @@
         </div>
 
         <!-- ============================================ -->
-        <!-- SOCIAL LOGIN - Google & Apple                -->
+        <!-- SOCIAL LOGIN - Google                        -->
         <!-- ============================================ -->
         <div class="social-login-wrap">
-          <p style="color: rgba(255,255,255,0.5); font-size: 13px; margin-bottom: 12px;" data-i18n="register.socialLoginTitle">
+          <p style="color: #69746c; font-size: 13px; margin-bottom: 12px;" data-i18n="register.socialLoginTitle">
             أو سجل دخول باستخدام
           </p>
           <div style="display: flex; gap: 12px; justify-content: center; flex-wrap: wrap;">
@@ -273,12 +282,6 @@
                 <path fill="#1976D2" d="M43.611,20.083H42V20H24v8h11.303c-0.792,2.237-2.231,4.166-4.087,5.571c0.001-0.001,0.002-0.001,0.003-0.002l6.19,5.238C36.971,39.205,44,34,44,24C44,22.659,43.862,21.35,43.611,20.083z" />
               </svg>
               <span data-i18n="register.googleBtn">Google</span>
-            </a>
-
-            <!-- Apple Button -->
-            <a href="/api/v1/auth/apple" class="social-btn apple">
-              <i class="fab fa-apple"></i>
-              <span data-i18n="register.appleBtn">Apple</span>
             </a>
           </div>
 
