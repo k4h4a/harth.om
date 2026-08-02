@@ -76,6 +76,7 @@
     "rentEquipment": "تأجير معدات",
     "sellEquipment": "بيع معدات",
     "ownerDashboard": "لوحة المالك",
+    "myActivity": "نشاطي",
     "myOrders": "طلباتي",
     "delivery": "التوصيل",
     "trackOrders": "تتبع الطلبات",
@@ -381,26 +382,6 @@
   },
   "ownerDashboard": {
     "title": "لوحة المالك - حرث",
-    "loginGate": {
-      "heading": "تسجيل دخول المالك",
-      "desc": "هذه اللوحة مخصّصة لأصحاب المعدات. سجّل دخولك بحساب مالك.",
-      "emailPlaceholder": "البريد الإلكتروني",
-      "passwordPlaceholder": "كلمة المرور",
-      "submitBtn": "دخول",
-      "noAccountText": "ليس لديك حساب؟",
-      "registerLink": "سجّل كمالك"
-    },
-    "statusBanner": {
-      "defaultTitle": "حسابك قيد المراجعة",
-      "defaultMsg": "حسابك كمزارع قيد المراجعة من قِبل الإدارة. ستُفعَّل صلاحية إضافة المعدات للبيع/الإيجار بعد الموافقة. يمكنك في هذه الأثناء تصفّح وشراء المنتجات من المتجر.",
-      "pendingTitle": "حسابك قيد المراجعة",
-      "pendingMsg": "حسابك كمزارع قيد المراجعة من قِبل الإدارة. ستُفعَّل صلاحية إضافة المعدات للبيع/الإيجار بعد الموافقة. يمكنك في هذه الأثناء تصفّح وشراء المنتجات من المتجر.",
-      "rejectedTitle": "تم رفض تفعيل صلاحيات حسابك",
-      "rejectedReasonPrefix": "السبب:",
-      "rejectedMsg": "لا يمكنك حالياً إضافة معدات للبيع أو الإيجار. للتواصل مع الإدارة لإعادة المراجعة، يُرجى التواصل مع الدعم.",
-      "inactiveTitle": "حسابك غير مفعّل",
-      "inactiveMsg": "تواصل مع الإدارة لمزيد من المعلومات."
-    },
     "trustBanner": {
       "heading": "عزّز ثقة المشترين بحسابك",
       "msgPrefix": "إكمال هذه الخطوات يضيف علامة ✓ موثَّق على ملفك ومعداتك.",
@@ -524,10 +505,6 @@
     "deleteBtnTitle": "حذف",
     "pagination": { "prev": "السابق", "next": "التالي" },
     "toasts": {
-      "enterEmailPassword": "أدخل البريد وكلمة المرور",
-      "notOwnerAccount": "هذا الحساب ليس مالكاً — استخدم صفحة التسجيل لإنشاء حساب مالك",
-      "loginFailed": "فشل تسجيل الدخول",
-      "ownersOnly": "هذه اللوحة للمالكين فقط",
       "maxImages": "الحد الأقصى 10 صور",
       "imageUploadFailed": "فشل رفع الصورة",
       "equipmentUpdated": "تم تحديث المعدة بنجاح",
@@ -540,6 +517,55 @@
       "pdfUploadFailed": "فشل الرفع",
       "pdfUploaded": "تم رفع ملف PDF بنجاح",
       "pdfUploadGenericFailed": "فشل رفع الملف"
+    }
+  },
+  "dashboard": {
+    "title": "لوحتي - حرث",
+    "tabs": {
+      "listings": "منتجاتي",
+      "incoming": "طلبات واردة",
+      "deliveries": "التوصيل"
+    },
+    "myOrdersCard": {
+      "cta": "طلباتي ومشترياتي"
+    },
+    "statusBanner": {
+      "pendingTitle": "حسابك قيد المراجعة",
+      "pendingMsg": "حسابك قيد المراجعة من قِبل الإدارة. ستُفعَّل كامل الصلاحيات (إضافة معدات، قبول طلبات توصيل) فور الموافقة. يمكنك في هذه الأثناء تصفّح وشراء المنتجات من المتجر.",
+      "rejectedTitle": "تم رفض تفعيل صلاحيات حسابك",
+      "rejectedReasonPrefix": "السبب:",
+      "rejectedMsg": "لا يمكنك حالياً إضافة معدات أو قبول طلبات توصيل. للتواصل مع الإدارة لإعادة المراجعة، يُرجى التواصل مع الدعم.",
+      "inactiveTitle": "حسابك غير مفعّل",
+      "inactiveMsg": "تواصل مع الإدارة لمزيد من المعلومات."
+    },
+    "incoming": {
+      "heading": "طلبات واردة",
+      "statusFilterAll": "كل الحالات",
+      "emptyTitle": "لا توجد طلبات واردة",
+      "emptyDesc": "عندما يطلب أحدهم استئجار إحدى معدّاتك، ستظهر طلباته هنا للموافقة أو الرفض.",
+      "approveBtn": "موافقة",
+      "rejectBtn": "رفض",
+      "resolveDepositBtn": "تسوية التأمين",
+      "confirmApprove": "هل تريد الموافقة على هذا الطلب؟",
+      "responsePromptTitle": "ملاحظة للمستأجر (اختياري)",
+      "approveSuccess": "تمت الموافقة على الطلب",
+      "rejectSuccess": "تم رفض الطلب",
+      "genericFailed": "تعذّرت العملية، حاول مرة أخرى",
+      "loadFailed": "تعذّر تحميل الطلبات",
+      "depositModal": {
+        "title": "تسوية التأمين",
+        "desc": "حدّد كيفية تسوية مبلغ التأمين المحجوز لهذا الإيجار.",
+        "resolutionLabel": "القرار",
+        "refundedOption": "إرجاع كامل المبلغ للمستأجر",
+        "partialOption": "احتجاز جزء من المبلغ",
+        "forfeitedOption": "احتجاز كامل المبلغ",
+        "keptAmountLabel": "المبلغ المحتجز (ريال)",
+        "notesLabel": "سبب / ملاحظات (اختياري)",
+        "submitBtn": "تأكيد التسوية",
+        "cancelBtn": "إلغاء",
+        "success": "تمت تسوية التأمين",
+        "failed": "تعذّرت تسوية التأمين"
+      }
     }
   },
   "adminDashboard": {
@@ -571,7 +597,6 @@
       "analyticsHeading": "تحليلات تفاعلية",
       "chartSales": { "label": "المبيعات الشهرية", "range6": "آخر 6 أشهر", "range12": "آخر 12 شهراً", "range24": "آخر 24 شهراً" },
       "chartCategories": { "label": "أعلى الفئات", "range7": "آخر أسبوع", "range30": "آخر 30 يوم", "range90": "آخر 90 يوم" },
-      "chartGrowth": { "label": "نمو المستخدمين", "range14": "آخر أسبوعين", "range30": "آخر 30 يوم", "range90": "آخر 90 يوم" },
       "chartGov": { "label": "توزيع الطلبات على المحافظات", "range30": "آخر 30 يوم", "range90": "آخر 90 يوم", "range365": "آخر سنة" },
       "recentActivityHeading": "آخر 7 أيام",
       "topOwnersHeading": "أكثر الملّاك مبيعاً (30 يوم)",
@@ -588,15 +613,11 @@
         "pendingAccounts": { "label": "حسابات بانتظار الموافقة", "subHasPending": "مزارعون / مندوبون بانتظار التفعيل", "subNone": "لا يوجد معلّق" },
         "orders": { "label": "الطلبات", "sub": "{{paid}} مدفوع · {{revenue}}" },
         "rentals": { "label": "الإيجارات", "sub": "{{active}} فعّال · {{revenue}}" },
-        "commissions": { "label": "عمولات المنصة", "sub": "{{pending}} معلّقة" },
-        "userDistribution": { "label": "توزيع المستخدمين", "owner": "مزارع", "renter": "مستهلك", "courier": "مندوب" }
+        "commissions": { "label": "عمولات المنصة", "sub": "{{pending}} معلّقة" }
       },
       "chartLabels": {
         "purchaseSales": "مبيعات الشراء",
         "rentalSales": "مبيعات الإيجار",
-        "renters": "مستهلكون",
-        "owners": "مزارعون",
-        "couriers": "مندوبون",
         "orderCount": "عدد الطلبات",
         "ordersTooltip": "طلبات: {{count}}",
         "revenueTooltip": "إيرادات: {{amount}}",
@@ -717,13 +738,6 @@
     },
     "users": {
       "searchPlaceholder": "بحث بالاسم أو البريد...",
-      "roleAll": "كل الأنواع",
-      "roleOptions": {
-        "renter": "مستهلك",
-        "owner": "مزارع",
-        "delivery": "مندوب توصيل",
-        "admin": "أدمن"
-      },
       "statusAll": "كل الحالات",
       "statusOptions": {
         "pending": "قيد المراجعة",
@@ -740,7 +754,8 @@
       "noneFound": "لا يوجد مستخدمون",
       "colName": "الاسم",
       "colEmail": "البريد",
-      "colRole": "النوع",
+      "colAdmin": "أدمن",
+      "adminBadge": "أدمن",
       "colAccountStatus": "حالة الحساب",
       "colPro": "PRO",
       "colPoints": "نقاط",
@@ -1128,7 +1143,6 @@
       }
     },
     "labels": {
-      "roles": { "admin": "أدمن", "owner": "مزارع", "renter": "مستهلك", "delivery": "مندوب توصيل" },
       "accountStatus": { "pending": "قيد المراجعة", "approved": "موافق عليه", "rejected": "مرفوض", "blocked": "محظور", "deleted": "محذوف" },
       "orderStatus": { "pending": "قيد الانتظار", "confirmed": "مؤكّد", "shipped": "مُرسَل", "delivered": "مُسلَّم", "cancelled": "مُلغى", "paid": "مدفوع", "failed": "فاشل", "active": "فعّال", "completed": "مكتمل" },
       "available": "متاح"
@@ -1139,11 +1153,12 @@
         "name": "الاسم",
         "email": "البريد",
         "phone": "الهاتف",
-        "role": "الدور",
-        "identityNumber": "رقم الهوية",
-        "account": "الحساب"
+        "account": "الحساب",
+        "admin": "صلاحية الإدارة",
+        "identityNumber": "رقم الهوية"
       },
-      "roleMap": { "owner": "مالك معدات", "renter": "مستأجر", "admin": "أدمن", "delivery": "مندوب" },
+      "adminYes": "أدمن",
+      "adminNo": "لا",
       "identityStatus": { "none": "لم يُقدَّم", "pending": "قيد المراجعة", "approved": "موافق عليه ✓", "rejected": "مرفوض ✗" },
       "identityStatusLabel": "حالة التوثيق",
       "identityDocsLabel": "وثائق الهوية:",
@@ -1233,18 +1248,6 @@
     }
   },
   "delivery": {
-    "title": "لوحة المندوب - حرث",
-    "statusBanner": {
-      "defaultTitle": "حسابك قيد المراجعة",
-      "defaultMsg": "حسابك كمندوب توصيل قيد المراجعة من قِبل الإدارة. لا يمكنك قبول طلبات التوصيل حتى الموافقة على حسابك.",
-      "pendingTitle": "حسابك قيد المراجعة",
-      "pendingMsg": "حسابك كمندوب توصيل قيد المراجعة من قِبل الإدارة. لا يمكنك قبول طلبات التوصيل حتى يتم اعتماد حسابك. سيصلك إشعار فور المراجعة.",
-      "rejectedTitle": "تم رفض تفعيل صلاحيات حسابك",
-      "rejectedReasonPrefix": "السبب:",
-      "rejectedMsg": "لا يمكنك حالياً قبول طلبات التوصيل. للتواصل مع الإدارة لإعادة المراجعة، يُرجى التواصل مع الدعم.",
-      "inactiveTitle": "حسابك غير مفعّل",
-      "inactiveMsg": "تواصل مع الإدارة لمزيد من المعلومات."
-    },
     "tabs": {
       "available": "طلبات متاحة",
       "mine": "طلباتي النشطة",
@@ -1262,9 +1265,6 @@
       "in_transit": "في الطريق",
       "delivered": "تم التسليم",
       "cancelled": "مُلغى"
-    },
-    "alerts": {
-      "deliveryOnly": "هذه الصفحة لمندوبي التوصيل فقط."
     },
     "toasts": {
       "loadFailed": "فشل التحميل",
@@ -1760,13 +1760,7 @@
   "profile": {
     "title": "الملف الشخصي — حرث",
     "memberBadge": "عضو",
-    "roles": {
-      "owner": "مالك معدات",
-      "renter": "مستأجر",
-      "delivery": "مندوب توصيل",
-      "admin": "مدير النظام",
-      "default": "عضو"
-    },
+    "adminBadge": "مدير النظام",
     "stats": { "orders": "طلب", "listings": "إعلان", "rating": "تقييم" },
     "nav": {
       "profile": "الملف الشخصي",

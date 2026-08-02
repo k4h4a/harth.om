@@ -7,7 +7,7 @@ const env = require("../config/env");
  */
 function signToken(user) {
   return jwt.sign(
-    { id: user.id, role: user.role },
+    { id: user.id, is_admin: user.is_admin },
     env.JWT_SECRET,
     { expiresIn: env.JWT_EXPIRES_IN },
   );

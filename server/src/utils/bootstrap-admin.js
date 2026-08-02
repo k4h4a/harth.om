@@ -9,7 +9,7 @@ const env = require("../config/env");
  * enforced by env.js, but admin password strength isn't — deploy with care).
  */
 async function bootstrapAdmin() {
-  const count = await knex("users").where({ role: "admin" }).count("* as c").first();
+  const count = await knex("users").where({ is_admin: true }).count("* as c").first();
   if (parseInt(count.c, 10) > 0) {
     // eslint-disable-next-line no-console
     console.log("ℹ️  Admin already exists — skipping bootstrap.");
@@ -24,7 +24,7 @@ async function bootstrapAdmin() {
   await knex("users").insert({
     email: env.ADMIN_EMAIL,
     password_hash: passwordHash,
-    role: "admin",
+    is_admin: true,
     name: "Administrator",
     is_active: true,
     account_status: "approved",

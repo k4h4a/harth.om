@@ -76,6 +76,7 @@
     "rentEquipment": "Rent Equipment",
     "sellEquipment": "Sell Equipment",
     "ownerDashboard": "Owner Dashboard",
+    "myActivity": "My Activity",
     "myOrders": "My Orders",
     "delivery": "Delivery",
     "trackOrders": "Track Orders",
@@ -381,26 +382,6 @@
   },
   "ownerDashboard": {
     "title": "Owner Dashboard - Harth",
-    "loginGate": {
-      "heading": "Owner Login",
-      "desc": "This dashboard is for equipment owners. Log in with an owner account.",
-      "emailPlaceholder": "Email address",
-      "passwordPlaceholder": "Password",
-      "submitBtn": "Log In",
-      "noAccountText": "Don't have an account?",
-      "registerLink": "Register as an owner"
-    },
-    "statusBanner": {
-      "defaultTitle": "Your account is under review",
-      "defaultMsg": "Your farmer account is under review by the admin team. The ability to list equipment for sale/rent will be enabled once approved. In the meantime, you can browse and buy products from the store.",
-      "pendingTitle": "Your account is under review",
-      "pendingMsg": "Your farmer account is under review by the admin team. The ability to list equipment for sale/rent will be enabled once approved. In the meantime, you can browse and buy products from the store.",
-      "rejectedTitle": "Your account activation was rejected",
-      "rejectedReasonPrefix": "Reason:",
-      "rejectedMsg": "You currently can't list equipment for sale or rent. To request a re-review, please contact support.",
-      "inactiveTitle": "Your account is inactive",
-      "inactiveMsg": "Contact the admin team for more information."
-    },
     "trustBanner": {
       "heading": "Boost buyer trust in your account",
       "msgPrefix": "Completing these steps adds a ✓ Verified badge to your profile and equipment.",
@@ -524,10 +505,6 @@
     "deleteBtnTitle": "Delete",
     "pagination": { "prev": "Previous", "next": "Next" },
     "toasts": {
-      "enterEmailPassword": "Enter your email and password",
-      "notOwnerAccount": "This account isn't an owner account — use the registration page to create an owner account",
-      "loginFailed": "Login failed",
-      "ownersOnly": "This dashboard is for owners only",
       "maxImages": "Maximum 10 images",
       "imageUploadFailed": "Failed to upload image",
       "equipmentUpdated": "Equipment updated successfully",
@@ -540,6 +517,55 @@
       "pdfUploadFailed": "Upload failed",
       "pdfUploaded": "PDF uploaded successfully",
       "pdfUploadGenericFailed": "Failed to upload file"
+    }
+  },
+  "dashboard": {
+    "title": "My Dashboard - Harth",
+    "tabs": {
+      "listings": "My Listings",
+      "incoming": "Incoming Orders",
+      "deliveries": "Delivery"
+    },
+    "myOrdersCard": {
+      "cta": "My Orders & Purchases"
+    },
+    "statusBanner": {
+      "pendingTitle": "Your account is under review",
+      "pendingMsg": "Your account is being reviewed by the admin team. Full access (adding equipment, accepting delivery jobs) will be enabled once approved. In the meantime you can browse and buy from the store.",
+      "rejectedTitle": "Your account privileges were declined",
+      "rejectedReasonPrefix": "Reason:",
+      "rejectedMsg": "You currently can't add equipment or accept delivery jobs. Contact support to have your account reviewed again.",
+      "inactiveTitle": "Your account is inactive",
+      "inactiveMsg": "Contact the admin team for more information."
+    },
+    "incoming": {
+      "heading": "Incoming Orders",
+      "statusFilterAll": "All statuses",
+      "emptyTitle": "No incoming orders yet",
+      "emptyDesc": "When someone requests to rent one of your listings, their request will show up here for you to approve or reject.",
+      "approveBtn": "Approve",
+      "rejectBtn": "Reject",
+      "resolveDepositBtn": "Resolve Deposit",
+      "confirmApprove": "Approve this rental request?",
+      "responsePromptTitle": "Note to the renter (optional)",
+      "approveSuccess": "Request approved",
+      "rejectSuccess": "Request rejected",
+      "genericFailed": "Something went wrong, please try again",
+      "loadFailed": "Failed to load requests",
+      "depositModal": {
+        "title": "Resolve Deposit",
+        "desc": "Decide how to settle the security deposit held for this rental.",
+        "resolutionLabel": "Decision",
+        "refundedOption": "Refund the full amount to the renter",
+        "partialOption": "Keep part of the amount",
+        "forfeitedOption": "Keep the full amount",
+        "keptAmountLabel": "Amount kept (OMR)",
+        "notesLabel": "Reason / notes (optional)",
+        "submitBtn": "Confirm",
+        "cancelBtn": "Cancel",
+        "success": "Deposit resolved",
+        "failed": "Failed to resolve deposit"
+      }
     }
   },
   "adminDashboard": {
@@ -571,7 +597,6 @@
       "analyticsHeading": "Interactive Analytics",
       "chartSales": { "label": "Monthly Sales", "range6": "Last 6 months", "range12": "Last 12 months", "range24": "Last 24 months" },
       "chartCategories": { "label": "Top Categories", "range7": "Last week", "range30": "Last 30 days", "range90": "Last 90 days" },
-      "chartGrowth": { "label": "User Growth", "range14": "Last 2 weeks", "range30": "Last 30 days", "range90": "Last 90 days" },
       "chartGov": { "label": "Orders by Governorate", "range30": "Last 30 days", "range90": "Last 90 days", "range365": "Last year" },
       "recentActivityHeading": "Last 7 Days",
       "topOwnersHeading": "Top Sellers (30 days)",
@@ -588,15 +613,11 @@
         "pendingAccounts": { "label": "Accounts Pending Approval", "subHasPending": "Owners / couriers awaiting activation", "subNone": "Nothing pending" },
         "orders": { "label": "Orders", "sub": "{{paid}} paid · {{revenue}}" },
         "rentals": { "label": "Rentals", "sub": "{{active}} active · {{revenue}}" },
-        "commissions": { "label": "Platform Commissions", "sub": "{{pending}} pending" },
-        "userDistribution": { "label": "User Distribution", "owner": "Farmers", "renter": "Consumers", "courier": "Couriers" }
+        "commissions": { "label": "Platform Commissions", "sub": "{{pending}} pending" }
       },
       "chartLabels": {
         "purchaseSales": "Purchase Sales",
         "rentalSales": "Rental Sales",
-        "renters": "Consumers",
-        "owners": "Farmers",
-        "couriers": "Couriers",
         "orderCount": "Order Count",
         "ordersTooltip": "Orders: {{count}}",
         "revenueTooltip": "Revenue: {{amount}}",
@@ -717,13 +738,6 @@
     },
     "users": {
       "searchPlaceholder": "Search by name or email...",
-      "roleAll": "All Types",
-      "roleOptions": {
-        "renter": "Consumer",
-        "owner": "Farmer",
-        "delivery": "Delivery Agent",
-        "admin": "Admin"
-      },
       "statusAll": "All Statuses",
       "statusOptions": {
         "pending": "Under Review",
@@ -740,7 +754,8 @@
       "noneFound": "No users found",
       "colName": "Name",
       "colEmail": "Email",
-      "colRole": "Type",
+      "colAdmin": "Admin",
+      "adminBadge": "Admin",
       "colAccountStatus": "Account Status",
       "colPro": "PRO",
       "colPoints": "Points",
@@ -1128,7 +1143,6 @@
       }
     },
     "labels": {
-      "roles": { "admin": "Admin", "owner": "Farmer", "renter": "Consumer", "delivery": "Delivery Agent" },
       "accountStatus": { "pending": "Under Review", "approved": "Approved", "rejected": "Rejected", "blocked": "Blocked", "deleted": "Deleted" },
       "orderStatus": { "pending": "Pending", "confirmed": "Confirmed", "shipped": "Shipped", "delivered": "Delivered", "cancelled": "Cancelled", "paid": "Paid", "failed": "Failed", "active": "Active", "completed": "Completed" },
       "available": "Available"
@@ -1139,11 +1153,12 @@
         "name": "Name",
         "email": "Email",
         "phone": "Phone",
-        "role": "Role",
-        "identityNumber": "Identity Number",
-        "account": "Account"
+        "account": "Account",
+        "admin": "Admin Access",
+        "identityNumber": "Identity Number"
       },
-      "roleMap": { "owner": "Equipment Owner", "renter": "Renter", "admin": "Admin", "delivery": "Courier" },
+      "adminYes": "Admin",
+      "adminNo": "No",
       "identityStatus": { "none": "Not submitted", "pending": "Under review", "approved": "Approved ✓", "rejected": "Rejected ✗" },
       "identityStatusLabel": "Verification Status",
       "identityDocsLabel": "Identity documents:",
@@ -1233,18 +1248,6 @@
     }
   },
   "delivery": {
-    "title": "Courier Dashboard - Harth",
-    "statusBanner": {
-      "defaultTitle": "Your account is under review",
-      "defaultMsg": "Your courier account is under review by the admin team. You can't accept delivery jobs until your account is approved.",
-      "pendingTitle": "Your account is under review",
-      "pendingMsg": "Your courier account is under review by the admin team. You can't accept delivery jobs until your account is approved. You'll be notified as soon as it's reviewed.",
-      "rejectedTitle": "Your account activation was rejected",
-      "rejectedReasonPrefix": "Reason:",
-      "rejectedMsg": "You currently can't accept delivery jobs. To request a re-review, please contact support.",
-      "inactiveTitle": "Your account is inactive",
-      "inactiveMsg": "Contact the admin team for more information."
-    },
     "tabs": {
       "available": "Available Jobs",
       "mine": "My Active Jobs",
@@ -1262,9 +1265,6 @@
       "in_transit": "In transit",
       "delivered": "Delivered",
       "cancelled": "Cancelled"
-    },
-    "alerts": {
-      "deliveryOnly": "This page is for delivery couriers only."
     },
     "toasts": {
       "loadFailed": "Failed to load",
@@ -1760,13 +1760,7 @@
   "profile": {
     "title": "Profile — Harth",
     "memberBadge": "Member",
-    "roles": {
-      "owner": "Equipment Owner",
-      "renter": "Renter",
-      "delivery": "Delivery Agent",
-      "admin": "System Admin",
-      "default": "Member"
-    },
+    "adminBadge": "System Admin",
     "stats": { "orders": "Orders", "listings": "Listings", "rating": "Rating" },
     "nav": {
       "profile": "Profile",

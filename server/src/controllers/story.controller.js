@@ -50,7 +50,7 @@ const deleteStory = asyncHandler(async (req, res) => {
   const ok = await storyRepo.deleteStory({
     storyId: req.params.id,
     callerId: req.user.id,
-    callerRole: req.user.role,
+    isAdmin: !!req.user.is_admin,
   });
   if (!ok) throw new AppError("Story not found", 404);
   res.json({ success: true });
@@ -93,7 +93,7 @@ const listViewers = asyncHandler(async (req, res) => {
     .where({ id: req.params.id })
     .first("author_id");
   if (!story) throw new AppError("Story not found", 404);
-  const isAdmin = req.user.role === "admin";
+  const isAdmin = !!req.user.is_admin;
   if (!isAdmin && story.author_id !== req.user.id) {
     throw new AppError("Not allowed", 403);
   }

@@ -21,12 +21,7 @@
             var landing =
               user.account_status === "pending"
                 ? "tools.html"
-                : ({
-                    admin: "admin-dashboard.html",
-                    owner: "owner-dashboard.html",
-                    delivery: "delivery.html",
-                    renter: "basket.html",
-                  }[user.role] || "index.html");
+                : (user.is_admin ? "admin-dashboard.html" : "dashboard.html");
             window.location.replace(landing);
           }
         } catch (e) {}
@@ -357,14 +352,7 @@
 
         function landingFor(user) {
           if (user.account_status === "pending") return "tools.html";
-          return (
-            {
-              admin: "admin-dashboard.html",
-              owner: "owner-dashboard.html",
-              delivery: "delivery.html",
-              renter: "basket.html",
-            }[user.role] || "index.html"
-          );
+          return user.is_admin ? "admin-dashboard.html" : "dashboard.html";
         }
 
         // ─── Google OAuth: pick up the result of a redirect round-trip ──

@@ -2,7 +2,7 @@ const express = require("express");
 const router = express.Router();
 
 const auth = require("../middleware/auth");
-const requireRole = require("../middleware/requireRole");
+const requireAdmin = require("../middleware/requireAdmin");
 const ctrl = require("../controllers/order.controller");
 const invoiceCtrl = require("../controllers/invoice.controller");
 const {
@@ -16,7 +16,7 @@ const {
 router.get("/track/:tracking", trackingValidator, ctrl.track);
 
 // Admin-only list must come before `/:id` to avoid param capture.
-router.get("/all", auth, requireRole("admin"), listQueryValidator, ctrl.listAll);
+router.get("/all", auth, requireAdmin, listQueryValidator, ctrl.listAll);
 
 // Caller's own orders
 router.get("/mine", auth, listQueryValidator, ctrl.listMine);

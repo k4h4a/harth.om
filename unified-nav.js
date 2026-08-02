@@ -1,6 +1,10 @@
 /**
  * unified-nav.js — Harth Platform
- * Injects a consistent, role-aware navigation into every page.
+ * Injects a consistent navigation into every page. Every account has the
+ * same capabilities now (no more owner/delivery/renter role split), so
+ * every nav item is shown to every user — the individual destination pages
+ * handle their own "must be logged in" gate. Only `adminOnly` items are
+ * filtered, based on `user.is_admin`.
  *
  * What it does:
  *   1. Replaces <ul class="nav-links"> content with the canonical item list.
@@ -22,21 +26,21 @@
   ];
 
   /* ─── Canonical desktop nav items ───────────────────────────────── */
-  // roles: "*"   → shown to everyone (including guests)
-  // roles: [..] → shown only when logged-in user's role is in the array
+  // adminOnly: true → shown only when the logged-in user has is_admin.
+  // Every other item is shown to everyone; pages that require a session
+  // (dashboard, my-orders, ...) redirect guests to register.html themselves.
   // label: translation key, resolved at render time via window.HarthI18n.
   function navItems() {
     const t = window.HarthI18n ? window.HarthI18n.t : (k) => k;
     return [
-      { href: "index.html", label: t("nav.home"), icon: "fa-home", roles: "*" },
-      { href: "tools.html", label: t("nav.rentEquipment"), icon: "fa-tractor", roles: "*" },
-      { href: "basket.html", label: t("nav.sellEquipment"), icon: "fa-store", roles: "*" },
-      { href: "owner-dashboard.html", label: t("nav.ownerDashboard"), icon: "fa-tachometer-alt", roles: ["owner", "admin"] },
-      { href: "my-orders.html", label: t("nav.myOrders"), icon: "fa-box", roles: ["renter", "owner", "admin"] },
-      { href: "delivery.html", label: t("nav.delivery"), icon: "fa-truck", roles: ["delivery", "admin"] },
-      { href: "track.html", label: t("nav.trackOrders"), icon: "fa-map-marker-alt", roles: ["renter", "owner", "delivery"] },
-      { href: "loyalty.html", label: t("nav.loyalty"), icon: "fa-medal", roles: ["renter", "owner"] },
-      { href: "support.html", label: t("nav.support"), icon: "fa-headset", roles: "*" },
+      { href: "index.html", label: t("nav.home"), icon: "fa-home" },
+      { href: "tools.html", label: t("nav.rentEquipment"), icon: "fa-tractor" },
+      { href: "basket.html", label: t("nav.sellEquipment"), icon: "fa-store" },
+      { href: "dashboard.html", label: t("nav.myActivity"), icon: "fa-tachometer-alt" },
+      { href: "my-orders.html", label: t("nav.myOrders"), icon: "fa-box" },
+      { href: "track.html", label: t("nav.trackOrders"), icon: "fa-map-marker-alt" },
+      { href: "loyalty.html", label: t("nav.loyalty"), icon: "fa-medal" },
+      { href: "support.html", label: t("nav.support"), icon: "fa-headset" },
     ];
   }
 
@@ -50,10 +54,8 @@
     return window.location.pathname.split("/").pop() || "index.html";
   }
 
-  function allowed(item, role) {
-    if (item.roles === "*") return true;
-    if (!role) return false;
-    return item.roles.includes(role);
+  function allowed(item, user) {
+    return item.adminOnly ? !!(user && user.is_admin) : true;
   }
 
   function isActive(href) {
@@ -94,9 +96,8 @@
     const ul = document.querySelector("ul.nav-links");
     if (!ul) return;
 
-    const role = user?.role || null;
     ul.innerHTML = navItems()
-      .filter(i => allowed(i, role))
+      .filter(i => allowed(i, user))
       .map(i => `<li><a href="${i.href}" class="nav-item${isActive(i.href) ? " active" : ""}">
           <i class="fas ${i.icon}"></i><span class="nav-item__label">${i.label}</span>
         </a></li>`)

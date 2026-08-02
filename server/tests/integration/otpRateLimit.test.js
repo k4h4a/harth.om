@@ -15,7 +15,6 @@ describe("otpRateLimit", () => {
       email: "rate-limit@test.harth",
       password: "password123",
       name: "Rate Limit Tester",
-      role: "renter",
     });
 
     const results = [];

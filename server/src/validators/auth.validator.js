@@ -10,9 +10,6 @@ const validate = (req, _res, next) => {
   return next(new AppError("Validation failed", 400, errors.array()));
 };
 
-// Roles a client is allowed to self-register as. Admins are bootstrapped only.
-const SELF_REGISTER_ROLES = ["owner", "renter", "delivery"];
-
 // 6-digit numeric OTP (we accept it as a string so leading zeros aren't lost).
 // Shared by every OTP-code field in this file — registration, password
 // reset, and password change all use the same 6-digit shape.
@@ -32,9 +29,6 @@ const registerValidator = [
     .trim()
     .isLength({ min: 2, max: 100 })
     .withMessage("Name must be 2-100 characters"),
-  body("role")
-    .isIn(SELF_REGISTER_ROLES)
-    .withMessage(`Role must be one of: ${SELF_REGISTER_ROLES.join(", ")}`),
   body("phone")
     .optional({ values: "falsy" })
     .isString()
@@ -78,9 +72,6 @@ const registerInitValidator = [
     .trim()
     .isLength({ min: 2, max: 100 })
     .withMessage("Name must be 2-100 characters"),
-  body("role")
-    .isIn(SELF_REGISTER_ROLES)
-    .withMessage(`Role must be one of: ${SELF_REGISTER_ROLES.join(", ")}`),
   body("phone")
     .optional({ values: "falsy" })
     .isString()
@@ -199,5 +190,4 @@ module.exports = {
   requestPasswordResetValidator,
   resetPasswordValidator,
   changePasswordValidator,
-  SELF_REGISTER_ROLES,
 };

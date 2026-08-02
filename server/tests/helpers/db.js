@@ -27,7 +27,7 @@ async function createTestUser(overrides = {}) {
       email: overrides.email || `user${userSeq}_${Date.now()}@test.harth`,
       phone: overrides.phone !== undefined ? overrides.phone : null,
       password_hash: overrides.password_hash || "$2b$04$abcdefghijklmnopqrstuv", // unused by these tests
-      role: overrides.role || "renter",
+      is_admin: overrides.is_admin || false,
       name: overrides.name || "Test User",
       referral_code: `T${userSeq}${Date.now().toString(36)}`.slice(0, 16).toUpperCase(),
       account_status: "approved",

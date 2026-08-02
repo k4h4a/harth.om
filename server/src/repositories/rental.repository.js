@@ -252,11 +252,11 @@ async function getByIdWithDetails(id) {
 }
 
 /**
- * List rentals with optional role-scoping.
- * role: 'renter' | 'owner' | 'admin'
+ * List rentals with optional scoping.
+ * scope: 'renter' | 'owner' | 'admin'
  */
 async function list({
-  role,
+  scope,
   userId,
   status = null,
   page = 1,
@@ -276,9 +276,9 @@ async function list({
   const countQ = knex("rentals").count("* as c").first();
 
   for (const q of [dataQ, countQ]) {
-    if (role === "renter") {
+    if (scope === "renter") {
       q.where(q === dataQ ? "r.renter_id" : "renter_id", userId);
-    } else if (role === "owner") {
+    } else if (scope === "owner") {
       q.where(q === dataQ ? "r.owner_id" : "owner_id", userId);
     }
     // 'admin' sees everything
@@ -428,7 +428,7 @@ async function cancel({ rentalId, userId }) {
  * Typically triggered when the delivery is marked 'delivered', but an
  * owner can also call this manually.
  */
-async function start({ rentalId, callerId, callerRole }) {
+async function start({ rentalId, callerId, isAdmin }) {
   return knex.transaction(async (trx) => {
     const rental = await trx("rentals")
       .where({ id: rentalId })
@@ -438,7 +438,7 @@ async function start({ rentalId, callerId, callerRole }) {
 
     const isParty =
       rental.owner_id === callerId || rental.renter_id === callerId;
-    if (!isParty && callerRole !== "admin") {
+    if (!isParty && !isAdmin) {
       throw new AppError("Not permitted", 403);
     }
     if (rental.status !== "approved") {
@@ -479,7 +479,7 @@ async function start({ rentalId, callerId, callerRole }) {
 /**
  * Complete a rental. active -> completed. Equipment goes back to 'available'.
  */
-async function complete({ rentalId, callerId, callerRole }) {
+async function complete({ rentalId, callerId, isAdmin }) {
   return knex.transaction(async (trx) => {
     const rental = await trx("rentals")
       .where({ id: rentalId })
@@ -489,7 +489,7 @@ async function complete({ rentalId, callerId, callerRole }) {
 
     const isParty =
       rental.owner_id === callerId || rental.renter_id === callerId;
-    if (!isParty && callerRole !== "admin") {
+    if (!isParty && !isAdmin) {
       throw new AppError("Not permitted", 403);
     }
     if (rental.status !== "active") {
@@ -552,7 +552,7 @@ async function complete({ rentalId, callerId, callerRole }) {
 async function resolveDeposit({
   rentalId,
   callerId,
-  callerRole,
+  isAdmin,
   resolution,        // 'refunded' | 'partial' | 'forfeited'
   keptAmount = 0,
   notes = null,
@@ -565,7 +565,6 @@ async function resolveDeposit({
     if (!rental) throw new AppError("Rental not found", 404);
 
     const isOwner = rental.owner_id === callerId;
-    const isAdmin = callerRole === "admin";
     if (!isOwner && !isAdmin) {
       throw new AppError("Not permitted to resolve this deposit", 403);
     }

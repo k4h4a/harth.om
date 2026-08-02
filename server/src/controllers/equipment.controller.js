@@ -95,7 +95,7 @@ const list = asyncHandler(async (req, res) => {
     sort,
   } = req.query;
 
-  const isAdmin = req.user?.role === "admin";
+  const isAdmin = !!req.user?.is_admin;
   const result = await equipmentRepo.list({
     page,
     limit,
@@ -146,7 +146,7 @@ const getOne = asyncHandler(async (req, res) => {
   // Commission breakdown is only for the owner/admin's eyes — buyers only
   // ever see the final price already on `item`.
   const isOwnerOrAdmin =
-    req.user && (req.user.role === "admin" || req.user.id === item.owner_id);
+    req.user && (req.user.is_admin || req.user.id === item.owner_id);
   if (isOwnerOrAdmin) {
     const ownerFields = await equipmentRepo.getOwnerFieldsById(item.id);
     Object.assign(item, ownerFields);
@@ -197,7 +197,7 @@ async function notifyAdminsOfNewListing(equipment, owner) {
   const knex = require("../db");
   const notificationService = require("../services/notification.service");
   const admins = await knex("users")
-    .where({ role: "admin", is_active: true })
+    .where({ is_admin: true, is_active: true })
     .select("id");
   await Promise.all(
     admins.map((a) =>
@@ -221,7 +221,7 @@ const update = asyncHandler(async (req, res) => {
   const existing = await equipmentRepo.getById(id);
   if (!existing) throw new AppError("Equipment not found", 404);
 
-  const isAdmin = req.user.role === "admin";
+  const isAdmin = !!req.user.is_admin;
   if (!isAdmin && existing.owner_id !== req.user.id) {
     throw new AppError("You do not own this equipment", 403);
   }
@@ -353,7 +353,7 @@ const remove = asyncHandler(async (req, res) => {
   const existing = await equipmentRepo.getById(id);
   if (!existing) throw new AppError("Equipment not found", 404);
 
-  const isAdmin = req.user.role === "admin";
+  const isAdmin = !!req.user.is_admin;
   if (!isAdmin && existing.owner_id !== req.user.id) {
     throw new AppError("You do not own this equipment", 403);
   }

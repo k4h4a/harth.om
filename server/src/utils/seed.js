@@ -1,15 +1,17 @@
 /* eslint-disable no-console */
 /**
  * seed.js — populate the database with realistic demo data so the user can
- * immediately see every feature working:
+ * immediately see every feature working. Every account has identical
+ * marketplace capabilities now (no roles) — the seeded accounts just vary
+ * in what they've *done* so the demo has realistic variety:
  *
  *   - 1 admin (already created by bootstrap)
- *   - 1 farmer (مزارع) with 3 approved equipment (1 sale, 1 rent, 1 both)
- *   - 1 farmer with 1 pending equipment (for admin approval test)
- *   - 1 renter (مستهلك)
- *   - 2 couriers (مندوب توصيل)
- *   - 2 orders with delivery requests (1 pending = shows in courier's available,
- *     1 assigned = shows courier name on track page)
+ *   - 2 accounts with equipment listings (one with 3 approved listings,
+ *     one with a listing still pending admin approval)
+ *   - 1 account with no listings, used as the buyer in the demo orders
+ *   - 2 accounts used as couriers in the demo delivery requests
+ *   - 2 orders with delivery requests (1 pending = shows in the open job
+ *     board, 1 assigned = shows courier name on track page)
  *
  * Idempotent: running it twice won't duplicate — it checks emails first.
  *
@@ -39,8 +41,8 @@ function generateReferralCode() {
   return code;
 }
 
-async function upsertUser({ email, password, role, name, phone, governorate = null, is_pro = false }) {
-  const existing = await knex("users").where({ email }).first("id", "role");
+async function upsertUser({ email, password, name, phone, governorate = null, is_pro = false, label = "user" }) {
+  const existing = await knex("users").where({ email }).first("id");
   if (existing) {
     console.log(`  ✓ user ${email} already exists`);
     return existing.id;
@@ -51,7 +53,6 @@ async function upsertUser({ email, password, role, name, phone, governorate = nu
       email,
       phone,
       password_hash: passwordHash,
-      role,
       name,
       governorate,
       is_pro,
@@ -63,7 +64,7 @@ async function upsertUser({ email, password, role, name, phone, governorate = nu
       status_changed_at: knex.fn.now(),
     })
     .returning(["id"]);
-  console.log(`  + created ${role} ${email}`);
+  console.log(`  + created ${label} ${email}`);
   return row.id;
 }
 
@@ -158,7 +159,7 @@ async function main() {
   const farmer1Id = await upsertUser({
     email: "farmer1@harth.com",
     password: "farmer123",
-    role: "owner",
+    label: "user (with listings)",
     name: "سالم المزارع",
     phone: "+96899000001",
     governorate: "muscat",
@@ -167,7 +168,7 @@ async function main() {
   const farmer2Id = await upsertUser({
     email: "farmer2@harth.com",
     password: "farmer123",
-    role: "owner",
+    label: "user (with a pending listing)",
     name: "أحمد الزارع",
     phone: "+96899000002",
     governorate: "dhofar",
@@ -175,7 +176,7 @@ async function main() {
   const renterId = await upsertUser({
     email: "renter@harth.com",
     password: "renter123",
-    role: "renter",
+    label: "user (buyer, no listings)",
     name: "خالد المستهلك",
     phone: "+96899000003",
     governorate: "muscat",
@@ -183,7 +184,7 @@ async function main() {
   const courier1Id = await upsertUser({
     email: "courier1@harth.com",
     password: "courier123",
-    role: "delivery",
+    label: "user (courier demo)",
     name: "يوسف المندوب",
     phone: "+96899000004",
     governorate: "muscat",
@@ -191,7 +192,7 @@ async function main() {
   const courier2Id = await upsertUser({
     email: "courier2@harth.com",
     password: "courier123",
-    role: "delivery",
+    label: "user (courier demo)",
     name: "ماجد السائق",
     phone: "+96899000005",
     governorate: "muscat",

@@ -82,8 +82,7 @@ async function getTicketMessages(ticketId) {
       "support_messages.body",
       "support_messages.attachments",
       "support_messages.created_at",
-      "users.name as sender_name",
-      "users.role as sender_role"
+      "users.name as sender_name"
     )
     .orderBy("support_messages.created_at", "asc");
 }

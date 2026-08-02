@@ -3,8 +3,6 @@ const router = express.Router();
 
 const auth = require("../middleware/auth");
 const { optionalAuth } = require("../middleware/auth");
-const requireRole = require("../middleware/requireRole");
-const requireApprovedAccount = require("../middleware/requireApprovedAccount");
 const ctrl = require("../controllers/story.controller");
 const {
   createStoryValidator,
@@ -23,16 +21,8 @@ router.get("/by-author/:authorId", authorIdValidator, ctrl.listByAuthor);
 router.post("/:id/view", optionalAuth, storyIdValidator, ctrl.recordView);
 
 // ─── Authenticated writes ──────────────────────────────────────────
-// Only owners/admins can publish. requireApprovedAccount blocks pending
-// or rejected farmers from posting before the admin reviews them.
-router.post(
-  "/",
-  auth,
-  requireRole("owner", "admin"),
-  requireApprovedAccount,
-  createStoryValidator,
-  ctrl.createStory,
-);
+// Any authenticated user can publish a story.
+router.post("/", auth, createStoryValidator, ctrl.createStory);
 router.delete("/:id", auth, storyIdValidator, ctrl.deleteStory);
 
 // Author-only viewer breakdown.

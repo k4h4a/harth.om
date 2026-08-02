@@ -30,8 +30,7 @@ const PUBLIC_FIELDS = [
 ];
 
 /**
- * Create a new story. The author should be an owner or admin —
- * enforced at the route layer via requireRole().
+ * Create a new story. Any authenticated user may post one.
  */
 async function createStory({
   authorId,
@@ -72,11 +71,10 @@ async function createStory({
  * Delete a story (author or admin). Returns true if removed, false if
  * the row didn't exist or didn't belong to the caller.
  */
-async function deleteStory({ storyId, callerId, callerRole }) {
+async function deleteStory({ storyId, callerId, isAdmin }) {
   const story = await knex("stories").where({ id: storyId }).first();
   if (!story) return false;
 
-  const isAdmin = callerRole === "admin";
   if (!isAdmin && story.author_id !== callerId) {
     throw new AppError("Not allowed to delete this story", 403);
   }

@@ -69,7 +69,7 @@
         </nav>
 
         <div class="section left">
-          <a href="register.html?role=owner" class="hs-btn hs-btn--accent hs-btn--sm" id="add-listing-cta">
+          <a href="register.html" class="hs-btn hs-btn--accent hs-btn--sm" id="add-listing-cta">
             <i class="fas fa-plus"></i>
             <span data-i18n="common.buttons.addEquipment">أضف معدتك</span>
           </a>
@@ -468,8 +468,8 @@
               <h4 data-i18n="home.footer.accountTitle">الحساب</h4>
               <ul>
                 <li><a href="register.html" data-i18n="home.footer.registerLogin">تسجيل / دخول</a></li>
-                <li><a href="owner-dashboard.html" data-i18n="home.footer.farmerPanel">لوحة المزارع</a></li>
-                <li><a href="delivery.html" data-i18n="home.footer.deliveryPanel">لوحة المندوب</a></li>
+                <li><a href="dashboard.html" data-i18n="nav.myActivity">نشاطي</a></li>
+                <li><a href="my-orders.html" data-i18n="nav.myOrders">طلباتي</a></li>
               </ul>
             </div>
 
@@ -1879,7 +1879,8 @@
           return { href: `tools.html#eq-${eq.id}`, label: t("common.buttons.rentNow") };
         }
 
-        /* ─── Header: Add Listing CTA target depends on role ─────────── */
+        /* ─── Header: Add Listing CTA — same destination for every
+           logged-in user; guests still land on the login/register page. */
         function wireAddListingCta() {
           const cta = document.getElementById("add-listing-cta");
           if (!cta) return;
@@ -1889,12 +1890,8 @@
           } catch (_e) {
             user = null;
           }
-          if (
-            localStorage.getItem("token") &&
-            user &&
-            (user.role === "owner" || user.role === "admin")
-          ) {
-            cta.href = "owner-dashboard.html";
+          if (localStorage.getItem("token") && user) {
+            cta.href = "dashboard.html#listings";
           }
         }
 

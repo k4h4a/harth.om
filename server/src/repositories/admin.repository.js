@@ -22,16 +22,7 @@ async function platformStats() {
       .select(
         knex.raw("count(*) as total"),
         knex.raw(
-          "count(*) filter (where role = 'admin') as admins",
-        ),
-        knex.raw(
-          "count(*) filter (where role = 'owner') as owners",
-        ),
-        knex.raw(
-          "count(*) filter (where role = 'renter') as renters",
-        ),
-        knex.raw(
-          "count(*) filter (where role = 'delivery') as couriers",
+          "count(*) filter (where is_admin = true) as admins",
         ),
         knex.raw(
           "count(*) filter (where is_active = true) as active",
@@ -155,9 +146,6 @@ async function platformStats() {
     users: {
       total: Number(userCounts.total),
       admins: Number(userCounts.admins),
-      owners: Number(userCounts.owners),
-      renters: Number(userCounts.renters),
-      couriers: Number(userCounts.couriers),
       active: Number(userCounts.active),
       pro_members: Number(userCounts.pro_members),
       pending_accounts: Number(userCounts.pending_accounts),
@@ -214,7 +202,6 @@ async function topOwners({ days = 30, limit = 10 } = {}) {
     LEFT JOIN commission_transactions c
       ON c.owner_id = u.id
       AND c.created_at >= now() - make_interval(days => ?)
-    WHERE u.role = 'owner'
     GROUP BY u.id
     HAVING count(c.id) > 0
     ORDER BY gross DESC
@@ -383,9 +370,10 @@ async function topCategories({ days = 30, limit = 10 } = {}) {
 }
 
 /**
- * User growth: new signups per day for the last N days, broken out by
- * role so the chart can show consumers vs farmers vs delivery agents.
- * Always returns one row per day (with zeroes) so the line is continuous.
+ * User growth: new signups per day for the last N days. There's no more
+ * role breakdown (every account has identical capabilities), so this is
+ * just a total-per-day count. Always returns one row per day (with
+ * zeroes) so the line is continuous.
  */
 async function userGrowth({ days = 30 } = {}) {
   const safeDays = Math.min(365, Math.max(1, parseInt(days, 10) || 30));
@@ -400,18 +388,12 @@ async function userGrowth({ days = 30 } = {}) {
     )
     SELECT
       ds.d AS date,
-      coalesce(u.total, 0)::int    AS total,
-      coalesce(u.renters, 0)::int  AS renters,
-      coalesce(u.owners, 0)::int   AS owners,
-      coalesce(u.couriers, 0)::int AS couriers
+      coalesce(u.total, 0)::int AS total
     FROM ds
     LEFT JOIN (
       SELECT
         created_at::date AS d,
-        count(*) AS total,
-        count(*) filter (where role = 'renter')   AS renters,
-        count(*) filter (where role = 'owner')    AS owners,
-        count(*) filter (where role = 'delivery') AS couriers
+        count(*) AS total
       FROM users
       WHERE account_status <> 'deleted'
       GROUP BY 1
@@ -423,9 +405,6 @@ async function userGrowth({ days = 30 } = {}) {
   return rows.rows.map((r) => ({
     date: r.date,
     total: Number(r.total),
-    renters: Number(r.renters),
-    owners: Number(r.owners),
-    couriers: Number(r.couriers),
   }));
 }
 
@@ -475,7 +454,7 @@ async function ordersByGovernorate({ days = 30 } = {}) {
 /**
  * Admin list of users with optional filters.
  */
-async function listUsers({ page = 1, limit = 20, role = null, status = null, search = null } = {}) {
+async function listUsers({ page = 1, limit = 20, status = null, search = null } = {}) {
   const safeLimit = Math.min(100, Math.max(1, parseInt(limit, 10) || 20));
   const safePage = Math.max(1, parseInt(page, 10) || 1);
   const offset = (safePage - 1) * safeLimit;
@@ -484,7 +463,7 @@ async function listUsers({ page = 1, limit = 20, role = null, status = null, sea
     "id",
     "email",
     "phone",
-    "role",
+    "is_admin",
     "name",
     "is_active",
     "is_pro",
@@ -504,7 +483,6 @@ async function listUsers({ page = 1, limit = 20, role = null, status = null, sea
   const countQ = knex("users").count("* as c").first();
 
   for (const q of [dataQ, countQ]) {
-    if (role) q.where("role", role);
     if (status) q.where("account_status", status);
     // By default, hide soft-deleted users from generic listings.
     if (status !== "deleted") q.whereNot("account_status", "deleted");
@@ -531,8 +509,8 @@ async function listUsers({ page = 1, limit = 20, role = null, status = null, sea
 
 /**
  * List accounts pending review. Used by the admin "موافقات الحسابات" tab.
- * Only farmer + delivery roles can be in 'pending' state (consumers are
- * auto-approved on signup), so we don't bother filtering by role here.
+ * Pending is no longer role-driven — any account can be placed in
+ * 'pending' state by an admin, so this just filters on account_status.
  */
 async function listPendingUsers({ page = 1, limit = 20 } = {}) {
   const safeLimit = Math.min(100, Math.max(1, parseInt(limit, 10) || 20));
@@ -543,7 +521,7 @@ async function listPendingUsers({ page = 1, limit = 20 } = {}) {
     "id",
     "email",
     "phone",
-    "role",
+    "is_admin",
     "name",
     "identity",
     "governorate",
@@ -603,7 +581,7 @@ async function setUserStatus(userId, { status, reason = null, changedBy = null }
       "id",
       "email",
       "name",
-      "role",
+      "is_admin",
       "is_active",
       "is_pro",
       "pro_expires_at",
@@ -622,7 +600,7 @@ async function setUserActive(userId, isActive) {
       "id",
       "email",
       "name",
-      "role",
+      "is_admin",
       "is_active",
       "is_pro",
       "pro_expires_at",
@@ -638,7 +616,7 @@ async function setUserPro(userId, { isPro, expiresAt = null }) {
       "id",
       "email",
       "name",
-      "role",
+      "is_admin",
       "is_active",
       "is_pro",
       "pro_expires_at",
@@ -681,9 +659,9 @@ async function bulkSetUserStatus(userIds, { status, reason = null, changedBy = n
     // 1. Snapshot current state of the targets (filtered to non-admin).
     const targets = await trx("users")
       .whereIn("id", userIds)
-      .select("id", "role", "account_status");
-    const skipped = targets.filter((u) => u.role === "admin").map((u) => u.id);
-    const updatable = targets.filter((u) => u.role !== "admin");
+      .select("id", "is_admin", "account_status");
+    const skipped = targets.filter((u) => u.is_admin === true).map((u) => u.id);
+    const updatable = targets.filter((u) => u.is_admin !== true);
     const updatableIds = updatable.map((u) => u.id);
 
     if (!updatableIds.length) {

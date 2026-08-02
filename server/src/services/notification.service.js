@@ -180,18 +180,28 @@ const events = {
   },
 
   /**
-   * Fan out to every active courier when a new delivery_request lands on
-   * the open job board. This is what makes the courier's "available" tab
-   * update without needing a refresh — the in-app notification pushes via
-   * Socket.IO and the page can reload its list when it sees the event.
+   * Fan out when a new delivery_request lands on the open job board. This
+   * is what makes the "available" tab update without needing a refresh —
+   * the in-app notification pushes via Socket.IO and the page can reload
+   * its list when it sees the event.
    *
-   * Returns silently if there are zero couriers (which would be a bigger
+   * There's no more "delivery" role — any authenticated user can accept a
+   * job, so we can't filter by role. Notifying every active user would be
+   * spam, so instead we notify users who've previously accepted a delivery
+   * (an activity-based proxy for "interested in courier work").
+   *
+   * Returns silently if there are zero such users (which would be a bigger
    * problem worth logging, but not one notify() should crash on).
    */
   async newDeliveryAvailable(delivery, orderTrackingNumber) {
     const knex = require("../db");
     const couriers = await knex("users")
-      .where({ role: "delivery", is_active: true })
+      .whereIn("id", function () {
+        this.select("courier_id")
+          .from("delivery_requests")
+          .whereNotNull("courier_id");
+      })
+      .where({ is_active: true })
       .select("id");
     if (!couriers.length) return;
 

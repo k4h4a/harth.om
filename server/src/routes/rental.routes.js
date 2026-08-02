@@ -2,7 +2,6 @@ const express = require("express");
 const router = express.Router();
 
 const auth = require("../middleware/auth");
-const requireRole = require("../middleware/requireRole");
 const ctrl = require("../controllers/rental.controller");
 const {
   createRentalValidator,
@@ -41,21 +40,10 @@ router.get("/", auth, listQueryValidator, ctrl.list);
 // Single
 router.get("/:id", auth, rentalIdValidator, ctrl.getOne);
 
-// Owner-only actions: approve / reject
-router.post(
-  "/:id/approve",
-  auth,
-  requireRole("owner", "admin"),
-  approveRejectValidator,
-  ctrl.approve,
-);
-router.post(
-  "/:id/reject",
-  auth,
-  requireRole("owner", "admin"),
-  approveRejectValidator,
-  ctrl.reject,
-);
+// Owner-only actions: approve / reject (ownership checked in controller —
+// req.user.id must match the rental's owner_id)
+router.post("/:id/approve", auth, approveRejectValidator, ctrl.approve);
+router.post("/:id/reject", auth, approveRejectValidator, ctrl.reject);
 
 // Cancel — renter OR owner can do this (controller enforces)
 router.post("/:id/cancel", auth, rentalIdValidator, ctrl.cancel);
@@ -66,11 +54,10 @@ router.post("/:id/complete", auth, rentalIdValidator, ctrl.complete);
 
 // Deposit resolution — owner (or admin) settles the held security deposit
 // after a completed rental. The renter learns about the outcome via a
-// notification fired from the controller.
+// notification fired from the controller. Ownership checked in controller.
 router.post(
   "/:id/deposit/resolve",
   auth,
-  requireRole("owner", "admin"),
   resolveDepositValidator,
   ctrl.resolveDeposit,
 );

@@ -997,7 +997,6 @@
         /* Inline analytics chart range pickers — keep them readable. */
         #chart-sales,
         #chart-categories,
-        #chart-growth,
         #chart-governorates {
           max-width: 100%;
         }
@@ -1438,45 +1437,6 @@
               </div>
             </div>
 
-            <!-- 3) User growth -->
-            <div
-              style="
-                background: rgba(0, 0, 0, 0.18);
-                border-radius: 10px;
-                padding: 12px;
-                border: 1px solid rgba(255, 255, 255, 0.08);
-              "
-            >
-              <div
-                style="
-                  display: flex;
-                  justify-content: space-between;
-                  align-items: center;
-                  margin-bottom: 6px;
-                "
-              >
-                <strong data-i18n="adminDashboard.overview.chartGrowth.label">نمو المستخدمين</strong>
-                <select
-                  id="chart-growth-range"
-                  style="
-                    background: rgba(0, 0, 0, 0.3);
-                    color: #fff;
-                    border: 1px solid rgba(255, 255, 255, 0.2);
-                    border-radius: 6px;
-                    padding: 4px 8px;
-                    font-family: inherit;
-                  "
-                >
-                  <option value="14" data-i18n="adminDashboard.overview.chartGrowth.range14">آخر أسبوعين</option>
-                  <option value="30" selected data-i18n="adminDashboard.overview.chartGrowth.range30">آخر 30 يوم</option>
-                  <option value="90" data-i18n="adminDashboard.overview.chartGrowth.range90">آخر 90 يوم</option>
-                </select>
-              </div>
-              <div style="position: relative; height: 240px">
-                <canvas id="chart-growth"></canvas>
-              </div>
-            </div>
-
             <!-- 4) Orders by governorate -->
             <div
               style="
@@ -1797,13 +1757,6 @@
         <div class="card">
           <div class="filters">
             <input type="search" id="users-search" data-i18n-placeholder="adminDashboard.users.searchPlaceholder" placeholder="بحث بالاسم أو البريد..." />
-            <select id="users-role">
-              <option value="" data-i18n="adminDashboard.users.roleAll">كل الأنواع</option>
-              <option value="renter" data-i18n="adminDashboard.users.roleOptions.renter">مستهلك</option>
-              <option value="owner" data-i18n="adminDashboard.users.roleOptions.owner">مزارع</option>
-              <option value="delivery" data-i18n="adminDashboard.users.roleOptions.delivery">مندوب توصيل</option>
-              <option value="admin" data-i18n="adminDashboard.users.roleOptions.admin">أدمن</option>
-            </select>
             <select id="users-status">
               <option value="" data-i18n="adminDashboard.users.statusAll">كل الحالات</option>
               <option value="pending" data-i18n="adminDashboard.users.statusOptions.pending">قيد المراجعة</option>
@@ -2650,10 +2603,6 @@
             `).join("")
           }</div>`;
 
-        function roleLabel(r) {
-          const label = t(`adminDashboard.labels.roles.${r}`);
-          return label.startsWith("adminDashboard.labels.roles.") ? r : label;
-        }
         function accountStatusLabel(s) {
           const label = t(`adminDashboard.labels.accountStatus.${s}`);
           return label.startsWith("adminDashboard.labels.accountStatus.") ? s : label;
@@ -2692,7 +2641,7 @@
             window.location.href = "register.html";
             return null;
           }
-          if (user.role !== "admin") {
+          if (!user.is_admin) {
             alert(t("adminDashboard.adminOnlyAlert"));
             window.location.href = "index.html";
             return null;
@@ -2775,14 +2724,6 @@
                 <div class="label">${t(`${sc}.commissions.label`)}</div>
                 <div class="value">${money(s.commissions.earned)}</div>
                 <div class="sub">${t(`${sc}.commissions.sub`, { pending: money(s.commissions.earned_pending) })}</div>
-              </div>
-              <div class="stat-card">
-                <div class="label">${t(`${sc}.userDistribution.label`)}</div>
-                <div class="value" style="font-size:16px;line-height:1.4">
-                  ${s.users.owners} ${t(`${sc}.userDistribution.owner`)}<br />
-                  ${s.users.renters} ${t(`${sc}.userDistribution.renter`)}<br />
-                  ${s.users.couriers} ${t(`${sc}.userDistribution.courier`)}
-                </div>
               </div>
             `;
             grid.style.display = "grid";
@@ -2985,7 +2926,6 @@
             if (!res?.success) throw new Error(res?.error?.message || t("adminDashboard.farmerModal.loadFailed"));
             const u = res.user;
             const fm = "adminDashboard.farmerModal";
-            const roleMap = t(`${fm}.roleMap`);
             const idStatus = t(`${fm}.identityStatus`);
             const idColor  = { none:"#888", pending:"#f1c40f", approved:"#55efc4", rejected:"#e17055" };
 
@@ -2995,9 +2935,9 @@
                   [t(`${fm}.fields.name`),           escapeHtml(u.name || "—")],
                   [t(`${fm}.fields.email`),           escapeHtml(u.email || "—")],
                   [t(`${fm}.fields.phone`),           escapeHtml(u.phone || "—")],
-                  [t(`${fm}.fields.role`),            (roleMap && roleMap[u.role]) || u.role],
-                  [t(`${fm}.fields.identityNumber`),  escapeHtml(u.identity || "—")],
                   [t(`${fm}.fields.account`),         escapeHtml(u.account_status || "—")],
+                  [t(`${fm}.fields.admin`),           u.is_admin ? t(`${fm}.adminYes`) : t(`${fm}.adminNo`)],
+                  [t(`${fm}.fields.identityNumber`),  escapeHtml(u.identity || "—")],
                 ].map(([k,v]) => `
                   <div style="background:rgba(255,255,255,.05);border-radius:10px;padding:12px">
                     <div style="color:#888;font-size:12px;margin-bottom:4px">${k}</div>
@@ -3170,7 +3110,6 @@
                 <div>
                   <div style="font-size:16px;font-weight:700">
                     ${escapeHtml(u.name || "—")}
-                    <span class="badge blue" style="margin-inline-start:8px">${roleLabel(u.role)}</span>
                   </div>
                   <div style="color:#ddd;font-size:13px;margin:4px 0">
                     <i class="fas fa-envelope"></i> ${escapeHtml(u.email)}
@@ -3315,7 +3254,6 @@
                 <div>
                   <div style="font-size:16px;font-weight:700">
                     ${escapeHtml(u.name || "—")}
-                    <span class="badge blue" style="margin-inline-start:6px">${roleLabel(u.role)}</span>
                   </div>
                   <div style="color:#ddd;font-size:13px;margin:4px 0">
                     <i class="fas fa-envelope"></i> ${escapeHtml(u.email)}
@@ -3446,10 +3384,8 @@
         // ---------- Users ----------
         async function loadUsers() {
           const params = new URLSearchParams({ page: String(usersPage), limit: "20" });
-          const role = $("#users-role").value;
           const status = $("#users-status").value;
           const search = $("#users-search").value.trim();
-          if (role) params.set("role", role);
           if (status) params.set("status", status);
           if (search) params.set("search", search);
 
@@ -3468,12 +3404,12 @@
 
             const rows = res.items.map((u) => `
               <tr>
-                <td>${u.role === "admin"
+                <td>${u.is_admin
                   ? `<span title="${t("adminDashboard.users.cannotBulkAdminTitle")}" style="opacity:0.3">—</span>`
                   : bulkCheckboxHtml("users", u.id)}</td>
                 <td>${escapeHtml(u.name || "—")}</td>
                 <td>${escapeHtml(u.email)}</td>
-                <td><span class="badge blue">${roleLabel(u.role)}</span></td>
+                <td>${u.is_admin ? `<span class="badge blue">${t("adminDashboard.users.adminBadge")}</span>` : "—"}</td>
                 <td><span class="badge ${accountStatusColor(u.account_status)}">${accountStatusLabel(u.account_status)}</span>${u.status_reason ? `<div style="font-size:11px;color:#aaa;margin-top:3px">${escapeHtml(u.status_reason)}</div>` : ""}</td>
                 <td>${u.is_pro ? '<span class="badge yellow">PRO</span>' : "—"}</td>
                 <td>${u.loyalty_points || 0}</td>
@@ -3486,7 +3422,7 @@
                 <thead>
                   <tr>
                     <th><input type="checkbox" id="users-bulk-all" class="bulk-cb" /></th>
-                    <th>${t("adminDashboard.users.colName")}</th><th>${t("adminDashboard.users.colEmail")}</th><th>${t("adminDashboard.users.colRole")}</th>
+                    <th>${t("adminDashboard.users.colName")}</th><th>${t("adminDashboard.users.colEmail")}</th><th>${t("adminDashboard.users.colAdmin")}</th>
                     <th>${t("adminDashboard.users.colAccountStatus")}</th><th>${t("adminDashboard.users.colPro")}</th><th>${t("adminDashboard.users.colPoints")}</th><th>${t("adminDashboard.users.colActions")}</th>
                   </tr>
                 </thead>
@@ -3528,7 +3464,7 @@
         }
 
         // Build the action-button cell for a user row. The exact set depends
-        // on the current account_status and role:
+        // on the current account_status and is_admin:
         //   - admin            → no status actions (don't accidentally lock yourself out)
         //   - pending          → approve / reject / block
         //   - approved         → block / re-pending (move back to review)
@@ -3538,7 +3474,7 @@
         // PRO toggle is always available for non-admins.
         function renderUserActions(u) {
           const buttons = [];
-          if (u.role !== "admin") {
+          if (!u.is_admin) {
             const id = u.id;
             const name = escapeHtml(u.name || u.email);
             const mk = (cls, action, icon, label) =>
@@ -3918,7 +3854,6 @@
           clearTimeout(usersDebounce);
           usersDebounce = setTimeout(() => { usersPage = 1; loadUsers(); }, 350);
         });
-        $("#users-role").addEventListener("change", () => { usersPage = 1; loadUsers(); });
         $("#users-status").addEventListener("change", () => { usersPage = 1; loadUsers(); });
         $("#orders-status").addEventListener("change", () => { ordersPage = 1; loadOrders(); });
         $("#orders-payment").addEventListener("change", () => { ordersPage = 1; loadOrders(); });
@@ -3985,7 +3920,6 @@
           await Promise.all([
             renderSalesChart(),
             renderCategoriesChart(),
-            renderUserGrowthChart(),
             renderGovernoratesChart(),
           ]);
         }
@@ -4101,60 +4035,6 @@
           return label.startsWith("adminDashboard.overview.chartCategoryLabels.") ? c : label;
         }
 
-        // 3) User growth — line, by role.
-        async function renderUserGrowthChart() {
-          const days = parseInt($("#chart-growth-range").value, 10) || 30;
-          const res = await apiFetch(`/admin/reports/user-growth?days=${days}`);
-          if (!res || !res.success) return;
-          const series = res.series;
-          // For longer ranges (>60 days) showing every day on x-axis is
-          // noisy. Tell Chart.js to auto-skip ticks.
-          mountChart("chart-growth", {
-            type: "line",
-            data: {
-              labels: series.map((r) => r.date),
-              datasets: [
-                {
-                  label: t("adminDashboard.overview.chartLabels.renters"),
-                  data: series.map((r) => r.renters),
-                  borderColor: "#3498db",
-                  backgroundColor: "rgba(52,152,219,0.1)",
-                  tension: 0.3,
-                  fill: false,
-                },
-                {
-                  label: t("adminDashboard.overview.chartLabels.owners"),
-                  data: series.map((r) => r.owners),
-                  borderColor: "#6ab04c",
-                  backgroundColor: "rgba(106,176,76,0.1)",
-                  tension: 0.3,
-                  fill: false,
-                },
-                {
-                  label: t("adminDashboard.overview.chartLabels.couriers"),
-                  data: series.map((r) => r.couriers),
-                  borderColor: "#e67e22",
-                  backgroundColor: "rgba(230,126,34,0.1)",
-                  tension: 0.3,
-                  fill: false,
-                },
-              ],
-            },
-            options: {
-              responsive: true,
-              maintainAspectRatio: false,
-              interaction: { mode: "index", intersect: false },
-              scales: {
-                x: {
-                  ticks: { autoSkip: true, maxTicksLimit: 12 },
-                  grid: { display: false },
-                },
-                y: { beginAtZero: true, ticks: { precision: 0 } },
-              },
-            },
-          });
-        }
-
         // 4) Orders by governorate — horizontal bar.
         async function renderGovernoratesChart() {
           const days = parseInt($("#chart-gov-range").value, 10) || 30;
@@ -4213,7 +4093,7 @@
         // Wire range selectors to re-render their respective charts.
         // We attach these once at boot — the selectors live inside the
         // overview panel which is in the DOM from the start.
-        ["chart-sales-range", "chart-cat-range", "chart-growth-range", "chart-gov-range"].forEach(
+        ["chart-sales-range", "chart-cat-range", "chart-gov-range"].forEach(
           (id) => {
             const el = document.getElementById(id);
             if (!el) return;
@@ -4221,7 +4101,6 @@
               if (typeof Chart === "undefined") return;
               if (id === "chart-sales-range") renderSalesChart();
               else if (id === "chart-cat-range") renderCategoriesChart();
-              else if (id === "chart-growth-range") renderUserGrowthChart();
               else if (id === "chart-gov-range") renderGovernoratesChart();
             });
           },

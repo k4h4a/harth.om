@@ -36,7 +36,7 @@ const remove = asyncHandler(async (req, res) => {
   await reviewRepo.remove({
     reviewId: req.params.id,
     reviewerId: req.user.id,
-    callerRole: req.user.role,
+    isAdmin: !!req.user.is_admin,
   });
   res.json({ success: true });
 });

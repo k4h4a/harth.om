@@ -845,7 +845,7 @@
       } catch (_e) {
         // If no backend yet, populate from localStorage
         const stored = JSON.parse(localStorage.getItem("user") || "{}");
-        populateProfile({ name: stored.name, email: stored.email, role: stored.role, profile: {} });
+        populateProfile({ name: stored.name, email: stored.email, is_admin: stored.is_admin, profile: {} });
       }
     }
 
@@ -857,7 +857,7 @@
       document.getElementById("main-avatar-ph").textContent    = initials;
       document.getElementById("sidebar-name").textContent  = data.name  || "—";
       document.getElementById("sidebar-email").textContent = data.email || "—";
-      document.getElementById("sidebar-role").innerHTML    = roleLabel(data.role);
+      updateAdminBadge(data.is_admin);
 
       if (p.avatar_url) {
         ["sidebar-avatar","main-avatar"].forEach(id => {
@@ -908,14 +908,18 @@
     function setSelect(id, val) { const el = document.getElementById(id); if (el && val) el.value = val; }
     function setToggle(id, val) { const el = document.getElementById(id); if (el) el.checked = !!val; }
 
-    function roleLabel(role) {
-      const map = {
-        owner: t("profile.roles.owner"),
-        renter: t("profile.roles.renter"),
-        delivery: t("profile.roles.delivery"),
-        admin: t("profile.roles.admin"),
-      };
-      return `<i class="fas fa-shield-alt"></i> ${map[role] || t("profile.roles.default")}`;
+    // Small "Admin" signal only — every account has the same capabilities
+    // now, so this badge is the only thing distinguishing an admin account
+    // and is hidden entirely for everyone else.
+    function updateAdminBadge(isAdmin) {
+      const el = document.getElementById("sidebar-role");
+      if (!el) return;
+      if (isAdmin) {
+        el.innerHTML = `<i class="fas fa-shield-alt"></i> ${t("profile.adminBadge")}`;
+        el.style.display = "";
+      } else {
+        el.style.display = "none";
+      }
     }
 
     // ── Save Profile ───────────────────────────────────────────

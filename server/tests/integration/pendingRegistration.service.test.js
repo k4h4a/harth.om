@@ -9,7 +9,6 @@ const base = {
   phone: "+96891111111",
   password: "password123",
   name: "New User",
-  role: "renter",
 };
 
 describe("pendingRegistration.service", () => {
@@ -44,7 +43,6 @@ describe("pendingRegistration.service", () => {
       email: base.email,
       phone: "+96892222222",
       password_hash: "x",
-      role: "renter",
       name: "X",
       referral_code: "ABCDEFGH",
       account_status: "approved",

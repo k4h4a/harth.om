@@ -105,7 +105,7 @@ const toggle2FA = asyncHandler(async (req, res) => {
 // POST /profile/export-data
 const exportData = asyncHandler(async (req, res) => {
   const [user, profile, activity] = await Promise.all([
-    knex("users").where({ id: req.user.id }).first("id","name","email","role","created_at"),
+    knex("users").where({ id: req.user.id }).first("id","name","email","is_admin","created_at"),
     knex("user_profiles").where({ user_id: req.user.id }).first(),
     repo.getActivityLog(req.user.id, { limit: 100 }),
   ]);

@@ -21,7 +21,7 @@ const orderInvoice = asyncHandler(async (req, res) => {
   if (!order) throw new AppError("Order not found", 404);
 
   // Authorization: buyer or admin.
-  if (order.user_id !== req.user.id && req.user.role !== "admin") {
+  if (order.user_id !== req.user.id && !req.user.is_admin) {
     throw new AppError("Not permitted", 403);
   }
 

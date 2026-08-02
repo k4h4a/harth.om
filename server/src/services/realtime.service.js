@@ -85,7 +85,6 @@ function initialize(httpServer) {
       if (!token) return next(new Error("Missing auth token"));
       const payload = verifyToken(token);
       socket.data.userId = payload.id;
-      socket.data.role = payload.role;
       return next();
     } catch (e) {
       return next(new Error("Invalid auth token"));

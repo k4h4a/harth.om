@@ -2,13 +2,13 @@ const express = require("express");
 const router = express.Router();
 
 const auth = require("../middleware/auth");
-const requireRole = require("../middleware/requireRole");
+const requireAdmin = require("../middleware/requireAdmin");
 const { param, body, query } = require("express-validator");
 const { validate } = require("../validators/auth.validator");
 const ctrl = require("../controllers/admin.controller");
 
-// Every admin route requires admin role. Applying once here keeps handlers tidy.
-router.use(auth, requireRole("admin"));
+// Every admin route requires the admin flag. Applying once here keeps handlers tidy.
+router.use(auth, requireAdmin);
 
 // ─── Dashboard / reports ───────────────────────────────────────────
 router.get("/stats", ctrl.stats);
@@ -45,7 +45,7 @@ router.get(
   ],
   ctrl.topCategories,
 );
-// User growth — daily new signups by role.
+// User growth — daily new signups.
 router.get(
   "/reports/user-growth",
   [query("days").optional().isInt({ min: 1, max: 365 }).toInt(), validate],
@@ -64,9 +64,6 @@ router.get(
   [
     query("page").optional().isInt({ min: 1 }).toInt(),
     query("limit").optional().isInt({ min: 1, max: 100 }).toInt(),
-    query("role")
-      .optional()
-      .isIn(["admin", "owner", "renter", "delivery"]),
     query("status")
       .optional()
       .isIn(["pending", "approved", "rejected", "blocked", "deleted"]),

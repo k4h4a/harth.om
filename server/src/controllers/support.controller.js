@@ -51,7 +51,7 @@ const getTicket = asyncHandler(async (req, res) => {
   if (!ticket) throw new AppError("Ticket not found", 404);
 
   // Ownership: owner or admin
-  const isAdmin = req.user?.role === "admin";
+  const isAdmin = !!req.user?.is_admin;
   const isOwner = req.user?.id && ticket.user_id === req.user.id;
   if (!isAdmin && !isOwner) throw new AppError("Forbidden", 403);
 
@@ -65,7 +65,7 @@ const replyTicket = asyncHandler(async (req, res) => {
   if (!ticket) throw new AppError("Ticket not found", 404);
   if (["closed"].includes(ticket.status)) throw new AppError("This ticket is closed. Please reopen it first.", 400);
 
-  const isAdmin = req.user?.role === "admin";
+  const isAdmin = !!req.user?.is_admin;
   const isOwner = req.user?.id && ticket.user_id === req.user.id;
   if (!isAdmin && !isOwner) throw new AppError("Forbidden", 403);
 
@@ -113,7 +113,7 @@ const rateTicket = asyncHandler(async (req, res) => {
 
 // GET /support/admin/tickets
 const adminListTickets = asyncHandler(async (req, res) => {
-  if (req.user.role !== "admin") throw new AppError("Forbidden", 403);
+  if (!req.user.is_admin) throw new AppError("Forbidden", 403);
   const { status, category, priority, page = 1, limit = 30 } = req.query;
   console.log("[adminListTickets] START", { status, category, priority, page, limit });
   const tickets = await repo.getAllTickets({ status, category, priority, page: Number(page), limit: Number(limit) });
@@ -123,14 +123,14 @@ const adminListTickets = asyncHandler(async (req, res) => {
 
 // GET /support/admin/stats
 const adminStats = asyncHandler(async (req, res) => {
-  if (req.user.role !== "admin") throw new AppError("Forbidden", 403);
+  if (!req.user.is_admin) throw new AppError("Forbidden", 403);
   const stats = await repo.getStats();
   res.json({ success: true, stats });
 });
 
 // PATCH /support/admin/tickets/:id/status
 const adminUpdateStatus = asyncHandler(async (req, res) => {
-  if (req.user.role !== "admin") throw new AppError("Forbidden", 403);
+  if (!req.user.is_admin) throw new AppError("Forbidden", 403);
   const { status } = req.body;
   if (!VALID_STATUSES.includes(status)) throw new AppError("Invalid status", 400);
   const ticket = await repo.updateStatus(req.params.id, status);
@@ -140,7 +140,7 @@ const adminUpdateStatus = asyncHandler(async (req, res) => {
 
 // PATCH /support/admin/tickets/:id/assign
 const adminAssign = asyncHandler(async (req, res) => {
-  if (req.user.role !== "admin") throw new AppError("Forbidden", 403);
+  if (!req.user.is_admin) throw new AppError("Forbidden", 403);
   const { agent_id } = req.body;
   if (!agent_id) throw new AppError("agent_id is required", 400);
   const ticket = await repo.assignTicket(req.params.id, agent_id);

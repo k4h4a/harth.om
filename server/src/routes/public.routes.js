@@ -39,10 +39,13 @@ async function computeStats() {
       .where("stock", ">", 0)
       .count("* as c")
       .first(),
-    // Active, approved farmer accounts.
-    knex("users")
-      .where({ role: "owner", is_active: true, account_status: "approved" })
-      .count("* as c")
+    // "Active farmers" = distinct users with at least one live (approved,
+    // visible) equipment listing. There's no seller/owner role anymore, so
+    // this is activity-based rather than role-based.
+    knex("equipment")
+      .where({ approval_status: "approved" })
+      .whereNot({ status: "hidden" })
+      .countDistinct({ c: "owner_id" })
       .first(),
     // Completed (delivered / paid) orders.
     knex("orders")
@@ -127,9 +130,9 @@ router.get(
  * trust profiles, but the URL says "farmers" because the buyer-facing
  * use case is "is this farmer reliable".
  *
- * Returns 404 only if the user doesn't exist OR isn't an owner/delivery —
- * we don't expose trust profiles for buyers since there's no public
- * page to show them on.
+ * Returns 404 only if the user doesn't exist OR has no marketplace activity
+ * (no listings and no deliveries) — we don't expose trust profiles for
+ * accounts with nothing to show since there's no public page for them.
  */
 const trustRepo = require("../repositories/trust.repository");
 
@@ -142,9 +145,13 @@ router.get(
         error: { code: 404, message: "Farmer not found" },
       });
     }
-    // Only expose trust profiles for sellers / couriers. A consumer's
-    // trust isn't public.
-    if (!["owner", "delivery", "admin"].includes(profile.role)) {
+    // Only expose trust profiles for accounts with actual marketplace
+    // activity (listings or deliveries). A consumer with neither isn't
+    // public.
+    if (
+      profile.stats.listings_count === 0 &&
+      profile.stats.deliveries_count === 0
+    ) {
       return res.status(404).json({
         error: { code: 404, message: "Farmer not found" },
       });

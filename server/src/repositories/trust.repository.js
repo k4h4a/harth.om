@@ -57,7 +57,7 @@ const QUICK_RESP_MAX_HOURS = 12;
 /**
  * Compute trust badges + stats for a single owner. Returns:
  *   {
- *     id, name, role, is_pro,
+ *     id, name, is_pro,
  *     email_verified, identity_verified, account_status,
  *     stats: { ... },
  *     badges: { verified, top_seller, fast_shipping, quick_responder, is_pro },
@@ -73,7 +73,6 @@ async function computeForOwner(ownerId) {
     .first(
       "id",
       "name",
-      "role",
       "is_pro",
       "email_verified",
       "identity_verified",
@@ -235,7 +234,6 @@ async function computeForOwner(ownerId) {
   return {
     id: user.id,
     name: user.name,
-    role: user.role,
     is_pro: !!user.is_pro,
     email_verified: !!user.email_verified,
     identity_verified: !!user.identity_verified,

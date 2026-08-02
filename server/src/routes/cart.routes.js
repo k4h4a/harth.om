@@ -9,8 +9,8 @@ const {
   cartItemIdValidator,
 } = require("../validators/cart.validator");
 
-// All cart routes require authentication. Any role can have a cart
-// (even owners may buy from other owners).
+// All cart routes require authentication. Every account can have a cart
+// (even a user who lists equipment may buy from another lister).
 
 router.get("/", auth, ctrl.get);
 router.post("/items", auth, addItemValidator, ctrl.addItem);

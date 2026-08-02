@@ -69,30 +69,26 @@ const create = asyncHandler(async (req, res) => {
 /**
  * GET /rentals
  *
- * Scope resolution:
- *   - admin + ?scope=admin   -> all rentals
- *   - owner                  -> rentals for their equipment
- *   - renter                 -> rentals they created
- *   - ?scope=renter/owner    -> force that view (e.g. owner who also rents)
+ * Scope resolution — any user can request either scope for themselves,
+ * there's no role check involved:
+ *   - ?scope=admin   -> all rentals (requires req.user.is_admin)
+ *   - ?scope=owner   -> rentals for equipment the caller owns
+ *   - ?scope=renter, or no scope given -> rentals the caller made as renter
  */
 const list = asyncHandler(async (req, res) => {
   const { page, limit, status, scope } = req.query;
 
   let resolvedScope;
-  if (req.user.role === "admin" && scope === "admin") {
+  if (req.user.is_admin && scope === "admin") {
     resolvedScope = "admin";
   } else if (scope === "owner") {
-    resolvedScope = "owner";
-  } else if (scope === "renter") {
-    resolvedScope = "renter";
-  } else if (req.user.role === "owner") {
     resolvedScope = "owner";
   } else {
     resolvedScope = "renter";
   }
 
   const result = await rentalRepo.list({
-    role: resolvedScope,
+    scope: resolvedScope,
     userId: req.user.id,
     status,
     page,
@@ -111,7 +107,7 @@ const getOne = asyncHandler(async (req, res) => {
 
   const isParty =
     rental.renter_id === req.user.id || rental.owner_id === req.user.id;
-  if (!isParty && req.user.role !== "admin") {
+  if (!isParty && !req.user.is_admin) {
     throw new AppError("Not permitted", 403);
   }
 
@@ -197,7 +193,7 @@ const start = asyncHandler(async (req, res) => {
   const rental = await rentalRepo.start({
     rentalId: req.params.id,
     callerId: req.user.id,
-    callerRole: req.user.role,
+    isAdmin: !!req.user.is_admin,
   });
   res.json({ success: true, rental });
 });
@@ -206,7 +202,7 @@ const complete = asyncHandler(async (req, res) => {
   const rental = await rentalRepo.complete({
     rentalId: req.params.id,
     callerId: req.user.id,
-    callerRole: req.user.role,
+    isAdmin: !!req.user.is_admin,
   });
   res.json({ success: true, rental });
 });
@@ -229,7 +225,7 @@ const resolveDeposit = asyncHandler(async (req, res) => {
   const rental = await rentalRepo.resolveDeposit({
     rentalId: req.params.id,
     callerId: req.user.id,
-    callerRole: req.user.role,
+    isAdmin: !!req.user.is_admin,
     resolution,
     keptAmount: kept_amount,
     notes,

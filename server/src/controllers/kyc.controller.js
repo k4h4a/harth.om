@@ -6,10 +6,10 @@ const auditService = require("../services/audit.service");
 /**
  * KYC (Know Your Customer) controller.
  *
- * Owners and delivery agents handle money / customer addresses, so we
- * require identity verification before they can do role-specific actions.
- * Renters CAN submit KYC if they want a verified badge, but it isn't
- * required for buying.
+ * KYC is a self-serve, optional identity verification any authenticated
+ * user can complete to earn the "موثَّق" trust badge. It is not required
+ * to use any marketplace capability (listing, buying, renting, or
+ * delivering) — every account can do all of that without it.
  *
  * Submission flow:
  *   1. User goes to /kyc page in the SPA.
@@ -39,7 +39,6 @@ const KYC_FIELDS = [
   "name",
   "email",
   "phone",
-  "role",
   "identity",
   "identity_status",
   "identity_verified",
@@ -86,7 +85,7 @@ const submitKyc = asyncHandler(async (req, res) => {
 
   const user = await knex("users")
     .where({ id: req.user.id })
-    .first("id", "name", "email", "role", "identity_status");
+    .first("id", "name", "email", "identity_status");
   if (!user) throw new AppError("User not found", 404);
 
   // Block re-submission while a previous one is still 'pending' — wait
@@ -142,7 +141,7 @@ const submitKyc = asyncHandler(async (req, res) => {
 
 async function notifyAdminsOfNewKyc(user) {
   const admins = await knex("users")
-    .where({ role: "admin", is_active: true })
+    .where({ is_admin: true, is_active: true })
     .select("id");
   await Promise.all(
     admins.map((a) =>
@@ -151,7 +150,7 @@ async function notifyAdminsOfNewKyc(user) {
         type: "system",
         title: "طلب تحقُّق هوية جديد",
         message: `قدّم ${user.name || user.email} وثائق التحقّق من الهوية وتحتاج مراجعتك.`,
-        metadata: { user_id: user.id, role: user.role },
+        metadata: { user_id: user.id },
       }),
     ),
   );

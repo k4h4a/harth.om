@@ -20,7 +20,6 @@ async function createPending(overrides = {}) {
     phone: overrides.phone,
     password: "password123",
     name: "Registration Otp Tester",
-    role: "renter",
   });
 }
 

@@ -4,14 +4,13 @@ const { verifyToken } = require("../utils/jwt");
 const { AppError } = require("./errorHandler");
 
 // Statuses that block all authenticated access. A blocked or deleted user
-// cannot use the system at all (not even to browse logged in). 'pending' and
-// 'rejected' users CAN still log in and browse/buy — they're just gated out
-// of role-specific actions like selling or accepting deliveries.
+// cannot use the system at all (not even to browse logged in).
 const BLOCKING_STATUSES = ["blocked", "deleted"];
 
 /**
  * Require a valid JWT. Populates req.user with a fresh copy from the DB
- * so deactivation, role changes, or status changes take effect immediately.
+ * so deactivation, admin-flag changes, or status changes take effect
+ * immediately without requiring re-login.
  */
 async function auth(req, _res, next) {
   try {
@@ -33,7 +32,7 @@ async function auth(req, _res, next) {
 
     const user = await knex("users")
       .where({ id: payload.id, is_active: true })
-      .first("id", "email", "role", "name", "is_pro", "account_status");
+      .first("id", "email", "is_admin", "name", "is_pro", "account_status");
 
     if (!user) return next(new AppError("User no longer exists", 401));
 
@@ -65,7 +64,7 @@ async function optionalAuth(req, _res, next) {
     const payload = verifyToken(token);
     const user = await knex("users")
       .where({ id: payload.id, is_active: true })
-      .first("id", "email", "role", "name", "is_pro", "account_status");
+      .first("id", "email", "is_admin", "name", "is_pro", "account_status");
     if (user && !BLOCKING_STATUSES.includes(user.account_status)) {
       req.user = user;
     }

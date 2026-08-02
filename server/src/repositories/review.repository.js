@@ -162,14 +162,14 @@ async function update({ reviewId, reviewerId, rating, comment }) {
   });
 }
 
-async function remove({ reviewId, reviewerId, callerRole }) {
+async function remove({ reviewId, reviewerId, isAdmin }) {
   return knex.transaction(async (t) => {
     const existing = await t("reviews")
       .where({ id: reviewId })
       .forUpdate()
       .first();
     if (!existing) throw new AppError("Review not found", 404);
-    if (existing.reviewer_id !== reviewerId && callerRole !== "admin") {
+    if (existing.reviewer_id !== reviewerId && !isAdmin) {
       throw new AppError("Not your review", 403);
     }
 

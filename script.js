@@ -324,9 +324,6 @@ function initRegisterPage() {
 
     if (registerBtn) {
       registerBtn.addEventListener("click", async () => {
-        const role =
-          document.querySelector('input[name="role"]:checked')?.value ||
-          "farmer";
         const userData = {
           email: document.getElementById("email").value,
           password: document.getElementById("password").value,
@@ -334,7 +331,6 @@ function initRegisterPage() {
           identity: document.getElementById("identity").value,
           phone: document.getElementById("phone").value,
           location: document.getElementById("location").value,
-          role,
         };
 
         if (!userData.email || !userData.password || !userData.full_name) {

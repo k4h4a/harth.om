@@ -3,7 +3,6 @@ const knex = require("../db");
 const { hashPassword, verifyPassword } = require("../utils/password");
 const { signToken, signOAuthState, verifyOAuthState } = require("../utils/jwt");
 const { AppError, asyncHandler } = require("../middleware/errorHandler");
-const { SELF_REGISTER_ROLES } = require("../validators/auth.validator");
 const notificationService = require("../services/notification.service");
 const otpService = require("../services/otp.service");
 const registrationOtpService = require("../services/registrationOtp.service");
@@ -34,7 +33,7 @@ const PUBLIC_USER_FIELDS = [
   "id",
   "email",
   "phone",
-  "role",
+  "is_admin",
   "name",
   "location",
   "governorate",
@@ -52,16 +51,6 @@ const PUBLIC_USER_FIELDS = [
   "avatar_url",
   "created_at",
 ];
-
-/**
- * Default account status for a new self-registered user.
- *   - renter (consumer)        → approved (only buys; nothing to review)
- *   - owner (farmer)           → pending  (must be approved before selling)
- *   - delivery (delivery agent) → pending (must be approved before accepting jobs)
- */
-function defaultStatusForRole(role) {
-  return role === "renter" ? "approved" : "pending";
-}
 
 const checkEmail = asyncHandler(async (req, res) => {
   const { email } = req.body;
@@ -83,7 +72,6 @@ async function createUserAndRespond({
   password = null,
   passwordHash: precomputedPasswordHash = null,
   name,
-  role,
   phone = null,
   identity = null,
   location = null,
@@ -92,12 +80,6 @@ async function createUserAndRespond({
   trx = null,
 }) {
   const db = trx || knex;
-
-  // Hard block: server-side admin creation is off limits here.
-  // SELF_REGISTER_ROLES excludes 'admin', so this is a belt-and-suspenders check.
-  if (role === "admin" || !SELF_REGISTER_ROLES.includes(role)) {
-    throw new AppError("Role not allowed", 400);
-  }
 
   // Resolve referrer (if any) *before* insertion so a bad code fails fast.
   let referredBy = null;
@@ -123,7 +105,6 @@ async function createUserAndRespond({
           email,
           phone,
           password_hash: passwordHash,
-          role,
           name,
           identity,
           location: location ? JSON.stringify(location) : null,
@@ -131,7 +112,7 @@ async function createUserAndRespond({
           referral_code: referralCode,
           referred_by: referredBy,
           is_active: true,
-          account_status: defaultStatusForRole(role),
+          account_status: "approved",
           status_changed_at: knex.fn.now(),
           // `register()` (legacy, immediate signup) sets this true
           // unconditionally — email verification was a soft, disabled
@@ -236,7 +217,6 @@ const register = asyncHandler(async (req, res) => {
     email,
     password,
     name,
-    role,
     phone = null,
     identity = null,
     location = null,
@@ -248,7 +228,6 @@ const register = asyncHandler(async (req, res) => {
     email,
     password,
     name,
-    role,
     phone,
     identity,
     location,
@@ -274,7 +253,6 @@ const registerInit = asyncHandler(async (req, res) => {
     email,
     password,
     name,
-    role,
     phone = null,
     identity = null,
     location = null,
@@ -282,16 +260,11 @@ const registerInit = asyncHandler(async (req, res) => {
     referral_code: referredByCode = null,
   } = req.body;
 
-  if (role === "admin" || !SELF_REGISTER_ROLES.includes(role)) {
-    throw new AppError("Role not allowed", 400);
-  }
-
   const pending = await pendingRegistrationService.createPendingRegistration({
     email,
     phone,
     password,
     name,
-    role,
     identity,
     location,
     governorate,
@@ -353,7 +326,6 @@ const registerVerify = asyncHandler(async (req, res) => {
       email: pending.email,
       passwordHash: pending.password_hash, // already hashed at registerInit time
       name: pending.name,
-      role: pending.role,
       phone: pending.phone,
       identity: pending.identity,
       location: pending.location,
@@ -389,9 +361,9 @@ const login = asyncHandler(async (req, res) => {
     throw new AppError("Invalid credentials", 401);
   }
 
-  // Hard block for suspended/removed accounts. Pending/rejected users CAN
-  // still log in — they just can't sell or accept deliveries (enforced at
-  // the action endpoints via requireApprovedAccount).
+  // Hard block for suspended/removed accounts. Every other account_status
+  // can log in and use the full marketplace — there's no role-gated
+  // capability left to restrict.
   if (user.account_status === "blocked") {
     throw new AppError(
       "تم إيقاف حسابك من قِبل الإدارة. الرجاء التواصل مع الدعم.",
@@ -443,13 +415,12 @@ async function insertGoogleUser({ googleId, email, name, picture }) {
         .insert({
           email,
           password_hash: null,
-          role: "renter",
           name,
           google_id: googleId,
           avatar_url: picture,
           referral_code: referralCode,
           is_active: true,
-          account_status: defaultStatusForRole("renter"),
+          account_status: "approved",
           status_changed_at: knex.fn.now(),
           // Google already verified this address; no local OTP step needed.
           email_verified: true,

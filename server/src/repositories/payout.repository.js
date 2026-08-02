@@ -58,6 +58,11 @@ async function listOwnerBalances({
   // We do this in raw SQL because expressing FILTER/COALESCE/MAX-with-condition
   // tidily in Knex's chainable form is more pain than it's worth.
   // Pagination + search are layered on at the outer query.
+  //
+  // There's no more "owner" role — any user can list equipment. We use an
+  // INNER JOIN against commission_transactions (rather than LEFT JOIN) so
+  // this stays scoped to users with actual commission activity, instead of
+  // returning every user on the platform.
   const baseSql = `
     SELECT
       u.id            AS owner_id,
@@ -73,9 +78,8 @@ async function listOwnerBalances({
       count(c.id)::int                                                                   AS total_count,
       max(c.paid_at)                                                                     AS last_paid_at
     FROM users u
-    LEFT JOIN commission_transactions c ON c.owner_id = u.id
-    WHERE u.role = 'owner'
-      AND u.account_status <> 'deleted'
+    INNER JOIN commission_transactions c ON c.owner_id = u.id
+    WHERE u.account_status <> 'deleted'
       ${search ? `AND (u.name ILIKE ? OR u.email ILIKE ?)` : ""}
     GROUP BY u.id
     ${onlyPending ? `HAVING coalesce(sum(c.net_amount) filter (where c.status = 'pending'), 0) > 0` : ""}
@@ -130,7 +134,7 @@ async function listOwnerBalances({
  */
 async function getOwnerPendingDetail(ownerId) {
   const owner = await knex("users")
-    .where({ id: ownerId, role: "owner" })
+    .where({ id: ownerId })
     .first("id", "name", "email", "phone", "governorate", "is_pro");
   if (!owner) throw new AppError("Owner not found", 404);
 

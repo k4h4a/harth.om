@@ -11,8 +11,8 @@ const knex = require("../db");
 const { AppError, asyncHandler } = require("../middleware/errorHandler");
 
 /**
- * Admin endpoints are all gated by requireRole('admin') on the router.
- * The controller assumes req.user.role === 'admin'.
+ * Admin endpoints are all gated by requireAdmin on the router.
+ * The controller assumes req.user.is_admin === true.
  *
  * Audit logging convention:
  *   - Every state-changing handler calls auditService.record() with a
@@ -73,8 +73,8 @@ const ordersByGovernorate = asyncHandler(async (req, res) => {
 // ─── Users ────────────────────────────────────────────────────────────
 
 const listUsers = asyncHandler(async (req, res) => {
-  const { page, limit, role, status, search } = req.query;
-  const result = await adminRepo.listUsers({ page, limit, role, status, search });
+  const { page, limit, status, search } = req.query;
+  const result = await adminRepo.listUsers({ page, limit, status, search });
   res.json({ success: true, ...result });
 });
 
@@ -99,7 +99,7 @@ const setUserStatus = asyncHandler(async (req, res) => {
     throw new AppError("Refusing to block or delete your own admin account.", 400);
   }
 
-  // Find target first so we can sanity-check role and notify.
+  // Find target first so we can snapshot the old status and notify.
   const target = await knex("users").where({ id: req.params.id }).first();
   if (!target) throw new AppError("User not found", 404);
 
@@ -121,16 +121,13 @@ const setUserStatus = asyncHandler(async (req, res) => {
     notes: reason,
   });
 
-  // Notify the user about the status change.
+  // Notify the user about the status change. One message per status,
+  // regardless of what the recipient does on the platform — every
+  // account has identical capabilities now.
   const messages = {
     approved: {
       title: "تم اعتماد حسابك",
-      message:
-        target.role === "owner"
-          ? "تم تفعيل صلاحيات البيع والتأجير. يمكنك الآن إضافة معداتك ومنتجاتك."
-          : target.role === "delivery"
-          ? "تم تفعيل صلاحيات التوصيل. يمكنك الآن قبول طلبات التوصيل."
-          : "تم اعتماد حسابك.",
+      message: "تم اعتماد حسابك. يمكنك الآن استخدام جميع ميزات المنصة.",
     },
     rejected: {
       title: "تم رفض تفعيل صلاحيات حسابك",
@@ -884,7 +881,7 @@ const getUserById = asyncHandler(async (req, res) => {
   const user = await knex("users")
     .where({ id: req.params.id })
     .first(
-      "id", "name", "email", "phone", "role", "account_status",
+      "id", "name", "email", "phone", "is_admin", "account_status",
       "identity_status", "identity_verified",
       "id_front_url", "id_back_url", "selfie_url", "identity",
       "is_pro", "created_at"

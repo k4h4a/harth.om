@@ -1,0 +1,2688 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <script>
+      (function () {
+        try {
+          if (localStorage.getItem("harth_lang") === "en") {
+            document.documentElement.lang = "en";
+            document.documentElement.dir = "ltr";
+          }
+        } catch (e) {}
+        document.documentElement.classList.add("i18n-loading");
+      })();
+    </script>
+    <style>
+      html.i18n-loading body { visibility: hidden; }
+    </style>
+    <title data-i18n="dashboard.title">لوحتي - حرث</title>
+
+    <link
+      href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;700&display=swap"
+      rel="stylesheet"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+    />
+    <link rel="stylesheet" href="design-system.css" />
+    <link rel="stylesheet" href="style.css" />
+
+    <style>
+      .dash-container {
+        max-width: 1200px;
+        margin: 24px auto;
+        padding: 0 16px;
+      }
+      .dash-card {
+        background: var(--surface-glass);
+        backdrop-filter: blur(14px);
+        -webkit-backdrop-filter: blur(14px);
+        color: var(--color-text);
+        border: var(--border-width) solid var(--border-soft);
+        border-radius: var(--r-lg);
+        padding: var(--sp-5);
+        margin-bottom: var(--sp-5);
+        box-shadow: var(--shadow-md);
+      }
+      .dash-card h2 {
+        margin: 0 0 var(--sp-4);
+        color: var(--color-text);
+        border-bottom: 2px solid var(--color-brand-500);
+        padding-bottom: var(--sp-2);
+        font-size: var(--fs-lg);
+      }
+      .dash-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(270px, 1fr));
+        gap: var(--sp-5);
+      }
+
+      /* ===== Welcome + quick-links card ===== */
+      .welcome-row {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        flex-wrap: wrap;
+        gap: var(--sp-3);
+      }
+      .my-orders-quicklink {
+        display: inline-flex;
+        align-items: center;
+        gap: 10px;
+        padding: 10px 16px;
+        background: rgba(52, 152, 219, 0.12);
+        border: 1px solid rgba(52, 152, 219, 0.35);
+        border-radius: var(--r-md);
+        color: var(--color-text);
+        text-decoration: none;
+        font-weight: 700;
+        font-size: 14px;
+        transition: background var(--dur-fast);
+      }
+      .my-orders-quicklink:hover { background: rgba(52, 152, 219, 0.2); }
+      .my-orders-quicklink i { color: #3498db; font-size: 18px; }
+
+      /* ===== Top-level dashboard tabs (uses shared .hs-tabs / .hs-tab) === */
+      #dash-tabs { margin-bottom: var(--sp-5); }
+      #dash-tabs .hs-tab .tab-count {
+        margin-inline-start: 4px;
+        opacity: 0.85;
+      }
+      .dtab-panel.hidden { display: none !important; }
+
+      .equip-card {
+        background: var(--surface-glass);
+        backdrop-filter: blur(12px);
+        -webkit-backdrop-filter: blur(12px);
+        border-radius: var(--r-lg);
+        overflow: hidden;
+        box-shadow: var(--shadow-md);
+        transition: transform var(--dur-base) var(--ease-standard),
+          box-shadow var(--dur-base) var(--ease-standard);
+        display: flex;
+        flex-direction: column;
+        border: var(--border-width) solid var(--border-soft);
+        position: relative;
+      }
+      .equip-card:hover {
+        transform: translateY(-4px);
+        box-shadow: var(--shadow-lg);
+      }
+      .eq-media {
+        position: relative;
+        height: 190px;
+        overflow: hidden;
+        background: var(--color-neutral-700);
+        flex-shrink: 0;
+      }
+      .eq-media img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        transition: transform 0.4s ease;
+        display: block;
+      }
+      .equip-card:hover .eq-media img {
+        transform: scale(1.05);
+      }
+      .eq-placeholder {
+        width: 100%;
+        height: 100%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: var(--color-text-soft);
+        opacity: 0.6;
+        font-size: 48px;
+      }
+      .eq-badges {
+        position: absolute;
+        top: var(--sp-2);
+        inset-inline-start: var(--sp-2);
+        display: flex;
+        flex-direction: column;
+        gap: 5px;
+        z-index: 2;
+      }
+      .eq-badge {
+        display: inline-flex;
+        align-items: center;
+        gap: 4px;
+        padding: 3px 9px;
+        border-radius: 999px;
+        font-size: 11px;
+        font-weight: 700;
+        backdrop-filter: blur(6px);
+        -webkit-backdrop-filter: blur(6px);
+        letter-spacing: 0.2px;
+      }
+      .eq-badge--new   { background: rgba(255,210,0,0.93); color:#5a3e00; }
+      .eq-badge--rent  { background: rgba(106,176,76,0.92); color:#fff; }
+      .eq-badge--sale  { background: rgba(52,152,219,0.92); color:#fff; }
+      .eq-badge--both  { background: rgba(155,89,182,0.92); color:#fff; }
+      .eq-status-pill {
+        position: absolute;
+        top: var(--sp-2);
+        inset-inline-end: var(--sp-2);
+        display: inline-flex;
+        align-items: center;
+        gap: 5px;
+        padding: 4px 10px;
+        border-radius: 999px;
+        font-size: 11px;
+        font-weight: 700;
+        backdrop-filter: blur(6px);
+        -webkit-backdrop-filter: blur(6px);
+        z-index: 2;
+      }
+      .eq-s-available   { background:rgba(39,174,96,0.93);   color:#fff; }
+      .eq-s-rented      { background:rgba(241,196,15,0.93);  color:#5a3e00; }
+      .eq-s-maintenance { background:rgba(231,76,60,0.93);   color:#fff; }
+      .eq-s-sold        { background:rgba(52,73,94,0.93);    color:#fff; }
+      .eq-s-hidden      { background:rgba(150,150,150,0.93); color:#fff; }
+      .eq-body {
+        padding: var(--sp-4);
+        flex: 1;
+        display: flex;
+        flex-direction: column;
+        gap: var(--sp-2);
+      }
+      .eq-cat {
+        font-size: 11px;
+        color: var(--color-brand-500);
+        font-weight: 700;
+        text-transform: uppercase;
+        letter-spacing: 0.7px;
+        display: flex;
+        align-items: center;
+        gap: 5px;
+      }
+      .eq-name {
+        font-size: var(--fs-md);
+        font-weight: 700;
+        color: var(--color-text);
+        margin: 0;
+        line-height: 1.3;
+      }
+      .eq-price-row {
+        display: flex;
+        align-items: baseline;
+        flex-wrap: wrap;
+        gap: 4px;
+        margin-top: 2px;
+      }
+      .eq-price-main  { font-size: var(--fs-xl); font-weight: 800; color: var(--color-accent-500); }
+      .eq-price-unit  { font-size: 13px; color: var(--color-text-soft); }
+      .eq-price-extra { font-size: 13px; color: var(--color-info-500); font-weight:600; }
+      .eq-meta-row {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 10px;
+        font-size: 12px;
+        color: var(--color-text-muted);
+      }
+      .eq-meta-row span {
+        display: inline-flex;
+        align-items: center;
+        gap: 4px;
+      }
+      .eq-meta-row i { color: var(--color-brand-500); width:12px; text-align:center; }
+      .eq-actions {
+        display: flex;
+        gap: 6px;
+        margin-top: auto;
+        padding-top: var(--sp-1);
+      }
+      .eq-btn {
+        flex: 1;
+        padding: 9px 8px;
+        border: none;
+        border-radius: var(--r-sm);
+        cursor: pointer;
+        font-family: inherit;
+        font-size: 12px;
+        font-weight: 700;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        gap: 4px;
+        transition: opacity 0.15s, transform 0.1s;
+      }
+      .eq-btn:active { transform: scale(0.95); }
+      .eq-btn--edit   { background: linear-gradient(135deg,#f39c12,#e67e22); color:#fff; }
+      .eq-btn--hide   { background: linear-gradient(135deg,#95a5a6,#7f8c8d); color:#fff; }
+      .eq-btn--show   { background: linear-gradient(135deg,#27ae60,#2ecc71); color:#fff; }
+      .eq-btn--del    { background: linear-gradient(135deg,#e74c3c,#c0392b); color:#fff; flex:0 0 auto; width:38px; }
+      .eq-btn--pdf    { background: linear-gradient(135deg,#8e44ad,#9b59b6); color:#fff; flex:0 0 auto; width:38px; }
+
+      .specs-acc { margin-top: var(--sp-4); border: var(--border-width) solid var(--border-soft); border-radius: var(--r-md); overflow:hidden; background: var(--surface-2); }
+      .specs-acc summary { cursor:pointer; padding:13px 18px; font-weight:700; color: var(--color-text); font-size:14px; background: var(--surface-3); list-style:none; display:flex; align-items:center; gap:8px; user-select:none; }
+      .specs-acc summary::-webkit-details-marker { display:none; }
+      .specs-acc summary .acc-arrow { margin-inline-start:auto; font-size:11px; transition:transform .22s; }
+      .specs-acc[open] summary .acc-arrow { transform:rotate(-180deg); }
+      .specs-acc .acc-body { padding: var(--sp-5); }
+      .specs-sub { font-weight:700; color: var(--color-text); font-size:13px; margin:16px 0 10px; padding-top:14px; border-top: 1px dashed var(--border-soft); display:flex; align-items:center; gap:6px; }
+      .specs-sub:first-child { margin-top:0; padding-top:0; border:none; }
+      .pdf-drop { border: 2px dashed var(--color-brand-500); border-radius: var(--r-sm); padding:14px 16px; background: var(--surface-2); margin-top:8px; }
+      .pdf-file-info { display:flex; align-items:center; gap:8px; margin-top:8px; padding:8px 12px; background: var(--surface-2); border: var(--border-width) solid var(--border-soft); border-radius: var(--r-sm); font-size:12px; color: var(--color-text-muted); }
+      .pdf-file-info i { color: var(--color-danger-500); font-size:16px; flex-shrink:0; }
+      #pdf-upload-name { flex: 1 1 auto; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+      #pdf-upload-size { flex-shrink: 0; }
+      .pdf-current-link { margin-top:6px; font-size:12px; }
+      .pdf-current-link a { color: var(--color-brand-500); text-decoration:none; }
+      .pdf-current-link a:hover { text-decoration:underline; }
+
+      .form-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+        gap: var(--sp-3);
+      }
+      .form-grid label {
+        display: flex;
+        flex-direction: column;
+        font-size: var(--fs-sm);
+        color: var(--color-text-muted);
+      }
+      .form-grid input,
+      .form-grid select,
+      .form-grid textarea {
+        padding: var(--sp-3) var(--sp-3);
+        background: var(--surface-2);
+        color: var(--color-text);
+        border: var(--border-width) solid var(--border-soft);
+        border-radius: var(--r-sm);
+        font-family: inherit;
+        font-size: var(--fs-sm);
+        margin-top: 4px;
+        transition: border-color var(--dur-fast);
+      }
+      .form-grid input:focus,
+      .form-grid select:focus,
+      .form-grid textarea:focus {
+        outline: none;
+        border-color: var(--color-brand-500);
+        box-shadow: 0 0 0 3px rgba(106, 176, 76, 0.1);
+      }
+      .form-grid select {
+        background: rgba(20, 40, 15, 0.95) !important;
+        color: #ffffff !important;
+      }
+      .form-grid select option {
+        background: #1a2e10;
+        color: #ffffff;
+        padding: 6px 10px;
+      }
+      .form-grid select option:checked,
+      .form-grid select option:hover {
+        background: #2d5016;
+        color: #ffffff;
+      }
+      .form-grid textarea {
+        grid-column: 1 / -1;
+        min-height: 70px;
+      }
+      .form-actions {
+        display: flex;
+        gap: var(--sp-3);
+        margin-top: var(--sp-3);
+      }
+      .btn-save {
+        background: var(--color-brand-500);
+        color: #fff;
+        border: none;
+        padding: var(--sp-3) var(--sp-5);
+        border-radius: var(--r-md);
+        font-family: inherit;
+        font-weight: 700;
+        cursor: pointer;
+        transition: background var(--dur-fast);
+      }
+      .btn-save:hover {
+        background: var(--color-brand-600);
+      }
+      .btn-cancel {
+        background: var(--color-neutral-600);
+        color: #fff;
+        border: none;
+        padding: var(--sp-3) var(--sp-5);
+        border-radius: var(--r-md);
+        font-family: inherit;
+        font-weight: 700;
+        cursor: pointer;
+        transition: background var(--dur-fast);
+      }
+      .btn-cancel:hover {
+        background: var(--color-neutral-700);
+      }
+      .image-preview {
+        display: flex;
+        gap: 8px;
+        flex-wrap: wrap;
+        margin-top: 8px;
+      }
+      .image-preview .thumb {
+        position: relative;
+        width: 80px;
+        height: 80px;
+        border-radius: var(--r-sm);
+        overflow: hidden;
+        border: 2px solid var(--border-soft);
+      }
+      .image-preview .thumb img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+      }
+      .image-preview .thumb .x {
+        position: absolute;
+        top: 2px;
+        inset-inline-end: 2px;
+        background: rgba(231, 76, 60, 0.9);
+        color: #fff;
+        width: 20px;
+        height: 20px;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        cursor: pointer;
+        font-size: 12px;
+      }
+      .image-preview .thumb.primary {
+        border-color: var(--color-brand-500);
+      }
+      .image-preview .thumb .primary-badge {
+        position: absolute;
+        bottom: 2px;
+        inset-inline-start: 2px;
+        background: var(--color-brand-500);
+        color: #fff;
+        font-size: 10px;
+        padding: 1px 6px;
+        border-radius: 4px;
+      }
+
+      /* ===== PRICE CALCULATION STYLES (Commission Only) ===== */
+      .price-group .commission-box {
+        margin-top: 6px;
+        padding: 10px 12px;
+        background: rgba(106, 176, 76, 0.08);
+        border-radius: 8px;
+        border: 1px solid rgba(106, 176, 76, 0.2);
+      }
+      .price-group .price-row {
+        display: flex;
+        justify-content: space-between;
+        font-size: 13px;
+        padding: 2px 0;
+        color: var(--color-text-muted);
+      }
+      .price-group .price-row .commission-text {
+        color: #f1c40f;
+        font-weight: 600;
+      }
+      .price-group .price-row .final-text {
+        color: #6ab04c;
+        font-weight: 700;
+        font-size: 15px;
+        border-top: 1px solid rgba(106, 176, 76, 0.15);
+        padding-top: 4px;
+        margin-top: 4px;
+      }
+      .price-group .commission-note {
+        color: var(--color-text-soft);
+        display: block;
+        margin-top: 4px;
+        font-size: 12px;
+      }
+
+      #toast {
+        position: fixed;
+        bottom: 24px;
+        inset-inline-start: 50%;
+        transform: translateX(-50%);
+        background: var(--color-brand-700);
+        color: #fff;
+        padding: 12px 20px;
+        border-radius: var(--r-md);
+        box-shadow: var(--shadow-lg);
+        z-index: 1000;
+        opacity: 0;
+        transition: opacity 0.2s;
+        pointer-events: none;
+        max-width: 90vw;
+      }
+      #toast.show { opacity: 1; }
+      #toast.error { background: var(--color-danger-600, #c0392b); }
+
+      .empty-state {
+        text-align: center;
+        padding: 40px 20px;
+        color: var(--color-text-muted);
+      }
+      .empty-state i {
+        font-size: 48px;
+        color: var(--color-brand-500);
+        margin-bottom: 12px;
+      }
+
+      .stats-row {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+        gap: var(--sp-3);
+        margin-bottom: var(--sp-4);
+      }
+      .stat-box {
+        background: var(--surface-glass);
+        backdrop-filter: blur(12px);
+        -webkit-backdrop-filter: blur(12px);
+        border: var(--border-width) solid var(--border-soft);
+        color: var(--color-text);
+        padding: var(--sp-4);
+        border-radius: var(--r-lg);
+        text-align: center;
+      }
+      .stat-box .num {
+        font-size: 28px;
+        font-weight: 800;
+        color: var(--color-accent-500);
+      }
+      .stat-box .label {
+        font-size: 13px;
+        color: var(--color-text-muted);
+      }
+
+      .pagination {
+        display: flex;
+        gap: var(--sp-2);
+        justify-content: center;
+        margin-top: var(--sp-4);
+        flex-wrap: wrap;
+      }
+      .pagination button {
+        min-width: 2.4rem;
+        height: 2.4rem;
+        padding: 0 10px;
+        background: var(--surface-2);
+        color: var(--color-text-muted);
+        border: var(--border-width) solid var(--border-subtle);
+        border-radius: var(--r-md);
+        cursor: pointer;
+        font-family: inherit;
+        font-size: var(--fs-sm);
+        transition: all var(--dur-fast);
+      }
+      .pagination button:hover:not(:disabled) {
+        background: var(--surface-3);
+        color: var(--color-text);
+      }
+      .pagination button:disabled {
+        opacity: 0.5;
+        cursor: not-allowed;
+      }
+      .pagination button.active {
+        background: var(--color-brand-500);
+        color: #fff;
+        border-color: var(--color-brand-600);
+      }
+
+      .hidden {
+        display: none !important;
+      }
+
+      .filter-bar {
+        display: flex;
+        gap: var(--sp-3);
+        flex-wrap: wrap;
+        margin-bottom: var(--sp-3);
+      }
+      .filter-bar select,
+      .filter-bar input {
+        padding: var(--sp-2) var(--sp-3);
+        background: var(--surface-2);
+        color: var(--color-text);
+        border: var(--border-width) solid var(--border-soft);
+        border-radius: var(--r-sm);
+        font-family: inherit;
+      }
+      .filter-bar select {
+        background: rgba(20, 40, 15, 0.95) !important;
+        color: #ffffff !important;
+      }
+      .filter-bar select option {
+        background: #1a2e10;
+        color: #ffffff;
+        padding: 6px 10px;
+      }
+      .filter-bar select option:checked,
+      .filter-bar select option:hover {
+        background: #2d5016;
+        color: #ffffff;
+      }
+
+      /* ===== Incoming-orders + delivery job cards ===== */
+      .rental-card, .job-card {
+        background: var(--surface-2);
+        border: var(--border-width) solid var(--border-soft);
+        border-radius: var(--r-lg);
+        padding: var(--sp-4);
+        margin-bottom: var(--sp-3);
+      }
+      .rc-head, .job-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        flex-wrap: wrap;
+        gap: 8px;
+        margin-bottom: 10px;
+      }
+      .rc-title, .job-number {
+        font-size: 15px;
+        color: var(--color-brand-500);
+        font-weight: 700;
+      }
+      .rc-title code, .job-number code {
+        background: rgba(0, 0, 0, 0.25);
+        padding: 2px 8px;
+        border-radius: 6px;
+        color: var(--color-text);
+      }
+      .rc-info, .job-info {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 10px;
+        margin: 10px 0;
+      }
+      @media (max-width: 600px) {
+        .rc-info, .job-info { grid-template-columns: 1fr; }
+      }
+      .rc-info-item, .job-info-item {
+        background: var(--surface-1);
+        padding: 10px;
+        border-radius: 8px;
+      }
+      .rc-info-item .label, .job-info-item .label {
+        font-size: 12px;
+        color: var(--color-text-soft);
+        margin-bottom: 3px;
+      }
+      .rc-info-item .value, .job-info-item .value {
+        font-size: 14px;
+        color: var(--color-text);
+      }
+      .rc-actions, .job-actions {
+        display: flex;
+        gap: 8px;
+        margin-top: 10px;
+        flex-wrap: wrap;
+      }
+      .btn {
+        padding: 8px 16px;
+        border: none;
+        border-radius: 8px;
+        cursor: pointer;
+        font-family: inherit;
+        font-weight: 700;
+        font-size: 14px;
+      }
+      .btn-green { background: #6ab04c; color: #fff; }
+      .btn-blue { background: #3498db; color: #fff; }
+      .btn-orange { background: #e67e22; color: #fff; }
+      .btn-red { background: #c0392b; color: #fff; }
+
+      .badge {
+        display: inline-block;
+        padding: 4px 12px;
+        border-radius: 999px;
+        font-size: 12px;
+        font-weight: 600;
+      }
+      .badge.yellow { background: rgba(241, 196, 15, 0.3); color: #b8860b; }
+      .badge.blue { background: rgba(52, 152, 219, 0.3); color: #1f5f8b; }
+      .badge.green { background: rgba(106, 176, 76, 0.3); color: #386127; }
+      .badge.red { background: rgba(231, 76, 60, 0.3); color: #96281b; }
+      .badge.grey { background: rgba(150, 150, 150, 0.3); color: #555; }
+
+      .loading, .empty { text-align: center; padding: 40px; color: var(--color-text-muted); }
+      .empty i {
+        font-size: 48px; color: var(--color-brand-500);
+        display: block; margin-bottom: 12px;
+      }
+
+      /* ===== Deposit-resolution modal ===== */
+      .hs-modal-overlay {
+        position: fixed; inset: 0; background: rgba(0,0,0,0.6);
+        display: flex; align-items: center; justify-content: center;
+        z-index: 2000; padding: 20px;
+      }
+      .hs-modal-box {
+        background: var(--surface-1);
+        border: var(--border-width) solid var(--border-soft);
+        border-radius: var(--r-lg);
+        padding: 24px;
+        max-width: 440px;
+        width: 100%;
+        color: var(--color-text);
+      }
+      .hs-modal-box h3 { color: var(--color-brand-500); margin-bottom: 8px; }
+      .hs-modal-box label { display:block; font-size: 13px; color: var(--color-text-muted); margin: 12px 0 4px; }
+      .hs-modal-box select,
+      .hs-modal-box input,
+      .hs-modal-box textarea {
+        width: 100%;
+        padding: 10px 12px;
+        background: var(--surface-2);
+        color: var(--color-text);
+        border: var(--border-width) solid var(--border-soft);
+        border-radius: var(--r-sm);
+        font-family: inherit;
+        box-sizing: border-box;
+      }
+      .hs-modal-actions { display:flex; gap:8px; margin-top: 18px; }
+
+      @media (max-width: 640px) {
+        .dash-container {
+          margin: 14px auto;
+          padding: 0 12px;
+        }
+        .dash-card {
+          padding: 14px;
+          border-radius: 12px;
+          margin-bottom: 14px;
+        }
+        .dash-card h2 {
+          font-size: 18px;
+        }
+        .dash-grid {
+          grid-template-columns: 1fr;
+          gap: 12px;
+        }
+        .eq-media { height: 180px; }
+        .filter-bar {
+          flex-wrap: wrap;
+          gap: 8px;
+        }
+        .filter-bar select,
+        .filter-bar input {
+          flex: 1 1 calc(50% - 4px);
+          min-width: 0;
+        }
+        table th,
+        table td {
+          padding: 8px;
+          font-size: 13px;
+        }
+      }
+
+      @media (max-width: 420px) {
+        .dash-container {
+          padding: 0 10px;
+        }
+        .dash-card {
+          padding: 12px;
+        }
+        .dash-card h2 {
+          font-size: 17px;
+          padding-bottom: 6px;
+        }
+        .eq-media { height: 160px; }
+        .eq-name { font-size: 15px; }
+        .eq-meta-row { font-size: 11px; }
+        #trust-banner-actions,
+        #status-banner-actions {
+          flex-wrap: wrap;
+          gap: 6px;
+        }
+        #trust-banner-actions > *,
+        #status-banner-actions > * {
+          flex: 1 1 100%;
+          text-align: center;
+        }
+      }
+    </style>
+
+    <link rel="stylesheet" href="responsive.css" />
+  </head>
+
+  <body>
+    <header class="header-container">
+      <div class="header-capsule">
+        <div class="section right">
+          <div class="site-brand">
+            <img src="شعار حرث.jpeg" alt="Logo" />
+            <h1>حــرث</h1>
+          </div>
+        </div>
+        <nav class="section center">
+          <ul class="nav-links"></ul>
+        </nav>
+        <div class="section left" id="auth-header">
+          <a href="register.html" class="hs-btn hs-btn--ghost hs-btn--sm" id="login-link" data-i18n="common.buttons.login">تسجيل دخول</a>
+        </div>
+      </div>
+    </header>
+
+    <main id="dashboard-section" class="dash-container hidden">
+      <div id="status-banner" class="dash-card hidden" style="border:1px solid #f1c40f; background:rgba(241,196,15,0.12)">
+        <div style="display:flex;gap:12px;align-items:flex-start">
+          <i class="fas fa-info-circle" id="status-banner-icon" style="font-size:24px;color:#f1c40f;margin-top:2px"></i>
+          <div style="flex:1">
+            <div style="font-weight:700;font-size:16px" id="status-banner-title" data-i18n="dashboard.statusBanner.pendingTitle">حسابك قيد المراجعة</div>
+            <div style="font-size:14px;color:#ddd;margin-top:6px" id="status-banner-msg" data-i18n="dashboard.statusBanner.pendingMsg">
+              حسابك قيد المراجعة من قِبل الإدارة.
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div
+        id="trust-banner"
+        class="dash-card hidden"
+        style="border:1px solid #6ab04c; background:rgba(106,176,76,0.12)"
+      >
+        <div style="display:flex;gap:12px;align-items:flex-start">
+          <i class="fas fa-shield-alt" style="font-size:24px;color:#6ab04c;margin-top:2px"></i>
+          <div style="flex:1">
+            <div style="font-weight:700;font-size:16px;color:#fff" data-i18n="ownerDashboard.trustBanner.heading">
+              عزّز ثقة المشترين بحسابك
+            </div>
+            <div id="trust-banner-msg" style="font-size:14px;color:#ddd;margin-top:6px"></div>
+            <div style="margin-top:10px;display:flex;gap:8px;flex-wrap:wrap" id="trust-banner-actions"></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="dash-card">
+        <div class="welcome-row">
+          <h2 style="margin:0;border:none;padding:0">
+            <i class="fas fa-user-circle"></i>
+            <span id="welcome-text" data-i18n="ownerDashboard.welcomeDefault">مرحباً</span>
+          </h2>
+          <a href="my-orders.html" class="my-orders-quicklink">
+            <i class="fas fa-receipt"></i>
+            <span data-i18n="dashboard.myOrdersCard.cta">طلباتي ومشترياتي</span>
+          </a>
+        </div>
+      </div>
+
+      <div class="hs-tabs" id="dash-tabs">
+        <button class="hs-tab is-active" data-dtab="listings">
+          <i class="fas fa-tractor"></i> <span data-i18n="dashboard.tabs.listings">منتجاتي</span>
+        </button>
+        <button class="hs-tab" data-dtab="incoming">
+          <i class="fas fa-inbox"></i> <span data-i18n="dashboard.tabs.incoming">طلبات واردة</span>
+          <span class="tab-count" id="incoming-tab-count"></span>
+        </button>
+        <button class="hs-tab" data-dtab="deliveries">
+          <i class="fas fa-truck"></i> <span data-i18n="dashboard.tabs.deliveries">التوصيل</span>
+        </button>
+      </div>
+
+      <!-- ===================== TAB: My Listings ===================== -->
+      <div id="dtab-listings" class="dtab-panel">
+        <div class="dash-card">
+          <div class="stats-row">
+            <div class="stat-box">
+              <div class="num" id="stat-total">0</div>
+              <div class="label" data-i18n="ownerDashboard.stats.total">إجمالي المعدات</div>
+            </div>
+            <div class="stat-box">
+              <div class="num" id="stat-available">0</div>
+              <div class="label" data-i18n="ownerDashboard.stats.available">متاحة</div>
+            </div>
+            <div class="stat-box">
+              <div class="num" id="stat-rented">0</div>
+              <div class="label" data-i18n="ownerDashboard.stats.rented">مؤجرة</div>
+            </div>
+            <div class="stat-box">
+              <div class="num" id="stat-hidden">0</div>
+              <div class="label" data-i18n="ownerDashboard.stats.hidden">مخفية</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="dash-card" id="equip-form-card">
+          <h2 id="form-title">
+            <i class="fas fa-plus-circle"></i> <span data-i18n="ownerDashboard.form.addTitle">إضافة معدة جديدة</span>
+          </h2>
+          <form id="equip-form">
+            <input type="hidden" id="equip-id" />
+
+            <div class="form-grid">
+              <label>
+                <span data-i18n="ownerDashboard.form.nameLabel">الاسم *</span>
+                <input type="text" id="f-name" required maxlength="200" />
+              </label>
+
+              <label>
+                <span data-i18n="ownerDashboard.form.categoryLabel">التصنيف *</span>
+                <select id="f-category" required>
+                  <option value="tractor" data-i18n="ownerDashboard.categories.tractor">جرارات</option>
+                  <option value="sprayer" data-i18n="ownerDashboard.categories.sprayer">مرشات</option>
+                  <option value="harvester" data-i18n="ownerDashboard.categories.harvester">حصادات</option>
+                  <option value="tools" data-i18n="ownerDashboard.categories.tools">أدوات</option>
+                  <option value="seeds" data-i18n="ownerDashboard.categories.seeds">بذور</option>
+                  <option value="fertilizer" data-i18n="ownerDashboard.categories.fertilizer">أسمدة</option>
+                  <option value="pesticide" data-i18n="ownerDashboard.categories.pesticide">مبيدات</option>
+                  <option value="other" data-i18n="ownerDashboard.categories.other">أخرى</option>
+                </select>
+              </label>
+
+              <label>
+                <span data-i18n="ownerDashboard.form.listingTypeLabel">نوع الإدراج *</span>
+                <select id="f-listing-type" required>
+                  <option value="rent" data-i18n="ownerDashboard.form.listingTypeOptions.rent">للإيجار</option>
+                  <option value="sale" data-i18n="ownerDashboard.form.listingTypeOptions.sale">للبيع</option>
+                </select>
+              </label>
+
+              <label>
+                <span data-i18n="ownerDashboard.form.statusLabel">الحالة</span>
+                <select id="f-status">
+                  <option value="available" data-i18n="ownerDashboard.statusOptions.available">متاح</option>
+                  <option value="rented" data-i18n="ownerDashboard.statusOptions.rented">مؤجر</option>
+                  <option value="maintenance" data-i18n="ownerDashboard.statusOptions.maintenance">صيانة</option>
+                  <option value="sold" data-i18n="ownerDashboard.statusOptions.sold">مباع</option>
+                  <option value="hidden" data-i18n="ownerDashboard.statusOptions.hidden">مخفي</option>
+                </select>
+              </label>
+
+              <label id="f-daily-wrap" class="price-group">
+                <span data-i18n="ownerDashboard.form.dailyPriceLabel">سعر المزارع (ريال) *</span>
+                <input type="number" id="f-daily-price" class="farmer-price-input" min="0" step="0.01" />
+                <small class="commission-note">
+                  ⚠️ تضاف عمولة المنصة 10% تلقائياً
+                </small>
+                <div class="commission-box">
+                  <div class="price-row">
+                    <span>السعر الأساسي:</span>
+                    <span id="base-price-display">0.00 ر.ع</span>
+                  </div>
+                  <div class="price-row">
+                    <span class="commission-text">عمولة المنصة (10%):</span>
+                    <span class="commission-text" id="commission-display">0.00 ر.ع</span>
+                  </div>
+                  <div class="price-row">
+                    <span class="final-text">السعر النهائي:</span>
+                    <span class="final-text" id="final-price-display">0.00 ر.ع</span>
+                  </div>
+                  <input type="hidden" id="final-price-input" class="final-price-input" value="0">
+                </div>
+              </label>
+
+              <label id="f-sale-wrap" class="price-group">
+                <span data-i18n="ownerDashboard.form.salePriceLabel">سعر المزارع للبيع (ريال)</span>
+                <input type="number" id="f-sale-price" class="farmer-price-input" min="0" step="0.01" />
+                <small class="commission-note">
+                  ⚠️ تضاف عمولة المنصة 10% تلقائياً
+                </small>
+                <div class="commission-box">
+                  <div class="price-row">
+                    <span>السعر الأساسي:</span>
+                    <span class="sale-base-price-display">0.00 ر.ع</span>
+                  </div>
+                  <div class="price-row">
+                    <span class="commission-text">عمولة المنصة (10%):</span>
+                    <span class="commission-text sale-commission-display">0.00 ر.ع</span>
+                  </div>
+                  <div class="price-row">
+                    <span class="final-text">السعر النهائي:</span>
+                    <span class="final-text sale-final-price-display">0.00 ر.ع</span>
+                  </div>
+                  <input type="hidden" class="final-price-input sale-final-price-input" value="0">
+                </div>
+              </label>
+
+              <label id="f-deposit-wrap">
+                <span data-i18n="ownerDashboard.form.depositLabel">تأمين قابل للاسترداد (ريال)</span> <small style="color:var(--color-text-soft)" data-i18n="ownerDashboard.form.depositOptionalHint">— اختياري</small>
+                <input
+                  type="number"
+                  id="f-deposit-amount"
+                  min="0"
+                  step="0.01"
+                  data-i18n-placeholder="ownerDashboard.form.depositPlaceholder"
+                  placeholder="مثال: 50.00"
+                />
+                <small style="color:var(--color-text-soft);display:block;margin-top:4px" data-i18n="ownerDashboard.form.depositHint">
+                  يُحجز من المستأجر عند الحجز ويُعاد عند إرجاع المعدة سليمة.
+                  ينطبق فقط على المعدات للإيجار.
+                </small>
+              </label>
+
+              <label id="f-stock-wrap">
+                <span data-i18n="ownerDashboard.form.stockLabel">الكمية المتاحة</span>
+                <input type="number" id="f-stock" min="0" step="1" value="1" />
+              </label>
+
+              <label>
+                <span data-i18n="ownerDashboard.form.governorateLabel">المحافظة</span>
+                <select id="f-governorate">
+                  <option value="" data-i18n="ownerDashboard.form.noGovernorateOption">بدون تحديد</option>
+                  <option value="muscat" data-i18n="common.governorates.muscat">مسقط</option>
+                  <option value="dhofar" data-i18n="common.governorates.dhofar">ظفار</option>
+                  <option value="musandam" data-i18n="common.governorates.musandam">مسندم</option>
+                  <option value="buraimi" data-i18n="common.governorates.buraimi">البريمي</option>
+                  <option value="dakhiliyah" data-i18n="common.governorates.dakhiliyah">الداخلية</option>
+                  <option value="north_batinah" data-i18n="common.governorates.north_batinah">شمال الباطنة</option>
+                  <option value="south_batinah" data-i18n="common.governorates.south_batinah">جنوب الباطنة</option>
+                  <option value="south_sharqiyah" data-i18n="common.governorates.south_sharqiyah">جنوب الشرقية</option>
+                  <option value="north_sharqiyah" data-i18n="common.governorates.north_sharqiyah">شمال الشرقية</option>
+                  <option value="dhahirah" data-i18n="common.governorates.dhahirah">الظاهرة</option>
+                  <option value="wusta" data-i18n="common.governorates.wusta">الوسطى</option>
+                </select>
+              </label>
+
+              <textarea
+                id="f-description"
+                data-i18n-placeholder="ownerDashboard.form.descriptionPlaceholder"
+                placeholder="وصف المعدة..."
+                maxlength="5000"
+              ></textarea>
+            </div>
+
+            <details class="specs-acc" id="tech-specs-acc">
+              <summary>
+                <i class="fas fa-cogs"></i> <span data-i18n="ownerDashboard.form.specsAcc.summary">المواصفات الفنية التفصيلية</span>
+                <small style="color:var(--color-text-soft);font-weight:400;margin-inline-start:4px" data-i18n="ownerDashboard.form.specsAcc.optionalHint">(اختياري — لتوليد الملف الفني PDF)</small>
+                <span class="acc-arrow">▼</span>
+              </summary>
+              <div class="acc-body">
+                <p class="specs-sub"><i class="fas fa-id-card"></i> <span data-i18n="ownerDashboard.form.specsAcc.idSection">بيانات التعريف</span></p>
+                <div class="form-grid">
+                  <label><span data-i18n="ownerDashboard.form.specsAcc.manufacturerLabel">الشركة المصنعة</span> <input type="text" id="f-manufacturer" maxlength="100" data-i18n-placeholder="ownerDashboard.form.specsAcc.manufacturerPlaceholder" placeholder="مثال: John Deere، كوبوتا"></label>
+                  <label><span data-i18n="ownerDashboard.form.specsAcc.modelLabel">الموديل</span> <input type="text" id="f-model" maxlength="100" data-i18n-placeholder="ownerDashboard.form.specsAcc.modelPlaceholder" placeholder="مثال: 6120M"></label>
+                  <label><span data-i18n="ownerDashboard.form.specsAcc.modelYearLabel">سنة الصنع</span> <input type="number" id="f-model-year" min="1950" max="2035" data-i18n-placeholder="ownerDashboard.form.specsAcc.modelYearPlaceholder" placeholder="مثال: 2022"></label>
+                  <label><span data-i18n="ownerDashboard.form.specsAcc.serialNumberLabel">الرقم التسلسلي</span> <input type="text" id="f-serial-number" maxlength="100" data-i18n-placeholder="ownerDashboard.form.specsAcc.serialNumberPlaceholder" placeholder="اختياري"></label>
+                  <label><span data-i18n="ownerDashboard.form.specsAcc.originCountryLabel">بلد المنشأ</span> <input type="text" id="f-origin-country" maxlength="100" data-i18n-placeholder="ownerDashboard.form.specsAcc.originCountryPlaceholder" placeholder="مثال: USA، Japan، Germany"></label>
+                  <label><span data-i18n="ownerDashboard.form.specsAcc.operatingHoursLabel">ساعات التشغيل</span> <input type="number" id="f-operating-hours" min="0" step="1" data-i18n-placeholder="ownerDashboard.form.specsAcc.operatingHoursPlaceholder" placeholder="عدد الساعات الكلية"></label>
+                  <label><span data-i18n="ownerDashboard.form.specsAcc.fuelTypeLabel">نوع الوقود / مصدر الطاقة</span>
+                    <select id="f-fuel-type">
+                      <option value="" data-i18n="ownerDashboard.form.specsAcc.fuelTypeOptions.empty">-- اختر --</option>
+                      <option value="diesel" data-i18n="ownerDashboard.form.specsAcc.fuelTypeOptions.diesel">ديزل</option>
+                      <option value="gasoline" data-i18n="ownerDashboard.form.specsAcc.fuelTypeOptions.gasoline">بنزين</option>
+                      <option value="electric" data-i18n="ownerDashboard.form.specsAcc.fuelTypeOptions.electric">كهرباء</option>
+                      <option value="hybrid" data-i18n="ownerDashboard.form.specsAcc.fuelTypeOptions.hybrid">هجين</option>
+                      <option value="gas" data-i18n="ownerDashboard.form.specsAcc.fuelTypeOptions.gas">غاز طبيعي</option>
+                    </select>
+                  </label>
+                </div>
+
+                <p class="specs-sub"><i class="fas fa-ruler-combined"></i> <span data-i18n="ownerDashboard.form.specsAcc.techSection">المواصفات الفنية</span></p>
+                <div class="form-grid">
+                  <label><span data-i18n="ownerDashboard.form.specsAcc.enginePowerLabel">القدرة المحركية (HP)</span> <input type="number" id="f-engine-power" min="0" step="0.1" data-i18n-placeholder="ownerDashboard.form.specsAcc.enginePowerPlaceholder" placeholder="مثال: 120"></label>
+                  <label><span data-i18n="ownerDashboard.form.specsAcc.weightLabel">الوزن الإجمالي (كجم)</span> <input type="number" id="f-weight" min="0" step="1" data-i18n-placeholder="ownerDashboard.form.specsAcc.weightPlaceholder" placeholder="مثال: 4200"></label>
+                  <label><span data-i18n="ownerDashboard.form.specsAcc.loadCapacityLabel">الحمولة القصوى (كجم)</span> <input type="number" id="f-load-capacity" min="0" step="1" data-i18n-placeholder="ownerDashboard.form.specsAcc.loadCapacityPlaceholder" placeholder="مثال: 2000"></label>
+                  <label><span data-i18n="ownerDashboard.form.specsAcc.dimLengthLabel">الطول (سم)</span> <input type="number" id="f-dim-length" min="0" step="1" data-i18n-placeholder="ownerDashboard.form.specsAcc.dimPlaceholder" placeholder="سم"></label>
+                  <label><span data-i18n="ownerDashboard.form.specsAcc.dimWidthLabel">العرض (سم)</span> <input type="number" id="f-dim-width" min="0" step="1" data-i18n-placeholder="ownerDashboard.form.specsAcc.dimPlaceholder" placeholder="سم"></label>
+                  <label><span data-i18n="ownerDashboard.form.specsAcc.dimHeightLabel">الارتفاع (سم)</span> <input type="number" id="f-dim-height" min="0" step="1" data-i18n-placeholder="ownerDashboard.form.specsAcc.dimPlaceholder" placeholder="سم"></label>
+                </div>
+
+                <p class="specs-sub"><i class="fas fa-wrench"></i> <span data-i18n="ownerDashboard.form.specsAcc.maintSection">سجل الصيانة</span></p>
+                <div class="form-grid">
+                  <label><span data-i18n="ownerDashboard.form.specsAcc.lastMaintDateLabel">تاريخ آخر صيانة</span> <input type="date" id="f-last-maint-date"></label>
+                  <label><span data-i18n="ownerDashboard.form.specsAcc.maintTypeLabel">نوع الصيانة</span> <input type="text" id="f-maint-type" maxlength="200" data-i18n-placeholder="ownerDashboard.form.specsAcc.maintTypePlaceholder" placeholder="مثال: دورية شاملة، تغيير زيت"></label>
+                  <label><span data-i18n="ownerDashboard.form.specsAcc.maintByLabel">الجهة المنفذة</span> <input type="text" id="f-maint-by" maxlength="200" data-i18n-placeholder="ownerDashboard.form.specsAcc.maintByPlaceholder" placeholder="مثال: وكالة الشركة، ورشة معتمدة"></label>
+                  <label><span data-i18n="ownerDashboard.form.specsAcc.nextMaintDateLabel">موعد الصيانة القادمة</span> <input type="date" id="f-next-maint-date"></label>
+                </div>
+
+                <p class="specs-sub"><i class="fas fa-shield-alt"></i> <span data-i18n="ownerDashboard.form.specsAcc.warrantySection">الضمان والشهادات</span></p>
+                <div class="form-grid">
+                  <label><span data-i18n="ownerDashboard.form.specsAcc.warrantyInfoLabel">معلومات الضمان</span> <input type="text" id="f-warranty-info" maxlength="300" data-i18n-placeholder="ownerDashboard.form.specsAcc.warrantyInfoPlaceholder" placeholder="مثال: ضمان سنة من الشركة"></label>
+                  <label><span data-i18n="ownerDashboard.form.specsAcc.inspectionCertLabel">شهادة الفحص الفني</span> <input type="text" id="f-inspection-cert" maxlength="300" data-i18n-placeholder="ownerDashboard.form.specsAcc.inspectionCertPlaceholder" placeholder="مثال: موثق — رقم الشهادة 12345"></label>
+                </div>
+
+                <p class="specs-sub"><i class="fas fa-file-pdf"></i> <span data-i18n="ownerDashboard.form.specsAcc.pdfSection">ملف PDF الرسمي (اختياري)</span></p>
+                <div class="pdf-drop">
+                  <small style="color:var(--color-text-muted);display:block;margin-bottom:8px" data-i18n="ownerDashboard.form.specsAcc.pdfHint">ارفع كتالوج الشركة أو دليل التشغيل أو الملف التقني الرسمي (PDF حتى 20 ميجابايت)</small>
+                  <input type="file" id="f-datasheet-pdf" accept="application/pdf">
+                  <div id="pdf-upload-info" style="display:none" class="pdf-file-info">
+                    <i class="fas fa-file-pdf"></i>
+                    <span id="pdf-upload-name"></span>
+                    <span id="pdf-upload-size" style="color:var(--color-text-soft);margin-inline-start:auto"></span>
+                  </div>
+                  <input type="hidden" id="f-datasheet-pdf-url">
+                  <div id="pdf-current-link" class="pdf-current-link"></div>
+                </div>
+
+              </div><!-- /acc-body -->
+            </details>
+
+            <!-- Image upload -->
+            <div style="margin-top: 12px">
+              <label style="display: block; margin-bottom: 6px; color: var(--color-text-muted)" data-i18n="ownerDashboard.form.imagesLabel">
+                الصور (يمكن إضافة حتى 10 صور)
+              </label>
+              <input
+                type="file"
+                id="f-images"
+                accept="image/jpeg,image/png,image/webp,image/gif"
+                multiple
+              />
+              <div id="image-preview" class="image-preview"></div>
+              <small style="color: var(--color-text-muted)" data-i18n="ownerDashboard.form.imagesHint"
+                >اضغط على صورة لجعلها الصورة الرئيسية</small
+              >
+            </div>
+
+            <div class="form-actions">
+              <button type="submit" class="btn-save" id="btn-save">
+                <i class="fas fa-save"></i> <span data-i18n="ownerDashboard.form.saveBtn">حفظ</span>
+              </button>
+              <button
+                type="button"
+                class="btn-cancel hidden"
+                id="btn-cancel-edit"
+                data-i18n="ownerDashboard.form.cancelEditBtn"
+              >
+                إلغاء التعديل
+              </button>
+            </div>
+          </form>
+        </div>
+
+        <div class="dash-card">
+          <h2><i class="fas fa-list"></i> <span data-i18n="ownerDashboard.list.heading">معدّاتي</span></h2>
+          <div class="filter-bar">
+            <input
+              type="search"
+              id="filter-search"
+              data-i18n-placeholder="ownerDashboard.list.searchPlaceholder"
+              placeholder="بحث بالاسم..."
+              style="min-width: 200px; flex: 1"
+            />
+            <select id="filter-status">
+              <option value="" data-i18n="ownerDashboard.list.statusFilterAll">كل الحالات</option>
+              <option value="available" data-i18n="ownerDashboard.statusOptions.available">متاح</option>
+              <option value="rented" data-i18n="ownerDashboard.statusOptions.rented">مؤجر</option>
+              <option value="maintenance" data-i18n="ownerDashboard.statusOptions.maintenance">صيانة</option>
+              <option value="sold" data-i18n="ownerDashboard.statusOptions.sold">مباع</option>
+              <option value="hidden" data-i18n="ownerDashboard.statusOptions.hidden">مخفي</option>
+            </select>
+            <button
+              id="filter-refresh"
+              class="hs-btn hs-btn--secondary hs-btn--sm"
+            >
+              <i class="fas fa-sync"></i> <span data-i18n="ownerDashboard.list.refreshBtn">تحديث</span>
+            </button>
+          </div>
+          <div id="equip-list" class="dash-grid"></div>
+          <div id="equip-empty" class="hs-empty hidden">
+            <div class="hs-empty__art">
+              <svg width="48" height="48" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M16 28C18.2091 28 20 26.2091 20 24C20 21.7909 18.2091 20 16 20C13.7909 20 12 21.7909 12 24C12 26.2091 13.7909 28 16 28Z" stroke="currentColor" stroke-width="2"/>
+                <path d="M34 32C36.2091 32 38 30.2091 38 28C38 25.7909 36.2091 24 34 24C31.7909 24 30 25.7909 30 28C30 30.2091 31.7909 32 34 32Z" stroke="currentColor" stroke-width="2"/>
+                <path d="M20 24H30M20 24L18 16H10M30 28L34 24H42" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+              </svg>
+            </div>
+            <h3 class="hs-empty__title" data-i18n="ownerDashboard.list.emptyTitle">لا توجد معدات بعد</h3>
+            <p class="hs-empty__desc" data-i18n="ownerDashboard.list.emptyDesc">أضف أول معدة لك من النموذج أعلاه لتظهر للمشترين والمستأجرين على المنصة.</p>
+          </div>
+          <div id="pagination" class="pagination"></div>
+        </div>
+      </div>
+
+      <!-- ===================== TAB: Incoming Orders ===================== -->
+      <div id="dtab-incoming" class="dtab-panel hidden">
+        <div class="dash-card">
+          <h2><i class="fas fa-inbox"></i> <span data-i18n="dashboard.incoming.heading">طلبات واردة</span></h2>
+          <div class="filter-bar">
+            <select id="inc-filter-status">
+              <option value="" data-i18n="dashboard.incoming.statusFilterAll">كل الحالات</option>
+              <option value="pending" data-i18n="myOrders.statusLabels.pending">جديد</option>
+              <option value="approved" data-i18n="myOrders.statusLabels.approved">موافق عليه</option>
+              <option value="active" data-i18n="myOrders.statusLabels.active">فعّال</option>
+              <option value="completed" data-i18n="myOrders.statusLabels.completed">مكتمل</option>
+              <option value="rejected" data-i18n="myOrders.statusLabels.rejected">مرفوض</option>
+              <option value="cancelled" data-i18n="myOrders.statusLabels.cancelled">ملغي</option>
+            </select>
+            <button id="inc-refresh" class="hs-btn hs-btn--secondary hs-btn--sm">
+              <i class="fas fa-sync"></i> <span data-i18n="ownerDashboard.list.refreshBtn">تحديث</span>
+            </button>
+          </div>
+          <div id="inc-list"></div>
+          <div id="inc-empty" class="hs-empty hidden">
+            <div class="hs-empty__art">
+              <svg width="48" height="48" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M14 24V36C14 37.1046 14.8954 38 16 38H32C33.1046 38 34 37.1046 34 36V24" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                <path d="M10 16H38L34 24H14L10 16Z" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/>
+                <path d="M20 28H28" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+              </svg>
+            </div>
+            <h3 class="hs-empty__title" data-i18n="dashboard.incoming.emptyTitle">لا توجد طلبات واردة</h3>
+            <p class="hs-empty__desc" data-i18n="dashboard.incoming.emptyDesc">عندما يطلب أحدهم استئجار إحدى معدّاتك، ستظهر طلباته هنا للموافقة أو الرفض.</p>
+          </div>
+          <div id="inc-pagination" class="pagination"></div>
+        </div>
+      </div>
+
+      <!-- ===================== TAB: Deliveries ===================== -->
+      <div id="dtab-deliveries" class="dtab-panel hidden">
+        <div id="delivery-status-banner" class="dash-card hidden" style="border:1px solid #f1c40f;background:rgba(241,196,15,0.12)">
+          <div style="display:flex;gap:12px;align-items:flex-start">
+            <i class="fas fa-info-circle" style="font-size:24px;color:#f1c40f;margin-top:2px"></i>
+            <div style="flex:1">
+              <div id="delivery-status-banner-title" style="font-weight:700;font-size:16px" data-i18n="dashboard.statusBanner.pendingTitle">حسابك قيد المراجعة</div>
+              <div id="delivery-status-banner-msg" style="font-size:14px;color:var(--color-text-muted);margin-top:6px" data-i18n="dashboard.statusBanner.pendingMsg">
+                حسابك قيد المراجعة من قِبل الإدارة.
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="dash-card" id="delivery-board">
+          <div class="tabs" id="delivery-subtabs">
+            <button class="tab active" data-tab="available">
+              <i class="fas fa-inbox"></i> <span data-i18n="delivery.tabs.available">طلبات متاحة</span>
+              <span id="available-count" style="margin-inline-start:6px"></span>
+            </button>
+            <button class="tab" data-tab="mine">
+              <i class="fas fa-user-check"></i> <span data-i18n="delivery.tabs.mine">طلباتي النشطة</span>
+              <span id="mine-count" style="margin-inline-start:6px"></span>
+            </button>
+            <button class="tab" data-tab="history">
+              <i class="fas fa-history"></i> <span data-i18n="delivery.tabs.history">السجل</span>
+            </button>
+          </div>
+
+          <div id="tab-available" class="tab-content active">
+            <div id="available-list"></div>
+          </div>
+          <div id="tab-mine" class="tab-content">
+            <div id="mine-list"></div>
+          </div>
+          <div id="tab-history" class="tab-content">
+            <div id="history-list"></div>
+          </div>
+        </div>
+      </div>
+    </main>
+
+    <div id="toast"></div>
+
+    <script src="i18n.js"></script>
+    <script src="lang-switcher.js"></script>
+    <script src="equipment-pdf.js"></script>
+    <script src="unified-nav.js"></script>
+    <script src="design-system.js"></script>
+    <script src="script.js"></script>
+
+    <script>
+      // =================================================================
+      // dashboard.html — merged "My Activity" hub. Replaces the old
+      // owner-dashboard.html (equipment CRUD + incoming rental requests)
+      // and delivery.html (courier job board). Reachable by ANY logged-in
+      // user — no role gate. Tabs are driven by location.hash:
+      //   #listings | #incoming | #deliveries
+      // =================================================================
+      (function () {
+        "use strict";
+
+        const API_BASE = "/api/v1";
+        const TOKEN_KEY = "token";
+        const USER_KEY = "user";
+
+        function t(key, vars) {
+          return window.HarthI18n ? window.HarthI18n.t(key, vars) : key;
+        }
+        function localeTag() {
+          return window.HarthI18n ? window.HarthI18n.localeTag() : "ar";
+        }
+        const $ = (sel) => document.querySelector(sel);
+        const $$ = (sel) => Array.from(document.querySelectorAll(sel));
+
+        function escapeHtml(s) {
+          if (s == null) return "";
+          return String(s).replace(/[&<>"']/g, (c) =>
+            ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]),
+          );
+        }
+        function showToast(msg, isError = false) {
+          const toastEl = $("#toast");
+          toastEl.textContent = msg;
+          toastEl.classList.toggle("error", isError);
+          toastEl.classList.add("show");
+          setTimeout(() => toastEl.classList.remove("show"), 3200);
+        }
+
+        // ---------- shared auth helpers ----------
+        function getToken() {
+          return localStorage.getItem(TOKEN_KEY);
+        }
+        function setAuth(token, user) {
+          localStorage.setItem(TOKEN_KEY, token);
+          localStorage.setItem(USER_KEY, JSON.stringify(user));
+        }
+        function clearAuth() {
+          localStorage.removeItem(TOKEN_KEY);
+          localStorage.removeItem(USER_KEY);
+        }
+        function getUser() {
+          try {
+            return JSON.parse(localStorage.getItem(USER_KEY));
+          } catch {
+            return null;
+          }
+        }
+        function redirectToLogin() {
+          clearAuth();
+          window.location.href = "register.html";
+        }
+
+        // JSON + FormData aware fetch wrapper used by the Listings tab
+        // (equipment CRUD & uploads need multipart bodies, which the
+        // global apiFetch() from script.js doesn't support).
+        async function api(path, opts = {}) {
+          const headers = { ...(opts.headers || {}) };
+          const token = getToken();
+          if (token) headers["Authorization"] = `Bearer ${token}`;
+          if (opts.body && !(opts.body instanceof FormData)) {
+            headers["Content-Type"] = "application/json";
+            opts.body = JSON.stringify(opts.body);
+          }
+          const res = await fetch(API_BASE + path, { ...opts, headers });
+          let data;
+          try {
+            data = await res.json();
+          } catch {
+            data = null;
+          }
+          if (!res.ok) {
+            const msg =
+              (data && data.error && data.error.message) ||
+              `Request failed (${res.status})`;
+            const err = new Error(msg);
+            err.status = res.status;
+            err.details = data && data.error && data.error.details;
+            if (res.status === 401) redirectToLogin();
+            throw err;
+          }
+          return data;
+        }
+
+        function govLabel(g) {
+          const label = t(`common.governorates.${g}`);
+          return label.startsWith("common.governorates.") ? g : label;
+        }
+
+        // ---------- banners (account status / KYC trust) — dashboard-wide ----------
+        function renderTrustBanner(user) {
+          const banner = $("#trust-banner");
+          if (!banner) return;
+          if (user.is_admin) {
+            banner.classList.add("hidden");
+            return;
+          }
+          const todo = [];
+          const idStatus = user.identity_status || "none";
+          if (idStatus === "none") todo.push("kyc_submit");
+          else if (idStatus === "rejected") todo.push("kyc_resubmit");
+          else if (idStatus === "pending") todo.push("kyc_pending");
+
+          if (!todo.length) {
+            banner.classList.add("hidden");
+            return;
+          }
+
+          const msgParts = [];
+          if (todo.includes("kyc_submit")) msgParts.push(t("ownerDashboard.trustBanner.kycSubmitMsg"));
+          if (todo.includes("kyc_resubmit")) msgParts.push(t("ownerDashboard.trustBanner.kycResubmitMsg"));
+          if (todo.includes("kyc_pending")) msgParts.push(t("ownerDashboard.trustBanner.kycPendingMsg"));
+          $("#trust-banner-msg").textContent =
+            t("ownerDashboard.trustBanner.msgPrefix") + " " + msgParts.join(" ");
+
+          const actions = $("#trust-banner-actions");
+          actions.innerHTML = "";
+          if (todo.includes("kyc_submit") || todo.includes("kyc_resubmit")) {
+            const link = document.createElement("a");
+            link.href = "kyc.html";
+            link.className = "btn-save";
+            link.style.cssText = "padding:8px 14px;border-radius:6px;text-decoration:none";
+            link.innerHTML =
+              '<i class="fas fa-id-card"></i> ' +
+              (todo.includes("kyc_resubmit") ? t("ownerDashboard.trustBanner.resubmitKycBtn") : t("ownerDashboard.trustBanner.submitKycBtn"));
+            actions.appendChild(link);
+          }
+          banner.classList.remove("hidden");
+        }
+
+        // Mirrors the same account_status onto the two banner instances
+        // (top-of-page + the one embedded in the Deliveries tab) so a
+        // pending/rejected/blocked account sees a consistent message no
+        // matter which tab it lands on.
+        function renderStatusBanner(user) {
+          const banner = $("#status-banner");
+          const formCard = $("#equip-form-card");
+          const deliveryBanner = $("#delivery-status-banner");
+          const deliveryBoard = $("#delivery-board");
+          if (!banner) return;
+
+          if (user.is_admin || user.account_status === "approved") {
+            banner.classList.add("hidden");
+            if (formCard) formCard.classList.remove("hidden");
+            if (deliveryBanner) deliveryBanner.classList.add("hidden");
+            if (deliveryBoard) deliveryBoard.classList.remove("hidden");
+            return;
+          }
+
+          let title, msg, color;
+          if (user.account_status === "pending") {
+            color = "#f1c40f";
+            title = t("dashboard.statusBanner.pendingTitle");
+            msg = t("dashboard.statusBanner.pendingMsg");
+          } else if (user.account_status === "rejected") {
+            color = "#e74c3c";
+            title = t("dashboard.statusBanner.rejectedTitle");
+            msg = (user.status_reason ? `${t("dashboard.statusBanner.rejectedReasonPrefix")} ${user.status_reason}. ` : "") +
+              t("dashboard.statusBanner.rejectedMsg");
+          } else {
+            color = "#e74c3c";
+            title = t("dashboard.statusBanner.inactiveTitle");
+            msg = t("dashboard.statusBanner.inactiveMsg");
+          }
+
+          banner.style.borderColor = color;
+          banner.style.background = `${color}1f`;
+          $("#status-banner-icon").style.color = color;
+          $("#status-banner-title").textContent = title;
+          $("#status-banner-msg").textContent = msg;
+          banner.classList.remove("hidden");
+          if (formCard) formCard.classList.add("hidden");
+
+          if (deliveryBanner) {
+            deliveryBanner.classList.remove("hidden");
+            const dTitle = $("#delivery-status-banner-title");
+            const dMsg = $("#delivery-status-banner-msg");
+            if (dTitle) dTitle.textContent = title;
+            if (dMsg) dMsg.textContent = msg;
+          }
+          if (deliveryBoard) deliveryBoard.classList.add("hidden");
+        }
+
+        async function reloadUser() {
+          try {
+            const r = await api("/auth/me");
+            setAuth(getToken(), r.user);
+            renderStatusBanner(r.user);
+            renderTrustBanner(r.user);
+            return r.user;
+          } catch (e) {
+            return null;
+          }
+        }
+
+        function showDashboard(user) {
+          $("#dashboard-section").classList.remove("hidden");
+          $("#welcome-text").textContent = t("ownerDashboard.welcomeTemplate", { name: user.name || user.email });
+          renderStatusBanner(user);
+          renderTrustBanner(user);
+        }
+
+        /* =============================================================
+         * TAB 1 — My Listings (ported from owner-dashboard.html)
+         * ============================================================= */
+        let currentImages = [];
+        let primaryImageUrl = null;
+        let editingId = null;
+        const PAGE_SIZE = 12;
+        let currentPage = 1;
+
+        async function handleImageFiles(files) {
+          if (!files || !files.length) return;
+          const fd = new FormData();
+          for (const f of files) fd.append("images", f);
+          try {
+            const res = await api("/uploads/images", { method: "POST", body: fd });
+            for (const f of res.files) {
+              if (currentImages.length >= 10) {
+                showToast(t("ownerDashboard.toasts.maxImages"), true);
+                break;
+              }
+              currentImages.push({ url: f.url, filename: f.filename });
+            }
+            if (!primaryImageUrl && currentImages.length) primaryImageUrl = currentImages[0].url;
+            renderImagePreview();
+          } catch (err) {
+            showToast(err.message || t("ownerDashboard.toasts.imageUploadFailed"), true);
+          }
+        }
+
+        function renderImagePreview() {
+          const wrap = $("#image-preview");
+          wrap.innerHTML = "";
+          for (const img of currentImages) {
+            const div = document.createElement("div");
+            div.className = "thumb" + (img.url === primaryImageUrl ? " primary" : "");
+            div.title = t("ownerDashboard.form.primaryTitleHint");
+            div.innerHTML = `
+              <img src="${img.url}" alt="" />
+              ${img.url === primaryImageUrl ? `<div class="primary-badge">${t("ownerDashboard.form.primaryBadge")}</div>` : ""}
+              <div class="x" data-url="${img.url}">×</div>
+            `;
+            div.addEventListener("click", (ev) => {
+              if (ev.target.classList.contains("x")) return;
+              primaryImageUrl = img.url;
+              renderImagePreview();
+            });
+            div.querySelector(".x").addEventListener("click", (ev) => {
+              ev.stopPropagation();
+              currentImages = currentImages.filter((i) => i.url !== img.url);
+              if (primaryImageUrl === img.url) primaryImageUrl = currentImages[0]?.url || null;
+              renderImagePreview();
+            });
+            wrap.appendChild(div);
+          }
+        }
+
+        function resetForm() {
+          editingId = null;
+          currentImages = [];
+          primaryImageUrl = null;
+          $("#equip-form").reset();
+          $("#equip-id").value = "";
+          $("#f-status").value = "available";
+          $("#f-listing-type").value = "rent";
+          $("#f-stock").value = "1";
+          document.querySelectorAll(".price-group").forEach((group) => {
+            const baseDisplay = group.querySelector("#base-price-display, .sale-base-price-display");
+            const commissionDisplay = group.querySelector("#commission-display, .sale-commission-display");
+            const finalDisplay = group.querySelector("#final-price-display, .sale-final-price-display");
+            const hiddenInput = group.querySelector(".final-price-input");
+            const currency = "ر.ع";
+            if (baseDisplay) baseDisplay.textContent = "0.00 " + currency;
+            if (commissionDisplay) commissionDisplay.textContent = "0.00 " + currency;
+            if (finalDisplay) finalDisplay.textContent = "0.00 " + currency;
+            if (hiddenInput) hiddenInput.value = "0";
+          });
+          const pdfUrlEl = $("#f-datasheet-pdf-url");
+          const pdfInfoEl = $("#pdf-upload-info");
+          const pdfLinkEl = $("#pdf-current-link");
+          if (pdfUrlEl) pdfUrlEl.value = "";
+          if (pdfInfoEl) pdfInfoEl.style.display = "none";
+          if (pdfLinkEl) pdfLinkEl.innerHTML = "";
+          const acc = document.getElementById("tech-specs-acc");
+          if (acc) acc.open = false;
+          renderImagePreview();
+          updateFormMode();
+          toggleListingPriceFields();
+        }
+
+        function updateFormMode() {
+          if (editingId) {
+            $("#form-title").innerHTML = `<i class="fas fa-edit"></i> ${t("ownerDashboard.form.editTitle")}`;
+            $("#btn-cancel-edit").classList.remove("hidden");
+          } else {
+            $("#form-title").innerHTML = `<i class="fas fa-plus-circle"></i> ${t("ownerDashboard.form.addTitle")}`;
+            $("#btn-cancel-edit").classList.add("hidden");
+          }
+        }
+
+        const COMMISSION_PERCENT = 10;
+        function calculatePriceWithCommission(farmerPrice) {
+          const price = parseFloat(farmerPrice) || 0;
+          const commission = price * (COMMISSION_PERCENT / 100);
+          return { basePrice: price, commission, finalPrice: price + commission };
+        }
+        function setupPriceCalculation() {
+          document.querySelectorAll(".farmer-price-input").forEach((input) => {
+            input.addEventListener("input", function () {
+              const value = parseFloat(this.value) || 0;
+              const result = calculatePriceWithCommission(value);
+              const container = this.closest(".price-group");
+              if (!container) return;
+              const baseDisplay = container.querySelector("#base-price-display, .sale-base-price-display");
+              const commissionDisplay = container.querySelector("#commission-display, .sale-commission-display");
+              const finalDisplay = container.querySelector("#final-price-display, .sale-final-price-display");
+              const hiddenInput = container.querySelector(".final-price-input");
+              const currency = "ر.ع";
+              if (baseDisplay) baseDisplay.textContent = result.basePrice.toFixed(2) + " " + currency;
+              if (commissionDisplay) commissionDisplay.textContent = result.commission.toFixed(2) + " " + currency;
+              if (finalDisplay) finalDisplay.textContent = result.finalPrice.toFixed(2) + " " + currency;
+              if (hiddenInput) hiddenInput.value = result.finalPrice.toFixed(2);
+            });
+          });
+        }
+
+        function toggleListingPriceFields() {
+          const listingType = $("#f-listing-type").value;
+          const daily = $("#f-daily-price");
+          const sale = $("#f-sale-price");
+          const dailyWrap = $("#f-daily-wrap");
+          const saleWrap = $("#f-sale-wrap");
+          const stock = $("#f-stock");
+          const stockWrap = $("#f-stock-wrap");
+          const depositWrap = $("#f-deposit-wrap");
+          const depositInput = $("#f-deposit-amount");
+          if (listingType === "rent") {
+            daily.required = true;
+            sale.required = false;
+            sale.value = "";
+          } else if (listingType === "sale") {
+            daily.required = false;
+            sale.required = true;
+            daily.value = "";
+          } else {
+            daily.required = true;
+            sale.required = true;
+          }
+          dailyWrap.style.display = listingType === "sale" ? "none" : "";
+          if (listingType === "rent") {
+            saleWrap.style.display = "none";
+            stockWrap.style.display = "none";
+            stock.value = "1";
+          } else {
+            saleWrap.style.display = "";
+            stockWrap.style.display = "";
+          }
+          if (listingType === "sale") {
+            depositWrap.style.display = "none";
+            depositInput.value = "";
+          } else {
+            depositWrap.style.display = "";
+          }
+        }
+
+        async function handleSubmit(e) {
+          e.preventDefault();
+          const payload = {
+            name: $("#f-name").value.trim(),
+            category: $("#f-category").value,
+            listing_type: $("#f-listing-type").value,
+            status: $("#f-status").value,
+            description: $("#f-description").value.trim() || null,
+            stock: parseInt($("#f-stock").value, 10) || 0,
+            governorate: $("#f-governorate").value || null,
+            images: currentImages.map((i) => i.url),
+            primary_image_url: primaryImageUrl,
+          };
+          const daily = $("#f-daily-price").value;
+          const sale = $("#f-sale-price").value;
+          payload.daily_price = daily === "" ? null : Number(daily);
+          payload.sale_price = sale === "" ? null : Number(sale);
+          const dep = $("#f-deposit-amount").value;
+          payload.deposit_amount = dep === "" ? null : Number(dep);
+
+          const specs = {};
+          const specStrFields = {
+            manufacturer: "#f-manufacturer", model: "#f-model", serial_number: "#f-serial-number",
+            origin_country: "#f-origin-country", fuel_type: "#f-fuel-type", maintenance_type: "#f-maint-type",
+            maintenance_by: "#f-maint-by", last_maintenance_date: "#f-last-maint-date",
+            next_maintenance_date: "#f-next-maint-date", warranty_info: "#f-warranty-info",
+            inspection_cert: "#f-inspection-cert",
+          };
+          const specNumFields = {
+            model_year: "#f-model-year", operating_hours: "#f-operating-hours", engine_power_hp: "#f-engine-power",
+            weight_kg: "#f-weight", load_capacity_kg: "#f-load-capacity", dimension_length: "#f-dim-length",
+            dimension_width: "#f-dim-width", dimension_height: "#f-dim-height",
+          };
+          for (const [key, sel] of Object.entries(specStrFields)) {
+            const el = $(sel); if (!el) continue;
+            const v = el.value.trim();
+            if (v) specs[key] = v;
+          }
+          for (const [key, sel] of Object.entries(specNumFields)) {
+            const el = $(sel); if (!el) continue;
+            const v = el.value;
+            if (v !== "") specs[key] = Number(v);
+          }
+          const pdfUrl = $("#f-datasheet-pdf-url")?.value;
+          if (pdfUrl) specs.datasheet_pdf_url = pdfUrl;
+          if (Object.keys(specs).length > 0) payload.specs = specs;
+
+          try {
+            if (editingId) {
+              await api(`/equipment/${editingId}`, { method: "PATCH", body: payload });
+              showToast(t("ownerDashboard.toasts.equipmentUpdated"));
+            } else {
+              await api("/equipment", { method: "POST", body: payload });
+              showToast(t("ownerDashboard.toasts.equipmentAdded"));
+            }
+            resetForm();
+            await refreshEquipment();
+          } catch (err) {
+            if (err.details && Array.isArray(err.details)) showToast(err.details[0].msg || err.message, true);
+            else showToast(err.message, true);
+          }
+        }
+
+        async function refreshEquipment() {
+          const params = new URLSearchParams({ page: String(currentPage), limit: String(PAGE_SIZE) });
+          try {
+            const res = await api(`/equipment/mine?${params}`);
+            renderEquipmentList(res.items);
+            updateStats(res.items, res.pagination.total);
+            renderEquipPagination(res.pagination);
+            applyClientFilters();
+          } catch (err) {
+            showToast(err.message, true);
+          }
+        }
+
+        function updateStats(items, total) {
+          $("#stat-total").textContent = total;
+          $("#stat-available").textContent = items.filter((i) => i.status === "available").length;
+          $("#stat-rented").textContent = items.filter((i) => i.status === "rented").length;
+          $("#stat-hidden").textContent = items.filter((i) => i.status === "hidden").length;
+        }
+
+        function catLabel(cat) {
+          const label = t(`ownerDashboard.categories.${cat}`);
+          return label.startsWith("ownerDashboard.categories.") ? cat : label;
+        }
+        function equipStatusLabel(status) {
+          const label = t(`ownerDashboard.statusOptions.${status}`);
+          return label.startsWith("ownerDashboard.statusOptions.") ? status : label;
+        }
+        const STATUS_ICONS = {
+          available: "fa-check-circle", rented: "fa-key",
+          maintenance: "fa-tools", sold: "fa-handshake", hidden: "fa-eye-slash",
+        };
+
+        const ownerEquipCache = {};
+
+        function renderEquipmentList(items) {
+          const wrap = $("#equip-list");
+          wrap.innerHTML = "";
+          if (!items.length) {
+            $("#equip-empty").classList.remove("hidden");
+            return;
+          }
+          $("#equip-empty").classList.add("hidden");
+
+          const sevenDaysAgo = Date.now() - 7 * 24 * 60 * 60 * 1000;
+
+          for (const eq of items) {
+            ownerEquipCache[eq.id] = eq;
+            const img = eq.primary_image_url || (Array.isArray(eq.images) && eq.images[0]) || "";
+            const isNew = eq.created_at && new Date(eq.created_at).getTime() > sevenDaysAgo;
+            const isHidden = eq.status === "hidden";
+
+            const typeBadge = eq.listing_type === "sale"
+              ? `<span class="eq-badge eq-badge--sale"><i class="fas fa-tag"></i> ${t("ownerDashboard.badges.forSale")}</span>`
+              : eq.listing_type === "both"
+              ? `<span class="eq-badge eq-badge--both"><i class="fas fa-exchange-alt"></i> ${t("ownerDashboard.badges.bothSaleRent")}</span>`
+              : `<span class="eq-badge eq-badge--rent"><i class="fas fa-key"></i> ${t("ownerDashboard.badges.forRent")}</span>`;
+
+            let priceHtml = "";
+            if (eq.daily_price != null && eq.daily_price !== "") {
+              priceHtml += `<span class="eq-price-main">${Number(eq.daily_price).toFixed(2)}</span><span class="eq-price-unit">${t("common.currency")} / ${t("common.perDay")}</span>`;
+            }
+            if (eq.sale_price != null && eq.sale_price !== "") {
+              priceHtml += `<span class="eq-price-extra">${eq.daily_price ? " · " : ""}${t("ownerDashboard.saleLabelPrefix")} ${Number(eq.sale_price).toFixed(2)} ${t("common.currency")}</span>`;
+            }
+            if (!priceHtml) priceHtml = `<span class="eq-price-unit" style="color:var(--color-text-soft)">${t("ownerDashboard.noPriceLabel")}</span>`;
+
+            const card = document.createElement("div");
+            card.className = "equip-card";
+            card.dataset.status = eq.status;
+            card.dataset.name = (eq.name || "").toLowerCase();
+            card.innerHTML = `
+              <div class="eq-media">
+                ${img
+                  ? `<img src="${escapeHtml(img)}" alt="${escapeHtml(eq.name)}" loading="lazy" />`
+                  : `<div class="eq-placeholder"><i class="fas fa-tractor"></i></div>`
+                }
+                <div class="eq-badges">
+                  ${isNew ? `<span class="eq-badge eq-badge--new"><i class="fas fa-star"></i> ${t("ownerDashboard.badges.new")}</span>` : ""}
+                  ${typeBadge}
+                </div>
+                <span class="eq-status-pill eq-s-${eq.status}">
+                  <i class="fas ${STATUS_ICONS[eq.status] || "fa-circle"}"></i>
+                  ${equipStatusLabel(eq.status)}
+                </span>
+              </div>
+              <div class="eq-body">
+                <div class="eq-cat"><i class="fas fa-tag"></i> ${escapeHtml(catLabel(eq.category))}</div>
+                <h3 class="eq-name">${escapeHtml(eq.name)}</h3>
+                <div class="eq-price-row">${priceHtml}</div>
+                <div class="eq-meta-row">
+                  ${eq.governorate ? `<span><i class="fas fa-map-marker-alt"></i> ${escapeHtml(govLabel(eq.governorate))}</span>` : ""}
+                  ${eq.stock != null ? `<span><i class="fas fa-cubes"></i> ${t("ownerDashboard.quantityLabelPrefix")} ${eq.stock}</span>` : ""}
+                  ${eq.deposit_amount ? `<span><i class="fas fa-shield-alt"></i> ${t("ownerDashboard.depositLabelPrefix")} ${Number(eq.deposit_amount).toFixed(0)} ${t("common.currency")}</span>` : ""}
+                </div>
+                <div class="eq-actions">
+                  <button class="eq-btn eq-btn--edit" data-id="${eq.id}">
+                    <i class="fas fa-edit"></i> ${t("ownerDashboard.editBtn")}
+                  </button>
+                  <button class="eq-btn ${isHidden ? "eq-btn--show" : "eq-btn--hide"}" data-id="${eq.id}" data-cur="${eq.status}">
+                    <i class="fas ${isHidden ? "fa-eye" : "fa-eye-slash"}"></i>
+                    ${isHidden ? t("ownerDashboard.activateBtn") : t("ownerDashboard.deactivateBtn")}
+                  </button>
+                  <button class="eq-btn eq-btn--pdf" data-id="${eq.id}" title="${t("ownerDashboard.pdfBtnTitle")}">
+                    <i class="fas fa-file-pdf"></i>
+                  </button>
+                  <button class="eq-btn eq-btn--del" data-id="${eq.id}" title="${t("ownerDashboard.deleteBtnTitle")}">
+                    <i class="fas fa-trash"></i>
+                  </button>
+                </div>
+              </div>
+            `;
+            wrap.appendChild(card);
+          }
+
+          wrap.querySelectorAll(".eq-btn--edit").forEach((b) => b.addEventListener("click", () => loadForEdit(b.dataset.id)));
+          wrap.querySelectorAll(".eq-btn--hide, .eq-btn--show").forEach((b) =>
+            b.addEventListener("click", () => toggleEquipmentStatus(b.dataset.id, b.dataset.cur)));
+          wrap.querySelectorAll(".eq-btn--del").forEach((b) => b.addEventListener("click", () => deleteEquipment(b.dataset.id)));
+          wrap.querySelectorAll(".eq-btn--pdf").forEach((b) =>
+            b.addEventListener("click", () => {
+              const cached = ownerEquipCache[b.dataset.id];
+              if (cached && window.generateEquipmentPDF) generateEquipmentPDF(cached);
+              else showToast(t("ownerDashboard.toasts.equipmentDataUnavailable"), true);
+            }));
+        }
+
+        function renderEquipPagination(p) {
+          const wrap = $("#pagination");
+          wrap.innerHTML = "";
+          if (p.pages <= 1) return;
+          const mk = (label, pageNum, opts = {}) => {
+            const b = document.createElement("button");
+            b.textContent = label;
+            if (opts.active) b.classList.add("active");
+            if (opts.disabled) b.disabled = true;
+            b.addEventListener("click", () => { currentPage = pageNum; refreshEquipment(); });
+            return b;
+          };
+          wrap.appendChild(mk(t("ownerDashboard.pagination.prev"), Math.max(1, p.page - 1), { disabled: p.page === 1 }));
+          for (let i = 1; i <= p.pages; i++) wrap.appendChild(mk(String(i), i, { active: i === p.page }));
+          wrap.appendChild(mk(t("ownerDashboard.pagination.next"), Math.min(p.pages, p.page + 1), { disabled: p.page === p.pages }));
+        }
+
+        async function loadForEdit(id) {
+          try {
+            const res = await api(`/equipment/${id}`);
+            const eq = res.item;
+            editingId = id;
+            $("#equip-id").value = id;
+            $("#f-name").value = eq.name || "";
+            $("#f-category").value = eq.category || "other";
+            $("#f-listing-type").value = eq.listing_type || "rent";
+            $("#f-status").value = eq.status || "available";
+            $("#f-daily-price").value = eq.farmer_daily_price ?? "";
+            $("#f-sale-price").value = eq.farmer_sale_price ?? "";
+            $("#f-deposit-amount").value = eq.deposit_amount ?? "";
+            $("#f-stock").value = eq.stock ?? 1;
+            $("#f-governorate").value = eq.governorate || "";
+            $("#f-description").value = eq.description || "";
+
+            const dailyResult = calculatePriceWithCommission(eq.farmer_daily_price);
+            const saleResult = calculatePriceWithCommission(eq.farmer_sale_price);
+            const dailyBase = document.querySelector("#f-daily-wrap #base-price-display");
+            const dailyCommission = document.querySelector("#f-daily-wrap #commission-display");
+            const dailyFinal = document.querySelector("#f-daily-wrap #final-price-display");
+            const dailyHidden = document.querySelector("#f-daily-wrap .final-price-input");
+            const saleBase = document.querySelector("#f-sale-wrap .sale-base-price-display");
+            const saleCommission = document.querySelector("#f-sale-wrap .sale-commission-display");
+            const saleFinal = document.querySelector("#f-sale-wrap .sale-final-price-display");
+            const saleHidden = document.querySelector("#f-sale-wrap .final-price-input");
+            const currency = "ر.ع";
+            if (dailyBase) dailyBase.textContent = dailyResult.basePrice.toFixed(2) + " " + currency;
+            if (dailyCommission) dailyCommission.textContent = dailyResult.commission.toFixed(2) + " " + currency;
+            if (dailyFinal) dailyFinal.textContent = dailyResult.finalPrice.toFixed(2) + " " + currency;
+            if (dailyHidden) dailyHidden.value = dailyResult.finalPrice.toFixed(2);
+            if (saleBase) saleBase.textContent = saleResult.basePrice.toFixed(2) + " " + currency;
+            if (saleCommission) saleCommission.textContent = saleResult.commission.toFixed(2) + " " + currency;
+            if (saleFinal) saleFinal.textContent = saleResult.finalPrice.toFixed(2) + " " + currency;
+            if (saleHidden) saleHidden.value = saleResult.finalPrice.toFixed(2);
+
+            currentImages = (Array.isArray(eq.images) ? eq.images : []).map((u) => ({ url: u, filename: u.split("/").pop() }));
+            primaryImageUrl = eq.primary_image_url || currentImages[0]?.url || null;
+            renderImagePreview();
+            toggleListingPriceFields();
+            updateFormMode();
+
+            const specs = (typeof eq.specs === "object" && eq.specs !== null) ? eq.specs : {};
+            const specAllFields = {
+              manufacturer: "#f-manufacturer", model: "#f-model", model_year: "#f-model-year",
+              serial_number: "#f-serial-number", origin_country: "#f-origin-country", operating_hours: "#f-operating-hours",
+              fuel_type: "#f-fuel-type", engine_power_hp: "#f-engine-power", weight_kg: "#f-weight",
+              load_capacity_kg: "#f-load-capacity", dimension_length: "#f-dim-length", dimension_width: "#f-dim-width",
+              dimension_height: "#f-dim-height", maintenance_type: "#f-maint-type", maintenance_by: "#f-maint-by",
+              last_maintenance_date: "#f-last-maint-date", next_maintenance_date: "#f-next-maint-date",
+              warranty_info: "#f-warranty-info", inspection_cert: "#f-inspection-cert",
+            };
+            for (const [key, sel] of Object.entries(specAllFields)) {
+              const el = $(sel);
+              if (el && specs[key] != null) el.value = specs[key];
+            }
+            const pdfUrlEl = $("#f-datasheet-pdf-url");
+            const pdfLinkEl = $("#pdf-current-link");
+            if (pdfUrlEl) pdfUrlEl.value = specs.datasheet_pdf_url || "";
+            if (pdfLinkEl && specs.datasheet_pdf_url) {
+              pdfLinkEl.innerHTML = `<a href="${escapeHtml(specs.datasheet_pdf_url)}" target="_blank"><i class="fas fa-file-pdf"></i> ${t("ownerDashboard.form.specsAcc.pdfCurrentLinkText")}</a>`;
+            } else if (pdfLinkEl) {
+              pdfLinkEl.innerHTML = "";
+            }
+            if (Object.keys(specs).length > 0) {
+              const acc = document.getElementById("tech-specs-acc");
+              if (acc) acc.open = true;
+            }
+            // Jump to the Listings tab (edit may have been triggered from
+            // elsewhere in the future) and scroll to the form.
+            setMainTab("listings");
+            window.scrollTo({ top: 0, behavior: "smooth" });
+          } catch (err) {
+            showToast(err.message, true);
+          }
+        }
+
+        async function deleteEquipment(id) {
+          if (!confirm(t("ownerDashboard.toasts.confirmDelete"))) return;
+          try {
+            await api(`/equipment/${id}`, { method: "DELETE" });
+            showToast(t("ownerDashboard.toasts.deleted"));
+            await refreshEquipment();
+          } catch (err) {
+            showToast(err.message, true);
+          }
+        }
+
+        async function toggleEquipmentStatus(id, currentStatus) {
+          const newStatus = currentStatus === "hidden" ? "available" : "hidden";
+          try {
+            await api(`/equipment/${id}`, { method: "PATCH", body: { status: newStatus } });
+            showToast(newStatus === "hidden" ? t("ownerDashboard.toasts.deactivated") : t("ownerDashboard.toasts.activated"));
+            await refreshEquipment();
+          } catch (err) {
+            showToast(err.message, true);
+          }
+        }
+
+        function applyClientFilters() {
+          const q = $("#filter-search").value.trim().toLowerCase();
+          const s = $("#filter-status").value;
+          $$("#equip-list .equip-card").forEach((c) => {
+            const nameMatch = !q || c.dataset.name.includes(q);
+            const statusMatch = !s || c.dataset.status === s;
+            c.style.display = nameMatch && statusMatch ? "" : "none";
+          });
+        }
+
+        /* =============================================================
+         * TAB 2 — Incoming Orders (new: rentals scope=owner)
+         * ============================================================= */
+        let incomingPage = 1;
+        const INC_PAGE_SIZE = 10;
+
+        function rentalStatusLabel(s) {
+          const label = t(`myOrders.statusLabels.${s}`);
+          return label.startsWith("myOrders.statusLabels.") ? s : label;
+        }
+        function rentalStatusColor(s) {
+          return ({
+            pending: "yellow", approved: "blue", active: "blue",
+            completed: "green", rejected: "red", cancelled: "red",
+          })[s] || "grey";
+        }
+        function incomingSkeleton(count = 2) {
+          const item = `
+            <div class="hs-card" style="padding:var(--sp-4);margin-bottom:var(--sp-3)">
+              <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:var(--sp-3)">
+                <div class="skeleton skeleton--title" style="width:35%"></div>
+                <div class="skeleton" style="height:24px;width:90px;border-radius:var(--r-pill)"></div>
+              </div>
+              <div class="skeleton skeleton--text" style="width:70%;margin-bottom:var(--sp-2)"></div>
+              <div class="skeleton skeleton--text" style="width:50%"></div>
+            </div>
+          `;
+          return Array.from({ length: count }, () => item).join("");
+        }
+
+        async function loadIncoming() {
+          $("#inc-list").innerHTML = incomingSkeleton();
+          $("#inc-empty").classList.add("hidden");
+          const status = $("#inc-filter-status").value;
+          const params = new URLSearchParams({ scope: "owner", page: String(incomingPage), limit: String(INC_PAGE_SIZE) });
+          if (status) params.set("status", status);
+          try {
+            const res = await apiFetch(`/rentals?${params}`);
+            if (!res?.success) throw new Error(res?.error?.message || t("dashboard.incoming.loadFailed"));
+            if (!res.items.length) {
+              $("#inc-list").innerHTML = "";
+              $("#inc-empty").classList.remove("hidden");
+              $("#inc-pagination").innerHTML = "";
+              return;
+            }
+            renderIncomingList(res.items);
+            renderIncomingPagination(res.pagination);
+          } catch (err) {
+            $("#inc-list").innerHTML = `<div class="empty" style="color:#ffb3b3">${escapeHtml(err.message)}</div>`;
+          }
+        }
+
+        // Little counter badge on the "Incoming Orders" tab — counts only
+        // pending requests (the ones that actually need action). Cheap
+        // (limit=1, we only read pagination.total) so it can run on a timer
+        // without the user needing to open the tab.
+        async function refreshIncomingBadgeOnly() {
+          try {
+            const res = await apiFetch(`/rentals?scope=owner&status=pending&limit=1`);
+            if (res?.success && res.pagination) {
+              const el = $("#incoming-tab-count");
+              if (el) el.textContent = res.pagination.total ? `(${res.pagination.total})` : "";
+            }
+          } catch (_e) { /* silent */ }
+        }
+
+        function renderIncomingList(items) {
+          const wrap = $("#inc-list");
+          wrap.innerHTML = items.map((r) => renderRentalCard(r)).join("");
+          wrap.querySelectorAll("[data-approve]").forEach((b) =>
+            b.addEventListener("click", () => approveRentalRow(b.dataset.approve)));
+          wrap.querySelectorAll("[data-reject]").forEach((b) =>
+            b.addEventListener("click", () => rejectRentalRow(b.dataset.reject)));
+          wrap.querySelectorAll("[data-resolve-deposit]").forEach((b) =>
+            b.addEventListener("click", () => {
+              const r = incomingCache[b.dataset.resolveDeposit];
+              if (r) openDepositModal(r);
+            }));
+        }
+
+        const incomingCache = {};
+
+        function renderRentalCard(r) {
+          incomingCache[r.id] = r;
+          const dirArrow = document.documentElement.getAttribute("dir") === "rtl" ? "←" : "→";
+          const startD = (r.start_date || "").slice(0, 10);
+          const endD = (r.end_date || "").slice(0, 10);
+          const total = (Number(r.total_price || 0) + Number(r.deposit_amount || 0)).toFixed(2);
+
+          let actionsHtml = "";
+          if (r.status === "pending") {
+            actionsHtml = `
+              <button class="btn btn-green" data-approve="${r.id}"><i class="fas fa-check"></i> ${t("dashboard.incoming.approveBtn")}</button>
+              <button class="btn btn-red" data-reject="${r.id}"><i class="fas fa-times"></i> ${t("dashboard.incoming.rejectBtn")}</button>
+            `;
+          } else if (r.status === "completed" && r.deposit_status === "held") {
+            actionsHtml = `<button class="btn btn-orange" data-resolve-deposit="${r.id}"><i class="fas fa-shield-alt"></i> ${t("dashboard.incoming.resolveDepositBtn")}</button>`;
+          }
+
+          return `
+            <div class="rental-card">
+              <div class="rc-head">
+                <div class="rc-title"><i class="fas fa-tractor"></i> ${escapeHtml(r.equipment_name || "—")} <code>#${(r.tracking_number || r.id.slice(0, 8)).toString().toUpperCase()}</code></div>
+                <span class="badge ${rentalStatusColor(r.status)}">${rentalStatusLabel(r.status)}</span>
+              </div>
+              <div class="rc-info">
+                <div class="rc-info-item">
+                  <div class="label"><i class="fas fa-calendar-alt"></i> ${t("myOrders.rentalDetails.labels.startDate")}</div>
+                  <div class="value">${startD} ${dirArrow} ${endD}</div>
+                </div>
+                <div class="rc-info-item">
+                  <div class="label"><i class="fas fa-coins"></i> ${t("myOrders.rentalDetails.totals.grand")}</div>
+                  <div class="value">${total} ${t("common.currency")}</div>
+                </div>
+              </div>
+              ${r.renter_notes ? `<div style="background:rgba(0,0,0,0.15);padding:8px;border-radius:6px;font-size:13px;color:var(--color-text-muted);margin-bottom:10px"><i class="fas fa-sticky-note"></i> ${escapeHtml(r.renter_notes)}</div>` : ""}
+              <div style="font-size:12px;color:var(--color-text-soft);margin-bottom:8px">
+                <i class="fas fa-clock"></i> ${new Date(r.created_at).toLocaleString(localeTag())}
+              </div>
+              ${actionsHtml ? `<div class="rc-actions">${actionsHtml}</div>` : ""}
+            </div>
+          `;
+        }
+
+        function renderIncomingPagination(p) {
+          const wrap = $("#inc-pagination");
+          wrap.innerHTML = "";
+          if (!p || p.pages <= 1) return;
+          const mk = (label, pageNum, opts = {}) => {
+            const b = document.createElement("button");
+            b.textContent = label;
+            if (opts.active) b.classList.add("active");
+            if (opts.disabled) b.disabled = true;
+            b.addEventListener("click", () => { incomingPage = pageNum; loadIncoming(); });
+            return b;
+          };
+          wrap.appendChild(mk(t("ownerDashboard.pagination.prev"), Math.max(1, p.page - 1), { disabled: p.page === 1 }));
+          for (let i = 1; i <= p.pages; i++) wrap.appendChild(mk(String(i), i, { active: i === p.page }));
+          wrap.appendChild(mk(t("ownerDashboard.pagination.next"), Math.min(p.pages, p.page + 1), { disabled: p.page === p.pages }));
+        }
+
+        async function approveRentalRow(id) {
+          if (!confirm(t("dashboard.incoming.confirmApprove"))) return;
+          try {
+            const res = await apiFetch(`/rentals/${id}/approve`, { method: "POST", body: JSON.stringify({}) });
+            if (!res?.success) throw new Error(res?.error?.message || t("dashboard.incoming.genericFailed"));
+            showToast(t("dashboard.incoming.approveSuccess"));
+            loadIncoming();
+            refreshIncomingBadgeOnly();
+          } catch (err) {
+            showToast(err.message, true);
+          }
+        }
+
+        async function rejectRentalRow(id) {
+          const note = prompt(t("dashboard.incoming.responsePromptTitle")) || "";
+          try {
+            const res = await apiFetch(`/rentals/${id}/reject`, {
+              method: "POST",
+              body: JSON.stringify({ response_note: note || null }),
+            });
+            if (!res?.success) throw new Error(res?.error?.message || t("dashboard.incoming.genericFailed"));
+            showToast(t("dashboard.incoming.rejectSuccess"));
+            loadIncoming();
+            refreshIncomingBadgeOnly();
+          } catch (err) {
+            showToast(err.message, true);
+          }
+        }
+
+        // ---------- deposit-resolution modal ----------
+        function openDepositModal(rental) {
+          const overlay = document.createElement("div");
+          overlay.className = "hs-modal-overlay";
+          overlay.innerHTML = `
+            <div class="hs-modal-box">
+              <h3><i class="fas fa-shield-alt"></i> ${t("dashboard.incoming.depositModal.title")}</h3>
+              <p style="color:var(--color-text-muted);font-size:13px">${t("dashboard.incoming.depositModal.desc")}</p>
+              <label>${t("dashboard.incoming.depositModal.resolutionLabel")}</label>
+              <select id="dep-resolution">
+                <option value="refunded">${t("dashboard.incoming.depositModal.refundedOption")}</option>
+                <option value="partial">${t("dashboard.incoming.depositModal.partialOption")}</option>
+                <option value="forfeited">${t("dashboard.incoming.depositModal.forfeitedOption")}</option>
+              </select>
+              <label id="dep-kept-wrap" class="hidden">${t("dashboard.incoming.depositModal.keptAmountLabel")}</label>
+              <input type="number" id="dep-kept-amount" min="0" step="0.01" class="hidden" max="${rental.deposit_amount}" />
+              <label>${t("dashboard.incoming.depositModal.notesLabel")}</label>
+              <textarea id="dep-notes" rows="2"></textarea>
+              <div class="hs-modal-actions">
+                <button class="btn-save" id="dep-submit" style="flex:1">${t("dashboard.incoming.depositModal.submitBtn")}</button>
+                <button class="btn-cancel" id="dep-cancel" style="flex:1">${t("dashboard.incoming.depositModal.cancelBtn")}</button>
+              </div>
+            </div>
+          `;
+          document.body.appendChild(overlay);
+          const resSel = overlay.querySelector("#dep-resolution");
+          const keptWrap = overlay.querySelector("#dep-kept-wrap");
+          const keptInput = overlay.querySelector("#dep-kept-amount");
+          resSel.addEventListener("change", () => {
+            const showKept = resSel.value === "partial";
+            keptWrap.classList.toggle("hidden", !showKept);
+            keptInput.classList.toggle("hidden", !showKept);
+          });
+          overlay.querySelector("#dep-cancel").addEventListener("click", () => overlay.remove());
+          overlay.querySelector("#dep-submit").addEventListener("click", async () => {
+            const resolution = resSel.value;
+            const kept_amount = resolution === "partial" ? Number(keptInput.value || 0) : undefined;
+            const notes = overlay.querySelector("#dep-notes").value.trim() || null;
+            try {
+              const body = { resolution, notes };
+              if (kept_amount !== undefined) body.kept_amount = kept_amount;
+              const res = await apiFetch(`/rentals/${rental.id}/deposit/resolve`, {
+                method: "POST",
+                body: JSON.stringify(body),
+              });
+              if (!res?.success) throw new Error(res?.error?.message || t("dashboard.incoming.depositModal.failed"));
+              showToast(t("dashboard.incoming.depositModal.success"));
+              overlay.remove();
+              loadIncoming();
+            } catch (err) {
+              showToast(err.message, true);
+            }
+          });
+        }
+
+        /* =============================================================
+         * TAB 3 — Deliveries (ported from delivery.html, functionally
+         * unchanged — sub-tabs available / mine / history)
+         * ============================================================= */
+        function deliverySkeleton(count = 3) {
+          const item = `
+            <div class="hs-card" style="padding:var(--sp-4);margin-bottom:var(--sp-3)">
+              <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:var(--sp-3)">
+                <div class="skeleton skeleton--title" style="width:35%"></div>
+                <div class="skeleton" style="height:24px;width:90px;border-radius:var(--r-pill)"></div>
+              </div>
+              <div class="skeleton skeleton--text" style="width:70%;margin-bottom:var(--sp-2)"></div>
+              <div class="skeleton skeleton--text" style="width:50%;margin-bottom:var(--sp-3)"></div>
+              <div style="display:flex;gap:var(--sp-2)">
+                <div class="skeleton skeleton--button" style="width:120px"></div>
+                <div class="skeleton skeleton--button" style="width:90px"></div>
+              </div>
+            </div>
+          `;
+          return Array.from({ length: count }, () => item).join("");
+        }
+
+        function deliveryEmptyState(variant) {
+          const icons = {
+            available: '<path d="M16 24L22 30L34 18" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><circle cx="24" cy="24" r="20" stroke="currentColor" stroke-width="2"/>',
+            mine: '<path d="M14 24V36C14 37.1046 14.8954 38 16 38H32C33.1046 38 34 37.1046 34 36V24" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><path d="M10 16H38L34 24H14L10 16Z" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/><path d="M20 28H28" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>',
+            history: '<circle cx="24" cy="24" r="18" stroke="currentColor" stroke-width="2"/><path d="M24 14V24L30 28" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>',
+          };
+          const icon = icons[variant] || icons.available;
+          const title = t(`delivery.emptyStates.${variant}.title`);
+          const desc = t(`delivery.emptyStates.${variant}.desc`);
+          return `
+            <div class="hs-empty">
+              <div class="hs-empty__art">
+                <svg width="48" height="48" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">${icon}</svg>
+              </div>
+              <h3 class="hs-empty__title">${title}</h3>
+              <p class="hs-empty__desc">${desc}</p>
+            </div>
+          `;
+        }
+
+        function deliveryStatusLabel(s) {
+          const label = t(`delivery.statusLabels.${s}`);
+          return label.startsWith("delivery.statusLabels.") ? s : label;
+        }
+        function deliveryStatusColor(s) {
+          return ({
+            pending: "yellow", accepted: "blue", picked_up: "blue",
+            in_transit: "blue", delivered: "green", cancelled: "red",
+          })[s] || "yellow";
+        }
+
+        function safeJson(s) {
+          try { return typeof s === "object" ? s : JSON.parse(s); }
+          catch { return {}; }
+        }
+        function formatAddress(a) {
+          if (!a || typeof a !== "object") return "—";
+          const parts = [a.city, a.street, a.landmark].filter(Boolean);
+          return parts.length ? parts.join(" · ") : "—";
+        }
+
+        async function fetchAvailable() {
+          const res = await apiFetch("/deliveries?scope=available&limit=50");
+          if (!res?.success) throw new Error(res?.error?.message || t("delivery.toasts.loadFailed"));
+          return res.items || [];
+        }
+        async function fetchMine(historyOnly = false) {
+          const res = await apiFetch("/deliveries?scope=mine&limit=100");
+          if (!res?.success) throw new Error(res?.error?.message || t("delivery.toasts.loadFailed"));
+          const items = res.items || [];
+          return historyOnly
+            ? items.filter((d) => ["delivered", "cancelled"].includes(d.status))
+            : items.filter((d) => !["delivered", "cancelled"].includes(d.status));
+        }
+
+        const orderCache = {};
+        async function fetchOrderMeta(orderId) {
+          if (!orderId) return null;
+          if (orderCache[orderId]) return orderCache[orderId];
+          try {
+            const res = await apiFetch(`/orders/${orderId}`);
+            if (res && res.success && res.order) {
+              orderCache[orderId] = res.order;
+              return res.order;
+            }
+          } catch (_e) {}
+          return null;
+        }
+
+        function renderJob(d, actions) {
+          const pickup = typeof d.pickup_address === "string" ? safeJson(d.pickup_address) : d.pickup_address;
+          const dropoff = typeof d.dropoff_address === "string" ? safeJson(d.dropoff_address) : d.dropoff_address;
+          const dirArrow = document.documentElement.getAttribute("dir") === "rtl" ? "←" : "→";
+          let orderInfoHtml = "";
+          if (d.rental_meta) {
+            const r = d.rental_meta;
+            const rTotal = (Number(r.total_price || 0) + Number(r.deposit_amount || 0)).toFixed(2);
+            const startD = (r.start_date || "").slice(0, 10);
+            const endD = (r.end_date || "").slice(0, 10);
+            orderInfoHtml = `
+              <div style="background:rgba(241,196,15,0.08);border:1px solid rgba(241,196,15,0.25);border-radius:8px;padding:10px;margin:10px 0;font-size:13px">
+                <div style="display:flex;justify-content:space-between;margin-bottom:4px">
+                  <span style="color:#f1c40f;font-weight:700"><i class="fas fa-key"></i> ${t("delivery.job.rentalPrefix")} — ${escapeHtml(r.tracking_number || "")}</span>
+                  <span style="color:var(--color-text);font-weight:700">${rTotal} ${t("common.currency")}</span>
+                </div>
+                <div style="color:var(--color-text-muted);margin-bottom:4px">${escapeHtml(r.equipment_name || t("delivery.job.equipmentFallback"))}</div>
+                <div style="color:var(--color-text-soft)"><i class="fas fa-calendar-alt"></i> ${startD} ${dirArrow} ${endD}</div>
+              </div>
+            `;
+          } else if (d.order_meta) {
+            const o = d.order_meta;
+            const itemsSummary = (o.items || []).slice(0, 3)
+              .map((it) => `${escapeHtml(it.equipment_name_snapshot || t("delivery.job.productFallback"))} × ${it.quantity}`)
+              .join(t("delivery.job.listSeparator"));
+            const more = (o.items || []).length > 3 ? ` (+${o.items.length - 3})` : "";
+            orderInfoHtml = `
+              <div style="background:rgba(106,176,76,0.08);border:1px solid rgba(106,176,76,0.2);border-radius:8px;padding:10px;margin:10px 0;font-size:13px">
+                <div style="display:flex;justify-content:space-between;margin-bottom:4px">
+                  <span style="color:var(--color-brand-500);font-weight:700"><i class="fas fa-receipt"></i> ${escapeHtml(o.tracking_number || "")}</span>
+                  <span style="color:var(--color-text);font-weight:700">${Number(o.total || 0).toFixed(2)} ${t("common.currency")}</span>
+                </div>
+                ${itemsSummary ? `<div style="color:var(--color-text-muted)">${itemsSummary}${more}</div>` : ""}
+                <div style="color:var(--color-text-soft);margin-top:4px">
+                  <i class="fas fa-credit-card"></i> ${o.payment_method === "cash_on_delivery" ? t("delivery.job.paymentCod") : t("delivery.job.paymentCard")}
+                </div>
+              </div>
+            `;
+          }
+
+          const feeHtml = d.fee && Number(d.fee) > 0
+            ? `<span style="background:rgba(241,196,15,0.15);border:1px solid rgba(241,196,15,0.3);padding:3px 10px;border-radius:999px;font-size:12px;color:#f1c40f"><i class="fas fa-coins"></i> ${t("delivery.job.feeLabel", { amount: Number(d.fee).toFixed(2), currency: t("common.currency") })}</span>`
+            : "";
+
+          return `
+            <div class="job-card">
+              <div class="job-header">
+                <div class="job-number"><i class="fas fa-truck"></i> <code>#${d.id.slice(0, 8).toUpperCase()}</code></div>
+                <span class="badge ${deliveryStatusColor(d.status)}">${deliveryStatusLabel(d.status)}</span>
+              </div>
+              ${orderInfoHtml}
+              <div class="job-info">
+                <div class="job-info-item">
+                  <div class="label"><i class="fas fa-map-marker-alt" style="color:#e74c3c"></i> ${t("delivery.job.pickupLabel")}</div>
+                  <div class="value">${escapeHtml(formatAddress(pickup))}</div>
+                </div>
+                <div class="job-info-item">
+                  <div class="label"><i class="fas fa-flag-checkered" style="color:#6ab04c"></i> ${t("delivery.job.dropoffLabel")}</div>
+                  <div class="value">${escapeHtml(formatAddress(dropoff))}</div>
+                </div>
+              </div>
+              ${feeHtml ? `<div style="margin:8px 0">${feeHtml}</div>` : ""}
+              ${d.notes ? `<div style="background:rgba(0,0,0,0.15);padding:8px;border-radius:6px;font-size:13px;color:var(--color-text-muted);margin-bottom:10px"><i class="fas fa-sticky-note"></i> ${escapeHtml(d.notes)}</div>` : ""}
+              <div style="font-size:12px;color:var(--color-text-soft);margin-bottom:8px">
+                <i class="fas fa-clock"></i> ${new Date(d.created_at).toLocaleString(localeTag())}
+              </div>
+              <div class="job-actions">${actions}</div>
+            </div>
+          `;
+        }
+
+        function nextActions(d) {
+          switch (d.status) {
+            case "accepted":
+              return `<button class="btn btn-blue" data-pickup="${d.id}"><i class="fas fa-dolly"></i> ${t("delivery.jobActions.pickup")}</button>`;
+            case "picked_up":
+              return `<button class="btn btn-orange" data-transit="${d.id}"><i class="fas fa-route"></i> ${t("delivery.jobActions.startTransit")}</button>`;
+            case "in_transit":
+              return `<button class="btn btn-green" data-delivered="${d.id}"><i class="fas fa-check-circle"></i> ${t("delivery.jobActions.delivered")}</button>`;
+            default:
+              return "";
+          }
+        }
+
+        function wireActionButtons(root) {
+          root.querySelectorAll("[data-pickup]").forEach((b) => b.addEventListener("click", () => actOn("pickup", b.dataset.pickup)));
+          root.querySelectorAll("[data-transit]").forEach((b) => b.addEventListener("click", () => actOn("in-transit", b.dataset.transit)));
+          root.querySelectorAll("[data-delivered]").forEach((b) => b.addEventListener("click", () => actOn("delivered", b.dataset.delivered)));
+        }
+
+        const ACTIONS_NEEDING_PROOF = new Set(["pickup", "delivered"]);
+
+        async function actOn(action, deliveryId) {
+          const labelKeys = { accept: "accept", pickup: "pickup", "in-transit": "inTransit", delivered: "delivered" };
+          const label = t(`delivery.actionLabels.${labelKeys[action]}`);
+          let proofUrls = [];
+          let proofLocation = null;
+          if (ACTIONS_NEEDING_PROOF.has(action)) {
+            const result = await askForProofPhoto(label);
+            if (!result) return;
+            proofUrls = result.urls || [];
+            proofLocation = result.location || null;
+          } else {
+            if (!confirm(t("delivery.confirmAction", { label }))) return;
+          }
+          try {
+            const body = {};
+            if (proofUrls.length) body.proof_images = proofUrls;
+            if (proofLocation) body.proof_location = proofLocation;
+            const res = await apiFetch(`/deliveries/${deliveryId}/${action}`, { method: "POST", body: JSON.stringify(body) });
+            if (!res?.success) throw new Error(res?.error?.message || t("delivery.toasts.genericFailed"));
+            showToast(t("delivery.toasts.actionSuccess"));
+            loadAvailable();
+            loadMine();
+          } catch (err) {
+            showToast(err.message, true);
+          }
+        }
+
+        function captureGps(timeoutMs = 8000) {
+          return new Promise((resolve) => {
+            if (!navigator.geolocation) return resolve(null);
+            navigator.geolocation.getCurrentPosition(
+              (pos) => resolve({
+                lat: pos.coords.latitude, lng: pos.coords.longitude,
+                accuracy: Math.round(pos.coords.accuracy), client_ts: new Date().toISOString(),
+              }),
+              () => resolve(null),
+              { enableHighAccuracy: true, timeout: timeoutMs, maximumAge: 0 },
+            );
+          });
+        }
+
+        function askForProofPhoto(actionLabel) {
+          return new Promise((resolve) => {
+            const overlay = document.createElement("div");
+            overlay.style.cssText = "position:fixed;inset:0;background:rgba(0,0,0,0.85);display:flex;align-items:center;justify-content:center;z-index:2000;padding:20px";
+            overlay.innerHTML = `
+              <div style="background:var(--surface-1);border-radius:14px;padding:24px;max-width:460px;width:100%;color:var(--color-text)">
+                <h3 style="color:var(--color-brand-500);margin-bottom:8px">
+                  <i class="fas fa-camera"></i> ${escapeHtml(actionLabel)}
+                </h3>
+                <p style="color:var(--color-text-muted);font-size:13px;margin-bottom:10px">
+                  ${t("delivery.proofModal.instructions")}
+                </p>
+                <div id="gps-bar" style="background:rgba(241,196,15,0.12);border:1px solid rgba(241,196,15,0.3);border-radius:8px;padding:8px 12px;font-size:12px;margin-bottom:12px;display:flex;align-items:center;gap:8px">
+                  <i class="fas fa-location-dot" style="color:#f1c40f"></i>
+                  <span id="gps-text" style="color:#f1c40f">${t("delivery.proofModal.gpsDetecting")}</span>
+                </div>
+                <label style="display:block;background:rgba(106,176,76,0.15);border:2px dashed rgba(106,176,76,0.5);border-radius:10px;padding:16px;text-align:center;cursor:pointer;margin-bottom:12px">
+                  <i class="fas fa-camera" style="font-size:28px;color:#6ab04c;display:block;margin-bottom:6px"></i>
+                  <span style="font-size:13px;color:var(--color-text-muted)">${t("delivery.proofModal.tapToOpenCamera")}</span>
+                  <input type="file" id="proof-input" accept="image/*" capture="environment" style="display:none" />
+                </label>
+                <div id="proof-preview" style="margin-bottom:12px"></div>
+                <div id="proof-status" style="font-size:13px;color:var(--color-text-soft);margin-bottom:12px;min-height:18px"></div>
+                <div style="display:flex;gap:8px">
+                  <button id="proof-submit" class="btn btn-green" disabled style="flex:1;opacity:0.5">
+                    <i class="fas fa-check"></i> ${t("delivery.proofModal.confirmSubmitBtn")}
+                  </button>
+                  <button id="proof-retake" class="btn btn-blue" style="flex:1;display:none">
+                    <i class="fas fa-redo"></i> ${t("delivery.proofModal.retakeBtn")}
+                  </button>
+                  <button id="proof-cancel" class="btn btn-red" style="flex:0 0 auto;padding:8px 14px">
+                    ${t("delivery.proofModal.cancelBtn")}
+                  </button>
+                </div>
+              </div>
+            `;
+            document.body.appendChild(overlay);
+
+            const fileInput = overlay.querySelector("#proof-input");
+            const preview = overlay.querySelector("#proof-preview");
+            const status = overlay.querySelector("#proof-status");
+            const submitBtn = overlay.querySelector("#proof-submit");
+            const retakeBtn = overlay.querySelector("#proof-retake");
+            const cancelBtn = overlay.querySelector("#proof-cancel");
+            const gpsText = overlay.querySelector("#gps-text");
+            let uploadedUrls = [];
+            let capturedGps = null;
+
+            captureGps().then((loc) => {
+              capturedGps = loc;
+              if (loc) {
+                gpsText.textContent = t("delivery.proofModal.gpsSuccess", { accuracy: loc.accuracy });
+                gpsText.style.color = "#a9dc98";
+                overlay.querySelector("#gps-bar").style.borderColor = "rgba(106,176,76,0.4)";
+                overlay.querySelector("#gps-bar").style.background = "rgba(106,176,76,0.08)";
+              } else {
+                gpsText.textContent = t("delivery.proofModal.gpsFailed");
+                gpsText.style.color = "#ffb3b3";
+              }
+            });
+
+            function cleanup(result) {
+              document.body.removeChild(overlay);
+              resolve(result);
+            }
+            function resetCapture() {
+              fileInput.value = "";
+              preview.innerHTML = "";
+              status.textContent = "";
+              submitBtn.disabled = true;
+              submitBtn.style.opacity = "0.5";
+              retakeBtn.style.display = "none";
+              uploadedUrls = [];
+            }
+
+            fileInput.addEventListener("change", async () => {
+              const file = fileInput.files[0];
+              if (!file) return;
+              capturedGps = capturedGps ? { ...capturedGps, client_ts: new Date().toISOString() } : { client_ts: new Date().toISOString() };
+              status.textContent = t("delivery.proofModal.uploading");
+              status.style.color = "var(--color-text-soft)";
+              submitBtn.disabled = true;
+              submitBtn.style.opacity = "0.5";
+              const objectUrl = URL.createObjectURL(file);
+              preview.innerHTML = `<img src="${objectUrl}" style="max-width:100%;max-height:200px;border-radius:8px;border:2px solid rgba(255,255,255,0.2)" />`;
+              try {
+                const fd = new FormData();
+                fd.append("image", file);
+                const token = getToken();
+                const r = await fetch("/api/v1/uploads/image", { method: "POST", headers: { Authorization: `Bearer ${token}` }, body: fd });
+                const data = await r.json();
+                if (!r.ok || !data?.success) throw new Error(data?.error?.message || t("delivery.proofModal.uploadFailed"));
+                uploadedUrls = [data.url];
+                preview.innerHTML = `<img src="${escapeHtml(data.url)}" style="max-width:100%;max-height:200px;border-radius:8px;border:2px solid #6ab04c" />`;
+                status.textContent = t("delivery.proofModal.uploadSuccess");
+                status.style.color = "#a9dc98";
+                submitBtn.disabled = false;
+                submitBtn.style.opacity = "1";
+                retakeBtn.style.display = "block";
+              } catch (err) {
+                preview.innerHTML = "";
+                status.textContent = err.message;
+                status.style.color = "#ffb3b3";
+                uploadedUrls = [];
+              }
+            });
+
+            retakeBtn.addEventListener("click", resetCapture);
+            submitBtn.addEventListener("click", () => cleanup({ urls: uploadedUrls, location: capturedGps }));
+            cancelBtn.addEventListener("click", () => cleanup(null));
+          });
+        }
+
+        function renderList(items, containerId, actionsBuilder) {
+          const container = document.getElementById(containerId);
+          if (!container) return;
+          container.innerHTML = items.map((d) => renderJob(d, actionsBuilder(d))).join("");
+          wireActionButtons(container);
+          container.querySelectorAll("[data-accept]").forEach((b) => b.addEventListener("click", () => actOn("accept", b.dataset.accept)));
+        }
+
+        async function loadAvailable() {
+          $("#available-list").innerHTML = deliverySkeleton(3);
+          try {
+            const items = await fetchAvailable();
+            $("#available-count").textContent = items.length ? `(${items.length})` : "";
+            if (!items.length) {
+              $("#available-list").innerHTML = deliveryEmptyState("available");
+              return;
+            }
+            renderList(items, "available-list", (d) =>
+              `<button class="btn btn-green" data-accept="${d.id}"><i class="fas fa-check"></i> ${t("delivery.jobActions.accept")}</button>`);
+          } catch (err) {
+            $("#available-list").innerHTML = `<div class="empty" style="color:#ffb3b3">${escapeHtml(err.message)}</div>`;
+          }
+        }
+
+        async function loadMine() {
+          $("#mine-list").innerHTML = deliverySkeleton(2);
+          try {
+            const items = await fetchMine(false);
+            $("#mine-count").textContent = items.length ? `(${items.length})` : "";
+            if (!items.length) {
+              $("#mine-list").innerHTML = deliveryEmptyState("mine");
+              return;
+            }
+            renderList(items, "mine-list", (d) => nextActions(d));
+          } catch (err) {
+            $("#mine-list").innerHTML = `<div class="empty" style="color:#ffb3b3">${escapeHtml(err.message)}</div>`;
+          }
+        }
+
+        async function loadHistory() {
+          $("#history-list").innerHTML = deliverySkeleton(2);
+          try {
+            const items = await fetchMine(true);
+            if (!items.length) {
+              $("#history-list").innerHTML = deliveryEmptyState("history");
+              return;
+            }
+            renderList(items, "history-list", () => "");
+          } catch (err) {
+            $("#history-list").innerHTML = `<div class="empty" style="color:#ffb3b3">${escapeHtml(err.message)}</div>`;
+          }
+        }
+
+        $$("#delivery-subtabs .tab").forEach((btn) => {
+          btn.addEventListener("click", () => {
+            $$("#delivery-subtabs .tab").forEach((b) => b.classList.remove("active"));
+            $$("#delivery-board .tab-content").forEach((c) => c.classList.remove("active"));
+            btn.classList.add("active");
+            $("#tab-" + btn.dataset.tab).classList.add("active");
+            if (btn.dataset.tab === "available") loadAvailable();
+            if (btn.dataset.tab === "mine") loadMine();
+            if (btn.dataset.tab === "history") loadHistory();
+          });
+        });
+
+        /* =============================================================
+         * Top-level tab routing (hash-driven)
+         * ============================================================= */
+        let incomingLoadedOnce = false;
+        let deliveriesLoadedOnce = false;
+        const VALID_TABS = ["listings", "incoming", "deliveries"];
+
+        function setMainTab(name) {
+          if (!VALID_TABS.includes(name)) name = "listings";
+          $$("#dash-tabs .hs-tab").forEach((b) => b.classList.toggle("is-active", b.dataset.dtab === name));
+          $$(".dtab-panel").forEach((p) => p.classList.toggle("hidden", p.id !== "dtab-" + name));
+          if (location.hash.slice(1) !== name) {
+            history.replaceState(null, "", "#" + name);
+          }
+          // Accounts still pending/rejected/blocked only see the status
+          // banner in each tab — don't bother hitting endpoints they're
+          // not cleared to use yet (mirrors the pre-merge behaviour of
+          // owner-dashboard.html / delivery.html).
+          const u = getUser();
+          const isApproved = !!(u && (u.is_admin || u.account_status === "approved"));
+          if (name === "incoming" && !incomingLoadedOnce && isApproved) {
+            incomingLoadedOnce = true;
+            loadIncoming();
+          }
+          if (name === "deliveries" && !deliveriesLoadedOnce && isApproved) {
+            deliveriesLoadedOnce = true;
+            loadAvailable();
+            loadMine();
+          }
+        }
+
+        $$("#dash-tabs .hs-tab").forEach((b) =>
+          b.addEventListener("click", () => setMainTab(b.dataset.dtab)));
+        window.addEventListener("hashchange", () => setMainTab(location.hash.slice(1)));
+
+        function isAccountApproved() {
+          const u = getUser();
+          return !!(u && (u.is_admin || u.account_status === "approved"));
+        }
+
+        // Background refresh for the "pending" badge on the Incoming tab —
+        // cheap (limit=1) and lets a user sitting on Listings notice a new
+        // request without switching tabs.
+        setInterval(() => {
+          if (document.hidden || !isAccountApproved()) return;
+          refreshIncomingBadgeOnly();
+        }, 20000);
+
+        // Auto-refresh the Deliveries board every 15s while that tab is
+        // the active one and the page is visible.
+        const REFRESH_MS = 15000;
+        setInterval(() => {
+          if (document.hidden || !isAccountApproved()) return;
+          if (location.hash.slice(1) !== "deliveries") return;
+          const activeSub = $("#delivery-subtabs .tab.active")?.dataset.tab;
+          if (activeSub === "available") loadAvailable();
+          else if (activeSub === "mine") loadMine();
+        }, REFRESH_MS);
+        document.addEventListener("visibilitychange", () => {
+          if (document.hidden || !isAccountApproved()) return;
+          if (location.hash.slice(1) !== "deliveries") return;
+          const activeSub = $("#delivery-subtabs .tab.active")?.dataset.tab;
+          if (activeSub === "available") loadAvailable();
+          else if (activeSub === "mine") loadMine();
+        });
+
+        /* =============================================================
+         * Init
+         * ============================================================= */
+        async function init() {
+          if (window.HarthI18n) await window.HarthI18n.ready();
+          if (!getToken()) return redirectToLogin();
+          try {
+            const res = await api("/auth/me");
+            setAuth(getToken(), res.user);
+            showDashboard(res.user);
+            await refreshEquipment();
+            if (isAccountApproved()) refreshIncomingBadgeOnly();
+            setMainTab(location.hash.slice(1) || "listings");
+          } catch (err) {
+            redirectToLogin();
+          }
+        }
+
+        document.addEventListener("DOMContentLoaded", () => {
+          $("#equip-form").addEventListener("submit", handleSubmit);
+          $("#btn-cancel-edit").addEventListener("click", resetForm);
+          $("#f-listing-type").addEventListener("change", toggleListingPriceFields);
+          $("#f-images").addEventListener("change", (e) => {
+            handleImageFiles(e.target.files);
+            e.target.value = "";
+          });
+          $("#filter-search").addEventListener("input", applyClientFilters);
+          $("#filter-status").addEventListener("change", applyClientFilters);
+          $("#filter-refresh").addEventListener("click", refreshEquipment);
+          $("#inc-filter-status").addEventListener("change", () => { incomingPage = 1; loadIncoming(); });
+          $("#inc-refresh").addEventListener("click", () => loadIncoming());
+
+          setupPriceCalculation();
+
+          const pdfInput = $("#f-datasheet-pdf");
+          if (pdfInput) {
+            pdfInput.addEventListener("change", async (e) => {
+              const file = e.target.files[0];
+              if (!file) return;
+              const infoEl = $("#pdf-upload-info");
+              const nameEl = $("#pdf-upload-name");
+              const sizeEl = $("#pdf-upload-size");
+              const urlEl = $("#f-datasheet-pdf-url");
+              const linkEl = $("#pdf-current-link");
+              if (infoEl) infoEl.style.display = "flex";
+              if (nameEl) nameEl.textContent = file.name;
+              if (sizeEl) sizeEl.textContent = (file.size / 1024 / 1024).toFixed(2) + " MB";
+              try {
+                const form = new FormData();
+                form.append("pdf", file);
+                const token = localStorage.getItem("token");
+                const res = await fetch(`${window.API_BASE || "/api/v1"}/uploads/pdf`, {
+                  method: "POST",
+                  headers: token ? { Authorization: "Bearer " + token } : {},
+                  body: form,
+                });
+                const data = await res.json();
+                if (!data.success) throw new Error(data.error?.message || t("ownerDashboard.toasts.pdfUploadFailed"));
+                if (urlEl) urlEl.value = data.url;
+                if (linkEl) linkEl.innerHTML = `<a href="${escapeHtml(data.url)}" target="_blank"><i class="fas fa-file-pdf"></i> ${t("ownerDashboard.form.specsAcc.pdfUploadedLinkText")}</a>`;
+                showToast(t("ownerDashboard.toasts.pdfUploaded"));
+              } catch (err) {
+                showToast(err.message || t("ownerDashboard.toasts.pdfUploadGenericFailed"), true);
+              }
+            });
+          }
+
+          if (window.HarthI18n) {
+            document.addEventListener("harth:langchange", () => {
+              updateFormMode();
+              if ($("#dashboard-section") && !$("#dashboard-section").classList.contains("hidden")) {
+                const user = getUser();
+                if (user) {
+                  renderStatusBanner(user);
+                  renderTrustBanner(user);
+                  $("#welcome-text").textContent = t("ownerDashboard.welcomeTemplate", { name: user.name || user.email });
+                }
+                refreshEquipment();
+                if (incomingLoadedOnce) loadIncoming();
+                if (deliveriesLoadedOnce) { loadAvailable(); loadMine(); }
+              }
+            });
+          }
+
+          init();
+        });
+      })();
+    </script>
+
+    <script src="responsive.js" defer></script>
+  </body>
+</html>

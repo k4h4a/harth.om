@@ -50,13 +50,13 @@ const create = asyncHandler(async (req, res) => {
     if (!rental) throw new AppError("Rental not found", 404);
     const isParty =
       rental.renter_id === req.user.id || rental.owner_id === req.user.id;
-    if (!isParty && req.user.role !== "admin") {
+    if (!isParty && !req.user.is_admin) {
       throw new AppError("Not permitted for this rental", 403);
     }
   } else {
     const order = await knex("orders").where({ id: order_id }).first();
     if (!order) throw new AppError("Order not found", 404);
-    if (order.user_id !== req.user.id && req.user.role !== "admin") {
+    if (order.user_id !== req.user.id && !req.user.is_admin) {
       // Sellers are reachable via order_items.equipment.owner_id; we allow
       // buyer + admin to initiate for simplicity. Sellers can always coordinate
       // via the chat feature in a later phase.
@@ -79,30 +79,21 @@ const create = asyncHandler(async (req, res) => {
 
 /**
  * GET /deliveries
- * Courier job board + scoped views for other roles.
+ * Courier job board + scoped views. There's no more role distinction —
+ * the caller always passes an explicit `scope`; we default to `customer`
+ * (deliveries tied to things the caller bought/rented) when omitted.
  */
 const list = asyncHandler(async (req, res) => {
   let { scope, status, order_id, page, limit } = req.query;
 
-  // Resolve scope defaults by role if not explicitly set
-  if (!scope) {
-    if (req.user.role === "delivery") scope = "mine";
-    else if (req.user.role === "owner") scope = "owner";
-    else if (req.user.role === "admin") scope = "admin";
-    else scope = "customer";
-  }
+  if (!scope) scope = "customer";
 
   // Authorization: only admins can ask for 'admin' scope.
-  if (scope === "admin" && req.user.role !== "admin") {
-    throw new AppError("Admin scope requires admin role", 403);
+  if (scope === "admin" && !req.user.is_admin) {
+    throw new AppError("Admin scope requires admin privileges", 403);
   }
-  // Only couriers/admins see the open job board.
-  if (
-    scope === "available" &&
-    !["delivery", "admin"].includes(req.user.role)
-  ) {
-    throw new AppError("Available jobs are for couriers only", 403);
-  }
+  // The open job board ('available' = pending & unclaimed) is visible to
+  // any authenticated user — anyone can accept an unclaimed delivery job.
 
   const result = await deliveryRepo.list({
     scope,
@@ -123,7 +114,7 @@ const getOne = asyncHandler(async (req, res) => {
   const delivery = await deliveryRepo.getById(req.params.id);
   if (!delivery) throw new AppError("Delivery not found", 404);
 
-  if (req.user.role === "admin") {
+  if (req.user.is_admin) {
     return res.json({ success: true, delivery });
   }
   if (delivery.courier_id === req.user.id) {
