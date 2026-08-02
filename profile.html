@@ -10,6 +10,9 @@
           document.documentElement.lang = "en";
           document.documentElement.dir = "ltr";
         }
+        if (localStorage.getItem("harth_theme") === "dark") {
+          document.documentElement.setAttribute("data-theme", "dark");
+        }
       } catch (e) {}
       document.documentElement.classList.add("i18n-loading");
     })();
@@ -520,7 +523,7 @@
               <div class="toggle-lbl" data-i18n="profile.panels.prefs.darkModeLabel">الوضع الليلي</div>
               <div class="toggle-sub" data-i18n="profile.panels.prefs.darkModeSub">خلفية داكنة تريح العين</div>
             </div>
-            <label class="sw"><input type="checkbox" id="sw-dark" checked onchange="toggleTheme(this.checked)" /><span class="sw-slider"></span></label>
+            <label class="sw"><input type="checkbox" id="sw-dark" onchange="toggleTheme(this.checked)" /><span class="sw-slider"></span></label>
           </div>
           <div class="toggle-row">
             <div class="toggle-info">
@@ -773,6 +776,7 @@
 
   <div id="toast"></div>
 
+  <script src="theme.js"></script>
   <script src="i18n.js"></script>
   <script src="lang-switcher.js"></script>
   <script src="design-system.js"></script>
@@ -885,7 +889,18 @@
       setSelect("f-gender", p.gender);
 
       // Preferences
-      setToggle("sw-dark",          (p.theme || "dark") === "dark");
+      // localStorage (via theme.js) is the paint-time source of truth, same
+      // as harth_lang — but on first-ever visit with nothing stored yet,
+      // hydrate from this logged-in user's saved backend preference once.
+      if (window.HarthTheme) {
+        let hasLocalThemeChoice;
+        try { hasLocalThemeChoice = localStorage.getItem("harth_theme") !== null; }
+        catch { hasLocalThemeChoice = true; }
+        if (!hasLocalThemeChoice && p.theme === "dark") {
+          window.HarthTheme.setTheme("dark", { silent: true });
+        }
+      }
+      setToggle("sw-dark", window.HarthTheme ? window.HarthTheme.getTheme() === "dark" : false);
       setToggle("sw-2fa",           !!p.two_fa_enabled);
       setToggle("sw-notif-orders",  p.notif_orders  !== false);
       setToggle("sw-notif-msgs",    p.notif_messages !== false);
@@ -1195,10 +1210,9 @@
     window.savePref = savePref;
 
     function toggleTheme(dark) {
-      document.body.style.background = dark
-        ? "#0a1a0a"
-        : "linear-gradient(135deg,#f0f4f0,#e8f0e8)";
-      savePref("theme", dark ? "dark" : "light");
+      const theme = dark ? "dark" : "light";
+      if (window.HarthTheme) window.HarthTheme.setTheme(theme);
+      savePref("theme", theme);
     }
     window.toggleTheme = toggleTheme;
 

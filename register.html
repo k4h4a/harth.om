@@ -34,6 +34,9 @@
             document.documentElement.lang = "en";
             document.documentElement.dir = "ltr";
           }
+          if (localStorage.getItem("harth_theme") === "dark") {
+            document.documentElement.setAttribute("data-theme", "dark");
+          }
         } catch (e) {}
         document.documentElement.classList.add("i18n-loading");
       })();
@@ -325,6 +328,7 @@
       </a>
     </div>
 
+    <script src="theme.js"></script>
     <script src="i18n.js"></script>
     <script src="lang-switcher.js"></script>
     <script src="design-system.js"></script>

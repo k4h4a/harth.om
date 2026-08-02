@@ -71,7 +71,7 @@
       /* ── Active state for desktop nav items ─────────────── */
       .nav-links .nav-item.active,
       .nav-links a.active {
-        color: #0f4d37 !important;
+        color: var(--color-brand-700, #0f4d37) !important;
         font-weight: 700;
         position: relative;
       }
@@ -84,7 +84,7 @@
         inset-inline-start: 0;
         inset-inline-end: 0;
         height: 2px;
-        background: #b8860b;
+        background: var(--color-accent-500, #b8860b);
         border-radius: 2px;
       }
     `;

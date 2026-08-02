@@ -12,6 +12,9 @@
             document.documentElement.lang = "en";
             document.documentElement.dir = "ltr";
           }
+          if (localStorage.getItem("harth_theme") === "dark") {
+            document.documentElement.setAttribute("data-theme", "dark");
+          }
         } catch (e) {}
         document.documentElement.classList.add("i18n-loading");
       })();
@@ -31,12 +34,8 @@
       * { margin: 0; padding: 0; box-sizing: border-box; }
       body {
         font-family: "Cairo", sans-serif;
-        background:
-          linear-gradient(rgba(10, 20, 10, 0.80), rgba(10, 20, 10, 0.88)),
-          url("https://images.unsplash.com/photo-1500673922987-e212871fec22?auto=format&fit=crop&w=1920&q=80")
-          no-repeat center center fixed;
-        background-size: cover;
-        color: #fff;
+        background: #f9f8f4;
+        color: #173828;
         min-height: 100vh;
         padding-bottom: 60px;
       }
@@ -52,10 +51,11 @@
         font-size: 28px;
         font-weight: 700;
         margin-bottom: 6px;
+        color: #173828;
       }
-      .page-title span { color: #6ab04c; }
+      .page-title span { color: #0f4d37; }
       .page-subtitle {
-        color: rgba(255,255,255,0.55);
+        color: #69746c;
         font-size: 14px;
         margin-bottom: 28px;
       }
@@ -70,9 +70,9 @@
       }
       .filter-bar input,
       .filter-bar select {
-        background: rgba(255,255,255,0.10);
-        border: 1px solid rgba(255,255,255,0.22);
-        color: #fff;
+        background: #fff;
+        border: 1px solid #e8e4da;
+        color: #173828;
         padding: 9px 14px;
         border-radius: 8px;
         font-family: inherit;
@@ -80,15 +80,15 @@
         transition: border-color 0.2s;
         min-width: 140px;
       }
-      .filter-bar input::placeholder { color: rgba(255,255,255,0.45); }
+      .filter-bar input::placeholder { color: #8b948d; }
       .filter-bar input:focus,
-      .filter-bar select:focus { outline: none; border-color: #6ab04c; }
-      .filter-bar select option { background: #1a2e12; color: #fff; }
+      .filter-bar select:focus { outline: none; border-color: #6fae2d; }
+      .filter-bar select option { background: #fff; color: #173828; }
       .filter-bar input[type="search"] { flex: 1; min-width: 200px; }
       .filter-bar .btn-clear {
-        background: transparent;
-        border: 1px solid rgba(255,255,255,0.22);
-        color: rgba(255,255,255,0.6);
+        background: #fff;
+        border: 1px solid #e8e4da;
+        color: #3f4d45;
         padding: 9px 16px;
         border-radius: 8px;
         cursor: pointer;
@@ -97,7 +97,7 @@
         transition: all 0.2s;
         white-space: nowrap;
       }
-      .filter-bar .btn-clear:hover { border-color: rgba(255,255,255,0.5); color: #fff; }
+      .filter-bar .btn-clear:hover { border-color: #d7d1c1; color: #173828; }
 
       /* ── Summary Stats ── */
       .stats-row {
@@ -107,27 +107,29 @@
         flex-wrap: wrap;
       }
       .stat-card {
-        background: rgba(255,255,255,0.07);
-        border: 1px solid rgba(255,255,255,0.12);
+        background: #fff;
+        border: 1px solid #e8e4da;
         border-radius: 12px;
         padding: 14px 20px;
         flex: 1;
         min-width: 130px;
         text-align: center;
+        box-shadow: 0 1px 3px rgba(23,56,40,.06);
       }
-      .stat-card .stat-num { font-size: 26px; font-weight: 700; color: #6ab04c; }
-      .stat-card .stat-label { font-size: 12px; color: rgba(255,255,255,0.55); margin-top: 2px; }
+      .stat-card .stat-num { font-size: 26px; font-weight: 700; color: #0f4d37; }
+      .stat-card .stat-label { font-size: 12px; color: #69746c; margin-top: 2px; }
 
       /* ── Order Card ── */
       .order-card {
-        background: rgba(255,255,255,0.07);
-        border: 1px solid rgba(255,255,255,0.13);
+        background: #fff;
+        border: 1px solid #e8e4da;
         border-radius: 14px;
         margin-bottom: 14px;
         overflow: hidden;
         transition: border-color 0.2s, box-shadow 0.2s;
+        box-shadow: 0 1px 3px rgba(23,56,40,.06);
       }
-      .order-card:hover { border-color: rgba(106,176,76,0.35); box-shadow: 0 4px 20px rgba(0,0,0,0.25); }
+      .order-card:hover { border-color: #6fae2d; box-shadow: 0 6px 16px rgba(23,56,40,.08); }
 
       .order-header {
         display: flex;
@@ -137,12 +139,12 @@
         cursor: pointer;
         user-select: none;
       }
-      .order-header:hover { background: rgba(255,255,255,0.03); }
+      .order-header:hover { background: #f9f8f4; }
 
       .order-num {
         font-weight: 700;
         font-size: 15px;
-        color: #6ab04c;
+        color: #0f4d37;
         white-space: nowrap;
       }
       .order-meta {
@@ -151,11 +153,11 @@
       }
       .order-meta .order-date {
         font-size: 13px;
-        color: rgba(255,255,255,0.55);
+        color: #69746c;
       }
       .order-meta .order-summary {
         font-size: 14px;
-        color: rgba(255,255,255,0.85);
+        color: #173828;
         white-space: nowrap;
         overflow: hidden;
         text-overflow: ellipsis;
@@ -164,7 +166,7 @@
       .order-total {
         font-size: 17px;
         font-weight: 700;
-        color: #fff;
+        color: #0f4d37;
         white-space: nowrap;
       }
       .status-badge {
@@ -177,15 +179,15 @@
         font-weight: 700;
         white-space: nowrap;
       }
-      .status-badge.pending    { background: rgba(241,196,15,0.2);  color: #f1c40f;  border: 1px solid rgba(241,196,15,0.35); }
-      .status-badge.confirmed  { background: rgba(52,152,219,0.2);  color: #74b9ff;  border: 1px solid rgba(52,152,219,0.35); }
-      .status-badge.shipped    { background: rgba(142,68,173,0.2);  color: #d2a5ff;  border: 1px solid rgba(142,68,173,0.35); }
-      .status-badge.delivered  { background: rgba(39,174,96,0.2);   color: #55efc4;  border: 1px solid rgba(39,174,96,0.35); }
-      .status-badge.cancelled  { background: rgba(231,76,60,0.2);   color: #ffb3b3;  border: 1px solid rgba(231,76,60,0.35); }
-      .status-badge.refunded   { background: rgba(99,110,114,0.2);  color: #b2bec3;  border: 1px solid rgba(99,110,114,0.35); }
+      .status-badge.pending    { background: rgba(184,134,11,0.12);  color: #9c7209;  border: 1px solid rgba(184,134,11,0.3); }
+      .status-badge.confirmed  { background: rgba(52,152,219,0.12);  color: #2471a3;  border: 1px solid rgba(52,152,219,0.3); }
+      .status-badge.shipped    { background: rgba(142,68,173,0.12);  color: #8e44ad;  border: 1px solid rgba(142,68,173,0.3); }
+      .status-badge.delivered  { background: rgba(39,174,96,0.12);   color: #1e8449;  border: 1px solid rgba(39,174,96,0.3); }
+      .status-badge.cancelled  { background: rgba(231,76,60,0.12);   color: #c0392b;  border: 1px solid rgba(231,76,60,0.3); }
+      .status-badge.refunded   { background: #f1efe6;  color: #69746c;  border: 1px solid #e8e4da; }
 
       .expand-icon {
-        color: rgba(255,255,255,0.4);
+        color: #8b948d;
         font-size: 13px;
         transition: transform 0.25s;
         flex-shrink: 0;
@@ -195,7 +197,7 @@
       /* ── Order Details (expanded) ── */
       .order-details {
         display: none;
-        border-top: 1px solid rgba(255,255,255,0.1);
+        border-top: 1px solid #e8e4da;
         padding: 18px 20px;
         animation: fadeIn 0.2s ease;
       }
@@ -206,13 +208,13 @@
       .details-loading {
         text-align: center;
         padding: 20px;
-        color: rgba(255,255,255,0.5);
+        color: #69746c;
       }
       .spin-sm {
         display: inline-block;
         width: 18px; height: 18px;
-        border: 2px solid rgba(255,255,255,0.2);
-        border-top-color: #6ab04c;
+        border: 2px solid #e8e4da;
+        border-top-color: #0f4d37;
         border-radius: 50%;
         animation: spin 0.7s linear infinite;
         vertical-align: middle;
@@ -227,23 +229,23 @@
         margin-bottom: 14px;
       }
       .items-table th {
-        background: rgba(255,255,255,0.06);
+        background: #f9f8f4;
         padding: 8px 10px;
         text-align: start;
-        color: rgba(255,255,255,0.6);
+        color: #69746c;
         font-weight: 600;
         font-size: 12px;
-        border-bottom: 1px solid rgba(255,255,255,0.1);
+        border-bottom: 1px solid #e8e4da;
       }
-      .items-table td { padding: 10px; border-bottom: 1px solid rgba(255,255,255,0.06); vertical-align: middle; }
+      .items-table td { padding: 10px; border-bottom: 1px solid #f1efe6; vertical-align: middle; color: #173828; }
       .items-table tr:last-child td { border-bottom: none; }
       .item-img { width: 44px; height: 44px; object-fit: cover; border-radius: 6px; }
       .item-img-ph {
         width: 44px; height: 44px;
-        background: rgba(255,255,255,0.07);
+        background: #f1efe6;
         border-radius: 6px;
         display: flex; align-items: center; justify-content: center;
-        color: rgba(255,255,255,0.3);
+        color: #b0a996;
       }
 
       .order-info-grid {
@@ -253,12 +255,12 @@
         font-size: 13px;
         margin-bottom: 14px;
         padding: 12px 14px;
-        background: rgba(255,255,255,0.04);
+        background: #f9f8f4;
         border-radius: 8px;
       }
       .order-info-grid .info-row { display: flex; gap: 6px; }
-      .order-info-grid .info-label { color: rgba(255,255,255,0.5); white-space: nowrap; }
-      .order-info-grid .info-val { font-weight: 600; color: #fff; }
+      .order-info-grid .info-label { color: #69746c; white-space: nowrap; }
+      .order-info-grid .info-val { font-weight: 600; color: #173828; }
 
       .order-totals-mini {
         display: flex;
@@ -266,12 +268,12 @@
         gap: 24px;
         font-size: 13px;
         padding: 10px 0 4px;
-        border-top: 1px dashed rgba(255,255,255,0.12);
-        color: rgba(255,255,255,0.7);
+        border-top: 1px dashed #e8e4da;
+        color: #3f4d45;
         flex-wrap: wrap;
       }
       .order-totals-mini .grand-val {
-        color: #6ab04c;
+        color: #0f4d37;
         font-size: 16px;
         font-weight: 700;
       }
@@ -296,23 +298,23 @@
         transition: all 0.2s;
       }
       .btn-reorder {
-        background: #6ab04c;
+        background: #0f4d37;
         color: #fff;
       }
-      .btn-reorder:hover { background: #5a9a3c; transform: translateY(-1px); }
+      .btn-reorder:hover { background: #14664a; transform: translateY(-1px); }
       .btn-reorder:disabled { opacity: 0.5; cursor: not-allowed; transform: none; }
       .btn-track {
-        background: rgba(52,152,219,0.15);
-        border: 1px solid rgba(52,152,219,0.35);
-        color: #74b9ff;
+        background: rgba(52,152,219,0.1);
+        border: 1px solid rgba(52,152,219,0.3);
+        color: #2471a3;
       }
-      .btn-track:hover { background: rgba(52,152,219,0.25); }
+      .btn-track:hover { background: rgba(52,152,219,0.18); }
       .btn-cancel {
-        background: rgba(231,76,60,0.12);
-        border: 1px solid rgba(231,76,60,0.35);
-        color: #ffb3b3;
+        background: rgba(231,76,60,0.08);
+        border: 1px solid rgba(231,76,60,0.3);
+        color: #c0392b;
       }
-      .btn-cancel:hover { background: rgba(231,76,60,0.22); }
+      .btn-cancel:hover { background: rgba(231,76,60,0.14); }
       .btn-cancel:disabled { opacity: 0.5; cursor: not-allowed; }
 
       /* ── Pagination ── */
@@ -327,17 +329,17 @@
         min-width: 38px;
         height: 38px;
         padding: 0 12px;
-        background: rgba(255,255,255,0.08);
-        border: 1px solid rgba(255,255,255,0.18);
-        color: rgba(255,255,255,0.7);
+        background: #fff;
+        border: 1px solid #e8e4da;
+        color: #3f4d45;
         border-radius: 8px;
         cursor: pointer;
         font-family: inherit;
         font-size: 14px;
         transition: all 0.2s;
       }
-      .pagination button:hover:not(:disabled) { background: rgba(255,255,255,0.15); color: #fff; }
-      .pagination button.active { background: #6ab04c; border-color: #5a9a3c; color: #fff; }
+      .pagination button:hover:not(:disabled) { background: #f9f8f4; color: #173828; }
+      .pagination button.active { background: #0f4d37; border-color: #0f4d37; color: #fff; }
       .pagination button:disabled { opacity: 0.4; cursor: not-allowed; }
 
       /* These chevrons point toward "previous"/"next" in reading order —
@@ -356,19 +358,19 @@
       .spin-lg {
         display: inline-block;
         width: 48px; height: 48px;
-        border: 4px solid rgba(255,255,255,0.2);
-        border-top-color: #6ab04c;
+        border: 4px solid #e8e4da;
+        border-top-color: #0f4d37;
         border-radius: 50%;
         animation: spin 0.8s linear infinite;
         margin-bottom: 14px;
       }
-      .empty-state i { font-size: 60px; color: rgba(106,176,76,0.5); margin-bottom: 16px; display: block; }
-      .empty-state h3 { font-size: 22px; margin-bottom: 8px; }
-      .empty-state p { color: rgba(255,255,255,0.5); font-size: 14px; }
+      .empty-state i { font-size: 60px; color: #8fbb9c; margin-bottom: 16px; display: block; }
+      .empty-state h3 { font-size: 22px; margin-bottom: 8px; color: #173828; }
+      .empty-state p { color: #69746c; font-size: 14px; }
       .empty-state a {
         display: inline-block;
         margin-top: 20px;
-        background: #6ab04c;
+        background: #0f4d37;
         color: #fff;
         padding: 10px 24px;
         border-radius: 8px;
@@ -382,11 +384,11 @@
         bottom: 24px;
         inset-inline-start: 50%;
         transform: translateX(-50%);
-        background: #2d5016;
+        background: #0f4d37;
         color: #fff;
         padding: 12px 22px;
         border-radius: 8px;
-        box-shadow: 0 4px 16px rgba(0,0,0,0.35);
+        box-shadow: 0 8px 24px rgba(23,56,40,.2);
         z-index: 2000;
         opacity: 0;
         transition: opacity 0.25s;
@@ -402,9 +404,66 @@
         .order-info-grid { grid-template-columns: 1fr; }
         .items-table thead { display: none; }
         .items-table, .items-table tbody, .items-table tr, .items-table td { display: block; width: 100%; }
-        .items-table tr { background: rgba(255,255,255,0.03); margin-bottom: 8px; border-radius: 6px; padding: 8px; }
+        .items-table tr { background: #f9f8f4; margin-bottom: 8px; border-radius: 6px; padding: 8px; }
         .items-table td { padding: 4px 0; }
       }
+
+      /* ===== Dark mode — this page is self-contained (plain hex, no
+         design tokens), so every color rule above gets a dark twin here. ===== */
+      html[data-theme="dark"] body { background: #101b15; color: #eaf1ec; }
+      html[data-theme="dark"] .page-title { color: #eaf1ec; }
+      html[data-theme="dark"] .page-title span { color: #3fa562; }
+      html[data-theme="dark"] .page-subtitle { color: #b7c4bb; }
+      html[data-theme="dark"] .filter-bar input,
+      html[data-theme="dark"] .filter-bar select { background: #17251e; border-color: rgba(255,255,255,.16); color: #eaf1ec; }
+      html[data-theme="dark"] .filter-bar input::placeholder { color: #66716a; }
+      html[data-theme="dark"] .filter-bar select option { background: #17251e; color: #eaf1ec; }
+      html[data-theme="dark"] .filter-bar .btn-clear { background: #17251e; border-color: rgba(255,255,255,.16); color: #b7c4bb; }
+      html[data-theme="dark"] .filter-bar .btn-clear:hover { border-color: rgba(255,255,255,.28); color: #eaf1ec; }
+      html[data-theme="dark"] .stat-card { background: #17251e; border-color: rgba(255,255,255,.09); box-shadow: 0 1px 3px rgba(0,0,0,.3); }
+      html[data-theme="dark"] .stat-card .stat-num { color: #3fa562; }
+      html[data-theme="dark"] .stat-card .stat-label { color: #b7c4bb; }
+      html[data-theme="dark"] .order-card { background: #17251e; border-color: rgba(255,255,255,.09); box-shadow: 0 1px 3px rgba(0,0,0,.3); }
+      html[data-theme="dark"] .order-card:hover { border-color: #7fc13b; }
+      html[data-theme="dark"] .order-header:hover { background: #1f3128; }
+      html[data-theme="dark"] .order-num { color: #7fc13b; }
+      html[data-theme="dark"] .order-meta .order-date { color: #b7c4bb; }
+      html[data-theme="dark"] .order-meta .order-summary { color: #eaf1ec; }
+      html[data-theme="dark"] .order-total { color: #7fc13b; }
+      html[data-theme="dark"] .status-badge.pending { background: rgba(212,160,23,.14); color: #d4a017; border-color: rgba(212,160,23,.3); }
+      html[data-theme="dark"] .status-badge.confirmed { background: rgba(74,168,232,.14); color: #4aa8e8; border-color: rgba(74,168,232,.3); }
+      html[data-theme="dark"] .status-badge.shipped { background: rgba(180,120,220,.14); color: #c290e8; border-color: rgba(180,120,220,.3); }
+      html[data-theme="dark"] .status-badge.delivered { background: rgba(52,199,122,.14); color: #34c77a; border-color: rgba(52,199,122,.3); }
+      html[data-theme="dark"] .status-badge.cancelled { background: rgba(239,91,74,.14); color: #ef5b4a; border-color: rgba(239,91,74,.3); }
+      html[data-theme="dark"] .status-badge.refunded { background: #1f3128; color: #b7c4bb; border-color: rgba(255,255,255,.16); }
+      html[data-theme="dark"] .expand-icon { color: #66716a; }
+      html[data-theme="dark"] .order-details { border-color: rgba(255,255,255,.09); }
+      html[data-theme="dark"] .details-loading { color: #b7c4bb; }
+      html[data-theme="dark"] .spin-sm,
+      html[data-theme="dark"] .spin-lg { border-color: rgba(255,255,255,.16); border-top-color: #3fa562; }
+      html[data-theme="dark"] .items-table th { background: #101b15; color: #b7c4bb; border-color: rgba(255,255,255,.09); }
+      html[data-theme="dark"] .items-table td { border-color: rgba(255,255,255,.06); color: #eaf1ec; }
+      html[data-theme="dark"] .item-img-ph { background: #1f3128; color: #66716a; }
+      html[data-theme="dark"] .order-info-grid { background: #101b15; }
+      html[data-theme="dark"] .order-info-grid .info-label { color: #b7c4bb; }
+      html[data-theme="dark"] .order-info-grid .info-val { color: #eaf1ec; }
+      html[data-theme="dark"] .order-totals-mini { border-color: rgba(255,255,255,.16); color: #b7c4bb; }
+      html[data-theme="dark"] .order-totals-mini .grand-val { color: #7fc13b; }
+      html[data-theme="dark"] .btn-reorder { background: #3fa562; color: #0d1712; }
+      html[data-theme="dark"] .btn-reorder:hover { background: #52c17a; }
+      html[data-theme="dark"] .btn-track { background: rgba(74,168,232,.12); border-color: rgba(74,168,232,.3); color: #4aa8e8; }
+      html[data-theme="dark"] .btn-track:hover { background: rgba(74,168,232,.2); }
+      html[data-theme="dark"] .btn-cancel { background: rgba(239,91,74,.1); border-color: rgba(239,91,74,.3); color: #ef5b4a; }
+      html[data-theme="dark"] .btn-cancel:hover { background: rgba(239,91,74,.18); }
+      html[data-theme="dark"] .pagination button { background: #17251e; border-color: rgba(255,255,255,.16); color: #b7c4bb; }
+      html[data-theme="dark"] .pagination button:hover:not(:disabled) { background: #1f3128; color: #eaf1ec; }
+      html[data-theme="dark"] .pagination button.active { background: #3fa562; border-color: #3fa562; color: #0d1712; }
+      html[data-theme="dark"] .empty-state i { color: #5b9a6a; }
+      html[data-theme="dark"] .empty-state p { color: #b7c4bb; }
+      html[data-theme="dark"] .empty-state a { background: #3fa562; color: #0d1712; }
+      html[data-theme="dark"] #toast { background: #3fa562; color: #0d1712; }
+      html[data-theme="dark"] #toast.error { background: #ef5b4a; color: #101b15; }
+      html[data-theme="dark"] .items-table tr { background: #101b15; }
     </style>
   </head>
   <body>
@@ -469,7 +528,7 @@
       <!-- Loading state -->
       <div class="page-loading" id="page-loading">
         <div class="spin-lg"></div>
-        <div style="color:rgba(255,255,255,0.5)" data-i18n="myOrders.loadingOrders">جارٍ تحميل طلباتك...</div>
+        <div style="color:#69746c" data-i18n="myOrders.loadingOrders">جارٍ تحميل طلباتك...</div>
       </div>
 
       <!-- Orders list -->
@@ -489,6 +548,7 @@
 
     <div id="toast"></div>
 
+    <script src="theme.js"></script>
     <script src="i18n.js"></script>
     <script src="lang-switcher.js"></script>
     <script src="design-system.js"></script>
@@ -601,7 +661,7 @@
           updateStats(allOrders);
           applyFilters();
         } catch (err) {
-          $("#page-loading").innerHTML = `<p style="color:#ffb3b3">${t("myOrders.toasts.errorPrefix")} ${escapeHtml(err.message)}</p>`;
+          $("#page-loading").innerHTML = `<p style="color:#c0392b">${t("myOrders.toasts.errorPrefix")} ${escapeHtml(err.message)}</p>`;
           showToast(err.message, true);
         }
       }
@@ -679,8 +739,8 @@
 
           const isRental = o._type === "rental";
           const typeBadge = isRental
-            ? `<span style="background:rgba(241,196,15,0.15);color:#f1c40f;font-size:11px;padding:2px 8px;border-radius:20px;margin-inline-start:6px;font-weight:700">${t("myOrders.typeBadges.rental")}</span>`
-            : `<span style="background:rgba(106,176,76,0.15);color:#6ab04c;font-size:11px;padding:2px 8px;border-radius:20px;margin-inline-start:6px;font-weight:700">${t("myOrders.typeBadges.sale")}</span>`;
+            ? `<span style="background:rgba(15,77,55,0.1);color:#0f4d37;font-size:11px;padding:2px 8px;border-radius:20px;margin-inline-start:6px;font-weight:700">${t("myOrders.typeBadges.rental")}</span>`
+            : `<span style="background:rgba(184,134,11,0.12);color:#9c7209;font-size:11px;padding:2px 8px;border-radius:20px;margin-inline-start:6px;font-weight:700">${t("myOrders.typeBadges.sale")}</span>`;
 
           const addr = (() => {
             try {
@@ -695,7 +755,7 @@
             ? (o.start_date ? `${o.start_date.slice(0,10)} ${dirArrow} ${(o.end_date||"").slice(0,10)}` : "")
             : addr;
 
-          const borderStyle = isRental ? "border-inline-start:3px solid rgba(241,196,15,0.4);" : "";
+          const borderStyle = isRental ? "border-inline-start:3px solid rgba(15,77,55,0.4);" : "";
 
           card.innerHTML = `
             <div class="order-header" style="${borderStyle}">
@@ -750,7 +810,7 @@
             renderDetails(detailEl, order, res.order);
           }
         } catch (err) {
-          detailEl.innerHTML = `<p style="color:#ffb3b3;padding:14px">${t("myOrders.toasts.errorPrefix")} ${escapeHtml(err.message)}</p>`;
+          detailEl.innerHTML = `<p style="color:#c0392b;padding:14px">${t("myOrders.toasts.errorPrefix")} ${escapeHtml(err.message)}</p>`;
         }
       }
 
@@ -765,11 +825,11 @@
         const rTotal = Number(r.total_price || 0) + Number(r.deposit_amount || 0);
 
         el.innerHTML = `
-          <div style="display:flex;align-items:center;gap:14px;padding:12px;background:rgba(241,196,15,.06);border-radius:10px;margin-bottom:14px">
-            ${r.equipment_image ? `<img src="${escapeHtml(r.equipment_image)}" style="width:56px;height:56px;object-fit:cover;border-radius:8px">` : `<div style="width:56px;height:56px;background:rgba(255,255,255,.07);border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:22px">🚜</div>`}
+          <div style="display:flex;align-items:center;gap:14px;padding:12px;background:rgba(15,77,55,.06);border-radius:10px;margin-bottom:14px">
+            ${r.equipment_image ? `<img src="${escapeHtml(r.equipment_image)}" style="width:56px;height:56px;object-fit:cover;border-radius:8px">` : `<div style="width:56px;height:56px;background:#f1efe6;border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:22px">🚜</div>`}
             <div>
-              <div style="font-size:15px;font-weight:700">${escapeHtml(r.equipment_name || t("myOrders.rentalDetails.equipmentFallback"))}</div>
-              ${r.equipment_category ? `<div style="font-size:12px;color:rgba(255,255,255,0.5)">${escapeHtml(r.equipment_category)}</div>` : ""}
+              <div style="font-size:15px;font-weight:700;color:#173828">${escapeHtml(r.equipment_name || t("myOrders.rentalDetails.equipmentFallback"))}</div>
+              ${r.equipment_category ? `<div style="font-size:12px;color:#69746c">${escapeHtml(r.equipment_category)}</div>` : ""}
             </div>
           </div>
           <div class="order-info-grid">
@@ -826,12 +886,12 @@
                 `).join("")}
               </tbody>
             </table>`
-          : `<p style="color:rgba(255,255,255,0.45);font-size:13px;margin-bottom:12px">${t("myOrders.orderDetails.noItems")}</p>`;
+          : `<p style="color:#8b948d;font-size:13px;margin-bottom:12px">${t("myOrders.orderDetails.noItems")}</p>`;
 
         const discountRow = Number(detail.discount) > 0
-          ? `<span>${t("myOrders.orderDetails.totals.discount")} <strong style="color:#f1c40f">-${money(detail.discount)}</strong></span>` : "";
+          ? `<span>${t("myOrders.orderDetails.totals.discount")} <strong style="color:#9c7209">-${money(detail.discount)}</strong></span>` : "";
         const loyaltyRow = Number(detail.loyalty_points_used) > 0
-          ? `<span>${t("myOrders.orderDetails.totals.loyaltyUsed")} <strong style="color:#f1c40f">${t("myOrders.orderDetails.loyaltyUsedValue", { n: detail.loyalty_points_used })}</strong></span>` : "";
+          ? `<span>${t("myOrders.orderDetails.totals.loyaltyUsed")} <strong style="color:#9c7209">${t("myOrders.orderDetails.loyaltyUsedValue", { n: detail.loyalty_points_used })}</strong></span>` : "";
 
         el.innerHTML = `
           ${itemsHtml}
@@ -975,9 +1035,9 @@
         };
         wrap.appendChild(mk('<i class="fas fa-angle-right"></i>', Math.max(1, page - 1), { disabled: page === 1 }));
         const start = Math.max(1, page - 2), end = Math.min(pages, page + 2);
-        if (start > 1) { wrap.appendChild(mk("1", 1)); if (start > 2) wrap.appendChild(Object.assign(document.createElement("span"), { textContent: "…", style: "color:rgba(255,255,255,0.4);padding:0 6px;line-height:38px" })); }
+        if (start > 1) { wrap.appendChild(mk("1", 1)); if (start > 2) wrap.appendChild(Object.assign(document.createElement("span"), { textContent: "…", style: "color:#8b948d;padding:0 6px;line-height:38px" })); }
         for (let i = start; i <= end; i++) wrap.appendChild(mk(String(i), i, { active: i === page }));
-        if (end < pages) { if (end < pages - 1) wrap.appendChild(Object.assign(document.createElement("span"), { textContent: "…", style: "color:rgba(255,255,255,0.4);padding:0 6px;line-height:38px" })); wrap.appendChild(mk(String(pages), pages)); }
+        if (end < pages) { if (end < pages - 1) wrap.appendChild(Object.assign(document.createElement("span"), { textContent: "…", style: "color:#8b948d;padding:0 6px;line-height:38px" })); wrap.appendChild(mk(String(pages), pages)); }
         wrap.appendChild(mk('<i class="fas fa-angle-left"></i>', Math.min(pages, page + 1), { disabled: page === pages }));
       }
 

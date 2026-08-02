@@ -160,7 +160,7 @@ button {
   display: flex !important;
   align-items: center;
   justify-content: space-between;
-  background-color: #ffffff;
+  background-color: var(--surface-1, #ffffff);
   padding: 8px 14px;
   border-radius: 50px;
   width: 100%;
@@ -168,8 +168,9 @@ button {
   position: relative;
   gap: 8px;
   flex-wrap: nowrap;
-  border: 1px solid #e8e4da;
+  border: 1px solid var(--border-soft, #e8e4da);
   box-shadow: none;
+  transition: background 220ms ease, border-color 220ms ease;
 }
 
 .header-capsule .section {
@@ -203,14 +204,14 @@ button {
   height: 36px !important;
   border-radius: 50%;
   object-fit: cover;
-  border: 2px solid #e8e4da;
+  border: 2px solid var(--border-soft, #e8e4da);
   flex-shrink: 0;
 }
 
 .site-brand h1 {
   font-size: 18px !important;
   margin: 0;
-  color: #173828;
+  color: var(--color-text, #173828);
   white-space: nowrap;
   font-weight: 700;
 }
@@ -223,8 +224,8 @@ button {
   width: 42px;
   height: 42px;
   border-radius: 12px;
-  background: #f9f8f4;
-  border: 1px solid #e8e4da;
+  background: var(--surface-2, #f9f8f4);
+  border: 1px solid var(--border-soft, #e8e4da);
   cursor: pointer;
   padding: 0;
   margin-inline-start: 6px;
@@ -235,7 +236,7 @@ button {
 }
 
 .hs-hamburger:hover {
-  background: #eef4ea;
+  background: var(--color-brand-50, #eef4ea);
 }
 
 .hs-hamburger:active {
@@ -253,7 +254,7 @@ button {
   display: block;
   width: 100%;
   height: 2px;
-  background: #0f4d37;
+  background: var(--color-brand-700, #0f4d37);
   border-radius: 2px;
   transition: transform 0.25s ease, opacity 0.2s ease;
   transform-origin: center;
@@ -284,7 +285,7 @@ button {
   width: min(320px, 85vw);
   height: 100dvh;
   height: 100vh; /* fallback for older browsers */
-  background: #ffffff;
+  background: var(--surface-1, #ffffff);
   flex-direction: column;
   justify-content: flex-start;
   align-items: stretch;
@@ -339,24 +340,24 @@ body.menu-open .header-capsule .section.center {
   width: 100%;
   padding: 14px 16px !important;
   font-size: 15px !important;
-  background: #f9f8f4;
-  color: #173828;
+  background: var(--surface-2, #f9f8f4);
+  color: var(--color-text, #173828);
   border-radius: 12px !important;
   white-space: normal;
   text-align: start;
-  border: 1px solid #f1efe6;
+  border: 1px solid var(--surface-3, #f1efe6);
 }
 
 .header-capsule .section.center .nav-links li a:hover {
-  background: #eef4ea;
-  border-color: #d3e6d7;
-  color: #0f4d37;
+  background: var(--color-brand-50, #eef4ea);
+  border-color: var(--color-brand-100, #d3e6d7);
+  color: var(--color-brand-700, #0f4d37);
 }
 
 .header-capsule .section.center .nav-links li a.nav-item--active {
-  background: #eef4ea;
-  border-color: #b8860b;
-  color: #0f4d37;
+  background: var(--color-brand-50, #eef4ea);
+  border-color: var(--color-accent-500, #b8860b);
+  color: var(--color-brand-700, #0f4d37);
   box-shadow: inset 0 0 0 1px rgba(184, 134, 11, 0.35);
 }
 
@@ -604,22 +605,22 @@ body.menu-open {
     gap:             clamp(6px, 0.7vw, 10px);
     border-radius:   12px !important;
     background:      transparent;
-    color:           #173828;
+    color:           var(--color-text, #173828);
     border:          none;
     position:        relative;
   }
 
   .header-capsule .section.center .nav-links li a:hover,
   .header-capsule .section.center .nav-links li .nav-item:hover {
-    background: #eef4ea;
-    color: #0f4d37;
+    background: var(--color-brand-50, #eef4ea);
+    color: var(--color-brand-700, #0f4d37);
   }
 
   .header-capsule .section.center .nav-links li a.nav-item--active,
   .header-capsule .section.center .nav-links li .nav-item--active {
     background: transparent;
-    color: #0f4d37;
-    box-shadow: inset 0 -2px 0 0 #b8860b;
+    color: var(--color-brand-700, #0f4d37);
+    box-shadow: inset 0 -2px 0 0 var(--color-accent-500, #b8860b);
   }
 
   /* ---- Shared styles: CTA/login button + language switcher ----
@@ -1894,7 +1895,7 @@ a {
  * 17. ACCESSIBILITY — focus visible, reduced motion
  * ------------------------------------------------------------ */
 :focus-visible {
-  outline: 2px solid #6fae2d;
+  outline: 2px solid var(--color-brand-500, #6fae2d);
   outline-offset: 2px;
   border-radius: 6px;
 }

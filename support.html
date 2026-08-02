@@ -10,6 +10,9 @@
           document.documentElement.lang = "en";
           document.documentElement.dir = "ltr";
         }
+        if (localStorage.getItem("harth_theme") === "dark") {
+          document.documentElement.setAttribute("data-theme", "dark");
+        }
       } catch (e) {}
       document.documentElement.classList.add("i18n-loading");
     })();
@@ -163,6 +166,60 @@
       .tkts-filter .f-chip{font-size:12px;padding:5px 12px}
       .tkt-card{flex-wrap:wrap}
     }
+
+    /* ===== Dark mode — this page is self-contained (plain hex, no
+       design tokens), so every color rule above gets a dark twin here. ===== */
+    html[data-theme="dark"] body{background:#101b15;color:#eaf1ec}
+    html[data-theme="dark"] .sp-hero h1{color:#eaf1ec}
+    html[data-theme="dark"] .sp-hero h1 span{color:#3fa562}
+    html[data-theme="dark"] .sp-hero p{color:#b7c4bb}
+    html[data-theme="dark"] .sec-h{color:#eaf1ec}
+    html[data-theme="dark"] .sec-h span{color:#3fa562}
+    html[data-theme="dark"] .ch-card{background:#17251e;border-color:rgba(255,255,255,.09);box-shadow:0 1px 3px rgba(0,0,0,.3)}
+    html[data-theme="dark"] .ch-card .ch-lbl{color:#eaf1ec}
+    html[data-theme="dark"] .ch-card .ch-sub{color:#b7c4bb}
+    html[data-theme="dark"] .sp-tabs-wrap{background:#17251e;border-color:rgba(255,255,255,.09)}
+    html[data-theme="dark"] .tab-btn{background:#101b15;border-color:rgba(255,255,255,.09);color:#b7c4bb}
+    html[data-theme="dark"] .tab-btn:hover{background:#1f3128;color:#7fc13b}
+    html[data-theme="dark"] .tab-btn.active{background:#3fa562;color:#0d1712;border-color:#3fa562}
+    html[data-theme="dark"] .f-chip{border-color:rgba(255,255,255,.09);background:#17251e;color:#b7c4bb}
+    html[data-theme="dark"] .f-chip.active,html[data-theme="dark"] .f-chip:hover{background:#1f3128;border-color:#7fc13b;color:#7fc13b}
+    html[data-theme="dark"] .tkt-card{background:#17251e;border-color:rgba(255,255,255,.09);box-shadow:0 1px 3px rgba(0,0,0,.3)}
+    html[data-theme="dark"] .tkt-card:hover{border-color:#7fc13b}
+    html[data-theme="dark"] .tkt-num{color:#7fc13b}
+    html[data-theme="dark"] .tkt-subj{color:#eaf1ec}
+    html[data-theme="dark"] .tkt-meta{color:#b7c4bb}
+    html[data-theme="dark"] .no-results{color:#66716a}
+    html[data-theme="dark"] .tkt-detail{background:#17251e;border-color:rgba(255,255,255,.09);box-shadow:0 1px 3px rgba(0,0,0,.3)}
+    html[data-theme="dark"] .msg-thread::-webkit-scrollbar-track{background:#1f3128}
+    html[data-theme="dark"] .msg-bubble{color:#eaf1ec}
+    html[data-theme="dark"] .msg-user{background:rgba(127,193,59,.12);border-color:rgba(127,193,59,.3)}
+    html[data-theme="dark"] .msg-system{background:#101b15;border-color:rgba(255,255,255,.16);color:#b7c4bb}
+    html[data-theme="dark"] .msg-sender{color:#b7c4bb}
+    html[data-theme="dark"] .msg-time{color:#66716a}
+    html[data-theme="dark"] .reply-area{border-color:rgba(255,255,255,.09)}
+    html[data-theme="dark"] .reply-area textarea{background:#101b15;border-color:rgba(255,255,255,.16);color:#eaf1ec}
+    html[data-theme="dark"] .csat-block{background:rgba(127,193,59,.1);border-color:rgba(127,193,59,.3)}
+    html[data-theme="dark"] .star-btn{color:rgba(255,255,255,.18)}
+    html[data-theme="dark"] .ntk-step{background:#17251e;border-color:rgba(255,255,255,.09);box-shadow:0 1px 3px rgba(0,0,0,.3)}
+    html[data-theme="dark"] .ntk-step h3{color:#7fc13b}
+    html[data-theme="dark"] .step-num{background:#3fa562;color:#0d1712}
+    html[data-theme="dark"] .cat-sel-btn{background:#101b15;border-color:rgba(255,255,255,.16);color:#eaf1ec}
+    html[data-theme="dark"] .cat-sel-btn:hover,html[data-theme="dark"] .cat-sel-btn.sel{background:rgba(127,193,59,.12);border-color:#7fc13b}
+    html[data-theme="dark"] .pri-btn{border-color:rgba(255,255,255,.16);background:#101b15;color:#b7c4bb}
+    html[data-theme="dark"] .pri-btn:hover,html[data-theme="dark"] .pri-btn.sel{background:rgba(127,193,59,.12);border-color:#7fc13b;color:#7fc13b}
+    html[data-theme="dark"] .ntk-label{color:#b7c4bb}
+    html[data-theme="dark"] .ntk-input,html[data-theme="dark"] .ntk-textarea{background:#101b15;border-color:rgba(255,255,255,.16);color:#eaf1ec}
+    html[data-theme="dark"] .ntk-submit{background:#3fa562;color:#0d1712}
+    html[data-theme="dark"] .ntk-submit:hover{background:#52c17a}
+    html[data-theme="dark"] .btn-green{background:#3fa562;color:#0d1712}
+    html[data-theme="dark"] .btn-green:hover{background:#52c17a}
+    html[data-theme="dark"] .btn-ghost{background:#17251e;border-color:rgba(255,255,255,.16);color:#b7c4bb}
+    html[data-theme="dark"] .btn-ghost:hover{background:#1f3128;color:#eaf1ec}
+    html[data-theme="dark"] #toast{background:#3fa562;color:#0d1712}
+    html[data-theme="dark"] .auth-gate{color:#b7c4bb}
+    html[data-theme="dark"] .auth-gate h3{color:#eaf1ec}
+    html[data-theme="dark"] .auth-gate a{color:#7fc13b}
   </style>
 </head>
 <body>
@@ -304,6 +361,7 @@
 
   <div id="toast"></div>
 
+  <script src="theme.js"></script>
   <script src="i18n.js"></script>
   <script src="lang-switcher.js"></script>
   <script src="design-system.js"></script>

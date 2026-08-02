@@ -3,11 +3,11 @@ body {
   margin: 0;
   padding: 0;
   font-family: "Cairo", sans-serif;
-  background: #f9f8f4;
+  background: var(--surface-2, #f9f8f4);
   min-height: 100vh;
   display: flex;
   flex-direction: column;
-  color: #173828;
+  color: var(--color-text, #173828);
   /* overflow-x is intentionally not set here — it would make body a
      scroll container and break `position: sticky` on the header.
      html { overflow-x: hidden } in responsive.css already prevents
@@ -25,15 +25,15 @@ body {
   position: sticky;
   top: 0;
   z-index: var(--z-header, 1000);
-  background: #ffffff;
-  border: 1px solid #e8e4da;
+  background: var(--surface-1, #ffffff);
+  border: 1px solid var(--border-soft, #e8e4da);
   border-radius: 60px;
   box-shadow: none;
-  transition: box-shadow 220ms ease;
+  transition: box-shadow 220ms ease, background 220ms ease, border-color 220ms ease;
 }
 
 .header-container.is-scrolled {
-  box-shadow: 0 8px 24px rgba(15, 77, 55, 0.1);
+  box-shadow: var(--shadow-md, 0 8px 24px rgba(15, 77, 55, 0.1));
 }
 
 /* شعار الموقع */
@@ -48,13 +48,13 @@ body {
   width: 40px;
   border-radius: 50%;
   object-fit: cover;
-  border: 2px solid #e8e4da;
+  border: 2px solid var(--border-soft, #e8e4da);
 }
 
 .site-brand h1 {
   font-size: 22px;
   margin: 0;
-  color: #173828;
+  color: var(--color-text, #173828);
   text-shadow: none;
 }
 
@@ -70,7 +70,7 @@ body {
 .nav-links li a,
 .nav-links li .nav-item {
   text-decoration: none;
-  color: #173828;
+  color: var(--color-text, #173828);
   padding: 6px 14px;
   border-radius: 20px;
   background: transparent;
@@ -83,15 +83,15 @@ body {
 
 .nav-links li a:hover,
 .nav-links li .nav-item:hover {
-  background: #eef4ea;
-  color: #0f4d37;
+  background: var(--color-brand-50, #eef4ea);
+  color: var(--color-brand-700, #0f4d37);
 }
 
 .nav-links li a.nav-item--active,
 .nav-links li .nav-item--active {
-  color: #0f4d37;
+  color: var(--color-brand-700, #0f4d37);
   background: transparent;
-  box-shadow: inset 0 -2px 0 0 #b8860b;
+  box-shadow: inset 0 -2px 0 0 var(--color-accent-500, #b8860b);
 }
 
 /* الرعاية */
@@ -1776,7 +1776,7 @@ footer {
 /* تنسيق زر تسجيل الدخول المنفصل */
 .nav-links li a[href*="login"],
 .nav-links li a.login-btn-nav {
-  background: #0f4d37 !important;
+  background: var(--color-brand-700, #0f4d37) !important;
   color: #ffffff !important;
   border: 1px solid transparent;
   padding: 8px 22px;
@@ -1788,13 +1788,13 @@ footer {
 }
 
 .nav-links li a[href*="login"]:hover {
-  background: #14664a !important;
-  box-shadow: 0 4px 12px rgba(15, 77, 55, 0.25);
+  background: var(--color-brand-600, #14664a) !important;
+  box-shadow: var(--shadow-sm, 0 4px 12px rgba(15, 77, 55, 0.25));
   transform: translateY(-1px);
 }
 /* تنسيق زر تسجيل الدخول في الهيدر */
 .nav-links li a.login-nav-button {
-  background: #0f4d37 !important;
+  background: var(--color-brand-700, #0f4d37) !important;
   color: #ffffff !important;
   padding: 8px 20px !important;
   border-radius: 12px !important;
@@ -1808,9 +1808,9 @@ footer {
 }
 
 .nav-links li a.login-nav-button:hover {
-  background: #14664a !important;
+  background: var(--color-brand-600, #14664a) !important;
   transform: translateY(-1px);
-  box-shadow: 0 4px 12px rgba(15, 77, 55, 0.25) !important;
+  box-shadow: var(--shadow-sm, 0 4px 12px rgba(15, 77, 55, 0.25)) !important;
 }
 
 /* Cart Badge in Header */
