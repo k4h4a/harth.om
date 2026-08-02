@@ -71,7 +71,7 @@
       /* ── Active state for desktop nav items ─────────────── */
       .nav-links .nav-item.active,
       .nav-links a.active {
-        color: #6ab04c !important;
+        color: #0f4d37 !important;
         font-weight: 700;
         position: relative;
       }
@@ -84,11 +84,23 @@
         inset-inline-start: 0;
         inset-inline-end: 0;
         height: 2px;
-        background: #6ab04c;
+        background: #b8860b;
         border-radius: 2px;
       }
     `;
     document.head.appendChild(s);
+  }
+
+  /* ─── Sticky header shadow-on-scroll ─────────────────────────────── */
+  function initHeaderScrollShadow() {
+    const header = document.querySelector(".header-container");
+    if (!header) return;
+    const THRESHOLD = 8;
+    const update = () => {
+      header.classList.toggle("is-scrolled", window.scrollY > THRESHOLD);
+    };
+    update();
+    window.addEventListener("scroll", update, { passive: true });
   }
 
   /* ─── Desktop nav update ─────────────────────────────────────────── */
@@ -110,6 +122,7 @@
     if (SKIP.includes(page)) return;
 
     injectCSS();
+    initHeaderScrollShadow();
 
     const render = () => updateDesktopNav(getUser());
     if (window.HarthI18n) {

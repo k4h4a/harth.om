@@ -30,10 +30,18 @@ html {
   scroll-behavior: smooth;
 }
 
-html,
-body {
+html {
   max-width: 100%;
   overflow-x: hidden !important;
+}
+
+/* NOTE: overflow-x is intentionally NOT set on body — doing so makes body
+   a scroll container (forces overflow-y: auto per spec), which breaks
+   `position: sticky` on the header for all of its descendants. html's
+   overflow-x: hidden already prevents horizontal scrolling at the
+   viewport level. */
+body {
+  max-width: 100%;
 }
 
 body {
@@ -140,7 +148,8 @@ button {
   width: calc(100% - 20px) !important;
   max-width: 1400px;
   overflow: visible !important;
-  position: relative;
+  position: sticky;
+  top: 0;
   /* Must beat .menu-backdrop's z-index (999) — .header-container creates
      its own stacking context, so the slide-in panel inside it (z-index
      1000) was being trapped under the backdrop and eating all taps. */
@@ -151,9 +160,7 @@ button {
   display: flex !important;
   align-items: center;
   justify-content: space-between;
-  background-color: rgba(60, 64, 72, 0.92);
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
+  background-color: #ffffff;
   padding: 8px 14px;
   border-radius: 50px;
   width: 100%;
@@ -161,8 +168,8 @@ button {
   position: relative;
   gap: 8px;
   flex-wrap: nowrap;
-  border: 1px solid rgba(255, 255, 255, 0.12);
-  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.16);
+  border: 1px solid #e8e4da;
+  box-shadow: none;
 }
 
 .header-capsule .section {
@@ -196,14 +203,14 @@ button {
   height: 36px !important;
   border-radius: 50%;
   object-fit: cover;
-  border: 2px solid rgba(255, 255, 255, 0.4);
+  border: 2px solid #e8e4da;
   flex-shrink: 0;
 }
 
 .site-brand h1 {
   font-size: 18px !important;
   margin: 0;
-  color: #fff;
+  color: #173828;
   white-space: nowrap;
   font-weight: 700;
 }
@@ -216,8 +223,8 @@ button {
   width: 42px;
   height: 42px;
   border-radius: 12px;
-  background: rgba(255, 255, 255, 0.12);
-  border: 1px solid rgba(255, 255, 255, 0.18);
+  background: #f9f8f4;
+  border: 1px solid #e8e4da;
   cursor: pointer;
   padding: 0;
   margin-inline-start: 6px;
@@ -228,7 +235,7 @@ button {
 }
 
 .hs-hamburger:hover {
-  background: rgba(255, 255, 255, 0.2);
+  background: #eef4ea;
 }
 
 .hs-hamburger:active {
@@ -246,7 +253,7 @@ button {
   display: block;
   width: 100%;
   height: 2px;
-  background: #fff;
+  background: #0f4d37;
   border-radius: 2px;
   transition: transform 0.25s ease, opacity 0.2s ease;
   transform-origin: center;
@@ -277,12 +284,12 @@ button {
   width: min(320px, 85vw);
   height: 100dvh;
   height: 100vh; /* fallback for older browsers */
-  background: linear-gradient(180deg, #1f2a25 0%, #2d5016 100%);
+  background: #ffffff;
   flex-direction: column;
   justify-content: flex-start;
   align-items: stretch;
   padding: 80px 20px 40px;
-  box-shadow: -8px 0 32px rgba(0, 0, 0, 0.4);
+  box-shadow: -8px 0 32px rgba(23, 56, 40, 0.14);
   transform: translate3d(110%, 0, 0);
   transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1),
               visibility 0s linear 0.3s;
@@ -303,7 +310,7 @@ html[dir="rtl"] .header-capsule .section.center,
   right: auto;
   left: 0;
   transform: translate3d(-110%, 0, 0);
-  box-shadow: 8px 0 32px rgba(0, 0, 0, 0.4);
+  box-shadow: 8px 0 32px rgba(23, 56, 40, 0.14);
 }
 
 body.menu-open .header-capsule .section.center {
@@ -332,18 +339,25 @@ body.menu-open .header-capsule .section.center {
   width: 100%;
   padding: 14px 16px !important;
   font-size: 15px !important;
-  background: rgba(255, 255, 255, 0.06);
+  background: #f9f8f4;
+  color: #173828;
   border-radius: 12px !important;
   white-space: normal;
   text-align: start;
-  border: 1px solid rgba(255, 255, 255, 0.06);
+  border: 1px solid #f1efe6;
 }
 
-.header-capsule .section.center .nav-links li a:hover,
+.header-capsule .section.center .nav-links li a:hover {
+  background: #eef4ea;
+  border-color: #d3e6d7;
+  color: #0f4d37;
+}
+
 .header-capsule .section.center .nav-links li a.nav-item--active {
-  background: rgba(106, 176, 76, 0.25);
-  border-color: rgba(106, 176, 76, 0.4);
-  color: #fff;
+  background: #eef4ea;
+  border-color: #b8860b;
+  color: #0f4d37;
+  box-shadow: inset 0 0 0 1px rgba(184, 134, 11, 0.35);
 }
 
 /* Backdrop for open menu */
@@ -589,8 +603,23 @@ body.menu-open {
     justify-content: center;
     gap:             clamp(6px, 0.7vw, 10px);
     border-radius:   12px !important;
-    background:      rgba(255, 255, 255, 0.1);
+    background:      transparent;
+    color:           #173828;
     border:          none;
+    position:        relative;
+  }
+
+  .header-capsule .section.center .nav-links li a:hover,
+  .header-capsule .section.center .nav-links li .nav-item:hover {
+    background: #eef4ea;
+    color: #0f4d37;
+  }
+
+  .header-capsule .section.center .nav-links li a.nav-item--active,
+  .header-capsule .section.center .nav-links li .nav-item--active {
+    background: transparent;
+    color: #0f4d37;
+    box-shadow: inset 0 -2px 0 0 #b8860b;
   }
 
   /* ---- Shared styles: CTA/login button + language switcher ----
@@ -1865,7 +1894,7 @@ a {
  * 17. ACCESSIBILITY — focus visible, reduced motion
  * ------------------------------------------------------------ */
 :focus-visible {
-  outline: 2px solid #6ab04c;
+  outline: 2px solid #6fae2d;
   outline-offset: 2px;
   border-radius: 6px;
 }

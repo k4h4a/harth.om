@@ -1622,7 +1622,8 @@
       "searchPlaceholder": "ابحث عن جرار، حصادة، مرشة...",
       "searchAriaLabel": "ابحث عن معدة",
       "categoryAriaLabel": "فئة المعدات",
-      "governorateAriaLabel": "المحافظة"
+      "governorateAriaLabel": "المحافظة",
+      "browseCta": "تصفح المعدات"
     },
     "categoriesSection": {
       "title": "تصفح حسب الفئة",

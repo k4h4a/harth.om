@@ -14,42 +14,42 @@
  * 1. TOKENS
  * ------------------------------------------------------------ */
 :root {
-  /* Brand */
-  --color-brand-50:  #eef7e9;
-  --color-brand-100: #d9ecca;
-  --color-brand-300: #9bcc81;
-  --color-brand-500: #6ab04c;   /* primary */
-  --color-brand-600: #58993f;
-  --color-brand-700: #3f7a2c;
-  --color-brand-900: #2d5016;   /* darkest */
+  /* Brand — Harth green/gold identity */
+  --color-brand-50:  #eaf3ec;
+  --color-brand-100: #d3e6d7;
+  --color-brand-300: #8fbb9c;
+  --color-brand-500: #6fae2d;   /* secondary green */
+  --color-brand-600: #14664a;
+  --color-brand-700: #0f4d37;   /* primary green */
+  --color-brand-900: #0a3626;   /* darkest */
 
-  --color-accent-500: #f1c40f;  /* gold — pro / featured */
-  --color-accent-600: #d4ac0d;
+  --color-accent-500: #b8860b;  /* gold — pro / featured */
+  --color-accent-600: #9c7209;
 
   /* Status */
   --color-success-500: #27ae60;
   --color-success-600: #1e8449;
-  --color-warning-500: #f39c12;
+  --color-warning-500: #b8860b;
   --color-danger-500:  #e74c3c;
   --color-danger-600:  #c0392b;
   --color-info-500:    #3498db;
 
-  /* Neutrals (light text on dark hero pages) */
-  --color-text:        #ffffff;
-  --color-text-muted:  #d8dde2;
-  --color-text-soft:   #aab2bb;
-  --color-text-dim:    #7f868d;
+  /* Neutrals — dark text on light premium surfaces */
+  --color-text:        #173828;
+  --color-text-muted:  #3f4d45;
+  --color-text-soft:   #69746c;
+  --color-text-dim:    #8b948d;
 
   /* Surfaces */
-  --surface-1:  rgba(255, 255, 255, 0.06);
-  --surface-2:  rgba(255, 255, 255, 0.10);
-  --surface-3:  rgba(255, 255, 255, 0.16);
-  --surface-glass: rgba(255, 255, 255, 0.12);
-  --surface-modal: #1a3a1a;
+  --surface-1:  #ffffff;
+  --surface-2:  #f9f8f4;
+  --surface-3:  #f1efe6;
+  --surface-glass: #ffffff;
+  --surface-modal: #ffffff;
 
-  --border-subtle: rgba(255, 255, 255, 0.08);
-  --border-soft:   rgba(255, 255, 255, 0.16);
-  --border-strong: rgba(255, 255, 255, 0.28);
+  --border-subtle: #eeece3;
+  --border-soft:   #e8e4da;
+  --border-strong: #d7d1c1;
 
   /* Typography */
   --font-family: "Cairo", system-ui, -apple-system, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
@@ -93,12 +93,12 @@
   --r-2xl:  28px;
   --r-pill: 999px;
 
-  /* Elevation */
-  --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.10);
-  --shadow-md: 0 4px 12px rgba(0, 0, 0, 0.18);
-  --shadow-lg: 0 12px 28px rgba(0, 0, 0, 0.28);
-  --shadow-xl: 0 24px 48px rgba(0, 0, 0, 0.34);
-  --shadow-glow: 0 0 0 4px rgba(106, 176, 76, 0.25);
+  /* Elevation — soft, premium, low-opacity */
+  --shadow-sm: 0 1px 3px rgba(23, 56, 40, 0.06);
+  --shadow-md: 0 6px 16px rgba(23, 56, 40, 0.08);
+  --shadow-lg: 0 16px 32px rgba(23, 56, 40, 0.10);
+  --shadow-xl: 0 28px 56px rgba(23, 56, 40, 0.14);
+  --shadow-glow: 0 0 0 4px rgba(111, 174, 45, 0.22);
 
   /* Motion */
   --ease-standard: cubic-bezier(0.2, 0, 0, 1);
@@ -132,13 +132,11 @@
  * 2. CARD
  * ------------------------------------------------------------ */
 .hs-card {
-  background: var(--surface-glass);
-  backdrop-filter: blur(14px);
-  -webkit-backdrop-filter: blur(14px);
+  background: var(--surface-1);
   border: 1px solid var(--border-soft);
   border-radius: var(--r-lg);
   padding: var(--sp-5);
-  box-shadow: var(--shadow-md);
+  box-shadow: var(--shadow-sm);
   transition: transform var(--dur-base) var(--ease-standard),
               box-shadow var(--dur-base) var(--ease-standard),
               border-color var(--dur-base) var(--ease-standard);
@@ -152,8 +150,8 @@
   border-color: var(--border-strong);
 }
 .hs-card--featured {
-  border: 1px solid rgba(241, 196, 15, 0.5);
-  box-shadow: 0 0 0 1px rgba(241, 196, 15, 0.25), var(--shadow-md);
+  border: 1px solid rgba(184, 134, 11, 0.4);
+  box-shadow: 0 0 0 1px rgba(184, 134, 11, 0.18), var(--shadow-sm);
 }
 .hs-card__title {
   font-size: var(--fs-lg);
@@ -172,7 +170,7 @@
  * 3. BUTTON
  * ------------------------------------------------------------ */
 .hs-btn {
-  --_bg: var(--color-brand-500);
+  --_bg: var(--color-brand-700);      /* primary: dark green */
   --_bg-hover: var(--color-brand-600);
   --_color: #fff;
   --_border: transparent;
@@ -197,7 +195,8 @@
   transition: background var(--dur-fast) var(--ease-standard),
               transform var(--dur-fast) var(--ease-standard),
               box-shadow var(--dur-fast) var(--ease-standard),
-              border-color var(--dur-fast) var(--ease-standard);
+              border-color var(--dur-fast) var(--ease-standard),
+              opacity var(--dur-fast) var(--ease-standard);
 }
 .hs-btn:hover:not(:disabled) {
   background: var(--_bg-hover);
@@ -205,7 +204,8 @@
   box-shadow: var(--shadow-md);
 }
 .hs-btn:active:not(:disabled) {
-  transform: translateY(0);
+  transform: translateY(0) scale(0.97);
+  opacity: 0.92;
   box-shadow: var(--shadow-sm);
 }
 .hs-btn:focus-visible {
@@ -230,6 +230,16 @@
   --_color: var(--color-text);
   --_border: var(--border-soft);
 }
+/* Outline: white bg, green border+text — fills green on hover */
+.hs-btn--outline {
+  --_bg: #fff;
+  --_bg-hover: var(--color-brand-700);
+  --_color: var(--color-brand-700);
+  --_border: var(--color-brand-700);
+}
+.hs-btn--outline:hover:not(:disabled) {
+  color: #fff;
+}
 .hs-btn--danger {
   --_bg: var(--color-danger-500);
   --_bg-hover: var(--color-danger-600);
@@ -240,12 +250,12 @@
 }
 .hs-btn--warning {
   --_bg: var(--color-warning-500);
-  --_bg-hover: #d68910;
+  --_bg-hover: #9c7209;
 }
 .hs-btn--accent {
-  --_bg: var(--color-accent-500);
+  --_bg: var(--color-accent-500);   /* gold */
   --_bg-hover: var(--color-accent-600);
-  --_color: #1a1a1a;
+  --_color: #fff;
 }
 
 /* Sizes */
@@ -293,17 +303,17 @@
   border-radius: var(--r-pill);
   font-size: var(--fs-xs);
   font-weight: var(--fw-bold);
-  background: rgba(255, 255, 255, 0.14);
+  background: var(--surface-3);
   color: var(--color-text);
   white-space: nowrap;
   line-height: 1.45;
 }
-.hs-badge--success { background: rgba(39, 174, 96, 0.22);  color: #6ee7a7; }
-.hs-badge--warning { background: rgba(243, 156, 18, 0.22); color: #ffd384; }
-.hs-badge--danger  { background: rgba(231, 76, 60, 0.24);  color: #ffb3b3; }
-.hs-badge--info    { background: rgba(52, 152, 219, 0.22); color: #a3d5ff; }
-.hs-badge--accent  { background: rgba(241, 196, 15, 0.22); color: #ffe58a; }
-.hs-badge--neutral { background: rgba(149, 165, 166, 0.22); color: #d4d4d4; }
+.hs-badge--success { background: rgba(39, 174, 96, 0.12);  color: #1e8449; }
+.hs-badge--warning { background: rgba(184, 134, 11, 0.12); color: #9c7209; }
+.hs-badge--danger  { background: rgba(231, 76, 60, 0.12);  color: #c0392b; }
+.hs-badge--info    { background: rgba(52, 152, 219, 0.12); color: #2471a3; }
+.hs-badge--accent  { background: rgba(184, 134, 11, 0.14); color: #9c7209; }
+.hs-badge--neutral { background: var(--surface-3); color: var(--color-text-soft); }
 
 .hs-badge--dot::before {
   content: "";
@@ -332,8 +342,9 @@
 .hs-select,
 .hs-textarea {
   width: 100%;
+  min-height: 44px;
   padding: 10px 14px;
-  background: var(--surface-2);
+  background: var(--surface-1);
   color: var(--color-text);
   border: 1px solid var(--border-soft);
   border-radius: var(--r-sm);
@@ -361,34 +372,35 @@
 .hs-select {
   appearance: auto;
   -webkit-appearance: auto;
-  background: rgba(20, 40, 15, 0.95) !important;
-  color: #ffffff !important;
+  background: #ffffff !important;
+  color: var(--color-text) !important;
 }
 .hs-select option {
-  background: #1a2e10;
-  color: #ffffff;
+  background: #ffffff;
+  color: #173828;
   padding: 6px 10px;
 }
 .hs-select option:checked,
 .hs-select option:hover {
-  background: #2d5016;
-  color: #ffffff;
+  background: #eaf3ec;
+  color: #173828;
 }
 
 /* ── Generic select inside filters-bar: ensure solid visible dropdown ── */
 .filters-bar select {
-  background: rgba(255, 255, 255, 0.92) !important;
-  color: #1a1a1a !important;
+  background: #ffffff !important;
+  color: #173828 !important;
+  border: 1px solid #e8e4da;
   appearance: auto;
   -webkit-appearance: auto;
 }
 .filters-bar select option {
   background: #ffffff;
-  color: #1a1a1a;
+  color: #173828;
 }
 .filters-bar select option:checked {
-  background: #e8f5e0;
-  color: #1a1a1a;
+  background: #eaf3ec;
+  color: #173828;
 }
 
 .hs-field__hint {
@@ -448,9 +460,9 @@
   display: block;
   background: linear-gradient(
     90deg,
-    rgba(255, 255, 255, 0.06) 0%,
-    rgba(255, 255, 255, 0.18) 50%,
-    rgba(255, 255, 255, 0.06) 100%
+    #f1efe6 0%,
+    #e8e4da 50%,
+    #f1efe6 100%
   );
   background-size: 200% 100%;
   animation: hs-shimmer 1.4s linear infinite;
@@ -479,9 +491,9 @@
   display: block;
   background: linear-gradient(
     90deg,
-    rgba(255, 255, 255, 0.06) 0%,
-    rgba(255, 255, 255, 0.18) 50%,
-    rgba(255, 255, 255, 0.06) 100%
+    #f1efe6 0%,
+    #e8e4da 50%,
+    #f1efe6 100%
   );
   background-size: 200% 100%;
   animation: hs-shimmer 1.4s linear infinite;

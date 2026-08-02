@@ -1622,7 +1622,8 @@
       "searchPlaceholder": "Search for a tractor, harvester, sprayer...",
       "searchAriaLabel": "Search for equipment",
       "categoryAriaLabel": "Equipment category",
-      "governorateAriaLabel": "Governorate"
+      "governorateAriaLabel": "Governorate",
+      "browseCta": "Browse Equipment"
     },
     "categoriesSection": {
       "title": "Browse by Category",
