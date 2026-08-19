@@ -2,6 +2,7 @@ const knex = require("../db");
 const bcrypt = require("bcrypt");
 const repo = require("../repositories/profile.repository");
 const { AppError, asyncHandler } = require("../middleware/errorHandler");
+const { resolveFileUrl } = require("../utils/file-url");
 
 // GET /profile/me
 const getMe = asyncHandler(async (req, res) => {
@@ -29,7 +30,7 @@ const updateMe = asyncHandler(async (req, res) => {
 // POST /profile/avatar
 const uploadAvatar = asyncHandler(async (req, res) => {
   if (!req.file) throw new AppError("No file uploaded", 400);
-  const url = `/uploads/${req.file.filename}`;
+  const url = resolveFileUrl(req.file);
   await repo.updateAvatar(req.user.id, url);
   res.json({ success: true, avatar_url: url });
 });

@@ -1,17 +1,5 @@
-const env = require("../config/env");
 const { AppError, asyncHandler } = require("../middleware/errorHandler");
-
-/**
- * Build the public URL for an uploaded file.
- * If PUBLIC_BASE_URL is configured, we produce an absolute URL. Otherwise
- * we return a path that clients resolve relative to their current origin.
- */
-function publicUrlFor(filename) {
-  const base = env.PUBLIC_BASE_URL
-    ? env.PUBLIC_BASE_URL.replace(/\/+$/, "")
-    : "";
-  return `${base}/uploads/${filename}`;
-}
+const { resolveFileUrl } = require("../utils/file-url");
 
 /**
  * POST /uploads/image
@@ -21,7 +9,7 @@ const uploadSingle = asyncHandler(async (req, res) => {
   if (!req.file) throw new AppError("No file uploaded", 400);
   res.status(201).json({
     success: true,
-    url: publicUrlFor(req.file.filename),
+    url: resolveFileUrl(req.file),
     filename: req.file.filename,
     size: req.file.size,
     mimetype: req.file.mimetype,
@@ -37,7 +25,7 @@ const uploadMultiple = asyncHandler(async (req, res) => {
     throw new AppError("No files uploaded", 400);
   }
   const files = req.files.map((f) => ({
-    url: publicUrlFor(f.filename),
+    url: resolveFileUrl(f),
     filename: f.filename,
     size: f.size,
     mimetype: f.mimetype,
@@ -54,7 +42,7 @@ const uploadPdf = asyncHandler(async (req, res) => {
   if (!req.file) throw new AppError("No PDF file uploaded", 400);
   res.status(201).json({
     success: true,
-    url: publicUrlFor(req.file.filename),
+    url: resolveFileUrl(req.file),
     filename: req.file.filename,
     size: req.file.size,
     mimetype: req.file.mimetype,

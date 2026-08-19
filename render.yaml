@@ -27,6 +27,15 @@ services:
         value: 7d
       - key: BCRYPT_ROUNDS
         value: "12"
+      # Persistent file storage (Cloudinary free tier). Required in
+      # production — Render's free plan wipes local disk on every
+      # deploy/restart, so uploaded images/PDFs would otherwise be lost.
+      - key: CLOUDINARY_CLOUD_NAME
+        sync: false
+      - key: CLOUDINARY_API_KEY
+        sync: false
+      - key: CLOUDINARY_API_SECRET
+        sync: false
       # Set these in the Render dashboard after the first deploy (Environment tab).
       - key: ADMIN_EMAIL
         sync: false

@@ -2532,7 +2532,11 @@
         function mediaUrl(path) {
           if (!path) return "";
           if (/^https?:\/\//i.test(path)) return path;
-          return "http://localhost:3000" + path;
+          const base =
+            window.location.hostname === "localhost"
+              ? "http://localhost:3000"
+              : "";
+          return base + path;
         }
 
         function escapeAttr(s) {
@@ -5650,7 +5654,10 @@
 
       try {
         const token = localStorage.getItem("token");
-        const BASE = "http://localhost:3000/api/v1";
+        const BASE =
+          window.location.hostname === "localhost"
+            ? "http://localhost:3000/api/v1"
+            : "/api/v1";
         const res = await fetch(`${BASE}/admin/orders/${orderId}`, {
           headers: { Authorization: `Bearer ${token}` }
         });
@@ -5723,7 +5730,10 @@
 
       try {
         const token = localStorage.getItem("token");
-        const BASE = "http://localhost:3000/api/v1";
+        const BASE =
+          window.location.hostname === "localhost"
+            ? "http://localhost:3000/api/v1"
+            : "/api/v1";
         const res = await fetch(`${BASE}/rentals/${rentalId}`, {
           headers: { Authorization: `Bearer ${token}` }
         });
@@ -5791,7 +5801,10 @@
       if (btn) { btn.disabled = true; btn.innerHTML = `<i class="fas fa-spinner fa-spin"></i> ${t("adminDashboard.orderModal.sendingInProgress")}`; }
       try {
         const token = localStorage.getItem("token");
-        const BASE = "http://localhost:3000/api/v1";
+        const BASE =
+          window.location.hostname === "localhost"
+            ? "http://localhost:3000/api/v1"
+            : "/api/v1";
         const res = await fetch(`${BASE}/admin/rentals/${rentalId}/dispatch`, {
           method: "POST",
           headers: { Authorization: `Bearer ${token}`, "Content-Type": "application/json" }

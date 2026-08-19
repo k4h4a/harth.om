@@ -9,6 +9,7 @@
     "migrate": "knex migrate:latest",
     "migrate:rollback": "knex migrate:rollback",
     "seed": "node src/utils/seed.js",
+    "migrate:uploads": "node src/utils/migrate-uploads-to-cloudinary.js",
     "lint": "eslint .",
     "test": "jest --runInBand"
   },
@@ -16,8 +17,12 @@
   "author": "",
   "license": "ISC",
   "type": "commonjs",
+  "engines": {
+    "node": "22.x"
+  },
   "dependencies": {
     "bcrypt": "^6.0.0",
+    "cloudinary": "^2.10.0",
     "compression": "^1.8.1",
     "cors": "^2.8.6",
     "dotenv": "^17.4.2",

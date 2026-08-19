@@ -101,6 +101,15 @@ const env = {
   PENDING_REGISTRATION_TTL_MINUTES:
     parseInt(process.env.PENDING_REGISTRATION_TTL_MINUTES, 10) || 30,
 
+  // Cloudinary (persistent file storage). Optional in development — if any
+  // of the three is missing, uploads fall back to local disk storage
+  // (server/uploads/), which is fine locally but is NOT persistent on
+  // Render's free plan (the filesystem resets on every deploy/restart).
+  // Set all three in production to keep uploaded images/PDFs across deploys.
+  CLOUDINARY_CLOUD_NAME: process.env.CLOUDINARY_CLOUD_NAME || "",
+  CLOUDINARY_API_KEY: process.env.CLOUDINARY_API_KEY || "",
+  CLOUDINARY_API_SECRET: process.env.CLOUDINARY_API_SECRET || "",
+
   // Google OAuth ("Sign in with Google"). Optional — if left blank, the
   // /auth/google routes respond with a clear 503 instead of crashing.
   GOOGLE_CLIENT_ID: process.env.GOOGLE_CLIENT_ID || "",

@@ -38,6 +38,12 @@ module.exports = {
 
   production: {
     ...common,
+    // Neon (and some other managed Postgres providers) give roles an empty
+    // default search_path, so unqualified table names in every Knex query
+    // (e.g. `knex('users')` -> `select * from "users"`) fail with
+    // "relation does not exist" even though the tables exist in `public`.
+    // Explicitly setting it here makes every pooled connection safe.
+    searchPath: ["public"],
     connection: process.env.DATABASE_URL || {
       host: process.env.DB_HOST,
       port: parseInt(process.env.DB_PORT, 10) || 5432,
@@ -46,18 +52,6 @@ module.exports = {
       database: process.env.DB_NAME,
       ssl:
         process.env.DB_SSL === "true" ? { rejectUnauthorized: false } : false,
-    },
-    development: {
-      ...common,
-      connection: {
-        host: process.env.DB_HOST,
-        port: parseInt(process.env.DB_PORT, 10) || 5432,
-        user: process.env.DB_USER,
-        password: process.env.DB_PASSWORD,
-        database: process.env.DB_NAME,
-        ssl:
-          process.env.DB_SSL === "true" ? { rejectUnauthorized: false } : false,
-      },
     },
   },
 };
