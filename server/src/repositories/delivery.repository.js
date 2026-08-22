@@ -222,21 +222,49 @@ async function list({
  * same moment. The other gets 0 rows affected and an error.
  */
 async function accept({ deliveryId, courierId }) {
-  const [updated] = await knex("delivery_requests")
-    .where({ id: deliveryId, status: "pending", courier_id: null })
-    .update({
-      courier_id: courierId,
-      status: "accepted",
-      accepted_at: knex.fn.now(),
-    })
-    .returning(PUBLIC_DELIVERY_FIELDS);
-  if (!updated) {
-    throw new AppError(
-      "This delivery is no longer available (already taken or not pending)",
-      409,
-    );
-  }
-  return updated;
+  return knex.transaction(async (trx) => {
+    const d = await trx("delivery_requests").where({ id: deliveryId }).forUpdate().first();
+    if (!d) throw new AppError("Delivery not found", 404);
+
+    // Block self-dealing: a party to the underlying order/rental (buyer,
+    // seller, renter, or owner) must never be able to accept it as the
+    // courier too — otherwise they can "deliver" it to themselves and
+    // self-certify photo/GPS proof that never happened, auto-completing
+    // their own order/rental with no real handoff.
+    let partyIds = [];
+    if (d.rental_id) {
+      const rental = await trx("rentals")
+        .where({ id: d.rental_id })
+        .first("renter_id", "owner_id");
+      if (rental) partyIds = [rental.renter_id, rental.owner_id];
+    } else if (d.order_id) {
+      const order = await trx("orders").where({ id: d.order_id }).first("user_id");
+      const sellerIds = await trx("order_items as oi")
+        .join("equipment as e", "e.id", "oi.equipment_id")
+        .where("oi.order_id", d.order_id)
+        .pluck("e.owner_id");
+      partyIds = [order?.user_id, ...sellerIds];
+    }
+    if (partyIds.filter(Boolean).includes(courierId)) {
+      throw new AppError("You cannot deliver your own order or rental", 403);
+    }
+
+    const [updated] = await trx("delivery_requests")
+      .where({ id: deliveryId, status: "pending", courier_id: null })
+      .update({
+        courier_id: courierId,
+        status: "accepted",
+        accepted_at: trx.fn.now(),
+      })
+      .returning(PUBLIC_DELIVERY_FIELDS);
+    if (!updated) {
+      throw new AppError(
+        "This delivery is no longer available (already taken or not pending)",
+        409,
+      );
+    }
+    return updated;
+  });
 }
 
 /**

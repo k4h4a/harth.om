@@ -4,13 +4,34 @@ const env = require("../config/env");
 
 /**
  * Sign a JWT for a user. We only put identifiers in the payload — never PII.
+ *
+ * Each token gets a random `jti`. That's what makes session revocation
+ * possible at all: the token itself is stateless and can't be "deleted",
+ * but middleware/auth.js requires the jti to match a live row in
+ * user_sessions on every request, so revoking that row (logout, "log out
+ * all devices", password change) makes the still-technically-valid JWT
+ * stop working immediately. Returns { token, jti } — callers must persist
+ * the jti via profile.repository.js's createSession() for the token to
+ * actually work past the first request.
  */
 function signToken(user) {
-  return jwt.sign(
-    { id: user.id, is_admin: user.is_admin },
+  const jti = crypto.randomBytes(16).toString("hex");
+  const token = jwt.sign(
+    { id: user.id, is_admin: user.is_admin, jti },
     env.JWT_SECRET,
     { expiresIn: env.JWT_EXPIRES_IN },
   );
+  return { token, jti };
+}
+
+/**
+ * Hash a jti before storing/looking it up in user_sessions.token_hash.
+ * The jti isn't secret on its own (it's inside the JWT payload, which is
+ * base64 not encrypted), but hashing keeps the DB from holding a literal
+ * copy of the session identifier and matches the column's existing name.
+ */
+function hashJti(jti) {
+  return crypto.createHash("sha256").update(jti).digest("hex");
 }
 
 /**
@@ -51,4 +72,4 @@ function verifyOAuthState(state, purpose) {
   return decoded;
 }
 
-module.exports = { signToken, verifyToken, signOAuthState, verifyOAuthState };
+module.exports = { signToken, verifyToken, hashJti, signOAuthState, verifyOAuthState };

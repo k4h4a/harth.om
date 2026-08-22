@@ -2546,6 +2546,15 @@
           );
         }
 
+        // This file has a second, separate inline <script> block below (the
+        // support-ticket admin tab) that isn't part of this IIFE and can't
+        // see its local declarations. It calls all three of these, so they
+        // have to be reachable from outside — every call was throwing
+        // ReferenceError and the whole tab was non-functional (see C-15).
+        window.escapeHtml = escapeHtml;
+        window.escapeAttr = escapeAttr;
+        window.showToast = showToast;
+
         function money(n) {
           return Number(n || 0).toFixed(2) + " " + t("common.currency");
         }
@@ -2881,7 +2890,7 @@
                       style="background:rgba(116,185,255,.12);color:#74b9ff;border:1px solid rgba(116,185,255,.3);border-radius:6px;padding:5px 10px;cursor:pointer;font-size:12px;margin-inline-end:4px">
                       <i class="fas fa-file-pdf"></i> PDF
                     </button>
-                    <button onclick="deleteEquipment('${escapeAttr(eq.id)}', '${escapeHtml(eq.name).replace(/'/g,"\\'")}')"
+                    <button data-delete-eq="${escapeAttr(eq.id)}" data-eq-name="${escapeAttr(eq.name)}"
                       style="background:#c0392b;color:#fff;border:none;border-radius:6px;padding:5px 10px;cursor:pointer;font-size:12px">
                       <i class="fas fa-trash"></i> ${t("adminDashboard.equipmentList.deleteBtn")}
                     </button>
@@ -2900,6 +2909,14 @@
               </table>
               </div>
             `;
+            // data-* + addEventListener, not onclick="..." with an
+            // interpolated equipment name — an onclick attribute string is
+            // HTML-decoded by the browser before it's parsed as JS, so an
+            // escaped quote in the name would decode back into a real one
+            // and break out of the string (see C-14).
+            el.querySelectorAll("[data-delete-eq]").forEach((b) =>
+              b.addEventListener("click", () => deleteEquipment(b.dataset.deleteEq, b.dataset.eqName)),
+            );
           } catch (err) {
             el.innerHTML = `<div class="empty" style="color:#ffb3b3">${escapeHtml(err.message)}</div>`;
           }
@@ -3565,7 +3582,7 @@
                 <td><span class="badge ${statusColor(o.status)}">${statusLabel(o.status)}</span></td>
                 <td><span class="badge ${statusColor(o.payment_status)}">${statusLabel(o.payment_status)}</span></td>
                 <td>${new Date(o.created_at).toLocaleDateString(localeTag())}</td>
-                <td><button class="btn-sm btn-blue" onclick="showSaleOrderModal('${o.id}','${escapeHtml(o.tracking_number)}')">${t("adminDashboard.orders.viewBtn")}</button></td>
+                <td><button class="btn-sm btn-blue" data-view-order-id="${escapeAttr(o.id)}" data-view-order-ref="${escapeAttr(o.tracking_number)}">${t("adminDashboard.orders.viewBtn")}</button></td>
               </tr>
             `);
 
@@ -3584,7 +3601,7 @@
                 <td><span class="badge ${rStatusColorMap[r.status] || 'grey'}">${rStatusLabel.startsWith("adminDashboard.orders.rentalStatusOptions.") ? r.status : rStatusLabel}</span></td>
                 <td><span class="badge grey">—</span></td>
                 <td>${new Date(r.created_at).toLocaleDateString(localeTag())}</td>
-                <td><button class="btn-sm btn-blue" onclick="showRentalModal('${r.id}','${escapeHtml(r.equipment_name||"")}')">${t("adminDashboard.orders.viewBtn")}</button></td>
+                <td><button class="btn-sm btn-blue" data-view-rental-id="${escapeAttr(r.id)}" data-view-rental-eq="${escapeAttr(r.equipment_name||"")}">${t("adminDashboard.orders.viewBtn")}</button></td>
               </tr>
             `;});
 
@@ -3603,6 +3620,16 @@
                 <tbody>${allRows}</tbody>
               </table>
             `;
+            // data-* + addEventListener — an order tracking number or a
+            // rental's equipment name interpolated into onclick="fn('...')"
+            // is exploitable even after escapeHtml(), because the browser
+            // HTML-decodes the attribute before parsing it as JS (see C-14).
+            $("#orders-list").querySelectorAll("[data-view-order-id]").forEach((b) =>
+              b.addEventListener("click", () => showSaleOrderModal(b.dataset.viewOrderId, b.dataset.viewOrderRef)),
+            );
+            $("#orders-list").querySelectorAll("[data-view-rental-id]").forEach((b) =>
+              b.addEventListener("click", () => showRentalModal(b.dataset.viewRentalId, b.dataset.viewRentalEq)),
+            );
 
             renderPagination($("#orders-pagination"), ordersRes.pagination, (p) => {
               ordersPage = p; loadOrders();

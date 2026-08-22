@@ -55,6 +55,13 @@ const changePassword = asyncHandler(async (req, res) => {
 
   const hash = await bcrypt.hash(new_password, 12);
   await knex("users").where({ id: req.user.id }).update({ password_hash: hash });
+  // A password change is exactly the moment to assume the old password may
+  // have been compromised — kick out every other device's session so a
+  // stolen-but-not-yet-used token can't keep working. The device making the
+  // change itself stays logged in (exceptHash), which is the standard
+  // "log out everywhere else" UX rather than logging the user out of their
+  // own change-password screen.
+  await repo.revokeAllSessions(req.user.id, req.sessionTokenHash || null);
   await repo.logActivity(req.user.id, { action: "password_change", description: "تم تغيير كلمة المرور", ip: req.ip, risk: "medium" });
   res.json({ success: true });
 });
@@ -131,6 +138,10 @@ const deleteAccount = asyncHandler(async (req, res) => {
   if (!ok) throw new AppError("كلمة المرور غير صحيحة", 401);
 
   await knex("users").where({ id: req.user.id }).update({ is_active: false, account_status: "deleted" });
+  // Unlike changePassword, there's no session worth preserving here — the
+  // account itself is gone, so every device (including this one) should be
+  // signed out.
+  await repo.revokeAllSessions(req.user.id);
   await repo.logActivity(req.user.id, { action: "account_deleted", description: "تم حذف الحساب نهائياً", ip: req.ip, risk: "high" });
   res.json({ success: true });
 });

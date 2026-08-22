@@ -1,4 +1,5 @@
 const knex = require("../db");
+const { hashJti } = require("../utils/jwt");
 
 // Ensure profile row exists (upsert pattern)
 async function ensureProfile(userId) {
@@ -59,6 +60,37 @@ async function updatePreferences(userId, prefs) {
     .merge(clean);
 }
 
+/**
+ * Record a new session at login/registration time — this is what makes the
+ * jti in the just-issued JWT actually valid (see utils/jwt.js signToken).
+ * Accepts an optional `trx` since registerVerify() creates the user and the
+ * session inside the same transaction.
+ */
+async function createSession(userId, jti, { ip = null, deviceInfo = null, trx = null } = {}) {
+  const db = trx || knex;
+  return db("user_sessions").insert({
+    user_id: userId,
+    token_hash: hashJti(jti),
+    ip_address: ip,
+    device_info: deviceInfo,
+  });
+}
+
+/** Used by middleware/auth.js on every request to check the token's session is still live. */
+async function findSessionByHash(userId, tokenHash) {
+  return knex("user_sessions").where({ user_id: userId, token_hash: tokenHash }).first("id");
+}
+
+/** Fire-and-forget "last seen" bump — not awaited by callers, so keep it single-purpose. */
+async function touchSession(tokenHash) {
+  return knex("user_sessions").where({ token_hash: tokenHash }).update({ last_active: knex.fn.now() });
+}
+
+/** Used by auth.controller.js logout() to revoke exactly the session being logged out of. */
+async function revokeSessionByHash(tokenHash) {
+  return knex("user_sessions").where({ token_hash: tokenHash }).delete();
+}
+
 async function getSessions(userId) {
   return knex("user_sessions")
     .where({ user_id: userId })
@@ -112,5 +144,6 @@ async function markDataExport(userId) {
 module.exports = {
   getProfile, updateProfile, updateAvatar, removeAvatar,
   updatePreferences, getSessions, revokeSession, revokeAllSessions,
+  createSession, findSessionByHash, touchSession, revokeSessionByHash,
   logActivity, getActivityLog, toggle2FA, markDataExport,
 };

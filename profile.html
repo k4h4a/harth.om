@@ -140,6 +140,7 @@
     .sw input:checked+.sw-slider{background:#6ab04c}
     .sw input:checked+.sw-slider:before{transform:translateX(21px)}
     [dir="rtl"] .sw input:checked+.sw-slider:before{transform:translateX(-21px)}
+    .sw input:disabled+.sw-slider{opacity:.4;cursor:not-allowed}
 
     /* Session card */
     .session-card{background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.09);border-radius:12px;padding:14px 16px;display:flex;align-items:center;gap:12px;margin-bottom:8px}
@@ -211,8 +212,6 @@
 
     /* 2FA Setup */
     .twofa-qr{background:#fff;padding:10px;border-radius:10px;display:inline-block;margin:10px 0}
-    .backup-codes{display:grid;grid-template-columns:repeat(2,1fr);gap:6px;margin:10px 0}
-    .backup-code{background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.15);border-radius:8px;padding:8px 12px;font-family:monospace;font-size:14px;letter-spacing:2px;text-align:center}
 
     /* Deactivate confirm */
     .modal-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.7);z-index:2000;align-items:center;justify-content:center;padding:20px}
@@ -457,29 +456,20 @@
           </div>
         </div>
 
-        <!-- 2FA -->
+        <!-- 2FA — real per-user TOTP + server-side verification isn't built yet.
+             Deliberately shown as a disabled "coming soon" state rather than a
+             working-looking toggle: the old version shared one hardcoded TOTP
+             secret across every account and generated "backup codes" in the
+             browser that were never sent to or checked by the server, so
+             enabling it gave zero actual protection while looking like it did. -->
         <div class="pf-card">
           <div class="pf-card-title"><i class="fas fa-mobile-alt"></i> <span data-i18n="profile.panels.security.twoFaTitle">المصادقة الثنائية (2FA)</span></div>
           <div class="toggle-row" style="border:none;padding:0 0 14px">
             <div class="toggle-info">
               <div class="toggle-lbl" data-i18n="profile.panels.security.twoFaToggleLabel">تفعيل المصادقة الثنائية</div>
-              <div class="toggle-sub" data-i18n="profile.panels.security.twoFaToggleSub">طبقة أمان إضافية عند كل تسجيل دخول</div>
+              <div class="toggle-sub" data-i18n="profile.panels.security.twoFaComingSoon">هذه الميزة قيد التطوير وستتوفر قريبًا</div>
             </div>
-            <label class="sw"><input type="checkbox" id="sw-2fa" onchange="toggle2FA(this.checked)" /><span class="sw-slider"></span></label>
-          </div>
-          <div id="twofa-setup" style="display:none">
-            <div style="background:rgba(106,176,76,.08);border:1px solid rgba(106,176,76,.2);border-radius:12px;padding:16px;margin-top:10px">
-              <div style="font-size:13px;margin-bottom:12px;color:rgba(255,255,255,.75)" data-i18n="profile.panels.security.twoFaScanInstructions">
-                امسح الرمز التالي بتطبيق المصادقة (Google Authenticator / Authy):
-              </div>
-              <div class="twofa-qr">
-                <img src="https://api.qrserver.com/v1/create-qr-code/?size=140x140&data=otpauth://totp/Harth:user@harth.om?secret=JBSWY3DPEHPK3PXP&issuer=Harth" width="140" height="140" alt="2FA QR" />
-              </div>
-              <div style="font-size:12px;color:rgba(255,255,255,.5);margin:8px 0"><span data-i18n="profile.panels.security.twoFaManualCode">رمز الإعداد اليدوي:</span> <code style="color:#6ab04c;background:rgba(106,176,76,.1);padding:2px 8px;border-radius:4px">JBSWY3DPEHPK3PXP</code></div>
-              <div style="font-size:13px;font-weight:700;margin-bottom:6px;margin-top:14px" data-i18n="profile.panels.security.twoFaBackupCodesTitle">رموز الطوارئ:</div>
-              <div class="backup-codes" id="backup-codes"></div>
-              <div class="f-hint" data-i18n="profile.panels.security.twoFaBackupCodesHint">احفظ هذه الرموز في مكان آمن — كل رمز يُستخدم مرة واحدة فقط</div>
-            </div>
+            <label class="sw"><input type="checkbox" id="sw-2fa" disabled /><span class="sw-slider"></span></label>
           </div>
         </div>
 
@@ -901,7 +891,8 @@
         }
       }
       setToggle("sw-dark", window.HarthTheme ? window.HarthTheme.getTheme() === "dark" : false);
-      setToggle("sw-2fa",           !!p.two_fa_enabled);
+      // sw-2fa is permanently disabled (see the security panel markup) — 2FA
+      // isn't implemented server-side yet, so there's no real state to sync.
       setToggle("sw-notif-orders",  p.notif_orders  !== false);
       setToggle("sw-notif-msgs",    p.notif_messages !== false);
       setToggle("sw-notif-promos",  !!p.notif_promos);
@@ -1061,24 +1052,6 @@
       } catch (err) { toast(err.message, true); }
     }
     window.changePassword = changePassword;
-
-    // ── 2FA ────────────────────────────────────────────────────
-    async function toggle2FA(enabled) {
-      const setup = document.getElementById("twofa-setup");
-      if (enabled) {
-        setup.style.display = "block";
-        // Generate mock backup codes
-        const codes = Array.from({length:8}, () => Math.random().toString(36).slice(2,9).toUpperCase());
-        document.getElementById("backup-codes").innerHTML = codes.map(c => `<div class="backup-code">${c}</div>`).join("");
-      } else {
-        setup.style.display = "none";
-      }
-      try {
-        await apiFetch("/profile/2fa/toggle", { method:"POST", body: JSON.stringify({ enabled }) });
-        toast(enabled ? t("profile.toasts.twoFaEnabled") : t("profile.toasts.twoFaDisabled"));
-      } catch (_e) {}
-    }
-    window.toggle2FA = toggle2FA;
 
     // ── Sessions ───────────────────────────────────────────────
     async function loadSessions() {

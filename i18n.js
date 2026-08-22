@@ -91,17 +91,38 @@
 
   async function setLanguage(lang) {
     if (!SUPPORTED.includes(lang)) lang = DEFAULT_LANG;
-    translations = await loadLang(lang);
-    currentLang = lang;
+
+    // A transient network blip or brief server hiccup here must never mean
+    // the whole page stays hidden forever — every page hides its body via
+    // html.i18n-loading until this function removes that class (see below).
+    // If the fetch fails, keep whatever translations we already have (none,
+    // on a first-load failure — t() then falls back to raw keys, which is
+    // ugly but visible and usable, unlike a blank white page) and just make
+    // sure the page still gets shown.
+    let loaded = false;
     try {
-      localStorage.setItem(STORAGE_KEY, lang);
-    } catch {
-      /* private browsing / storage disabled — language just won't persist */
+      translations = await loadLang(lang);
+      currentLang = lang;
+      loaded = true;
+    } catch (err) {
+      // eslint-disable-next-line no-console
+      console.error(`i18n: failed to load locales/${lang}.json — falling back to raw keys`, err);
     }
-    setDirAttrs(lang);
+
+    // Only persist a language we actually managed to load — don't let one
+    // transient failure overwrite a previously-working stored preference.
+    if (loaded) {
+      try {
+        localStorage.setItem(STORAGE_KEY, lang);
+      } catch {
+        /* private browsing / storage disabled — language just won't persist */
+      }
+    }
+
+    setDirAttrs(currentLang);
     applyDom(document);
-    document.documentElement.classList.remove("i18n-loading");
-    document.dispatchEvent(new CustomEvent("harth:langchange", { detail: { lang } }));
+    document.documentElement.classList.remove("i18n-loading"); // always runs now
+    document.dispatchEvent(new CustomEvent("harth:langchange", { detail: { lang: currentLang } }));
   }
 
   function getLanguage() {

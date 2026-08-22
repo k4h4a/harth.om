@@ -10,6 +10,7 @@
     "migrate:rollback": "knex migrate:rollback",
     "seed": "node src/utils/seed.js",
     "migrate:uploads": "node src/utils/migrate-uploads-to-cloudinary.js",
+    "simulate:payment": "node src/utils/simulate-payment.js",
     "lint": "eslint .",
     "test": "jest --runInBand"
   },

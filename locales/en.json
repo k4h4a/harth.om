@@ -1843,6 +1843,7 @@
         "twoFaTitle": "Two-Factor Authentication (2FA)",
         "twoFaToggleLabel": "Enable two-factor authentication",
         "twoFaToggleSub": "An extra layer of security on every login",
+        "twoFaComingSoon": "This feature is under development and will be available soon",
         "twoFaScanInstructions": "Scan the code below with your authenticator app (Google Authenticator / Authy):",
         "twoFaManualCode": "Manual setup code:",
         "twoFaBackupCodesTitle": "Backup codes:",

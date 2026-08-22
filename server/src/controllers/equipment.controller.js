@@ -6,13 +6,41 @@ const notificationService = require("../services/notification.service");
 const { AppError, asyncHandler } = require("../middleware/errorHandler");
 const { computeEquipmentPricing } = require("../utils/commission-pricing");
 
+// The only columns a client (owner or admin, via POST/PATCH /equipment) may
+// ever set directly. Anything else — approval_status, approved_by,
+// approved_at, avg_rating, ratings_count, owner_id, commission fields, etc.
+// — is server-computed and must never come from req.body, even if a client
+// sends it. Kept in sync with equipment.validator.js, which is the only
+// other place allowed to define what a client may submit.
+const CLIENT_WRITABLE_FIELDS = [
+  "name",
+  "description",
+  "category",
+  "listing_type",
+  "daily_price",
+  "sale_price",
+  "deposit_amount",
+  "stock",
+  "images",
+  "primary_image_url",
+  "specs",
+  "location",
+  "governorate",
+  "status",
+];
+
 /**
- * Shape-check helper. Converts JSON-compatible values from the request into
- * what the DB expects (JSONB columns need stringified JSON via Knex helpers
- * or we can pass raw objects — Knex/pg handles both; we normalize here).
+ * Shape-check helper. Picks only client-writable fields from the request
+ * body (see CLIENT_WRITABLE_FIELDS), then converts JSON-compatible values
+ * into what the DB expects (JSONB columns need stringified JSON via Knex
+ * helpers or we can pass raw objects — Knex/pg handles both; we normalize
+ * here).
  */
 function normalizeForDb(body) {
-  const out = { ...body };
+  const out = {};
+  for (const key of CLIENT_WRITABLE_FIELDS) {
+    if (body[key] !== undefined) out[key] = body[key];
+  }
 
   // Coerce empty-string numbers to null, otherwise cast to Number.
   ["daily_price", "sale_price", "deposit_amount"].forEach((k) => {
@@ -31,14 +59,6 @@ function normalizeForDb(body) {
       out[k] = JSON.stringify(out[k]);
     }
   });
-
-  // Commission/final-price fields are always server-computed — never trust
-  // a client-supplied value here, regardless of what the request sent.
-  delete out.commission_percentage;
-  delete out.daily_commission_amount;
-  delete out.sale_commission_amount;
-  delete out.farmer_daily_price;
-  delete out.farmer_sale_price;
 
   return out;
 }

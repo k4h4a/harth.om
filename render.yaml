@@ -41,9 +41,16 @@ services:
         sync: false
       - key: ADMIN_PASSWORD
         sync: false
-      # Until a real Stripe key is added, payments run in mock mode.
+      # Until a real Stripe key is added, payments run in mock mode. The
+      # server now refuses to boot in this mode without MOCK_WEBHOOK_SECRET
+      # (>=20 random chars) also set — generate one with e.g.
+      # `node -e "console.log(require('crypto').randomBytes(24).toString('hex'))"`
+      # and set it in the Render dashboard. Required only while
+      # ALLOW_MOCK_PAYMENTS=true; drop both once a real STRIPE_SECRET_KEY is set.
       - key: ALLOW_MOCK_PAYMENTS
         value: "true"
+      - key: MOCK_WEBHOOK_SECRET
+        sync: false
       - key: STRIPE_SECRET_KEY
         sync: false
       - key: STRIPE_WEBHOOK_SECRET

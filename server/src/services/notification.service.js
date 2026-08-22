@@ -261,6 +261,29 @@ const events = {
     });
   },
 
+  rentalPaid(renterId, rental) {
+    return notify({
+      userId: renterId,
+      type: "payment",
+      title: "تم استلام الدفع",
+      message: `تم تأكيد دفع إيجارك من ${rental.start_date} إلى ${rental.end_date}.`,
+      metadata: { rental_id: rental.id },
+      email: true,
+      whatsapp: true,
+    });
+  },
+
+  rentalPaymentFailed(renterId, rental) {
+    return notify({
+      userId: renterId,
+      type: "payment",
+      title: "فشل الدفع",
+      message: `لم يتم تأكيد دفع طلب الإيجار من ${rental.start_date} إلى ${rental.end_date}. يرجى المحاولة مرة أخرى.`,
+      metadata: { rental_id: rental.id },
+      email: true,
+    });
+  },
+
   rentalRejected(renterId, rental, note) {
     return notify({
       userId: renterId,

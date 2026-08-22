@@ -1843,6 +1843,7 @@
         "twoFaTitle": "المصادقة الثنائية (2FA)",
         "twoFaToggleLabel": "تفعيل المصادقة الثنائية",
         "twoFaToggleSub": "طبقة أمان إضافية عند كل تسجيل دخول",
+        "twoFaComingSoon": "هذه الميزة قيد التطوير وستتوفر قريبًا",
         "twoFaScanInstructions": "امسح الرمز التالي بتطبيق المصادقة (Google Authenticator / Authy):",
         "twoFaManualCode": "رمز الإعداد اليدوي:",
         "twoFaBackupCodesTitle": "رموز الطوارئ:",

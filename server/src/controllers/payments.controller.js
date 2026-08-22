@@ -1,4 +1,5 @@
 const orderRepo = require("../repositories/order.repository");
+const rentalRepo = require("../repositories/rental.repository");
 const stripeService = require("../services/stripe.service");
 const notificationService = require("../services/notification.service");
 const { asyncHandler } = require("../middleware/errorHandler");
@@ -17,11 +18,15 @@ const webhook = asyncHandler(async (req, res) => {
   const event = stripeService.verifyWebhook({
     rawBody: req.body, // Buffer
     signatureHeader: signature,
+    // Only consulted in mock mode (no real STRIPE_SECRET_KEY) — a real
+    // Stripe webhook never sends this header and doesn't need to.
+    mockSecretHeader: req.headers["x-mock-webhook-secret"],
   });
 
   switch (event.type) {
     case "payment_intent.succeeded": {
       const pi = event.data.object;
+
       const order = await orderRepo.findByPaymentIntent(pi.id);
       if (order) {
         const paidOrder = await orderRepo.markPaid(order.id, {
@@ -49,12 +54,27 @@ const webhook = asyncHandler(async (req, res) => {
               console.error("[newDeliveryAvailable notify failed]", e.message);
             });
         }
+        break;
+      }
+
+      const rental = await rentalRepo.findByPaymentIntent(pi.id);
+      if (rental) {
+        const paidRental = await rentalRepo.markPaid(rental.id, {
+          paymentIntentId: pi.id,
+        });
+        notificationService.events.rentalPaid(rental.renter_id, paidRental).catch(
+          (e) => {
+            // eslint-disable-next-line no-console
+            console.error("[rentalPaid notify failed]", e.message);
+          },
+        );
       }
       break;
     }
     case "payment_intent.payment_failed":
     case "payment_intent.canceled": {
       const pi = event.data.object;
+
       const order = await orderRepo.findByPaymentIntent(pi.id);
       if (order) {
         const failedOrder = await orderRepo.markFailed(order.id);
@@ -64,6 +84,20 @@ const webhook = asyncHandler(async (req, res) => {
             .catch((e) => {
               // eslint-disable-next-line no-console
               console.error("[orderFailed notify failed]", e.message);
+            });
+        }
+        break;
+      }
+
+      const rental = await rentalRepo.findByPaymentIntent(pi.id);
+      if (rental) {
+        const failedRental = await rentalRepo.markFailed(rental.id);
+        if (failedRental) {
+          notificationService.events
+            .rentalPaymentFailed(rental.renter_id, failedRental)
+            .catch((e) => {
+              // eslint-disable-next-line no-console
+              console.error("[rentalPaymentFailed notify failed]", e.message);
             });
         }
       }

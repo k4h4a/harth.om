@@ -1,4 +1,5 @@
 const rentalRepo = require("../repositories/rental.repository");
+const stripeService = require("../services/stripe.service");
 const notificationService = require("../services/notification.service");
 const { AppError, asyncHandler } = require("../middleware/errorHandler");
 const knex = require("../db");
@@ -17,7 +18,7 @@ const create = asyncHandler(async (req, res) => {
     delivery_address = null,
   } = req.body;
 
-  const { rental, days } = await rentalRepo.createRental({
+  let { rental, days } = await rentalRepo.createRental({
     renterId: req.user.id,
     equipmentId: equipment_id,
     startDate: start_date,
@@ -27,42 +28,41 @@ const create = asyncHandler(async (req, res) => {
     deliveryAddress: delivery_address,
   });
 
+  // For card rentals, open a PaymentIntent the same way orders do — the
+  // renter can pay it right away, in parallel with the owner reviewing the
+  // request. Nothing here changes rental.status; start() (pickup) is the
+  // gate that actually requires payment_status === 'paid' before letting
+  // the renter collect the equipment (see rental.repository.js start()).
+  let payment = null;
+  if (payment_method === "card") {
+    const intent = await stripeService.createPaymentIntent({
+      amount: rental.total_price,
+      orderId: rental.id,
+      userId: req.user.id,
+      metadata: { type: "rental", rental_id: rental.id },
+    });
+    payment = {
+      client_secret: intent.clientSecret,
+      payment_intent_id: intent.paymentIntentId,
+      mock: intent.mock,
+    };
+    rental = await rentalRepo.setPaymentIntent(rental.id, intent.paymentIntentId);
+  }
+
   // Notify owner — fire-and-forget.
   notificationService.events
     .rentalRequested(rental.owner_id, rental, req.user.name || "مستخدم")
     .catch((e) => console.error("[rentalRequested notify failed]", e.message));
 
-  // Auto-create delivery request so driver can pick it up immediately.
-  if (delivery_address) {
-    try {
-      const addr = typeof delivery_address === "string"
-        ? JSON.parse(delivery_address) : delivery_address;
-      const owner = await knex("users").where({ id: rental.owner_id }).first("name", "phone");
-      const [deliveryRow] = await knex("delivery_requests")
-        .insert({
-          rental_id: rental.id,
-          courier_id: null,
-          status: "pending",
-          pickup_address: JSON.stringify({ city: "عُمان", notes: `اتصل بالمالك: ${owner?.name || ""}` }),
-          dropoff_address: JSON.stringify(addr),
-          scheduled_date: rental.start_date,
-          fee: 2.0,
-        })
-        .returning("*");
-      if (deliveryRow) {
-        notificationService.events
-          .newDeliveryAvailable(deliveryRow, rental.tracking_number)
-          .catch((e) => console.error("[rental newDeliveryAvailable failed]", e.message));
-      }
-    } catch (e) {
-      console.error("[rental auto-delivery creation failed]", e.message);
-    }
-  }
+  // No delivery request here — the rental isn't approved yet (see C-01 fix).
+  // approve() below already creates the delivery request once the owner
+  // actually confirms the booking, using the same delivery_address.
 
   res.status(201).json({
     success: true,
     rental,
     days,
+    payment,
   });
 });
 

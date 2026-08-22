@@ -30,6 +30,8 @@ const PUBLIC_RENTAL_FIELDS = [
   "deposit_notes",
   "delivery_address",
   "payment_method",
+  "payment_intent_id",
+  "paid_at",
   "created_at",
   "updated_at",
 ];
@@ -197,9 +199,8 @@ async function createRental({
         daily_price_snapshot: dailyPrice,
         total_price: total,
         commission_amount_snapshot: commissionAmountSnapshot,
-        status: "approved",
+        status: "pending",
         payment_status: "pending",
-        approved_at: trx.fn.now(),
         renter_notes: renterNotes,
         payment_method: paymentMethod,
         delivery_address: deliveryAddress ? JSON.stringify(deliveryAddress) : null,
@@ -447,6 +448,16 @@ async function start({ rentalId, callerId, isAdmin }) {
         400,
       );
     }
+    // A card rental can't be handed over before the charge actually clears —
+    // otherwise the renter walks away with the equipment on nothing more
+    // than a PaymentIntent that might still fail or never get confirmed.
+    // Cash-on-delivery rentals settle at handover instead, so they're exempt.
+    if (rental.payment_method !== "cash_on_delivery" && rental.payment_status !== "paid") {
+      throw new AppError(
+        "Cannot start this rental until payment is confirmed",
+        400,
+      );
+    }
 
     const updatePatch = {
       status: "active",
@@ -618,6 +629,72 @@ async function resolveDeposit({
   });
 }
 
+/**
+ * Persist the Stripe PaymentIntent id right after creating it, so a later
+ * webhook can look the rental up by payment_intent_id (findByPaymentIntent).
+ */
+async function setPaymentIntent(rentalId, paymentIntentId) {
+  const [row] = await knex("rentals")
+    .where({ id: rentalId })
+    .update({ payment_intent_id: paymentIntentId })
+    .returning(PUBLIC_RENTAL_FIELDS);
+  return row;
+}
+
+async function findByPaymentIntent(paymentIntentId) {
+  return knex("rentals").where({ payment_intent_id: paymentIntentId }).first();
+}
+
+/**
+ * Called from the Stripe webhook on payment_intent.succeeded. Only touches
+ * payment_status — the rental's own status (pending/approved/active/...)
+ * keeps following the owner-approval lifecycle independently. start()
+ * checks payment_status separately before allowing handover.
+ *
+ * Idempotent, and deliberately a no-op (not an error — Stripe still needs a
+ * 200) if the rental was rejected/cancelled before the charge cleared: a
+ * late-arriving webhook must never resurrect a dead rental's payment state.
+ */
+async function markPaid(rentalId, { paymentIntentId = null } = {}) {
+  return knex.transaction(async (trx) => {
+    const rental = await trx("rentals").where({ id: rentalId }).forUpdate().first();
+    if (!rental) throw new AppError("Rental not found", 404);
+    if (rental.payment_status === "paid") return rental; // idempotent
+    if (["rejected", "cancelled"].includes(rental.status)) return rental; // dead rental, ignore
+
+    const [updated] = await trx("rentals")
+      .where({ id: rentalId })
+      .update({
+        payment_status: "paid",
+        paid_at: trx.fn.now(),
+        payment_intent_id: paymentIntentId || rental.payment_intent_id,
+      })
+      .returning(PUBLIC_RENTAL_FIELDS);
+    return updated;
+  });
+}
+
+/**
+ * Called from the Stripe webhook on payment_intent.payment_failed/canceled.
+ * Rentals don't reserve stock or consume promo/loyalty at creation time
+ * (unlike orders), so there's nothing to roll back beyond the payment flag
+ * itself — the rental simply stays wherever the approval flow left it,
+ * still blocked from start() until payment is retried and succeeds.
+ */
+async function markFailed(rentalId) {
+  return knex.transaction(async (trx) => {
+    const rental = await trx("rentals").where({ id: rentalId }).forUpdate().first();
+    if (!rental) return null;
+    if (rental.payment_status === "failed") return rental; // idempotent
+
+    const [updated] = await trx("rentals")
+      .where({ id: rentalId })
+      .update({ payment_status: "failed" })
+      .returning(PUBLIC_RENTAL_FIELDS);
+    return updated;
+  });
+}
+
 module.exports = {
   createRental,
   isAvailable,
@@ -634,5 +711,9 @@ module.exports = {
   start,
   complete,
   resolveDeposit,
+  setPaymentIntent,
+  findByPaymentIntent,
+  markPaid,
+  markFailed,
   PUBLIC_RENTAL_FIELDS,
 };

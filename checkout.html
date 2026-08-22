@@ -1056,17 +1056,14 @@
                 throw new Error((res && res.error && res.error.message) || t("checkout.toasts.saleOrderFailed"));
               }
               trackingNumber = res.order.tracking_number;
-
-              if (res.payment && res.payment.mock && res.payment.payment_intent_id) {
-                fetch(`${API_BASE_URL}/payments/webhook`, {
-                  method: "POST",
-                  headers: { "Content-Type": "application/json" },
-                  body: JSON.stringify({
-                    type: "payment_intent.succeeded",
-                    data: { object: { id: res.payment.payment_intent_id } },
-                  }),
-                }).catch(() => {});
-              }
+              // In mock-payment mode (no real Stripe key configured), the
+              // order intentionally stays payment_status "pending" here —
+              // this used to self-call /payments/webhook from the browser
+              // to "confirm" its own payment, which is exactly the kind of
+              // request a real attacker would send (see C-07/C-10). Simulate
+              // it from a trusted place instead: `npm run simulate:payment
+              // -- <payment_intent_id>` in server/, which requires the
+              // server-side MOCK_WEBHOOK_SECRET no browser has access to.
             }
 
             // Rental requests
@@ -1085,6 +1082,10 @@
                   }),
                 });
                 if (!res || !res.success) throw new Error(res?.error?.message || t("checkout.toasts.genericFailed"));
+                // Remove it from the local rental cart the moment it actually
+                // succeeds — otherwise a retry after a *different* item fails
+                // resubmits this one too and books it twice (see C-09).
+                removeRentalItem(r.equipment_id);
               } catch (err) {
                 rentalErrors.push(`${r.name}: ${err.message}`);
               }
@@ -1092,6 +1093,11 @@
 
             if (rentalErrors.length) {
               showToast(t("checkout.toasts.rentalErrorsPrefix") + " " + rentalErrors.join(" | "), true);
+              // Re-sync currentCart with the server: if the sale order above
+              // already succeeded, the backend already emptied the cart, so
+              // a retry must not see stale items and re-submit a duplicate
+              // sale order too.
+              await loadCart();
               btn.disabled = false;
               btn.innerHTML = `<i class="fas fa-check-circle"></i> ${t("checkout.deliveryForm.submitBtn")}`;
               return;

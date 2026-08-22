@@ -17,6 +17,19 @@ const { AppError } = require("../middleware/errorHandler");
 const hasRealStripe = !!env.STRIPE_SECRET_KEY;
 const stripe = hasRealStripe ? require("stripe")(env.STRIPE_SECRET_KEY) : null;
 
+if (!hasRealStripe) {
+  // Loud and impossible to miss in logs — this mode accepts unsigned
+  // "payment succeeded" webhook calls (see verifyWebhook below). env.js
+  // already refuses to boot in production without MOCK_WEBHOOK_SECRET set,
+  // but this warning exists so it's also obvious to anyone watching logs,
+  // in any environment, exactly when mock mode is active.
+  // eslint-disable-next-line no-console
+  console.warn(
+    "⚠️  STRIPE MOCK PAYMENT MODE ACTIVE — payments are not verified against " +
+      "a real Stripe signature. This must never run against a production database.",
+  );
+}
+
 /**
  * Amounts in our DB are stored as OMR with 2 decimals. Stripe wants the
  * smallest currency unit — for OMR that's baisa (1 OMR = 1000 baisa).
@@ -65,9 +78,19 @@ async function createPaymentIntent({ amount, orderId, userId, metadata = {} }) {
  * In mock mode we accept any JSON payload with a `type` and `data.object`
  * to make local testing trivial. DO NOT deploy in mock mode.
  */
-function verifyWebhook({ rawBody, signatureHeader }) {
+function verifyWebhook({ rawBody, signatureHeader, mockSecretHeader }) {
   if (!hasRealStripe) {
-    // Mock path — rawBody is a Buffer; parse as JSON.
+    // Mock path has no real Stripe signature to check, so a shared secret
+    // header is the only thing standing between this endpoint and anyone
+    // who can send it a POST. env.js guarantees MOCK_WEBHOOK_SECRET is set
+    // (>=20 chars) whenever this mode could possibly run in production; in
+    // development it falls back to a fixed value, so this check still
+    // fires and still has to be satisfied — it just isn't a real secret
+    // there since the whole endpoint is on localhost.
+    if (!env.MOCK_WEBHOOK_SECRET || mockSecretHeader !== env.MOCK_WEBHOOK_SECRET) {
+      throw new AppError("Invalid or missing mock webhook secret", 401);
+    }
+    // rawBody is a Buffer; parse as JSON.
     try {
       const payload = JSON.parse(rawBody.toString("utf8"));
       if (!payload.type || !payload.data || !payload.data.object) {

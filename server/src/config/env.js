@@ -34,6 +34,25 @@ if (process.env.JWT_SECRET.length < 32) {
 
 const isProd = (process.env.NODE_ENV || "development") === "production";
 
+// bootstrap-admin.js auto-creates an admin account on first boot from these
+// two vars if no admin exists yet. In production that must never fall back
+// to the well-known default in .env.example — forgetting to set
+// ADMIN_PASSWORD would otherwise silently hand out a full-privilege admin
+// account with a password anyone can find in this repo.
+const DEFAULT_ADMIN_PASSWORD = "admin123";
+if (
+  isProd &&
+  (!process.env.ADMIN_PASSWORD ||
+    process.env.ADMIN_PASSWORD === DEFAULT_ADMIN_PASSWORD ||
+    process.env.ADMIN_PASSWORD.length < 12)
+) {
+  // eslint-disable-next-line no-console
+  console.error(
+    "🚨 Fatal: set a strong ADMIN_PASSWORD (>=12 chars, not the default) before running in production.",
+  );
+  process.exit(1);
+}
+
 if (
   isProd &&
   !process.env.STRIPE_SECRET_KEY &&
@@ -43,6 +62,26 @@ if (
   console.error(
     "🚨 Fatal: running in production without STRIPE_SECRET_KEY. " +
       "Set STRIPE_SECRET_KEY, or set ALLOW_MOCK_PAYMENTS=true to override.",
+  );
+  process.exit(1);
+}
+
+// Mock-payment mode (no real STRIPE_SECRET_KEY, running only because
+// ALLOW_MOCK_PAYMENTS=true) accepts webhook calls with no real Stripe
+// signature to check — that's fine for local dev, but catastrophic in
+// production: anyone could POST a fake "payment succeeded" event and mark
+// any order/rental paid without paying. If this mode is ever active in
+// production, require a second, explicitly-configured shared secret before
+// the webhook accepts anything — MOCK_WEBHOOK_SECRET is deliberately NOT
+// given a production default, so leaving ALLOW_MOCK_PAYMENTS=true on by
+// mistake fails loudly at boot instead of quietly opening this hole.
+const mockPaymentsActive = isProd && !process.env.STRIPE_SECRET_KEY && process.env.ALLOW_MOCK_PAYMENTS === "true";
+if (mockPaymentsActive && (!process.env.MOCK_WEBHOOK_SECRET || process.env.MOCK_WEBHOOK_SECRET.length < 20)) {
+  // eslint-disable-next-line no-console
+  console.error(
+    "🚨 Fatal: ALLOW_MOCK_PAYMENTS=true in production requires MOCK_WEBHOOK_SECRET " +
+      "(>=20 chars) to be set — this is the only thing standing between the payment " +
+      "webhook and anyone on the internet who can guess it's open.",
   );
   process.exit(1);
 }
@@ -77,6 +116,12 @@ const env = {
   STRIPE_SECRET_KEY: process.env.STRIPE_SECRET_KEY || "",
   STRIPE_WEBHOOK_SECRET: process.env.STRIPE_WEBHOOK_SECRET || "",
   STRIPE_CURRENCY: process.env.STRIPE_CURRENCY || "omr",
+  // Required to actually use mock-payment mode in production (see the fatal
+  // check above). In development, falls back to a fixed, publicly-known
+  // value purely so local testing keeps working out of the box — never
+  // relied on for anything security-relevant outside production.
+  MOCK_WEBHOOK_SECRET:
+    process.env.MOCK_WEBHOOK_SECRET || (isProd ? "" : "dev-only-mock-webhook-secret"),
 
   // Email / SMTP (Phase 4). All optional — missing vars silently disable email.
   // Also the delivery channel for registration OTP codes (Phase 5).

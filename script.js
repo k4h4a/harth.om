@@ -102,6 +102,17 @@ function t(key) {
   return window.HarthI18n ? window.HarthI18n.t(key) : key;
 }
 
+// Escape before injecting any user-/API-supplied text into innerHTML.
+// Registration only length-checks `name` (2-100 chars, see
+// server/src/validators/auth.validator.js) — HTML is fully permitted in it,
+// so anything rendered from user.name/user.email must go through this.
+function escapeHtml(s) {
+  if (s == null) return "";
+  return String(s).replace(/[&<>"']/g, (c) => ({
+    "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;",
+  })[c]);
+}
+
 // Render header auth state
 function renderHeaderAuthState() {
   const authHeader = document.getElementById("auth-header");
@@ -126,13 +137,13 @@ function renderHeaderAuthState() {
       <div class="hs-user-dd">
         <button class="hs-user-trigger" type="button">
           <span class="hs-user-avatar">${initials}</span>
-          ${user.name || user.email}
+          ${escapeHtml(user.name || user.email)}
           <i class="fas fa-chevron-down"></i>
         </button>
         <div class="hs-user-menu">
           <div class="hs-user-menu-head">
-            <div class="hs-user-menu-name">${user.name || ""}</div>
-            <div class="hs-user-menu-email">${user.email || ""}</div>
+            <div class="hs-user-menu-name">${escapeHtml(user.name || "")}</div>
+            <div class="hs-user-menu-email">${escapeHtml(user.email || "")}</div>
           </div>
           <a href="profile.html">
             <i class="fas fa-user-circle"></i>
@@ -227,10 +238,10 @@ function updateCartDisplay() {
     .map(
       (item) => `
     <tr>
-      <td data-label="${t("basket.table.product")}"><img src="${item.img}" alt="${
-        item.name
+      <td data-label="${t("basket.table.product")}"><img src="${escapeHtml(item.img)}" alt="${
+        escapeHtml(item.name)
       }" class="cart-img" onerror="this.src='https://via.placeholder.com/65x65/2c3e50/fff?text=📦'" /></td>
-      <td data-label="${t("basket.table.details")}">${item.name}</td>
+      <td data-label="${t("basket.table.details")}">${escapeHtml(item.name)}</td>
       <td data-label="${t("basket.table.quantity")}"><input type="number" class="qty-input" value="${
         item.qty
       }" min="1" onchange="updateQty('${item.id}', this.value)" /></td>

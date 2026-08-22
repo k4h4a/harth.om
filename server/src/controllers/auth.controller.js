@@ -8,6 +8,7 @@ const otpService = require("../services/otp.service");
 const registrationOtpService = require("../services/registrationOtp.service");
 const pendingRegistrationService = require("../services/pendingRegistration.service");
 const loyaltyRepo = require("../repositories/loyalty.repository");
+const profileRepo = require("../repositories/profile.repository");
 const googleOAuth = require("../utils/googleOAuth");
 
 /**
@@ -78,6 +79,7 @@ async function createUserAndRespond({
   governorate = null,
   referredByCode = null,
   trx = null,
+  req = null,
 }) {
   const db = trx || knex;
 
@@ -190,7 +192,12 @@ async function createUserAndRespond({
   // see yet — a foreign-key violation. Callers fire notifyRegistered()
   // themselves once they know the insert has actually committed.
 
-  const token = signToken(inserted);
+  const { token, jti } = signToken(inserted);
+  await profileRepo.createSession(inserted.id, jti, {
+    ip: req?.ip || null,
+    deviceInfo: req?.headers?.["user-agent"] || null,
+    trx,
+  });
   return {
     success: true,
     token,
@@ -233,6 +240,7 @@ const register = asyncHandler(async (req, res) => {
     location,
     governorate,
     referredByCode,
+    req,
   });
   notifyRegistered(payload.user);
   res.status(201).json(payload);
@@ -332,6 +340,7 @@ const registerVerify = asyncHandler(async (req, res) => {
       governorate: pending.governorate,
       referredByCode: pending.referred_by_code,
       trx,
+      req,
     });
     await pendingRegistrationService.consumePendingRegistration(pending.id, trx);
     return result;
@@ -376,7 +385,11 @@ const login = asyncHandler(async (req, res) => {
 
   // Strip password_hash from returned user
   const { password_hash: _ph, ...safeUser } = user;
-  const token = signToken(safeUser);
+  const { token, jti } = signToken(safeUser);
+  await profileRepo.createSession(user.id, jti, {
+    ip: req.ip,
+    deviceInfo: req.headers["user-agent"] || null,
+  });
   res.json({ success: true, token, user: safeUser });
 });
 
@@ -508,7 +521,11 @@ const googleAuthCallback = asyncHandler(async (req, res) => {
   }
 
   const { password_hash: _ph, ...safeUser } = user;
-  const token = signToken(safeUser);
+  const { token, jti } = signToken(safeUser);
+  await profileRepo.createSession(user.id, jti, {
+    ip: req.ip,
+    deviceInfo: req.headers["user-agent"] || null,
+  });
   // Fragment, not query string: it's never sent to the server on the next
   // request and never appears in server logs/Referer headers, only visible
   // to the frontend JS that immediately stores it and rewrites the URL.
@@ -524,8 +541,14 @@ const me = asyncHandler(async (req, res) => {
   res.json({ success: true, user });
 });
 
-const logout = asyncHandler(async (_req, res) => {
-  // Stateless JWT: actual invalidation happens client-side by deleting the token.
+const logout = asyncHandler(async (req, res) => {
+  // Revoke this specific session's row so the token stops working even if
+  // it's still copied somewhere (a stale tab, a leaked log) — previously
+  // this only relied on the client deleting its local copy, which does
+  // nothing to any other copy of the same token.
+  if (req.sessionTokenHash) {
+    await profileRepo.revokeSessionByHash(req.sessionTokenHash);
+  }
   res.json({ success: true, message: "Logged out" });
 });
 
