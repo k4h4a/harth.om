@@ -1,9 +1,7 @@
-const http = require("http");
 const env = require("./config/env");
 const app = require("./app");
 const knex = require("./db");
 const bootstrapAdmin = require("./utils/bootstrap-admin");
-const realtime = require("./services/realtime.service");
 
 async function start() {
   try {
@@ -13,28 +11,17 @@ async function start() {
 
     await bootstrapAdmin();
 
-    // Wrap the Express app in a raw HTTP server so Socket.IO can share the port.
-    const httpServer = http.createServer(app);
-
-    // Install realtime layer. From now on notificationService/messageController
-    // can push events via realtime.emitToUser(...).
-    realtime.initialize(httpServer);
-    // eslint-disable-next-line no-console
-    console.log("✅ Realtime (Socket.IO) initialized");
-
-    httpServer.listen(env.PORT, () => {
+    const server = app.listen(env.PORT, () => {
       // eslint-disable-next-line no-console
       console.log(`🚀 Server running at http://localhost:${env.PORT}`);
       // eslint-disable-next-line no-console
       console.log(`   Health: http://localhost:${env.PORT}/api/v1/health`);
-      // eslint-disable-next-line no-console
-      console.log(`   Socket.IO:  ws://localhost:${env.PORT}/socket.io/`);
     });
 
     const shutdown = async (signal) => {
       // eslint-disable-next-line no-console
       console.log(`\n${signal} received — shutting down gracefully`);
-      httpServer.close(async () => {
+      server.close(async () => {
         try {
           await knex.destroy();
           // eslint-disable-next-line no-console

@@ -1,5 +1,4 @@
 const notificationRepo = require("../repositories/notification.repository");
-const realtime = require("../services/realtime.service");
 const { AppError, asyncHandler } = require("../middleware/errorHandler");
 
 /**
@@ -31,12 +30,6 @@ const markRead = asyncHandler(async (req, res) => {
   const row = await notificationRepo.markRead(req.params.id, req.user.id);
   if (!row) throw new AppError("Notification not found or already read", 404);
 
-  // Push updated unread count to all the user's sockets
-  const count = await notificationRepo.unreadCount(req.user.id);
-  realtime.emitToUser(req.user.id, "notification:unread_count", {
-    unread_count: count,
-  });
-
   res.json({ success: true, notification: row });
 });
 
@@ -45,9 +38,6 @@ const markRead = asyncHandler(async (req, res) => {
  */
 const markAllRead = asyncHandler(async (req, res) => {
   const updated = await notificationRepo.markAllRead(req.user.id);
-  realtime.emitToUser(req.user.id, "notification:unread_count", {
-    unread_count: 0,
-  });
   res.json({ success: true, updated });
 });
 

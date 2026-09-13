@@ -13,7 +13,8 @@
       "Bash(node -c src/validators/rental.validator.js)",
       "Bash(node -c src/routes/rental.routes.js)",
       "Bash(node --check src/config/env.js)",
-      "Bash(node --check src/services/email.service.js)"
+      "Bash(node --check src/services/email.service.js)",
+      "Bash(timeout 8 npm start)"
     ]
   }
 }

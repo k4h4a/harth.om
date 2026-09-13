@@ -1,12 +1,11 @@
 const knex = require("../db");
 const messageRepo = require("../repositories/message.repository");
-const realtime = require("../services/realtime.service");
 const notificationService = require("../services/notification.service");
 const { AppError, asyncHandler } = require("../middleware/errorHandler");
 
 /**
  * POST /messages
- * Send a direct message and push it via realtime to both parties.
+ * Send a direct message. Recipients pick it up via GET /messages/with/:peerId.
  */
 const send = asyncHandler(async (req, res) => {
   const { recipient_id, body, attachment_url = null } = req.body;
@@ -28,12 +27,6 @@ const send = asyncHandler(async (req, res) => {
     body,
     attachmentUrl: attachment_url,
   });
-
-  // Push to recipient (every connected socket)
-  realtime.emitToUser(recipient_id, "message:new", message);
-  // Push back to sender's OTHER devices (so a message composed on the phone
-  // instantly appears on their laptop too).
-  realtime.emitToUser(req.user.id, "message:new", message);
 
   // Also create an in-app notification for the recipient so it shows up in
   // the bell even if they don't have chat open right now.
@@ -85,14 +78,6 @@ const markRead = asyncHandler(async (req, res) => {
     peerId: req.params.peerId,
   });
 
-  // Notify the peer that their messages were read.
-  if (updated.length) {
-    realtime.emitToUser(req.params.peerId, "message:read", {
-      reader_id: req.user.id,
-      message_ids: updated.map((m) => m.id),
-    });
-  }
-
   res.json({ success: true, marked: updated.length });
 });
 
@@ -101,23 +86,10 @@ const unreadCount = asyncHandler(async (req, res) => {
   res.json({ success: true, unread_count: count });
 });
 
-/**
- * GET /messages/presence/:peerId
- * Returns whether the peer currently has an active socket.
- */
-const peerPresence = asyncHandler(async (req, res) => {
-  res.json({
-    success: true,
-    user_id: req.params.peerId,
-    online: realtime.isOnline(req.params.peerId),
-  });
-});
-
 module.exports = {
   send,
   listConversations,
   getConversation,
   markRead,
   unreadCount,
-  peerPresence,
 };

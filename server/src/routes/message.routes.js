@@ -17,6 +17,4 @@ router.post("/", auth, sendValidator, ctrl.send);
 router.get("/with/:peerId", auth, peerIdValidator, listQueryValidator, ctrl.getConversation);
 router.post("/with/:peerId/read", auth, peerIdValidator, ctrl.markRead);
 
-router.get("/presence/:peerId", auth, peerIdValidator, ctrl.peerPresence);
-
 module.exports = router;

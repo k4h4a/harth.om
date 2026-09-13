@@ -4,10 +4,21 @@
 let cart = JSON.parse(localStorage.getItem("cart")) || [];
 
 // API config
+// TODO: after deploying the backend to Vercel, replace the URL below with
+// that project's real domain (e.g. "https://harth-api.vercel.app/api/v1").
+// The frontend and backend are now two separate Vercel projects/domains, so
+// this can no longer be a relative "/api/v1" path.
 const API_BASE_URL =
   window.location.hostname === "localhost"
     ? "http://localhost:3000/api/v1"
-    : "/api/v1";
+    : "https://REPLACE_WITH_BACKEND_VERCEL_URL/api/v1";
+
+// Google OAuth button (register.html) needs the same absolute backend origin
+// — keep it in sync with API_BASE_URL from this one place instead of hardcoding it in the HTML.
+document.addEventListener("DOMContentLoaded", () => {
+  const googleBtn = document.getElementById("googleLoginBtn");
+  if (googleBtn) googleBtn.href = `${API_BASE_URL}/auth/google`;
+});
 
 // Get token from localStorage
 function getToken() {

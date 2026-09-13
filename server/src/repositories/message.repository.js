@@ -134,8 +134,7 @@ async function listConversations(userId, { limit = 50 } = {}) {
 
 /**
  * Mark every message in a conversation as read (for the caller-recipient).
- * Returns the array of message ids newly marked so the sender can be
- * notified via realtime.
+ * Returns the array of message ids newly marked.
  */
 async function markConversationRead({ readerId, peerId }) {
   const p = pair(readerId, peerId);

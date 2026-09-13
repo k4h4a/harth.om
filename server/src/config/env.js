@@ -162,6 +162,12 @@ const env = {
   GOOGLE_CALLBACK_URL:
     process.env.GOOGLE_CALLBACK_URL ||
     `http://localhost:${parseInt(process.env.PORT, 10) || 3000}/api/v1/auth/google/callback`,
+
+  // Frontend origin, used only to build absolute redirect URLs after Google
+  // OAuth (see auth.controller.js's googleAuthCallback). Left blank in dev,
+  // where the frontend is served from this same origin — required in
+  // production once the frontend lives on a different domain (Vercel).
+  FRONTEND_URL: process.env.FRONTEND_URL || "",
 };
 
 module.exports = Object.freeze(env);

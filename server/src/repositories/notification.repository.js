@@ -21,8 +21,7 @@ const PUBLIC_FIELDS = [
  * callers typically create one in_app row plus one email row plus one
  * whatsapp row for the same logical event.
  *
- * Returns the inserted row so callers can emit realtime events with
- * a real ID.
+ * Returns the inserted row with its real ID.
  */
 async function create({
   userId,

@@ -38,6 +38,12 @@ module.exports = {
 
   production: {
     ...common,
+    // Overrides common.pool: on Vercel serverless, each function invocation
+    // can spin up its own pool, so a high per-instance max (common.pool.max
+    // is 10) risks exhausting Neon's connection limit under concurrency.
+    // Use Neon's pooled (PgBouncer, "-pooler" hostname) connection string for
+    // DATABASE_URL to make this safe.
+    pool: { min: 0, max: 3 },
     // Neon (and some other managed Postgres providers) give roles an empty
     // default search_path, so unqualified table names in every Knex query
     // (e.g. `knex('users')` -> `select * from "users"`) fail with

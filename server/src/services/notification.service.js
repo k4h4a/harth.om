@@ -2,13 +2,12 @@ const knex = require("../db");
 const notificationRepo = require("../repositories/notification.repository");
 const emailService = require("./email.service");
 const whatsappService = require("./whatsapp.service");
-const realtime = require("./realtime.service");
 
 /**
  * Orchestrates multi-channel notifications.
  *
  * For each notification "event" we:
- *   1. Always insert an in_app row + emit realtime event for instant UI.
+ *   1. Always insert an in_app row (client polls GET /notifications for it).
  *   2. Optionally dispatch email (fire-and-forget, logged to DB).
  *   3. Optionally dispatch whatsapp (fire-and-forget, logged to DB).
  *
@@ -36,12 +35,6 @@ async function notify({
     metadata,
     sent: true, // in_app is "sent" the moment it's in the DB
     sentAt: new Date(),
-  });
-
-  // Fire realtime push to the recipient's socket(s), if any.
-  realtime.emitToUser(userId, "notification:new", inAppRow);
-  realtime.emitToUser(userId, "notification:unread_count", {
-    unread_count: await notificationRepo.unreadCount(userId),
   });
 
   // 2. Load user contact info (phone/email) only if we're going to use them.

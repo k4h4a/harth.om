@@ -1,4 +1,5 @@
 const crypto = require("crypto");
+const env = require("../config/env");
 const knex = require("../db");
 const { hashPassword, verifyPassword } = require("../utils/password");
 const { signToken, signOAuthState, verifyOAuthState } = require("../utils/jwt");
@@ -480,7 +481,7 @@ async function upsertGoogleUser({ googleId, email, name, picture }) {
 
 const googleAuthCallback = asyncHandler(async (req, res) => {
   const redirectWithError = (code) =>
-    res.redirect(`/register.html?g_error=${encodeURIComponent(code)}`);
+    res.redirect(`${env.FRONTEND_URL}/register.html?g_error=${encodeURIComponent(code)}`);
 
   // User clicked "Cancel" on Google's consent screen.
   if (req.query.error) {
@@ -529,7 +530,7 @@ const googleAuthCallback = asyncHandler(async (req, res) => {
   // Fragment, not query string: it's never sent to the server on the next
   // request and never appears in server logs/Referer headers, only visible
   // to the frontend JS that immediately stores it and rewrites the URL.
-  res.redirect(`/register.html#g_token=${encodeURIComponent(token)}`);
+  res.redirect(`${env.FRONTEND_URL}/register.html#g_token=${encodeURIComponent(token)}`);
 });
 
 const me = asyncHandler(async (req, res) => {
