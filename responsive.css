@@ -216,7 +216,7 @@ button {
   font-weight: 700;
 }
 
-/* Hamburger button — visible only on mobile */
+/* Hamburger button — visible at every width; opens the off-canvas nav panel */
 .hs-hamburger {
   display: flex;
   align-items: center;
@@ -273,10 +273,13 @@ button {
   transform: translateY(-6px) rotate(-45deg);
 }
 
-/* MOBILE NAV (default behaviour, < 1024px)
-   Off-canvas slide-in panel — uses visibility + transform so the panel
-   is fully removed from the document's hit-test and overflow box when
-   closed (avoids any body.scrollWidth contribution on iOS Safari). */
+/* OFF-CANVAS NAV PANEL (default behaviour, every width — see the
+   min-width: 1024px block below, which no longer restores an inline
+   desktop nav on purpose: the hamburger is the only way to reach the
+   page-navigation links, at every screen size).
+   Uses visibility + transform so the panel is fully removed from the
+   document's hit-test and overflow box when closed (avoids any
+   body.scrollWidth contribution on iOS Safari). */
 .header-capsule .section.center {
   position: fixed;
   top: 0;
@@ -503,16 +506,11 @@ body.menu-open {
   }
 }
 
-/* DESKTOP NAV (≥ 1024px) — restore inline horizontal nav */
+/* DESKTOP (≥ 1024px) — header sizing only. The hamburger + off-canvas nav
+   panel (mobile behaviour) stays in effect at every width by design: only
+   the logo, language switcher, "add listing" and login buttons stay inline
+   in the bar; every page-navigation link lives behind the hamburger. */
 @media (min-width: 1024px) {
-  .hs-hamburger {
-    display: none !important;
-  }
-
-  .menu-backdrop {
-    display: none !important;
-  }
-
   .header-container {
     padding: 12px 20px !important;
     margin: 14px auto !important;
@@ -534,93 +532,6 @@ body.menu-open {
     box-sizing: border-box;
     padding: 10px 22px;
     gap: 12px;
-  }
-
-  .header-capsule .section.center {
-    position: static;
-    width: auto;
-    /* Without this, the flex item's automatic min-width falls back to its
-       max-content size (since overflow is visible), which pins it at the
-       nav's full unshrunk width and defeats every child sizing rule below —
-       this is what let the button row spill out of the capsule. */
-    min-width: 0;
-    height: auto;
-    background: transparent;
-    flex-direction: row;
-    padding: 0;
-    box-shadow: none;
-    transform: none !important;
-    z-index: auto;
-    overflow: visible;
-    justify-content: center;
-    visibility: visible;
-    pointer-events: auto;
-    contain: none;
-  }
-
-  /* Nav row: one straight line whenever there's room (the common case —
-     fluid font/padding below keep it that way on nearly every desktop
-     width). Falls back to wrapping onto a 2nd row only when an item-heavy
-     role (e.g. admin) genuinely doesn't fit even at the smallest fluid
-     size — never a horizontal scroll, never a hidden/cut-off item. */
-  .header-capsule .section.center .nav-links {
-    flex-direction: row !important;
-    flex-wrap:      wrap !important;
-    gap:            clamp(6px, 1vw, 14px) !important;
-    width:          100%;
-    align-items:    center;
-    justify-content: center;
-  }
-
-  .header-capsule .section.center .nav-links li {
-    flex:    0 0 auto; /* sized to its own link — never stretched/shrunk */
-    /* Reset the mobile-drawer rule's `width: 100%` (li.nav-links li),
-       which otherwise leaks through here and stretches every <li> to the
-       full row width — leaving huge gaps and pushing the other items
-       off-screen past the visible edge. */
-    width:   auto;
-    display: flex;
-  }
-
-  /* ---- Nav menu items ----
-     Font size, padding and height scale fluidly with viewport width
-     (clamp) instead of being fixed, so the row stays on one straight
-     line on nearly every screen, shrinking/growing in proportion to the
-     screen — never truncating with "...". */
-  .header-capsule .section.center .nav-links li a,
-  .header-capsule .section.center .nav-links li .nav-item {
-    box-sizing:      border-box;
-    width:           fit-content;
-    min-width:       max-content;
-    flex:            0 0 auto;
-    padding-inline:  clamp(10px, 1.6vw, 20px) !important;
-    padding-block:   0 !important;
-    min-height:      clamp(44px, 3.2vw, 56px) !important;
-    white-space:     nowrap;
-    font-size:       clamp(13px, 1.4vw, 16px) !important;
-    font-weight:     600 !important;
-    display:         inline-flex !important;
-    align-items:     center;
-    justify-content: center;
-    gap:             clamp(6px, 0.7vw, 10px);
-    border-radius:   12px !important;
-    background:      transparent;
-    color:           var(--color-text, #173828);
-    border:          none;
-    position:        relative;
-  }
-
-  .header-capsule .section.center .nav-links li a:hover,
-  .header-capsule .section.center .nav-links li .nav-item:hover {
-    background: var(--color-brand-50, #eef4ea);
-    color: var(--color-brand-700, #0f4d37);
-  }
-
-  .header-capsule .section.center .nav-links li a.nav-item--active,
-  .header-capsule .section.center .nav-links li .nav-item--active {
-    background: transparent;
-    color: var(--color-brand-700, #0f4d37);
-    box-shadow: inset 0 -2px 0 0 var(--color-accent-500, #b8860b);
   }
 
   /* ---- Shared styles: CTA/login button + language switcher ----
@@ -687,10 +598,6 @@ body.menu-open {
 
   .header-capsule .section.left {
     gap: 12px;
-  }
-
-  body.menu-open {
-    overflow: auto;
   }
 }
 
