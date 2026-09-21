@@ -160,14 +160,18 @@ const env = {
   GOOGLE_CLIENT_ID: process.env.GOOGLE_CLIENT_ID || "",
   GOOGLE_CLIENT_SECRET: process.env.GOOGLE_CLIENT_SECRET || "",
   GOOGLE_CALLBACK_URL:
-    process.env.GOOGLE_CALLBACK_URL ||
+    (process.env.GOOGLE_CALLBACK_URL || "").trim() ||
     `http://localhost:${parseInt(process.env.PORT, 10) || 3000}/api/v1/auth/google/callback`,
 
   // Frontend origin, used only to build absolute redirect URLs after Google
   // OAuth (see auth.controller.js's googleAuthCallback). Left blank in dev,
   // where the frontend is served from this same origin — required in
-  // production once the frontend lives on a different domain (Vercel).
-  FRONTEND_URL: process.env.FRONTEND_URL || "",
+  // production once the frontend lives on a different domain.
+  // Trimmed defensively: a stray trailing newline pasted into the host's
+  // env var UI (easy to do — e.g. copying a whole line from a file) lands
+  // literally in the redirect Location header and every browser rejects it
+  // outright with ERR_INVALID_REDIRECT, breaking Google sign-in entirely.
+  FRONTEND_URL: (process.env.FRONTEND_URL || "").trim(),
 };
 
 module.exports = Object.freeze(env);
