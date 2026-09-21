@@ -480,8 +480,18 @@ async function upsertGoogleUser({ googleId, email, name, picture }) {
 }
 
 const googleAuthCallback = asyncHandler(async (req, res) => {
-  const redirectWithError = (code) =>
-    res.redirect(`${env.FRONTEND_URL}/register.html?g_error=${encodeURIComponent(code)}`);
+  // TEMP DEBUG — remove once the ERR_INVALID_REDIRECT issue is confirmed
+  // fixed. Logs the exact target so we can see what's actually wrong
+  // with it instead of guessing.
+  console.log(
+    "[google oauth debug] FRONTEND_URL =",
+    JSON.stringify(env.FRONTEND_URL),
+  );
+  const redirectWithError = (code) => {
+    const target = `${env.FRONTEND_URL}/register.html?g_error=${encodeURIComponent(code)}`;
+    console.log("[google oauth debug] redirecting (error) to:", JSON.stringify(target));
+    return res.redirect(target);
+  };
 
   // User clicked "Cancel" on Google's consent screen.
   if (req.query.error) {
@@ -530,7 +540,13 @@ const googleAuthCallback = asyncHandler(async (req, res) => {
   // Fragment, not query string: it's never sent to the server on the next
   // request and never appears in server logs/Referer headers, only visible
   // to the frontend JS that immediately stores it and rewrites the URL.
-  res.redirect(`${env.FRONTEND_URL}/register.html#g_token=${encodeURIComponent(token)}`);
+  const successTarget = `${env.FRONTEND_URL}/register.html#g_token=${encodeURIComponent(token)}`;
+  // TEMP DEBUG — see note above.
+  console.log(
+    "[google oauth debug] redirecting (success) to (token redacted):",
+    JSON.stringify(successTarget.replace(token, "<redacted>")),
+  );
+  res.redirect(successTarget);
 });
 
 const me = asyncHandler(async (req, res) => {
