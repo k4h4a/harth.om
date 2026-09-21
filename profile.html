@@ -970,7 +970,7 @@
       try {
         const fd = new FormData();
         fd.append("image", file);
-        const res = await fetch(`${window.API_BASE || "/api/v1"}/profile/avatar`, {
+        const res = await fetch(`${window.API_BASE_URL}/profile/avatar`, {
           method: "POST",
           headers: { Authorization: `Bearer ${getToken()}` },
           body: fd,

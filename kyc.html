@@ -540,9 +540,7 @@
               return;
             }
             const r = await fetch(
-              (window.location.hostname === "localhost"
-                ? "http://localhost:3000/api/v1"
-                : "/api/v1") + "/uploads/image",
+              window.API_BASE_URL + "/uploads/image",
               { method: "POST", headers: { Authorization: `Bearer ${freshToken}` }, body: fd },
             );
             if (r.status === 401) {

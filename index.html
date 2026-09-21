@@ -610,7 +610,7 @@
         //  - if the user scrolls first, the counter runs with the
         //    hardcoded defaults and updates silently when the API
         //    responds (next refresh will animate to the new target).
-        fetch("/api/v1/public/stats")
+        fetch(`${window.API_BASE_URL}/public/stats`)
           .then((r) => (r.ok ? r.json() : null))
           .then((data) => {
             if (!data || !data.success || !data.stats) return;
@@ -655,13 +655,10 @@
       (function () {
         "use strict";
 
-        // We use the same API_BASE_URL convention as script.js: localhost
-        // gets the absolute http://localhost:3000 endpoint, everywhere
-        // else hits the same-origin /api/v1 path.
-        const API =
-          window.location.hostname === "localhost"
-            ? "http://localhost:3000/api/v1"
-            : "/api/v1";
+        // window.API_BASE_URL is set by script.js (loaded earlier in this
+        // page) — frontend (Netlify) and backend (Render) are separate
+        // domains, so this can't be a same-origin "/api/v1" path.
+        const API = window.API_BASE_URL;
 
         function t(key, vars) {
           return window.HarthI18n ? window.HarthI18n.t(key, vars) : key;
@@ -1960,10 +1957,7 @@
         }
 
         function getJsonLocal(path) {
-          const API =
-            window.location.hostname === "localhost"
-              ? "http://localhost:3000/api/v1"
-              : "/api/v1";
+          const API = window.API_BASE_URL;
           return fetch(API + path)
             .then((r) => (r.ok ? r.json() : null))
             .catch(() => null);
@@ -2158,10 +2152,7 @@
           const pressed = btn.getAttribute("aria-pressed") === "true";
           const icon = btn.querySelector("i");
           try {
-            const API =
-              window.location.hostname === "localhost"
-                ? "http://localhost:3000/api/v1"
-                : "/api/v1";
+            const API = window.API_BASE_URL;
             const headers = {
               Authorization: "Bearer " + token,
               "Content-Type": "application/json",

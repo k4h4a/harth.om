@@ -4,14 +4,15 @@
 let cart = JSON.parse(localStorage.getItem("cart")) || [];
 
 // API config
-// TODO: after deploying the backend to Vercel, replace the URL below with
-// that project's real domain (e.g. "https://harth-api.vercel.app/api/v1").
-// The frontend and backend are now two separate Vercel projects/domains, so
-// this can no longer be a relative "/api/v1" path.
+// Frontend (Netlify) and backend (Render) are separate domains, so this
+// can't be a relative "/api/v1" path — must be the backend's absolute URL.
+// Exposed on window so other inline <script> blocks across the site (which
+// can't see this file's top-level const) share the same value.
 const API_BASE_URL =
   window.location.hostname === "localhost"
     ? "http://localhost:3000/api/v1"
-    : "https://REPLACE_WITH_BACKEND_VERCEL_URL/api/v1";
+    : "https://harth-web.onrender.com/api/v1";
+window.API_BASE_URL = API_BASE_URL;
 
 // Google OAuth button (register.html) needs the same absolute backend origin
 // — keep it in sync with API_BASE_URL from this one place instead of hardcoding it in the HTML.

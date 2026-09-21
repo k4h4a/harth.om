@@ -1224,7 +1224,7 @@
       (function () {
         "use strict";
 
-        const API_BASE = "/api/v1";
+        const API_BASE = window.API_BASE_URL;
         const TOKEN_KEY = "token";
         const USER_KEY = "user";
 
@@ -2443,7 +2443,7 @@
                 const fd = new FormData();
                 fd.append("image", file);
                 const token = getToken();
-                const r = await fetch("/api/v1/uploads/image", { method: "POST", headers: { Authorization: `Bearer ${token}` }, body: fd });
+                const r = await fetch(`${window.API_BASE_URL}/uploads/image`, { method: "POST", headers: { Authorization: `Bearer ${token}` }, body: fd });
                 const data = await r.json();
                 if (!r.ok || !data?.success) throw new Error(data?.error?.message || t("delivery.proofModal.uploadFailed"));
                 uploadedUrls = [data.url];
@@ -2649,7 +2649,7 @@
                 const form = new FormData();
                 form.append("pdf", file);
                 const token = localStorage.getItem("token");
-                const res = await fetch(`${window.API_BASE || "/api/v1"}/uploads/pdf`, {
+                const res = await fetch(`${window.API_BASE_URL}/uploads/pdf`, {
                   method: "POST",
                   headers: token ? { Authorization: "Bearer " + token } : {},
                   body: form,
